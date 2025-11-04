@@ -1,17 +1,7 @@
-# Object-Oriented Programming Features
+# ميزات البرمجة الكائنية
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="object-oriented-programming-features-of-rust"></a>
 
-Object-oriented programming (OOP) is a way of modeling programs. Objects as a
-programmatic concept were introduced in the programming language Simula in the
-1960s. Those objects influenced Alan Kay’s programming architecture in which
-objects pass messages to each other. To describe this architecture, he coined
-the term _object-oriented programming_ in 1967. Many competing definitions
-describe what OOP is, and by some of these definitions Rust is object oriented
-but by others it is not. In this chapter, we’ll explore certain characteristics
-that are commonly considered object oriented and how those characteristics
-translate to idiomatic Rust. We’ll then show you how to implement an
-object-oriented design pattern in Rust and discuss the trade-offs of doing so
-versus implementing a solution using some of Rust’s strengths instead.
+البرمجة الكائنية (object-oriented programming أو OOP) هي طريقة لنمذجة البرامج. تم تقديم الكائنات كمفهوم برمجي في لغة البرمجة Simula في ستينيات القرن الماضي. أثرت تلك الكائنات على معمارية البرمجة الخاصة بآلان كاي (Alan Kay) والتي تمرر فيها الكائنات الرسائل لبعضها البعض. لوصف هذه المعمارية، صاغ مصطلح _البرمجة الكائنية_ في عام 1967. توجد العديد من التعريفات المتنافسة التي تصف ما هي OOP، وبحسب بعض هذه التعريفات تعتبر Rust كائنية التوجه ولكن بحسب تعريفات أخرى ليست كذلك. في هذا الفصل، سنستكشف خصائص معينة تُعتبر عادة كائنية التوجه وكيف تُترجم هذه الخصائص إلى Rust الاصطلاحية. بعد ذلك سنوضح لك كيفية تنفيذ نمط تصميم (design pattern) كائني التوجه في Rust ونناقش المفاضلات بين القيام بذلك مقابل تنفيذ حل يستخدم بعضًا من نقاط قوة Rust بدلاً من ذلك.

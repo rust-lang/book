@@ -1,33 +1,14 @@
-## Refutability: Whether a Pattern Might Fail to Match
+## قابلية الدحض: ما إذا كان النمط قد يفشل في المطابقة
 
-Patterns come in two forms: refutable and irrefutable. Patterns that will match
-for any possible value passed are _irrefutable_. An example would be `x` in the
-statement `let x = 5;` because `x` matches anything and therefore cannot fail
-to match. Patterns that can fail to match for some possible value are
-_refutable_. An example would be `Some(x)` in the expression `if let Some(x) =
-a_value` because if the value in the `a_value` variable is `None` rather than
-`Some`, the `Some(x)` pattern will not match.
+تأتي الأنماط في شكلين: قابلة للدحض (refutable) وغير قابلة للدحض (irrefutable). الأنماط التي ستطابق أي قيمة ممكنة يتم تمريرها هي _غير قابلة للدحض_ (irrefutable). مثال على ذلك هو `x` في التعليمة `let x = 5;` لأن `x` تطابق أي شيء وبالتالي لا يمكن أن تفشل في المطابقة. الأنماط التي يمكن أن تفشل في المطابقة لبعض القيم الممكنة هي _قابلة للدحض_ (refutable). مثال على ذلك سيكون `Some(x)` في التعبير `if let Some(x) = a_value` لأنه إذا كانت القيمة في المتغير `a_value` هي `None` بدلاً من `Some`، فإن النمط `Some(x)` لن يطابق.
 
-Function parameters, `let` statements, and `for` loops can only accept
-irrefutable patterns because the program cannot do anything meaningful when
-values don’t match. The `if let` and `while let` expressions and the
-`let...else` statement accept refutable and irrefutable patterns, but the
-compiler warns against irrefutable patterns because, by definition, they’re
-intended to handle possible failure: The functionality of a conditional is in
-its ability to perform differently depending on success or failure.
+معاملات الدوال وتعليمات `let` وحلقات `for` يمكنها فقط قبول الأنماط غير القابلة للدحض لأن البرنامج لا يمكنه فعل أي شيء ذي معنى عندما لا تطابق القيم. تعبيرات `if let` و `while let` وتعليمة `let...else` تقبل الأنماط القابلة للدحض وغير القابلة للدحض، لكن المترجم يحذر من الأنماط غير القابلة للدحض لأنها، بحكم التعريف، مخصصة للتعامل مع الفشل المحتمل: وظيفة الشرط هي في قدرته على الأداء بشكل مختلف اعتمادًا على النجاح أو الفشل.
 
-In general, you shouldn’t have to worry about the distinction between refutable
-and irrefutable patterns; however, you do need to be familiar with the concept
-of refutability so that you can respond when you see it in an error message. In
-those cases, you’ll need to change either the pattern or the construct you’re
-using the pattern with, depending on the intended behavior of the code.
+بشكل عام، لا يجب أن تقلق بشأن التمييز بين الأنماط القابلة للدحض وغير القابلة للدحض؛ ومع ذلك، تحتاج إلى أن تكون على دراية بمفهوم قابلية الدحض (refutability) حتى تتمكن من الرد عندما ترى ذلك في رسالة خطأ. في تلك الحالات، ستحتاج إلى تغيير إما النمط أو البنية التي تستخدم النمط معها، اعتمادًا على السلوك المقصود للكود.
 
-Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
-`let` statement, but for the pattern, we’ve specified `Some(x)`, a refutable
-pattern. As you might expect, this code will not compile.
+لننظر إلى مثال على ما يحدث عندما نحاول استخدام نمط قابل للدحض حيث يتطلب Rust نمطًا غير قابل للدحض والعكس بالعكس. توضح القائمة 19-8 تعليمة `let`، ولكن بالنسبة للنمط، حددنا `Some(x)`، وهو نمط قابل للدحض. كما قد تتوقع، لن يتم تجميع هذا الكود.
 
-<Listing number="19-8" caption="Attempting to use a refutable pattern with `let`">
+<Listing number="19-8" caption="محاولة استخدام نمط قابل للدحض مع `let`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-08/src/main.rs:here}}
@@ -35,26 +16,17 @@ pattern. As you might expect, this code will not compile.
 
 </Listing>
 
-If `some_option_value` were a `None` value, it would fail to match the pattern
-`Some(x)`, meaning the pattern is refutable. However, the `let` statement can
-only accept an irrefutable pattern because there is nothing valid the code can
-do with a `None` value. At compile time, Rust will complain that we’ve tried to
-use a refutable pattern where an irrefutable pattern is required:
+إذا كانت `some_option_value` قيمة `None`، فإنها ستفشل في مطابقة النمط `Some(x)`، مما يعني أن النمط قابل للدحض. ومع ذلك، يمكن لتعليمة `let` قبول نمط غير قابل للدحض فقط لأنه لا يوجد شيء صالح يمكن للكود القيام به بقيمة `None`. في وقت الترجمة، سيشكو Rust من أننا حاولنا استخدام نمط قابل للدحض حيث يتطلب نمط غير قابل للدحض:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-08/output.txt}}
 ```
 
-Because we didn’t cover (and couldn’t cover!) every valid value with the
-pattern `Some(x)`, Rust rightfully produces a compiler error.
+لأننا لم نغط (ولا يمكننا تغطية!) كل قيمة صالحة بالنمط `Some(x)`، ينتج Rust بحق خطأ في المترجم.
 
-If we have a refutable pattern where an irrefutable pattern is needed, we can
-fix it by changing the code that uses the pattern: Instead of using `let`, we
-can use `let else`. Then, if the pattern doesn’t match, the code will just skip
-the code in the curly brackets, giving it a way to continue validly. Listing
-19-9 shows how to fix the code in Listing 19-8.
+إذا كان لدينا نمط قابل للدحض حيث يلزم نمط غير قابل للدحض، فيمكننا إصلاحه عن طريق تغيير الكود الذي يستخدم النمط: بدلاً من استخدام `let`، يمكننا استخدام `let else`. بعد ذلك، إذا لم يطابق النمط، فسيتخطى الكود فقط الكود في الأقواس المجعدة، مما يمنحه طريقة لمتابعة بشكل صالح. توضح القائمة 19-9 كيفية إصلاح الكود في القائمة 19-8.
 
-<Listing number="19-9" caption="Using `let...else` and a block with refutable patterns instead of `let`">
+<Listing number="19-9" caption="استخدام `let...else` وكتلة مع الأنماط القابلة للدحض بدلاً من `let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-09/src/main.rs:here}}
@@ -62,12 +34,9 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 
 </Listing>
 
-We’ve given the code an out! This code is perfectly valid, although it means we
-cannot use an irrefutable pattern without receiving a warning. If we give
-`let...else` a pattern that will always match, such as `x`, as shown in Listing
-19-10, the compiler will give a warning.
+لقد أعطينا الكود مخرجًا! هذا الكود صالح تمامًا، على الرغم من أنه يعني أننا لا نستطيع استخدام نمط غير قابل للدحض بدون تلقي تحذير. إذا أعطينا `let...else` نمطًا سيطابق دائمًا، مثل `x`، كما هو موضح في القائمة 19-10، فسيعطي المترجم تحذيرًا.
 
-<Listing number="19-10" caption="Attempting to use an irrefutable pattern with `let...else`">
+<Listing number="19-10" caption="محاولة استخدام نمط غير قابل للدحض مع `let...else`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-10/src/main.rs:here}}
@@ -75,19 +44,12 @@ cannot use an irrefutable pattern without receiving a warning. If we give
 
 </Listing>
 
-Rust complains that it doesn’t make sense to use `let...else` with an
-irrefutable pattern:
+يشتكي Rust من أنه لا معنى لاستخدام `let...else` مع نمط غير قابل للدحض:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}
 ```
 
-For this reason, match arms must use refutable patterns, except for the last
-arm, which should match any remaining values with an irrefutable pattern. Rust
-allows us to use an irrefutable pattern in a `match` with only one arm, but
-this syntax isn’t particularly useful and could be replaced with a simpler
-`let` statement.
+لهذا السبب، يجب أن تستخدم أذرع المطابقة أنماطًا قابلة للدحض، باستثناء الذراع الأخير، الذي يجب أن يطابق أي قيم متبقية بنمط غير قابل للدحض. يسمح لنا Rust باستخدام نمط غير قابل للدحض في `match` بذراع واحد فقط، ولكن هذا البناء الجملي ليس مفيدًا بشكل خاص ويمكن استبداله بتعليمة `let` أبسط.
 
-Now that you know where to use patterns and the difference between refutable
-and irrefutable patterns, let’s cover all the syntax we can use to create
-patterns.
+الآن بعد أن عرفت أين تستخدم الأنماط والفرق بين الأنماط القابلة للدحض وغير القابلة للدحض، لنتطرق إلى جميع بناء الجملة التي يمكننا استخدامها لإنشاء الأنماط.

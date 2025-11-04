@@ -1,79 +1,70 @@
-## Refactoring to Improve Modularity and Error Handling
+## إعادة الهيكلة لتحسين النمطية ومعالجة الأخطاء
 
-To improve our program, we’ll fix four problems that have to do with the
-program’s structure and how it’s handling potential errors. First, our `main`
-function now performs two tasks: It parses arguments and reads files. As our
-program grows, the number of separate tasks the `main` function handles will
-increase. As a function gains responsibilities, it becomes more difficult to
-reason about, harder to test, and harder to change without breaking one of its
-parts. It’s best to separate functionality so that each function is responsible
-for one task.
+لتحسين برنامجنا، سنصلح أربع مشاكل تتعلق ببنية البرنامج وكيفية معالجته للأخطاء
+المحتملة. أولاً، تقوم دالة `main` الآن بمهمتين: تحلل المعاملات وتقرأ الملفات.
+مع نمو برنامجنا، سيزداد عدد المهام المنفصلة التي تتعامل معها دالة `main`. مع
+اكتساب الدالة مسؤوليات، يصبح من الأصعب التفكير فيها، وأصعب في الاختبار، وأصعب في
+التغيير دون كسر أحد أجزائها. من الأفضل فصل الوظائف بحيث تكون كل دالة مسؤولة عن
+مهمة واحدة.
 
-This issue also ties into the second problem: Although `query` and `file_path`
-are configuration variables to our program, variables like `contents` are used
-to perform the program’s logic. The longer `main` becomes, the more variables
-we’ll need to bring into scope; the more variables we have in scope, the harder
-it will be to keep track of the purpose of each. It’s best to group the
-configuration variables into one structure to make their purpose clear.
+تتعلق هذه المسألة أيضًا بالمشكلة الثانية: على الرغم من أن `query` و
+`file_path` هما متغيرات تكوين لبرنامجنا، فإن متغيرات مثل `contents` تُستخدم
+لتنفيذ منطق البرنامج. كلما أصبحت `main` أطول، زاد عدد المتغيرات التي سنحتاج
+إلى إدخالها في النطاق؛ كلما زاد عدد المتغيرات في النطاق، أصبح من الأصعب تتبع
+غرض كل منها. من الأفضل تجميع متغيرات التكوين في بنية واحدة لتوضيح غرضها.
 
-The third problem is that we’ve used `expect` to print an error message when
-reading the file fails, but the error message just prints `Should have been
-able to read the file`. Reading a file can fail in a number of ways: For
-example, the file could be missing, or we might not have permission to open it.
-Right now, regardless of the situation, we’d print the same error message for
-everything, which wouldn’t give the user any information!
+المشكلة الثالثة هي أننا استخدمنا `expect` لطباعة رسالة خطأ عند فشل قراءة الملف،
+لكن رسالة الخطأ تطبع فقط `Should have been able to read the file`. يمكن أن
+تفشل قراءة ملف بعدة طرق: على سبيل المثال، قد يكون الملف مفقودًا، أو قد لا يكون
+لدينا إذن لفتحه. في الوقت الحالي، بغض النظر عن الموقف، سنطبع نفس رسالة الخطأ
+لكل شيء، مما لن يعطي المستخدم أي معلومات!
 
-Fourth, we use `expect` to handle an error, and if the user runs our program
-without specifying enough arguments, they’ll get an `index out of bounds` error
-from Rust that doesn’t clearly explain the problem. It would be best if all the
-error-handling code were in one place so that future maintainers had only one
-place to consult the code if the error-handling logic needed to change. Having
-all the error-handling code in one place will also ensure that we’re printing
-messages that will be meaningful to our end users.
+رابعًا، نستخدم `expect` للتعامل مع خطأ، وإذا قام المستخدم بتشغيل برنامجنا دون
+تحديد معاملات كافية، فسيحصلون على خطأ `index out of bounds` من Rust والذي لا
+يشرح المشكلة بوضوح. سيكون من الأفضل لو كان كل كود معالجة الأخطاء في مكان واحد
+بحيث يكون للمشرفين المستقبليين مكان واحد فقط لمراجعة الكود إذا احتاج منطق
+معالجة الأخطاء للتغيير. وجود كل كود معالجة الأخطاء في مكان واحد سيضمن أيضًا
+أننا نطبع رسائل ذات معنى للمستخدمين النهائيين.
 
-Let’s address these four problems by refactoring our project.
+لنعالج هذه المشاكل الأربع بإعادة هيكلة مشروعنا.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="separation-of-concerns-for-binary-projects"></a>
 
-### Separating Concerns in Binary Projects
+### فصل الاهتمامات في المشاريع الثنائية
 
-The organizational problem of allocating responsibility for multiple tasks to
-the `main` function is common to many binary projects. As a result, many Rust
-programmers find it useful to split up the separate concerns of a binary
-program when the `main` function starts getting large. This process has the
-following steps:
+تُعد المشكلة التنظيمية المتعلقة بتخصيص المسؤولية عن مهام متعددة لدالة `main`
+شائعة في العديد من المشاريع الثنائية. ونتيجة لذلك، يجد العديد من مبرمجي Rust
+أنه من المفيد تقسيم الاهتمامات المنفصلة لبرنامج ثنائي عندما تبدأ دالة `main` في
+النمو. تتضمن هذه العملية الخطوات التالية:
 
-- Split your program into a _main.rs_ file and a _lib.rs_ file and move your
-  program’s logic to _lib.rs_.
-- As long as your command line parsing logic is small, it can remain in
-  the `main` function.
-- When the command line parsing logic starts getting complicated, extract it
-  from the `main` function into other functions or types.
+- قسّم برنامجك إلى ملف _main.rs_ وملف _lib.rs_ وانقل منطق برنامجك إلى
+  _lib.rs_.
+- طالما كان منطق تحليل سطر الأوامر صغيرًا، يمكن أن يبقى في دالة `main`.
+- عندما يبدأ منطق تحليل سطر الأوامر في التعقيد، استخرجه من دالة `main` إلى دوال
+  أو أنواع أخرى.
 
-The responsibilities that remain in the `main` function after this process
-should be limited to the following:
+المسؤوليات التي تبقى في دالة `main` بعد هذه العملية يجب أن تقتصر على ما يلي:
 
-- Calling the command line parsing logic with the argument values
-- Setting up any other configuration
-- Calling a `run` function in _lib.rs_
-- Handling the error if `run` returns an error
+- استدعاء منطق تحليل سطر الأوامر بقيم المعاملات
+- إعداد أي تكوين آخر
+- استدعاء دالة `run` في _lib.rs_
+- معالجة الخطأ إذا أرجعت `run` خطأ
 
-This pattern is about separating concerns: _main.rs_ handles running the
-program and _lib.rs_ handles all the logic of the task at hand. Because you
-can’t test the `main` function directly, this structure lets you test all of
-your program’s logic by moving it out of the `main` function. The code that
-remains in the `main` function will be small enough to verify its correctness
-by reading it. Let’s rework our program by following this process.
+يتعلق هذا النمط بفصل الاهتمامات: يتعامل _main.rs_ مع تشغيل البرنامج ويتعامل
+_lib.rs_ مع جميع منطق المهمة قيد التنفيذ. لأنك لا تستطيع اختبار دالة `main`
+مباشرة، تتيح لك هذه البنية اختبار جميع منطق برنامجك عن طريق نقله خارج دالة
+`main`. الكود الذي يبقى في دالة `main` سيكون صغيرًا بما يكفي للتحقق من صحته
+بقراءته. لنعيد العمل على برنامجنا باتباع هذه العملية.
 
-#### Extracting the Argument Parser
+#### استخراج محلل المعاملات
 
-We’ll extract the functionality for parsing arguments into a function that
-`main` will call. Listing 12-5 shows the new start of the `main` function that
-calls a new function `parse_config`, which we’ll define in _src/main.rs_.
+سنستخرج الوظيفة الخاصة بتحليل المعاملات إلى دالة ستستدعيها `main`. توضح
+القائمة 12-5 بداية جديدة لدالة `main` التي تستدعي دالة جديدة `parse_config`،
+والتي سنعرّفها في _src/main.rs_.
 
-<Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
+<Listing number="12-5" file-name="src/main.rs" caption="استخراج دالة `parse_config` من `main`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
@@ -81,40 +72,35 @@ calls a new function `parse_config`, which we’ll define in _src/main.rs_.
 
 </Listing>
 
-We’re still collecting the command line arguments into a vector, but instead of
-assigning the argument value at index 1 to the variable `query` and the
-argument value at index 2 to the variable `file_path` within the `main`
-function, we pass the whole vector to the `parse_config` function. The
-`parse_config` function then holds the logic that determines which argument
-goes in which variable and passes the values back to `main`. We still create
-the `query` and `file_path` variables in `main`, but `main` no longer has the
-responsibility of determining how the command line arguments and variables
-correspond.
+ما زلنا نجمع معاملات سطر الأوامر في متجه، لكن بدلاً من تعيين قيمة المعامل عند
+الفهرس 1 إلى المتغير `query` وقيمة المعامل عند الفهرس 2 إلى المتغير
+`file_path` داخل دالة `main`، نمرر المتجه كاملاً إلى دالة `parse_config`.
+تحتفظ دالة `parse_config` بعد ذلك بالمنطق الذي يحدد أي معامل يذهب في أي متغير
+وتمرر القيم مرة أخرى إلى `main`. ما زلنا ننشئ متغيري `query` و `file_path` في
+`main`، لكن `main` لم تعد لديها مسؤولية تحديد كيف تتوافق معاملات سطر الأوامر
+والمتغيرات.
 
-This rework may seem like overkill for our small program, but we’re refactoring
-in small, incremental steps. After making this change, run the program again to
-verify that the argument parsing still works. It’s good to check your progress
-often, to help identify the cause of problems when they occur.
+قد تبدو إعادة العمل هذه مبالغة فيها لبرنامجنا الصغير، لكننا نعيد الهيكلة بخطوات
+صغيرة ومتدرجة. بعد إجراء هذا التغيير، قم بتشغيل البرنامج مرة أخرى للتحقق من أن
+تحليل المعاملات لا يزال يعمل. من الجيد التحقق من تقدمك بشكل متكرر، للمساعدة في
+تحديد سبب المشاكل عند حدوثها.
 
-#### Grouping Configuration Values
+#### تجميع قيم التكوين
 
-We can take another small step to improve the `parse_config` function further.
-At the moment, we’re returning a tuple, but then we immediately break that
-tuple into individual parts again. This is a sign that perhaps we don’t have
-the right abstraction yet.
+يمكننا اتخاذ خطوة صغيرة أخرى لتحسين دالة `parse_config` بشكل أكبر. في الوقت
+الحالي، نُرجع زوجًا (tuple)، ولكن بعد ذلك نقوم فورًا بتقسيم ذلك الزوج إلى أجزاء
+فردية مرة أخرى. هذه علامة على أننا ربما لم نصل بعد إلى التجريد الصحيح.
 
-Another indicator that shows there’s room for improvement is the `config` part
-of `parse_config`, which implies that the two values we return are related and
-are both part of one configuration value. We’re not currently conveying this
-meaning in the structure of the data other than by grouping the two values into
-a tuple; we’ll instead put the two values into one struct and give each of the
-struct fields a meaningful name. Doing so will make it easier for future
-maintainers of this code to understand how the different values relate to each
-other and what their purpose is.
+مؤشر آخر يُظهر أن هناك مجالاً للتحسين هو جزء `config` من `parse_config`، الذي
+يشير إلى أن القيمتين اللتين نعيدهما مرتبطتان وكلاهما جزء من قيمة تكوين واحدة.
+نحن لا نوصل هذا المعنى حاليًا في بنية البيانات بخلاف تجميع القيمتين في زوج؛
+سنضع القيمتين بدلاً من ذلك في بنية واحدة ونعطي كل حقل من حقول البنية اسمًا ذا
+معنى. القيام بذلك سيسهل على المشرفين المستقبليين لهذا الكود فهم كيفية ارتباط
+القيم المختلفة ببعضها البعض وما هو غرضها.
 
-Listing 12-6 shows the improvements to the `parse_config` function.
+توضح القائمة 12-6 التحسينات على دالة `parse_config`.
 
-<Listing number="12-6" file-name="src/main.rs" caption="Refactoring `parse_config` to return an instance of a `Config` struct">
+<Listing number="12-6" file-name="src/main.rs" caption="إعادة هيكلة `parse_config` لإرجاع مثيل من بنية `Config`">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
@@ -122,65 +108,56 @@ Listing 12-6 shows the improvements to the `parse_config` function.
 
 </Listing>
 
-We’ve added a struct named `Config` defined to have fields named `query` and
-`file_path`. The signature of `parse_config` now indicates that it returns a
-`Config` value. In the body of `parse_config`, where we used to return
-string slices that reference `String` values in `args`, we now define `Config`
-to contain owned `String` values. The `args` variable in `main` is the owner of
-the argument values and is only letting the `parse_config` function borrow
-them, which means we’d violate Rust’s borrowing rules if `Config` tried to take
-ownership of the values in `args`.
+أضفنا بنية تُسمى `Config` معرّفة لتحتوي على حقول تُسمى `query` و `file_path`.
+يشير توقيع `parse_config` الآن إلى أنها تُرجع قيمة `Config`. في جسم
+`parse_config`، حيث كنا نعيد شرائح نصية تشير إلى قيم `String` في `args`، الآن
+نعرّف `Config` لتحتوي على قيم `String` مملوكة. متغير `args` في `main` هو
+مالك قيم المعاملات ويسمح فقط لدالة `parse_config` باستعارتها، مما يعني أننا
+سننتهك قواعد الاستعارة في Rust إذا حاول `Config` أخذ ملكية القيم في `args`.
 
-There are a number of ways we could manage the `String` data; the easiest,
-though somewhat inefficient, route is to call the `clone` method on the values.
-This will make a full copy of the data for the `Config` instance to own, which
-takes more time and memory than storing a reference to the string data.
-However, cloning the data also makes our code very straightforward because we
-don’t have to manage the lifetimes of the references; in this circumstance,
-giving up a little performance to gain simplicity is a worthwhile trade-off.
+هناك عدد من الطرق التي يمكننا بها إدارة بيانات `String`؛ الطريق الأسهل، وإن كان
+غير فعال إلى حد ما، هو استدعاء تابع `clone` على القيم. سيؤدي هذا إلى إنشاء
+نسخة كاملة من البيانات لمثيل `Config` ليمتلكها، وهو ما يستغرق وقتًا وذاكرة أكثر
+من تخزين مَرجِع إلى بيانات النص. ومع ذلك، فإن استنساخ البيانات يجعل كودنا أيضًا
+واضحًا جدًا لأننا لا نحتاج إلى إدارة مُدد صلاحية المَراجِع؛ في هذه الظروف،
+التخلي عن القليل من الأداء لكسب البساطة هو مقايضة مفيدة.
 
-> ### The Trade-Offs of Using `clone`
+> ### المقايضات في استخدام `clone`
 >
-> There’s a tendency among many Rustaceans to avoid using `clone` to fix
-> ownership problems because of its runtime cost. In
-> [Chapter 13][ch13]<!-- ignore -->, you’ll learn how to use more efficient
-> methods in this type of situation. But for now, it’s okay to copy a few
-> strings to continue making progress because you’ll make these copies only
-> once and your file path and query string are very small. It’s better to have
-> a working program that’s a bit inefficient than to try to hyperoptimize code
-> on your first pass. As you become more experienced with Rust, it’ll be
-> easier to start with the most efficient solution, but for now, it’s
-> perfectly acceptable to call `clone`.
+> هناك ميل بين العديد من مستخدمي Rust لتجنب استخدام `clone` لإصلاح مشاكل
+> الملكية بسبب تكلفتها في وقت التشغيل. في [الفصل 13][ch13]<!-- ignore -->،
+> ستتعلم كيفية استخدام طرق أكثر كفاءة في هذا النوع من المواقف. لكن في الوقت
+> الحالي، لا بأس من نسخ بضعة نصوص للاستمرار في التقدم لأنك ستقوم بهذه النسخ
+> مرة واحدة فقط ومسار ملفك ونص استعلامك صغيران جدًا. من الأفضل أن يكون لديك
+> برنامج يعمل وإن كان غير فعال قليلاً بدلاً من محاولة التحسين المفرط للكود في
+> تمريرتك الأولى. مع اكتسابك مزيدًا من الخبرة مع Rust، سيكون من الأسهل البدء
+> بالحل الأكثر كفاءة، لكن في الوقت الحالي، من المقبول تمامًا استدعاء `clone`.
 
-We’ve updated `main` so that it places the instance of `Config` returned by
-`parse_config` into a variable named `config`, and we updated the code that
-previously used the separate `query` and `file_path` variables so that it now
-uses the fields on the `Config` struct instead.
+لقد قمنا بتحديث `main` بحيث تضع مثيل `Config` المُرجع بواسطة `parse_config` في
+متغير يُسمى `config`، وقمنا بتحديث الكود الذي كان يستخدم متغيري `query` و
+`file_path` المنفصلين بحيث يستخدم الآن الحقول على بنية `Config` بدلاً من ذلك.
 
-Now our code more clearly conveys that `query` and `file_path` are related and
-that their purpose is to configure how the program will work. Any code that
-uses these values knows to find them in the `config` instance in the fields
-named for their purpose.
+الآن يوصل كودنا بشكل أكثر وضوحًا أن `query` و `file_path` مرتبطان وأن غرضهما
+هو تكوين كيفية عمل البرنامج. أي كود يستخدم هذه القيم يعرف أن يجدها في مثيل
+`config` في الحقول المسماة لغرضها.
 
-#### Creating a Constructor for `Config`
+#### إنشاء منشئ لـ `Config`
 
-So far, we’ve extracted the logic responsible for parsing the command line
-arguments from `main` and placed it in the `parse_config` function. Doing so
-helped us see that the `query` and `file_path` values were related, and that
-relationship should be conveyed in our code. We then added a `Config` struct to
-name the related purpose of `query` and `file_path` and to be able to return the
-values’ names as struct field names from the `parse_config` function.
+حتى الآن، استخرجنا المنطق المسؤول عن تحليل معاملات سطر الأوامر من `main`
+ووضعناه في دالة `parse_config`. ساعدنا ذلك في رؤية أن قيم `query` و
+`file_path` كانت مرتبطة، وأن تلك العلاقة يجب أن تُنقل في كودنا. ثم أضفنا بنية
+`Config` لتسمية الغرض المرتبط بـ `query` و `file_path` ولنتمكن من إرجاع أسماء
+القيم كأسماء حقول بنية من دالة `parse_config`.
 
-So, now that the purpose of the `parse_config` function is to create a `Config`
-instance, we can change `parse_config` from a plain function to a function
-named `new` that is associated with the `Config` struct. Making this change
-will make the code more idiomatic. We can create instances of types in the
-standard library, such as `String`, by calling `String::new`. Similarly, by
-changing `parse_config` into a `new` function associated with `Config`, we’ll
-be able to create instances of `Config` by calling `Config::new`. Listing 12-7
-shows the changes we need to make.
+لذا، الآن بعد أن أصبح غرض دالة `parse_config` هو إنشاء مثيل `Config`، يمكننا
+تغيير `parse_config` من دالة عادية إلى دالة تُسمى `new` مرتبطة ببنية `Config`.
+إجراء هذا التغيير سيجعل الكود أكثر اصطلاحية. يمكننا إنشاء مثيلات من الأنواع في
+المكتبة القياسية، مثل `String`، عن طريق استدعاء `String::new`. بالمثل، عن طريق
+تغيير `parse_config` إلى دالة `new` مرتبطة بـ `Config`، سنتمكن من إنشاء
+مثيلات من `Config` عن طريق استدعاء `Config::new`. توضح القائمة 12-7 التغييرات
+التي نحتاج إلى إجرائها.
 
-<Listing number="12-7" file-name="src/main.rs" caption="Changing `parse_config` into `Config::new`">
+<Listing number="12-7" file-name="src/main.rs" caption="تغيير `parse_config` إلى `Config::new`">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
@@ -188,33 +165,31 @@ shows the changes we need to make.
 
 </Listing>
 
-We’ve updated `main` where we were calling `parse_config` to instead call
-`Config::new`. We’ve changed the name of `parse_config` to `new` and moved it
-within an `impl` block, which associates the `new` function with `Config`. Try
-compiling this code again to make sure it works.
+قمنا بتحديث `main` حيث كنا نستدعي `parse_config` لنستدعي `Config::new` بدلاً
+من ذلك. لقد غيرنا اسم `parse_config` إلى `new` ونقلناها داخل كتلة `impl`، والتي
+تربط دالة `new` بـ `Config`. حاول تصريف هذا الكود مرة أخرى للتأكد من أنه يعمل.
 
-### Fixing the Error Handling
+### إصلاح معالجة الأخطاء
 
-Now we’ll work on fixing our error handling. Recall that attempting to access
-the values in the `args` vector at index 1 or index 2 will cause the program to
-panic if the vector contains fewer than three items. Try running the program
-without any arguments; it will look like this:
+الآن سنعمل على إصلاح معالجة الأخطاء لدينا. تذكر أن محاولة الوصول إلى القيم في
+متجه `args` عند الفهرس 1 أو الفهرس 2 ستتسبب في ذعر البرنامج إذا احتوى المتجه
+على أقل من ثلاثة عناصر. حاول تشغيل البرنامج بدون أي معاملات؛ سيبدو كالتالي:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
-The line `index out of bounds: the len is 1 but the index is 1` is an error
-message intended for programmers. It won’t help our end users understand what
-they should do instead. Let’s fix that now.
+السطر `index out of bounds: the len is 1 but the index is 1` هو رسالة خطأ
+مخصصة للمبرمجين. لن تساعد مستخدمينا النهائيين على فهم ما يجب عليهم فعله بدلاً
+من ذلك. لنصلح ذلك الآن.
 
-#### Improving the Error Message
+#### تحسين رسالة الخطأ
 
-In Listing 12-8, we add a check in the `new` function that will verify that the
-slice is long enough before accessing index 1 and index 2. If the slice isn’t
-long enough, the program panics and displays a better error message.
+في القائمة 12-8، نضيف فحصًا في دالة `new` سيتحقق من أن الشريحة طويلة بما يكفي
+قبل الوصول إلى الفهرس 1 والفهرس 2. إذا لم تكن الشريحة طويلة بما يكفي، يحدث ذعر
+للبرنامج ويعرض رسالة خطأ أفضل.
 
-<Listing number="12-8" file-name="src/main.rs" caption="Adding a check for the number of arguments">
+<Listing number="12-8" file-name="src/main.rs" caption="إضافة فحص لعدد المعاملات">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
@@ -222,50 +197,46 @@ long enough, the program panics and displays a better error message.
 
 </Listing>
 
-This code is similar to [the `Guess::new` function we wrote in Listing
-9-13][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
-`value` argument was out of the range of valid values. Instead of checking for
-a range of values here, we’re checking that the length of `args` is at least
-`3` and the rest of the function can operate under the assumption that this
-condition has been met. If `args` has fewer than three items, this condition
-will be `true`, and we call the `panic!` macro to end the program immediately.
+هذا الكود مشابه [لدالة `Guess::new` التي كتبناها في القائمة
+9-13][ch9-custom-types]<!-- ignore -->، حيث استدعينا `panic!` عندما كانت قيمة
+معامل `value` خارج نطاق القيم الصالحة. بدلاً من التحقق من نطاق من القيم هنا،
+نتحقق من أن طول `args` على الأقل `3` ويمكن لبقية الدالة العمل بافتراض أن هذا
+الشرط قد تم استيفاؤه. إذا كان لدى `args` أقل من ثلاثة عناصر، سيكون هذا الشرط
+`true`، ونستدعي ماكرو `panic!` لإنهاء البرنامج فورًا.
 
-With these extra few lines of code in `new`, let’s run the program without any
-arguments again to see what the error looks like now:
+مع هذه الأسطر القليلة الإضافية من الكود في `new`، لنقم بتشغيل البرنامج بدون أي
+معاملات مرة أخرى لنرى كيف يبدو الخطأ الآن:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
-This output is better: We now have a reasonable error message. However, we also
-have extraneous information we don’t want to give to our users. Perhaps the
-technique we used in Listing 9-13 isn’t the best one to use here: A call to
-`panic!` is more appropriate for a programming problem than a usage problem,
-[as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead,
-we’ll use the other technique you learned about in Chapter 9—[returning a
-`Result`][ch9-result]<!-- ignore --> that indicates either success or an error.
+هذا الإخراج أفضل: لدينا الآن رسالة خطأ معقولة. ومع ذلك، لدينا أيضًا معلومات
+إضافية لا نريد إعطاءها لمستخدمينا. ربما لا تكون التقنية التي استخدمناها في
+القائمة 9-13 هي الأفضل للاستخدام هنا: استدعاء `panic!` أكثر ملاءمة لمشكلة
+برمجية من مشكلة استخدام، [كما نوقش في الفصل 9][ch9-error-guidelines]<!--
+ignore -->. بدلاً من ذلك، سنستخدم التقنية الأخرى التي تعلمتها في الفصل
+9—[إرجاع `Result`][ch9-result]<!-- ignore --> الذي يشير إما إلى النجاح أو خطأ.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="returning-a-result-from-new-instead-of-calling-panic"></a>
 
-#### Returning a `Result` Instead of Calling `panic!`
+#### إرجاع `Result` بدلاً من استدعاء `panic!`
 
-We can instead return a `Result` value that will contain a `Config` instance in
-the successful case and will describe the problem in the error case. We’re also
-going to change the function name from `new` to `build` because many
-programmers expect `new` functions to never fail. When `Config::build` is
-communicating to `main`, we can use the `Result` type to signal there was a
-problem. Then, we can change `main` to convert an `Err` variant into a more
-practical error for our users without the surrounding text about `thread
-'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
+يمكننا بدلاً من ذلك إرجاع قيمة `Result` ستحتوي على مثيل `Config` في حالة
+النجاح وستصف المشكلة في حالة الخطأ. سنغير أيضًا اسم الدالة من `new` إلى `build`
+لأن العديد من المبرمجين يتوقعون أن دوال `new` لا تفشل أبدًا. عندما يتواصل
+`Config::build` مع `main`، يمكننا استخدام نوع `Result` للإشارة إلى وجود مشكلة.
+بعد ذلك، يمكننا تغيير `main` لتحويل متغير `Err` إلى خطأ أكثر عملية لمستخدمينا
+بدون النص المحيط حول `thread 'main'` و `RUST_BACKTRACE` الذي يتسبب فيه استدعاء
+`panic!`.
 
-Listing 12-9 shows the changes we need to make to the return value of the
-function we’re now calling `Config::build` and the body of the function needed
-to return a `Result`. Note that this won’t compile until we update `main` as
-well, which we’ll do in the next listing.
+توضح القائمة 12-9 التغييرات التي نحتاج إلى إجرائها على قيمة الإرجاع للدالة التي
+نسميها الآن `Config::build` وجسم الدالة اللازم لإرجاع `Result`. لاحظ أن هذا لن
+يُصرّف حتى نحدّث `main` أيضًا، والذي سنفعله في القائمة التالية.
 
-<Listing number="12-9" file-name="src/main.rs" caption="Returning a `Result` from `Config::build`">
+<Listing number="12-9" file-name="src/main.rs" caption="إرجاع `Result` من `Config::build`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
@@ -273,33 +244,30 @@ well, which we’ll do in the next listing.
 
 </Listing>
 
-Our `build` function returns a `Result` with a `Config` instance in the success
-case and a string literal in the error case. Our error values will always be
-string literals that have the `'static` lifetime.
+تُرجع دالة `build` الخاصة بنا `Result` مع مثيل `Config` في حالة النجاح ونص
+حرفي في حالة الخطأ. ستكون قيم الخطأ لدينا دائمًا نصوصًا حرفية لها مدة صلاحية
+`'static`.
 
-We’ve made two changes in the body of the function: Instead of calling `panic!`
-when the user doesn’t pass enough arguments, we now return an `Err` value, and
-we’ve wrapped the `Config` return value in an `Ok`. These changes make the
-function conform to its new type signature.
+لقد أجرينا تغييرين في جسم الدالة: بدلاً من استدعاء `panic!` عندما لا يمرر
+المستخدم معاملات كافية، نُرجع الآن قيمة `Err`، ولقد غلفنا قيمة إرجاع `Config` في
+`Ok`. هذه التغييرات تجعل الدالة تتوافق مع توقيع النوع الجديد.
 
-Returning an `Err` value from `Config::build` allows the `main` function to
-handle the `Result` value returned from the `build` function and exit the
-process more cleanly in the error case.
+إرجاع قيمة `Err` من `Config::build` يسمح لدالة `main` بمعالجة قيمة `Result`
+المُرجعة من دالة `build` والخروج من العملية بشكل أنظف في حالة الخطأ.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="calling-confignew-and-handling-errors"></a>
 
-#### Calling `Config::build` and Handling Errors
+#### استدعاء `Config::build` ومعالجة الأخطاء
 
-To handle the error case and print a user-friendly message, we need to update
-`main` to handle the `Result` being returned by `Config::build`, as shown in
-Listing 12-10. We’ll also take the responsibility of exiting the command line
-tool with a nonzero error code away from `panic!` and instead implement it by
-hand. A nonzero exit status is a convention to signal to the process that
-called our program that the program exited with an error state.
+للتعامل مع حالة الخطأ وطباعة رسالة سهلة الاستخدام، نحتاج إلى تحديث `main`
+للتعامل مع `Result` الذي يتم إرجاعه بواسطة `Config::build`، كما هو موضح في
+القائمة 12-10. سنأخذ أيضًا المسؤولية عن الخروج من أداة سطر الأوامر برمز خطأ غير
+صفري بعيدًا عن `panic!` ونطبقه بأيدينا. رمز الخروج غير الصفري هو اتفاقية للإشارة
+إلى العملية التي استدعت برنامجنا أن البرنامج خرج بحالة خطأ.
 
-<Listing number="12-10" file-name="src/main.rs" caption="Exiting with an error code if building a `Config` fails">
+<Listing number="12-10" file-name="src/main.rs" caption="الخروج برمز خطأ إذا فشل بناء `Config`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
@@ -307,52 +275,47 @@ called our program that the program exited with an error state.
 
 </Listing>
 
-In this listing, we’ve used a method we haven’t covered in detail yet:
-`unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
-Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
-handling. If the `Result` is an `Ok` value, this method’s behavior is similar
-to `unwrap`: It returns the inner value that `Ok` is wrapping. However, if the
-value is an `Err` value, this method calls the code in the closure, which is
-an anonymous function we define and pass as an argument to `unwrap_or_else`.
-We’ll cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For
-now, you just need to know that `unwrap_or_else` will pass the inner value of
-the `Err`, which in this case is the static string `"not enough arguments"`
-that we added in Listing 12-9, to our closure in the argument `err` that
-appears between the vertical pipes. The code in the closure can then use the
-`err` value when it runs.
+في هذه القائمة، استخدمنا تابعًا لم نغطه بالتفصيل بعد: `unwrap_or_else`، والذي
+يتم تعريفه على `Result<T, E>` بواسطة المكتبة القياسية. يتيح لنا استخدام
+`unwrap_or_else` تعريف بعض معالجة الأخطاء المخصصة غير `panic!`. إذا كانت
+`Result` قيمة `Ok`، فإن سلوك هذا التابع مشابه لـ `unwrap`: يُرجع القيمة
+الداخلية التي يغلفها `Ok`. ومع ذلك، إذا كانت القيمة قيمة `Err`، يستدعي هذا
+التابع الكود في الإغلاق، وهو دالة مجهولة نعرّفها ونمررها كمعامل إلى
+`unwrap_or_else`. سنغطي الإغلاقات بمزيد من التفصيل في [الفصل 13][ch13]<!--
+ignore -->. في الوقت الحالي، تحتاج فقط إلى معرفة أن `unwrap_or_else` سيمرر
+القيمة الداخلية لـ `Err`، والتي في هذه الحالة هي النص الثابت `"not enough
+arguments"` الذي أضفناه في القائمة 12-9، إلى إغلاقنا في المعامل `err` الذي
+يظهر بين الأنابيب العمودية. يمكن للكود في الإغلاق بعد ذلك استخدام قيمة `err`
+عند تشغيله.
 
-We’ve added a new `use` line to bring `process` from the standard library into
-scope. The code in the closure that will be run in the error case is only two
-lines: We print the `err` value and then call `process::exit`. The
-`process::exit` function will stop the program immediately and return the
-number that was passed as the exit status code. This is similar to the
-`panic!`-based handling we used in Listing 12-8, but we no longer get all the
-extra output. Let’s try it:
+أضفنا سطر `use` جديدًا لإدخال `process` من المكتبة القياسية إلى النطاق. الكود
+في الإغلاق الذي سيتم تشغيله في حالة الخطأ هو سطران فقط: نطبع قيمة `err` ثم
+نستدعي `process::exit`. ستوقف دالة `process::exit` البرنامج فورًا وتُرجع الرقم
+الذي تم تمريره كرمز حالة الخروج. هذا مشابه للمعالجة المستندة إلى `panic!` التي
+استخدمناها في القائمة 12-8، لكننا لم نعد نحصل على كل الإخراج الإضافي. لنجربه:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
-Great! This output is much friendlier for our users.
+عظيم! هذا الإخراج أكثر ودية لمستخدمينا.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="extracting-logic-from-the-main-function"></a>
 
-### Extracting Logic from `main`
+### استخراج المنطق من `main`
 
-Now that we’ve finished refactoring the configuration parsing, let’s turn to
-the program’s logic. As we stated in [“Separating Concerns in Binary
-Projects”](#separation-of-concerns-for-binary-projects)<!-- ignore -->, we’ll
-extract a function named `run` that will hold all the logic currently in the
-`main` function that isn’t involved with setting up configuration or handling
-errors. When we’re done, the `main` function will be concise and easy to verify
-by inspection, and we’ll be able to write tests for all the other logic.
+الآن بعد أن انتهينا من إعادة هيكلة تحليل التكوين، لننتقل إلى منطق البرنامج. كما
+ذكرنا في ["فصل الاهتمامات في المشاريع
+الثنائية"](#separation-of-concerns-for-binary-projects)<!-- ignore -->، سنستخرج
+دالة تُسمى `run` ستحتفظ بكل المنطق الموجود حاليًا في دالة `main` الذي لا يتعلق
+بإعداد التكوين أو معالجة الأخطاء. عندما ننتهي، ستكون دالة `main` موجزة وسهلة
+التحقق منها بالفحص، وسنتمكن من كتابة اختبارات لجميع المنطق الآخر.
 
-Listing 12-11 shows the small, incremental improvement of extracting a `run`
-function.
+توضح القائمة 12-11 التحسين الصغير المتدرج لاستخراج دالة `run`.
 
-<Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
+<Listing number="12-11" file-name="src/main.rs" caption="استخراج دالة `run` تحتوي على بقية منطق البرنامج">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
@@ -360,25 +323,23 @@ function.
 
 </Listing>
 
-The `run` function now contains all the remaining logic from `main`, starting
-from reading the file. The `run` function takes the `Config` instance as an
-argument.
+تحتوي دالة `run` الآن على كل المنطق المتبقي من `main`، بدءًا من قراءة الملف.
+تأخذ دالة `run` مثيل `Config` كمعامل.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="returning-errors-from-the-run-function"></a>
 
-#### Returning Errors from `run`
+#### إرجاع أخطاء من `run`
 
-With the remaining program logic separated into the `run` function, we can
-improve the error handling, as we did with `Config::build` in Listing 12-9.
-Instead of allowing the program to panic by calling `expect`, the `run`
-function will return a `Result<T, E>` when something goes wrong. This will let
-us further consolidate the logic around handling errors into `main` in a
-user-friendly way. Listing 12-12 shows the changes we need to make to the
-signature and body of `run`.
+مع فصل منطق البرنامج المتبقي إلى دالة `run`، يمكننا تحسين معالجة الأخطاء، كما
+فعلنا مع `Config::build` في القائمة 12-9. بدلاً من السماح للبرنامج بالذعر عن
+طريق استدعاء `expect`، ستُرجع دالة `run` `Result<T, E>` عندما يحدث خطأ ما.
+سيتيح لنا هذا مزيدًا من دمج المنطق حول معالجة الأخطاء في `main` بطريقة سهلة
+الاستخدام. توضح القائمة 12-12 التغييرات التي نحتاج إلى إجرائها على توقيع وجسم
+`run`.
 
-<Listing number="12-12" file-name="src/main.rs" caption="Changing the `run` function to return `Result`">
+<Listing number="12-12" file-name="src/main.rs" caption="تغيير دالة `run` لإرجاع `Result`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
@@ -386,80 +347,72 @@ signature and body of `run`.
 
 </Listing>
 
-We’ve made three significant changes here. First, we changed the return type of
-the `run` function to `Result<(), Box<dyn Error>>`. This function previously
-returned the unit type, `()`, and we keep that as the value returned in the
-`Ok` case.
+لقد أجرينا ثلاثة تغييرات مهمة هنا. أولاً، غيرنا نوع الإرجاع لدالة `run` إلى
+`Result<(), Box<dyn Error>>`. أرجعت هذه الدالة سابقًا نوع الوحدة، `()`،
+ونحتفظ بذلك كقيمة تُرجع في حالة `Ok`.
 
-For the error type, we used the trait object `Box<dyn Error>` (and we brought
-`std::error::Error` into scope with a `use` statement at the top). We’ll cover
-trait objects in [Chapter 18][ch18]<!-- ignore -->. For now, just know that
-`Box<dyn Error>` means the function will return a type that implements the
-`Error` trait, but we don’t have to specify what particular type the return
-value will be. This gives us flexibility to return error values that may be of
-different types in different error cases. The `dyn` keyword is short for
-_dynamic_.
+بالنسبة لنوع الخطأ، استخدمنا كائن السمة `Box<dyn Error>` (وأدخلنا
+`std::error::Error` إلى النطاق بعبارة `use` في الأعلى). سنغطي كائنات السمات في
+[الفصل 18][ch18]<!-- ignore -->. في الوقت الحالي، اعلم فقط أن `Box<dyn Error>`
+يعني أن الدالة ستُرجع نوعًا ينفذ سمة `Error`، ولكن ليس علينا تحديد ما هو النوع
+المحدد الذي ستكون عليه قيمة الإرجاع. هذا يمنحنا المرونة لإرجاع قيم خطأ قد تكون
+من أنواع مختلفة في حالات خطأ مختلفة. الكلمة الأساسية `dyn` هي اختصار لـ
+_dynamic_ (ديناميكي).
 
-Second, we’ve removed the call to `expect` in favor of the `?` operator, as we
-talked about in [Chapter 9][ch9-question-mark]<!-- ignore -->. Rather than
-`panic!` on an error, `?` will return the error value from the current function
-for the caller to handle.
+ثانيًا، أزلنا استدعاء `expect` لصالح المشغل `?`، كما تحدثنا في [الفصل
+9][ch9-question-mark]<!-- ignore -->. بدلاً من `panic!` عند حدوث خطأ، سيُرجع `?`
+قيمة الخطأ من الدالة الحالية للمستدعي للتعامل معها.
 
-Third, the `run` function now returns an `Ok` value in the success case.
-We’ve declared the `run` function’s success type as `()` in the signature,
-which means we need to wrap the unit type value in the `Ok` value. This
-`Ok(())` syntax might look a bit strange at first. But using `()` like this is
-the idiomatic way to indicate that we’re calling `run` for its side effects
-only; it doesn’t return a value we need.
+ثالثًا، تُرجع دالة `run` الآن قيمة `Ok` في حالة النجاح. لقد أعلنا نوع نجاح دالة
+`run` كـ `()` في التوقيع، مما يعني أننا بحاجة إلى تغليف قيمة نوع الوحدة في قيمة
+`Ok`. قد يبدو بناء `Ok(())` هذا غريبًا بعض الشيء في البداية. لكن استخدام `()`
+بهذه الطريقة هو الطريقة الاصطلاحية للإشارة إلى أننا نستدعي `run` لآثارها
+الجانبية فقط؛ لا تُرجع قيمة نحتاجها.
 
-When you run this code, it will compile but will display a warning:
+عندما تشغل هذا الكود، سيُصرّف لكنه سيعرض تحذيرًا:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 
-Rust tells us that our code ignored the `Result` value and the `Result` value
-might indicate that an error occurred. But we’re not checking to see whether or
-not there was an error, and the compiler reminds us that we probably meant to
-have some error-handling code here! Let’s rectify that problem now.
+تخبرنا Rust أن كودنا تجاهل قيمة `Result` وقد تشير قيمة `Result` إلى حدوث خطأ.
+لكننا لا نتحقق مما إذا كان هناك خطأ أم لا، ويذكرنا المصرِّف بأننا ربما قصدنا أن
+يكون لدينا بعض كود معالجة الأخطاء هنا! لنعالج تلك المشكلة الآن.
 
-#### Handling Errors Returned from `run` in `main`
+#### معالجة الأخطاء المُرجعة من `run` في `main`
 
-We’ll check for errors and handle them using a technique similar to one we used
-with `Config::build` in Listing 12-10, but with a slight difference:
+سنتحقق من الأخطاء ونتعامل معها باستخدام تقنية مشابهة لتلك التي استخدمناها مع
+`Config::build` في القائمة 12-10، ولكن مع اختلاف طفيف:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
-We use `if let` rather than `unwrap_or_else` to check whether `run` returns an
-`Err` value and to call `process::exit(1)` if it does. The `run` function
-doesn’t return a value that we want to `unwrap` in the same way that
-`Config::build` returns the `Config` instance. Because `run` returns `()` in
-the success case, we only care about detecting an error, so we don’t need
-`unwrap_or_else` to return the unwrapped value, which would only be `()`.
+نستخدم `if let` بدلاً من `unwrap_or_else` للتحقق مما إذا كانت `run` تُرجع قيمة
+`Err` ولاستدعاء `process::exit(1)` إذا كان الأمر كذلك. لا تُرجع دالة `run`
+قيمة نريد `unwrap` بها بنفس الطريقة التي تُرجع بها `Config::build` مثيل
+`Config`. لأن `run` تُرجع `()` في حالة النجاح، نهتم فقط باكتشاف خطأ، لذا لا
+نحتاج إلى `unwrap_or_else` لإرجاع القيمة غير الملفوفة، والتي ستكون فقط `()`.
 
-The bodies of the `if let` and the `unwrap_or_else` functions are the same in
-both cases: We print the error and exit.
+أجساد `if let` و `unwrap_or_else` متطابقة في كلتا الحالتين: نطبع الخطأ ونخرج.
 
-### Splitting Code into a Library Crate
+### تقسيم الكود إلى صندوق مكتبة
 
-Our `minigrep` project is looking good so far! Now we’ll split the
-_src/main.rs_ file and put some code into the _src/lib.rs_ file. That way, we
-can test the code and have a _src/main.rs_ file with fewer responsibilities.
+يبدو مشروع `minigrep` الخاص بنا جيدًا حتى الآن! الآن سنقسم ملف _src/main.rs_
+ونضع بعض الكود في ملف _src/lib.rs_. بهذه الطريقة، يمكننا اختبار الكود ويكون لدينا
+ملف _src/main.rs_ بمسؤوليات أقل.
 
-Let’s define the code responsible for searching text in _src/lib.rs_ rather
-than in _src/main.rs_, which will let us (or anyone else using our
-`minigrep` library) call the searching function from more contexts than our
-`minigrep` binary.
+لنعرّف الكود المسؤول عن البحث عن النص في _src/lib.rs_ بدلاً من _src/main.rs_،
+مما سيتيح لنا (أو لأي شخص آخر يستخدم مكتبة `minigrep` الخاصة بنا) استدعاء دالة
+البحث من سياقات أكثر من برنامجنا الثنائي `minigrep`.
 
-First, let’s define the `search` function signature in _src/lib.rs_ as shown in
-Listing 12-13, with a body that calls the `unimplemented!` macro. We’ll explain
-the signature in more detail when we fill in the implementation.
+أولاً، لنعرّف توقيع دالة `search` في _src/lib.rs_ كما هو موضح في القائمة 12-13،
+مع جسم يستدعي ماكرو `unimplemented!`. سنشرح التوقيع بمزيد من التفصيل عندما نملأ
+التطبيق.
 
-<Listing number="12-13" file-name="src/lib.rs" caption="Defining the `search` function in *src/lib.rs*">
+<Listing number="12-13" file-name="src/lib.rs" caption="تعريف دالة `search` في *src/lib.rs*">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs}}
@@ -467,14 +420,14 @@ the signature in more detail when we fill in the implementation.
 
 </Listing>
 
-We’ve used the `pub` keyword on the function definition to designate `search`
-as part of our library crate’s public API. We now have a library crate that we
-can use from our binary crate and that we can test!
+لقد استخدمنا الكلمة الأساسية `pub` على تعريف الدالة لتعيين `search` كجزء من
+واجهة برمجة التطبيقات العامة لصندوق مكتبتنا. لدينا الآن صندوق مكتبة يمكننا
+استخدامه من صندوقنا الثنائي ويمكننا اختباره!
 
-Now we need to bring the code defined in _src/lib.rs_ into the scope of the
-binary crate in _src/main.rs_ and call it, as shown in Listing 12-14.
+الآن نحتاج إلى إدخال الكود المعرّف في _src/lib.rs_ إلى نطاق الصندوق الثنائي في
+_src/main.rs_ واستدعائه، كما هو موضح في القائمة 12-14.
 
-<Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate’s `search` function in *src/main.rs*">
+<Listing number="12-14" file-name="src/main.rs" caption="استخدام دالة `search` من صندوق مكتبة `minigrep` في *src/main.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
@@ -482,28 +435,24 @@ binary crate in _src/main.rs_ and call it, as shown in Listing 12-14.
 
 </Listing>
 
-We add a `use minigrep::search` line to bring the `search` function from
-the library crate into the binary crate’s scope. Then, in the `run` function,
-rather than printing out the contents of the file, we call the `search`
-function and pass the `config.query` value and `contents` as arguments. Then,
-`run` will use a `for` loop to print each line returned from `search` that
-matched the query. This is also a good time to remove the `println!` calls in
-the `main` function that displayed the query and the file path so that our
-program only prints the search results (if no errors occur).
+نضيف سطر `use minigrep::search` لإدخال دالة `search` من صندوق المكتبة إلى نطاق
+الصندوق الثنائي. ثم، في دالة `run`، بدلاً من طباعة محتويات الملف، نستدعي دالة
+`search` ونمرر قيمة `config.query` و `contents` كمعاملات. بعد ذلك، ستستخدم
+`run` حلقة `for` لطباعة كل سطر مُرجع من `search` طابق الاستعلام. هذا أيضًا وقت
+جيد لإزالة استدعاءات `println!` في دالة `main` التي عرضت الاستعلام ومسار الملف
+بحيث لا يطبع برنامجنا سوى نتائج البحث (إذا لم تحدث أخطاء).
 
-Note that the search function will be collecting all the results into a vector
-it returns before any printing happens. This implementation could be slow to
-display results when searching large files, because results aren’t printed as
-they’re found; we’ll discuss a possible way to fix this using iterators in
-Chapter 13.
+لاحظ أن دالة البحث ستجمع جميع النتائج في متجه تُرجعه قبل حدوث أي طباعة. قد يكون
+هذا التطبيق بطيئًا في عرض النتائج عند البحث في ملفات كبيرة، لأن النتائج لا تُطبع
+عند العثور عليها؛ سنناقش طريقة محتملة لإصلاح هذا باستخدام المُكرِّرات في الفصل
+13.
 
-Whew! That was a lot of work, but we’ve set ourselves up for success in the
-future. Now it’s much easier to handle errors, and we’ve made the code more
-modular. Almost all of our work will be done in _src/lib.rs_ from here on out.
+فيو! كان ذلك الكثير من العمل، لكننا أعددنا أنفسنا للنجاح في المستقبل. الآن من
+الأسهل بكثير معالجة الأخطاء، ولقد جعلنا الكود أكثر نمطية. سيتم إنجاز جميع
+أعمالنا تقريبًا في _src/lib.rs_ من الآن فصاعدًا.
 
-Let’s take advantage of this newfound modularity by doing something that would
-have been difficult with the old code but is easy with the new code: We’ll
-write some tests!
+لنستفد من هذه النمطية الجديدة من خلال القيام بشيء كان سيكون صعبًا مع الكود
+القديم لكنه سهل مع الكود الجديد: سنكتب بعض الاختبارات!
 
 [ch13]: ch13-00-functional-features.html
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation

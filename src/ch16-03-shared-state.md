@@ -1,62 +1,33 @@
-## Shared-State Concurrency
+## تزامن الحالة المشتركة
 
-Message passing is a fine way to handle concurrency, but it’s not the only way.
-Another method would be for multiple threads to access the same shared data.
-Consider this part of the slogan from the Go language documentation again: “Do
-not communicate by sharing memory.”
+تمرير الرسائل هو طريقة جيدة للتعامل مع التزامن، لكنها ليست الطريقة الوحيدة. هناك طريقة أخرى وهي أن تصل خيوط متعددة إلى نفس البيانات المشتركة. فكر في هذا الجزء من شعار توثيق لغة Go مرة أخرى: "لا تتواصل بمشاركة الذاكرة."
 
-What would communicating by sharing memory look like? In addition, why would
-message-passing enthusiasts caution not to use memory sharing?
+كيف سيبدو التواصل بمشاركة الذاكرة؟ بالإضافة إلى ذلك، لماذا يحذر عشاق تمرير الرسائل من عدم استخدام مشاركة الذاكرة؟
 
-In a way, channels in any programming language are similar to single ownership
-because once you transfer a value down a channel, you should no longer use that
-value. Shared-memory concurrency is like multiple ownership: Multiple threads
-can access the same memory location at the same time. As you saw in Chapter 15,
-where smart pointers made multiple ownership possible, multiple ownership can
-add complexity because these different owners need managing. Rust’s type system
-and ownership rules greatly assist in getting this management correct. For an
-example, let’s look at mutexes, one of the more common concurrency primitives
-for shared memory.
+بطريقة ما، القنوات في أي لغة برمجة مشابهة للملكية الفردية لأنه بمجرد نقل قيمة أسفل قناة، يجب ألا تستخدم تلك القيمة بعد الآن. تزامن الذاكرة المشتركة يشبه الملكية المتعددة: يمكن لخيوط متعددة الوصول إلى نفس موقع الذاكرة في نفس الوقت. كما رأيت في الفصل 15، حيث جعلت المؤشرات الذكية الملكية المتعددة ممكنة، يمكن أن تضيف الملكية المتعددة تعقيداً لأن هؤلاء المالكين المختلفين يحتاجون إلى إدارة. يساعد نظام الأنواع وقواعد الملكية في Rust بشكل كبير في الحصول على هذه الإدارة بشكل صحيح. للحصول على مثال، دعونا ننظر إلى الأقفال المتبادلة (Mutexes)، وهي واحدة من أكثر الأوليات التزامنية شيوعاً للذاكرة المشتركة.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-mutexes-to-allow-access-to-data-from-one-thread-at-a-time"></a>
 
-### Controlling Access with Mutexes
+### التحكم في الوصول باستخدام Mutexes
 
-_Mutex_ is an abbreviation for _mutual exclusion_, as in a mutex allows only
-one thread to access some data at any given time. To access the data in a
-mutex, a thread must first signal that it wants access by asking to acquire the
-mutex’s lock. The _lock_ is a data structure that is part of the mutex that
-keeps track of who currently has exclusive access to the data. Therefore, the
-mutex is described as _guarding_ the data it holds via the locking system.
+Mutex هو اختصار للاستبعاد المتبادل (Mutual exclusion)، كما في أن mutex يسمح فقط لخيط واحد بالوصول إلى بعض البيانات في أي وقت معين. للوصول إلى البيانات في mutex، يجب على الخيط أولاً أن يشير إلى أنه يريد الوصول عن طريق طلب الحصول على قفل (Lock) الـ mutex. القفل هو بنية بيانات تعد جزءاً من الـ mutex تتتبع من لديه حالياً وصول حصري إلى البيانات. لذلك، يوصف الـ mutex بأنه يحرس (Guarding) البيانات التي يحملها عبر نظام القفل.
 
-Mutexes have a reputation for being difficult to use because you have to
-remember two rules:
+الأقفال المتبادلة لها سمعة بأنها صعبة الاستخدام لأنه عليك أن تتذكر قاعدتين:
 
-1. You must attempt to acquire the lock before using the data.
-2. When you’re done with the data that the mutex guards, you must unlock the
-   data so that other threads can acquire the lock.
+1. يجب عليك محاولة الحصول على القفل قبل استخدام البيانات.
+2. عندما تنتهي من البيانات التي يحرسها الـ mutex، يجب عليك فتح القفل للبيانات بحيث يمكن للخيوط الأخرى الحصول على القفل.
 
-For a real-world metaphor for a mutex, imagine a panel discussion at a
-conference with only one microphone. Before a panelist can speak, they have to
-ask or signal that they want to use the microphone. When they get the
-microphone, they can talk for as long as they want to and then hand the
-microphone to the next panelist who requests to speak. If a panelist forgets to
-hand the microphone off when they’re finished with it, no one else is able to
-speak. If management of the shared microphone goes wrong, the panel won’t work
-as planned!
+للحصول على استعارة من العالم الحقيقي للـ mutex، تخيل مناقشة جماعية في مؤتمر بميكروفون واحد فقط. قبل أن يتمكن أحد المتحدثين من التحدث، عليهم أن يطلبوا أو يشيروا إلى أنهم يريدون استخدام الميكروفون. عندما يحصلون على الميكروفون، يمكنهم التحدث طالما يريدون ثم يسلمون الميكروفون إلى المتحدث التالي الذي يطلب التحدث. إذا نسي أحد المتحدثين تسليم الميكروفون عندما ينتهون منه، فلن يتمكن أي شخص آخر من التحدث. إذا سارت إدارة الميكروفون المشترك بشكل خاطئ، فلن تعمل المناقشة كما هو مخطط لها!
 
-Management of mutexes can be incredibly tricky to get right, which is why so
-many people are enthusiastic about channels. However, thanks to Rust’s type
-system and ownership rules, you can’t get locking and unlocking wrong.
+يمكن أن تكون إدارة الأقفال المتبادلة معقدة بشكل لا يصدق لفعلها بشكل صحيح، وهذا هو السبب في أن الكثير من الناس متحمسون للقنوات. ومع ذلك، بفضل نظام الأنواع وقواعد الملكية في Rust، لا يمكنك الحصول على القفل والفتح بشكل خاطئ.
 
-#### The API of `Mutex<T>`
+#### واجهة برمجة تطبيقات `Mutex<T>`
 
-As an example of how to use a mutex, let’s start by using a mutex in a
-single-threaded context, as shown in Listing 16-12.
+كمثال على كيفية استخدام mutex، دعونا نبدأ باستخدام mutex في سياق خيط واحد، كما هو موضح في القائمة 16-12.
 
-<Listing number="16-12" file-name="src/main.rs" caption="Exploring the API of `Mutex<T>` in a single-threaded context for simplicity">
+<Listing number="16-12" file-name="src/main.rs" caption="استكشاف واجهة برمجة تطبيقات `Mutex<T>` في سياق خيط واحد من أجل البساطة">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-12/src/main.rs}}
@@ -64,46 +35,25 @@ single-threaded context, as shown in Listing 16-12.
 
 </Listing>
 
-As with many types, we create a `Mutex<T>` using the associated function `new`.
-To access the data inside the mutex, we use the `lock` method to acquire the
-lock. This call will block the current thread so that it can’t do any work
-until it’s our turn to have the lock.
+كما هو الحال مع العديد من الأنواع، نُنشئ `Mutex<T>` باستخدام الدالة المرتبطة `new`. للوصول إلى البيانات داخل الـ mutex، نستخدم دالة `lock` للحصول على القفل. سيحجب هذا الاستدعاء الخيط الحالي حتى لا يتمكن من القيام بأي عمل حتى يحين دورنا للحصول على القفل.
 
-The call to `lock` would fail if another thread holding the lock panicked. In
-that case, no one would ever be able to get the lock, so we’ve chosen to
-`unwrap` and have this thread panic if we’re in that situation.
+سيفشل الاستدعاء إلى `lock` إذا ذعر خيط آخر يحمل القفل. في هذه الحالة، لن يتمكن أحد من الحصول على القفل، لذلك اخترنا `unwrap` وجعل هذا الخيط يذعر إذا كنا في هذا الوضع.
 
-After we’ve acquired the lock, we can treat the return value, named `num` in
-this case, as a mutable reference to the data inside. The type system ensures
-that we acquire a lock before using the value in `m`. The type of `m` is
-`Mutex<i32>`, not `i32`, so we _must_ call `lock` to be able to use the `i32`
-value. We can’t forget; the type system won’t let us access the inner `i32`
-otherwise.
+بعد أن حصلنا على القفل، يمكننا التعامل مع قيمة الإرجاع، المسماة `num` في هذه الحالة، كمرجع قابل للتغيير إلى البيانات الداخلية. يضمن نظام الأنواع أننا نحصل على قفل قبل استخدام القيمة في `m`. نوع `m` هو `Mutex<i32>`، وليس `i32`، لذلك يجب علينا استدعاء `lock` لنتمكن من استخدام قيمة `i32`. لا يمكننا أن ننسى؛ لن يسمح لنا نظام الأنواع بالوصول إلى `i32` الداخلية بطريقة أخرى.
 
-The call to `lock` returns a type called `MutexGuard`, wrapped in a
-`LockResult` that we handled with the call to `unwrap`. The `MutexGuard` type
-implements `Deref` to point at our inner data; the type also has a `Drop`
-implementation that releases the lock automatically when a `MutexGuard` goes
-out of scope, which happens at the end of the inner scope. As a result, we
-don’t risk forgetting to release the lock and blocking the mutex from being
-used by other threads because the lock release happens automatically.
+يُرجع الاستدعاء إلى `lock` نوعاً يسمى `MutexGuard`، ملفوفاً في `LockResult` الذي تعاملنا معه بالاستدعاء إلى `unwrap`. ينفذ نوع `MutexGuard` السِمة `Deref` للإشارة إلى بياناتنا الداخلية؛ كما أن النوع لديه تنفيذ `Drop` يُطلق القفل تلقائياً عندما يخرج `MutexGuard` من النطاق، وهو ما يحدث في نهاية النطاق الداخلي. نتيجة لذلك، لا نخاطر بنسيان إطلاق القفل وحجب الـ mutex من الاستخدام بواسطة خيوط أخرى لأن إطلاق القفل يحدث تلقائياً.
 
-After dropping the lock, we can print the mutex value and see that we were able
-to change the inner `i32` to `6`.
+بعد إسقاط القفل، يمكننا طباعة قيمة الـ mutex ورؤية أننا تمكنا من تغيير `i32` الداخلية إلى `6`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="sharing-a-mutext-between-multiple-threads"></a>
 
-#### Shared Access to `Mutex<T>`
+#### الوصول المشترك إلى `Mutex<T>`
 
-Now let’s try to share a value between multiple threads using `Mutex<T>`. We’ll
-spin up 10 threads and have them each increment a counter value by 1, so the
-counter goes from 0 to 10. The example in Listing 16-13 will have a compiler
-error, and we’ll use that error to learn more about using `Mutex<T>` and how
-Rust helps us use it correctly.
+الآن دعونا نحاول مشاركة قيمة بين خيوط متعددة باستخدام `Mutex<T>`. سنقوم بإطلاق 10 خيوط ونجعل كل منها يزيد قيمة عداد بمقدار 1، بحيث ينتقل العداد من 0 إلى 10. سيكون للمثال في القائمة 16-13 خطأ في المترجم، وسنستخدم هذا الخطأ لمعرفة المزيد عن استخدام `Mutex<T>` وكيف تساعدنا Rust في استخدامه بشكل صحيح.
 
-<Listing number="16-13" file-name="src/main.rs" caption="Ten threads, each incrementing a counter guarded by a `Mutex<T>`">
+<Listing number="16-13" file-name="src/main.rs" caption="عشرة خيوط، كل منها يزيد عداداً محروساً بواسطة `Mutex<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-13/src/main.rs}}
@@ -111,38 +61,23 @@ Rust helps us use it correctly.
 
 </Listing>
 
-We create a `counter` variable to hold an `i32` inside a `Mutex<T>`, as we did
-in Listing 16-12. Next, we create 10 threads by iterating over a range of
-numbers. We use `thread::spawn` and give all the threads the same closure: one
-that moves the counter into the thread, acquires a lock on the `Mutex<T>` by
-calling the `lock` method, and then adds 1 to the value in the mutex. When a
-thread finishes running its closure, `num` will go out of scope and release the
-lock so that another thread can acquire it.
+نُنشئ متغير `counter` لاحتواء `i32` داخل `Mutex<T>`، كما فعلنا في القائمة 16-12. بعد ذلك، نُنشئ 10 خيوط عن طريق التكرار على نطاق من الأرقام. نستخدم `thread::spawn` ونعطي جميع الخيوط نفس الإغلاق: واحد ينقل العداد إلى الخيط، ويحصل على قفل على `Mutex<T>` عن طريق استدعاء دالة `lock`، ثم يضيف 1 إلى القيمة في الـ mutex. عندما ينتهي خيط من تشغيل إغلاقه، سيخرج `num` من النطاق ويطلق القفل بحيث يمكن لخيط آخر الحصول عليه.
 
-In the main thread, we collect all the join handles. Then, as we did in Listing
-16-2, we call `join` on each handle to make sure all the threads finish. At
-that point, the main thread will acquire the lock and print the result of this
-program.
+في الخيط الرئيسي، نجمع جميع معالجات الانضمام. ثم، كما فعلنا في القائمة 16-2، نستدعي `join` على كل معالج للتأكد من أن جميع الخيوط تنتهي. في تلك النقطة، سيحصل الخيط الرئيسي على القفل ويطبع نتيجة هذا البرنامج.
 
-We hinted that this example wouldn’t compile. Now let’s find out why!
+لمحنا إلى أن هذا المثال لن يترجم. الآن دعونا نكتشف السبب!
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-13/output.txt}}
 ```
 
-The error message states that the `counter` value was moved in the previous
-iteration of the loop. Rust is telling us that we can’t move the ownership of
-lock `counter` into multiple threads. Let’s fix the compiler error with the
-multiple-ownership method we discussed in Chapter 15.
+تشير رسالة الخطأ إلى أن قيمة `counter` تم نقلها في التكرار السابق للحلقة. تخبرنا Rust أننا لا نستطيع نقل ملكية القفل `counter` إلى خيوط متعددة. دعونا نصلح خطأ المترجم بطريقة الملكية المتعددة التي ناقشناها في الفصل 15.
 
-#### Multiple Ownership with Multiple Threads
+#### الملكية المتعددة مع خيوط متعددة
 
-In Chapter 15, we gave a value to multiple owners by using the smart pointer
-`Rc<T>` to create a reference-counted value. Let’s do the same here and see
-what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14 and clone
-the `Rc<T>` before moving ownership to the thread.
+في الفصل 15، أعطينا قيمة لمالكين متعددين باستخدام المؤشر الذكي `Rc<T>` لإنشاء قيمة معدودة المراجع. دعونا نفعل نفس الشيء هنا ونرى ماذا يحدث. سنلف `Mutex<T>` في `Rc<T>` في القائمة 16-14 ونستنسخ `Rc<T>` قبل نقل الملكية إلى الخيط.
 
-<Listing number="16-14" file-name="src/main.rs" caption="Attempting to use `Rc<T>` to allow multiple threads to own the `Mutex<T>`">
+<Listing number="16-14" file-name="src/main.rs" caption="محاولة استخدام `Rc<T>` للسماح لخيوط متعددة بامتلاك `Mutex<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-14/src/main.rs}}
@@ -150,51 +85,25 @@ the `Rc<T>` before moving ownership to the thread.
 
 </Listing>
 
-Once again, we compile and get... different errors! The compiler is teaching us
-a lot:
+مرة أخرى، نقوم بالترجمة ونحصل على... أخطاء مختلفة! المترجم يعلمنا الكثير:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
 ```
 
-Wow, that error message is very wordy! Here’s the important part to focus on:
-`` `Rc<Mutex<i32>>` cannot be sent between threads safely ``. The compiler is
-also telling us the reason why: `` the trait `Send` is not implemented for
-`Rc<Mutex<i32>>` ``. We’ll talk about `Send` in the next section: It’s one of
-the traits that ensures that the types we use with threads are meant for use in
-concurrent situations.
+واو، رسالة الخطأ هذه طويلة جداً! إليك الجزء المهم الذي يجب التركيز عليه: `` `Rc<Mutex<i32>>` cannot be sent between threads safely ``. يخبرنا المترجم أيضاً بالسبب: `` the trait `Send` is not implemented for `Rc<Mutex<i32>>` ``. سنتحدث عن `Send` في القسم التالي: إنها واحدة من السِمات التي تضمن أن الأنواع التي نستخدمها مع الخيوط مخصصة للاستخدام في المواقف المتزامنة.
 
-Unfortunately, `Rc<T>` is not safe to share across threads. When `Rc<T>`
-manages the reference count, it adds to the count for each call to `clone` and
-subtracts from the count when each clone is dropped. But it doesn’t use any
-concurrency primitives to make sure that changes to the count can’t be
-interrupted by another thread. This could lead to wrong counts—subtle bugs that
-could in turn lead to memory leaks or a value being dropped before we’re done
-with it. What we need is a type that is exactly like `Rc<T>`, but that makes
-changes to the reference count in a thread-safe way.
+لسوء الحظ، `Rc<T>` ليس آمناً للمشاركة عبر الخيوط. عندما تدير `Rc<T>` عدد المراجع، فإنها تضيف إلى العدد لكل استدعاء لـ `clone` وتطرح من العدد عندما يتم إسقاط كل استنساخ. لكنها لا تستخدم أي أوليات تزامن للتأكد من أن التغييرات في العدد لا يمكن مقاطعتها بواسطة خيط آخر. قد يؤدي هذا إلى عدد خاطئ - أخطاء دقيقة يمكن أن تؤدي بدورها إلى تسريبات في الذاكرة أو إسقاط قيمة قبل أن ننتهي منها. ما نحتاجه هو نوع مثل تماماً `Rc<T>`، لكنه يجري تغييرات على عدد المراجع بطريقة آمنة للخيوط.
 
-#### Atomic Reference Counting with `Arc<T>`
+#### العد الذري للمراجع مع `Arc<T>`
 
-Fortunately, `Arc<T>` _is_ a type like `Rc<T>` that is safe to use in
-concurrent situations. The _a_ stands for _atomic_, meaning it’s an _atomically
-reference-counted_ type. Atomics are an additional kind of concurrency
-primitive that we won’t cover in detail here: See the standard library
-documentation for [`std::sync::atomic`][atomic]<!-- ignore --> for more
-details. At this point, you just need to know that atomics work like primitive
-types but are safe to share across threads.
+لحسن الحظ، `Arc<T>` هو نوع مثل `Rc<T>` آمن للاستخدام في المواقف المتزامنة. الحرف a يرمز إلى ذري (Atomic)، مما يعني أنه نوع معدود المراجع ذرياً (Atomically reference-counted). الذريات هي نوع إضافي من أوليات التزامن لن نغطيها بالتفصيل هنا: راجع توثيق المكتبة القياسية لـ [`std::sync::atomic`][atomic]<!-- ignore --> لمزيد من التفاصيل. في هذه المرحلة، تحتاج فقط إلى معرفة أن الذريات تعمل مثل الأنواع الأولية ولكنها آمنة للمشاركة عبر الخيوط.
 
-You might then wonder why all primitive types aren’t atomic and why standard
-library types aren’t implemented to use `Arc<T>` by default. The reason is that
-thread safety comes with a performance penalty that you only want to pay when
-you really need to. If you’re just performing operations on values within a
-single thread, your code can run faster if it doesn’t have to enforce the
-guarantees atomics provide.
+قد تتساءل بعد ذلك لماذا جميع الأنواع الأولية ليست ذرية ولماذا أنواع المكتبة القياسية لا يتم تنفيذها لاستخدام `Arc<T>` بشكل افتراضي. السبب هو أن أمان الخيوط يأتي مع عقوبة أداء تريد دفعها فقط عندما تحتاج إليها حقاً. إذا كنت تقوم فقط بإجراء عمليات على القيم داخل خيط واحد، فيمكن لكودك أن يعمل بشكل أسرع إذا لم يكن عليه فرض الضمانات التي توفرها الذريات.
 
-Let’s return to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix
-our program by changing the `use` line, the call to `new`, and the call to
-`clone`. The code in Listing 16-15 will finally compile and run.
+دعونا نعود إلى مثالنا: `Arc<T>` و `Rc<T>` لهما نفس واجهة برمجة التطبيقات، لذا نصلح برنامجنا بتغيير سطر `use` واستدعاء `new` واستدعاء `clone`. سيترجم الكود في القائمة 16-15 ويعمل أخيراً.
 
-<Listing number="16-15" file-name="src/main.rs" caption="Using an `Arc<T>` to wrap the `Mutex<T>` to be able to share ownership across multiple threads">
+<Listing number="16-15" file-name="src/main.rs" caption="استخدام `Arc<T>` لتغليف `Mutex<T>` لتتمكن من مشاركة الملكية عبر خيوط متعددة">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-15/src/main.rs}}
@@ -202,7 +111,7 @@ our program by changing the `use` line, the call to `new`, and the call to
 
 </Listing>
 
-This code will print the following:
+سيطبع هذا الكود ما يلي:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -212,44 +121,20 @@ changes in the compiler -->
 Result: 10
 ```
 
-We did it! We counted from 0 to 10, which may not seem very impressive, but it
-did teach us a lot about `Mutex<T>` and thread safety. You could also use this
-program’s structure to do more complicated operations than just incrementing a
-counter. Using this strategy, you can divide a calculation into independent
-parts, split those parts across threads, and then use a `Mutex<T>` to have each
-thread update the final result with its part.
+لقد فعلناها! عددنا من 0 إلى 10، وهو ما قد لا يبدو مثيراً للإعجاب، لكنه علمنا الكثير عن `Mutex<T>` وأمان الخيوط. يمكنك أيضاً استخدام بنية هذا البرنامج للقيام بعمليات أكثر تعقيداً من مجرد زيادة عداد. باستخدام هذه الاستراتيجية، يمكنك تقسيم حساب إلى أجزاء مستقلة، وتقسيم تلك الأجزاء عبر الخيوط، ثم استخدام `Mutex<T>` لجعل كل خيط يحدث النتيجة النهائية بجزءه.
 
-Note that if you are doing simple numerical operations, there are types simpler
-than `Mutex<T>` types provided by the [`std::sync::atomic` module of the
-standard library][atomic]<!-- ignore -->. These types provide safe, concurrent,
-atomic access to primitive types. We chose to use `Mutex<T>` with a primitive
-type for this example so that we could concentrate on how `Mutex<T>` works.
+لاحظ أنه إذا كنت تقوم بعمليات رقمية بسيطة، فهناك أنواع أبسط من أنواع `Mutex<T>` توفرها وحدة [`std::sync::atomic` من المكتبة القياسية][atomic]<!-- ignore -->. توفر هذه الأنواع وصولاً آمناً ومتزامناً وذرياً إلى الأنواع الأولية. اخترنا استخدام `Mutex<T>` مع نوع أولي لهذا المثال حتى نتمكن من التركيز على كيفية عمل `Mutex<T>`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="similarities-between-refcelltrct-and-mutextarct"></a>
 
-### Comparing `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
+### مقارنة `RefCell<T>`/`Rc<T>` و `Mutex<T>`/`Arc<T>`
 
-You might have noticed that `counter` is immutable but that we could get a
-mutable reference to the value inside it; this means `Mutex<T>` provides
-interior mutability, as the `Cell` family does. In the same way we used
-`RefCell<T>` in Chapter 15 to allow us to mutate contents inside an `Rc<T>`, we
-use `Mutex<T>` to mutate contents inside an `Arc<T>`.
+قد تكون لاحظت أن `counter` غير قابل للتغيير لكننا تمكنا من الحصول على مرجع قابل للتغيير إلى القيمة بداخله؛ هذا يعني أن `Mutex<T>` توفر قابلية التغيير الداخلية، كما تفعل عائلة `Cell`. بنفس الطريقة التي استخدمنا بها `RefCell<T>` في الفصل 15 للسماح لنا بتغيير المحتويات داخل `Rc<T>`، نستخدم `Mutex<T>` لتغيير المحتويات داخل `Arc<T>`.
 
-Another detail to note is that Rust can’t protect you from all kinds of logic
-errors when you use `Mutex<T>`. Recall from Chapter 15 that using `Rc<T>` came
-with the risk of creating reference cycles, where two `Rc<T>` values refer to
-each other, causing memory leaks. Similarly, `Mutex<T>` comes with the risk of
-creating _deadlocks_. These occur when an operation needs to lock two resources
-and two threads have each acquired one of the locks, causing them to wait for
-each other forever. If you’re interested in deadlocks, try creating a Rust
-program that has a deadlock; then, research deadlock mitigation strategies for
-mutexes in any language and have a go at implementing them in Rust. The
-standard library API documentation for `Mutex<T>` and `MutexGuard` offers
-useful information.
+تفصيل آخر يجب ملاحظته هو أن Rust لا يمكنها حمايتك من جميع أنواع الأخطاء المنطقية عند استخدام `Mutex<T>`. تذكر من الفصل 15 أن استخدام `Rc<T>` جاء مع خطر إنشاء دورات مرجعية، حيث تشير قيمتان `Rc<T>` إلى بعضهما البعض، مما يسبب تسريبات في الذاكرة. بالمثل، `Mutex<T>` يأتي مع خطر إنشاء جمود (Deadlocks). تحدث هذه عندما تحتاج عملية إلى قفل موردين واكتسب خيطان كل واحد منهما أحد الأقفال، مما يتسبب في انتظارهما لبعضهما البعض إلى الأبد. إذا كنت مهتماً بالجمود، فحاول إنشاء برنامج Rust به جمود؛ ثم ابحث عن استراتيجيات تخفيف الجمود للأقفال المتبادلة في أي لغة وحاول تنفيذها في Rust. توفر وثائق واجهة برمجة تطبيقات المكتبة القياسية لـ `Mutex<T>` و `MutexGuard` معلومات مفيدة.
 
-We’ll round out this chapter by talking about the `Send` and `Sync` traits and
-how we can use them with custom types.
+سنختتم هذا الفصل بالحديث عن سِمات `Send` و `Sync` وكيف يمكننا استخدامها مع الأنواع المخصصة.
 
 [atomic]: ../std/sync/atomic/index.html

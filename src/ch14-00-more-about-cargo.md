@@ -1,14 +1,14 @@
-# More About Cargo and Crates.io
+# المزيد عن Cargo و Crates.io
 
-So far, we’ve used only the most basic features of Cargo to build, run, and
-test our code, but it can do a lot more. In this chapter, we’ll discuss some of
-its other, more advanced features to show you how to do the following:
+حتى الآن، استخدمنا فقط الميزات الأساسية لـ Cargo لبناء وتشغيل واختبار
+الكود الخاص بنا، لكنه يمكنه فعل الكثير أكثر من ذلك. في هذا الفصل، سنناقش بعضًا من
+ميزاته الأخرى الأكثر تقدمًا لنُريك كيفية القيام بما يلي:
 
-- Customize your build through release profiles.
-- Publish libraries on [crates.io](https://crates.io/)<!-- ignore -->.
-- Organize large projects with workspaces.
-- Install binaries from [crates.io](https://crates.io/)<!-- ignore -->.
-- Extend Cargo using custom commands.
+- تخصيص البناء الخاص بك من خلال ملفات تعريف الإصدار (release profiles).
+- نشر المكتبات على [crates.io](https://crates.io/)<!-- ignore -->.
+- تنظيم المشاريع الكبيرة باستخدام مساحات العمل (workspaces).
+- تثبيت الملفات الثنائية من [crates.io](https://crates.io/)<!-- ignore -->.
+- توسيع Cargo باستخدام الأوامر المخصصة.
 
-Cargo can do even more than the functionality we cover in this chapter, so for
-a full explanation of all its features, see [its documentation](https://doc.rust-lang.org/cargo/).
+يمكن لـ Cargo فعل أكثر من الوظائف التي نغطيها في هذا الفصل، لذا للحصول على
+شرح كامل لجميع ميزاته، راجع [الوثائق الخاصة به](https://doc.rust-lang.org/cargo/).

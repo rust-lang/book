@@ -1,44 +1,26 @@
-## Using `Box<T>` to Point to Data on the Heap
+## استخدام `Box<T>` للإشارة إلى البيانات على الكومة
 
-The most straightforward smart pointer is a box, whose type is written
-`Box<T>`. _Boxes_ allow you to store data on the heap rather than the stack.
-What remains on the stack is the pointer to the heap data. Refer to Chapter 4
-to review the difference between the stack and the heap.
+المؤشر الذكي الأكثر وضوحًا هو الصندوق (box)، والذي يُكتب نوعه `Box<T>`. _الصناديق_ (Boxes) تسمح لك بتخزين البيانات على الكومة (heap) بدلاً من المكدس (stack). ما يبقى على المكدس هو المؤشر إلى بيانات الكومة. ارجع إلى الفصل 4 لمراجعة الفرق بين المكدس والكومة.
 
-Boxes don’t have performance overhead, other than storing their data on the
-heap instead of on the stack. But they don’t have many extra capabilities
-either. You’ll use them most often in these situations:
+الصناديق ليس لها عبء أداء، بخلاف تخزين بياناتها على الكومة بدلاً من المكدس. لكن ليس لديها العديد من القدرات الإضافية أيضًا. ستستخدمها غالبًا في هذه المواقف:
 
-- When you have a type whose size can’t be known at compile time, and you want
-  to use a value of that type in a context that requires an exact size
-- When you have a large amount of data, and you want to transfer ownership but
-  ensure that the data won’t be copied when you do so
-- When you want to own a value, and you care only that it’s a type that
-  implements a particular trait rather than being of a specific type
+- عندما يكون لديك نوع لا يمكن معرفة حجمه في وقت الترجمة، وتريد استخدام قيمة من هذا النوع في سياق يتطلب حجمًا دقيقًا
+- عندما يكون لديك كمية كبيرة من البيانات، وتريد نقل الملكية ولكن تأكد من أن البيانات لن يتم نسخها عند القيام بذلك
+- عندما تريد امتلاك قيمة، وتهتم فقط بأنها نوع ينفذ سِمة معينة بدلاً من أن تكون من نوع محدد
 
-We’ll demonstrate the first situation in [“Enabling Recursive Types with
-Boxes”](#enabling-recursive-types-with-boxes)<!-- ignore -->. In the second
-case, transferring ownership of a large amount of data can take a long time
-because the data is copied around on the stack. To improve performance in this
-situation, we can store the large amount of data on the heap in a box. Then,
-only the small amount of pointer data is copied around on the stack, while the
-data it references stays in one place on the heap. The third case is known as a
-_trait object_, and [“Using Trait Objects to Abstract over Shared
-Behavior”][trait-objects]<!-- ignore --> in Chapter 18 is devoted to that
-topic. So, what you learn here you’ll apply again in that section!
+سنوضح الحالة الأولى في ["تمكين الأنواع التكرارية باستخدام الصناديق"](#enabling-recursive-types-with-boxes)<!-- ignore -->. في الحالة الثانية، يمكن أن يستغرق نقل ملكية كمية كبيرة من البيانات وقتًا طويلاً لأن البيانات يتم نسخها على المكدس. لتحسين الأداء في هذه الحالة، يمكننا تخزين الكمية الكبيرة من البيانات على الكومة في صندوق. بعد ذلك، يتم نسخ الكمية الصغيرة من بيانات المؤشر فقط على المكدس، بينما تظل البيانات التي يشير إليها في مكان واحد على الكومة. الحالة الثالثة تُعرف باسم _كائن السِمة_ (trait object)، و["استخدام كائنات السِمة للتجريد عن السلوك المشترك"][trait-objects]<!-- ignore --> في الفصل 18 مخصص لهذا الموضوع. لذا، ما تتعلمه هنا ستطبقه مرة أخرى في ذلك القسم!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-boxt-to-store-data-on-the-heap"></a>
 
-### Storing Data on the Heap
+### تخزين البيانات على الكومة
 
-Before we discuss the heap storage use case for `Box<T>`, we’ll cover the
-syntax and how to interact with values stored within a `Box<T>`.
+قبل أن نناقش حالة استخدام تخزين الكومة لـ `Box<T>`، سنغطي الصيغة وكيفية التفاعل مع القيم المخزنة داخل `Box<T>`.
 
-Listing 15-1 shows how to use a box to store an `i32` value on the heap.
+يوضح القائمة 15-1 كيفية استخدام صندوق لتخزين قيمة `i32` على الكومة.
 
-<Listing number="15-1" file-name="src/main.rs" caption="Storing an `i32` value on the heap using a box">
+<Listing number="15-1" file-name="src/main.rs" caption="تخزين قيمة `i32` على الكومة باستخدام صندوق">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-01/src/main.rs}}
@@ -46,73 +28,37 @@ Listing 15-1 shows how to use a box to store an `i32` value on the heap.
 
 </Listing>
 
-We define the variable `b` to have the value of a `Box` that points to the
-value `5`, which is allocated on the heap. This program will print `b = 5`; in
-this case, we can access the data in the box similarly to how we would if this
-data were on the stack. Just like any owned value, when a box goes out of
-scope, as `b` does at the end of `main`, it will be deallocated. The
-deallocation happens both for the box (stored on the stack) and the data it
-points to (stored on the heap).
+نحدد المتغير `b` ليكون له قيمة `Box` التي تشير إلى القيمة `5`، والتي يتم تخصيصها على الكومة. سيطبع هذا البرنامج `b = 5`؛ في هذه الحالة، يمكننا الوصول إلى البيانات في الصندوق بشكل مشابه لكيفية الوصول إليها إذا كانت هذه البيانات على المكدس. تمامًا مثل أي قيمة مملوكة، عندما يخرج صندوق عن النطاق، كما يفعل `b` في نهاية `main`، سيتم إلغاء تخصيصه. يحدث إلغاء التخصيص لكل من الصندوق (المخزن على المكدس) والبيانات التي يشير إليها (المخزنة على الكومة).
 
-Putting a single value on the heap isn’t very useful, so you won’t use boxes by
-themselves in this way very often. Having values like a single `i32` on the
-stack, where they’re stored by default, is more appropriate in the majority of
-situations. Let’s look at a case where boxes allow us to define types that we
-wouldn’t be allowed to define if we didn’t have boxes.
+وضع قيمة واحدة على الكومة ليس مفيدًا جدًا، لذلك لن تستخدم الصناديق بهذه الطريقة بمفردها في كثير من الأحيان. وجود قيم مثل `i32` واحد على المكدس، حيث يتم تخزينها بشكل افتراضي، أكثر ملاءمة في غالبية الحالات. دعنا ننظر في حالة تسمح لنا فيها الصناديق بتعريف أنواع لن يُسمح لنا بتعريفها إذا لم يكن لدينا صناديق.
 
-### Enabling Recursive Types with Boxes
+### تمكين الأنواع التكرارية باستخدام الصناديق
 
-A value of a _recursive type_ can have another value of the same type as part of
-itself. Recursive types pose an issue because Rust needs to know at compile time
-how much space a type takes up. However, the nesting of values of recursive
-types could theoretically continue infinitely, so Rust can’t know how much space
-the value needs. Because boxes have a known size, we can enable recursive types
-by inserting a box in the recursive type definition.
+قيمة _النوع التكراري_ (recursive type) يمكن أن يكون لها قيمة أخرى من نفس النوع كجزء منها. الأنواع التكرارية تشكل مشكلة لأن Rust يحتاج إلى معرفة كم من المساحة يشغلها النوع في وقت الترجمة. ومع ذلك، يمكن أن يستمر تداخل قيم الأنواع التكرارية نظريًا إلى ما لا نهاية، لذلك لا تستطيع Rust معرفة كم من المساحة تحتاج القيمة. نظرًا لأن الصناديق لها حجم معروف، يمكننا تمكين الأنواع التكرارية عن طريق إدراج صندوق في تعريف النوع التكراري.
 
-As an example of a recursive type, let’s explore the cons list. This is a data
-type commonly found in functional programming languages. The cons list type
-we’ll define is straightforward except for the recursion; therefore, the
-concepts in the example we’ll work with will be useful anytime you get into
-more complex situations involving recursive types.
+كمثال على نوع تكراري، دعنا نستكشف قائمة cons. هذا نوع بيانات يُوجد عادةً في لغات البرمجة الوظيفية. نوع قائمة cons الذي سنحدده بسيط باستثناء التكرار؛ لذلك، ستكون المفاهيم في المثال الذي سنعمل عليه مفيدة في أي وقت تدخل فيه في مواقف أكثر تعقيدًا تتضمن أنواعًا تكرارية.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="more-information-about-the-cons-list"></a>
 
-#### Understanding the Cons List
+#### فهم قائمة Cons
 
-A _cons list_ is a data structure that comes from the Lisp programming language
-and its dialects, is made up of nested pairs, and is the Lisp version of a
-linked list. Its name comes from the `cons` function (short for _construct
-function_) in Lisp that constructs a new pair from its two arguments. By
-calling `cons` on a pair consisting of a value and another pair, we can
-construct cons lists made up of recursive pairs.
+_قائمة cons_ هي هيكل بيانات يأتي من لغة البرمجة Lisp ولهجاتها، وتتكون من أزواج متداخلة، وهي نسخة Lisp من القائمة المرتبطة. يأتي اسمها من دالة `cons` (اختصار لـ _دالة البناء_ construct function) في Lisp التي تبني زوجًا جديدًا من معاملاتها. عن طريق استدعاء `cons` على زوج يتكون من قيمة وزوج آخر، يمكننا بناء قوائم cons مكونة من أزواج تكرارية.
 
-For example, here’s a pseudocode representation of a cons list containing the
-list `1, 2, 3` with each pair in parentheses:
+على سبيل المثال، إليك تمثيل pseudocode لقائمة cons تحتوي على القائمة `1, 2, 3` مع كل زوج بين قوسين:
 
 ```text
 (1, (2, (3, Nil)))
 ```
 
-Each item in a cons list contains two elements: the value of the current item
-and of the next item. The last item in the list contains only a value called
-`Nil` without a next item. A cons list is produced by recursively calling the
-`cons` function. The canonical name to denote the base case of the recursion is
-`Nil`. Note that this is not the same as the “null” or “nil” concept discussed
-in Chapter 6, which is an invalid or absent value.
+كل عنصر في قائمة cons يحتوي على عنصرين: قيمة العنصر الحالي وقيمة العنصر التالي. العنصر الأخير في القائمة يحتوي على قيمة فقط تسمى `Nil` بدون عنصر تالٍ. يتم إنتاج قائمة cons عن طريق استدعاء دالة `cons` بشكل تكراري. الاسم القانوني للإشارة إلى الحالة الأساسية للتكرار هو `Nil`. لاحظ أن هذا ليس نفس مفهوم "null" أو "nil" الذي تم مناقشته في الفصل 6، وهو قيمة غير صالحة أو غائبة.
 
-The cons list isn’t a commonly used data structure in Rust. Most of the time
-when you have a list of items in Rust, `Vec<T>` is a better choice to use.
-Other, more complex recursive data types _are_ useful in various situations,
-but by starting with the cons list in this chapter, we can explore how boxes
-let us define a recursive data type without much distraction.
+قائمة cons ليست هيكل بيانات شائع الاستخدام في Rust. معظم الوقت عندما يكون لديك قائمة من العناصر في Rust، `Vec<T>` هو خيار أفضل للاستخدام. هياكل البيانات التكرارية الأخرى الأكثر تعقيدًا _مفيدة_ في مواقف مختلفة، لكن من خلال البدء بقائمة cons في هذا الفصل، يمكننا استكشاف كيف تتيح لنا الصناديق تعريف نوع بيانات تكراري دون الكثير من التشتيت.
 
-Listing 15-2 contains an enum definition for a cons list. Note that this code
-won’t compile yet, because the `List` type doesn’t have a known size, which
-we’ll demonstrate.
+تحتوي القائمة 15-2 على تعريف enum لقائمة cons. لاحظ أن هذا الكود لن يتم ترجمته بعد، لأن نوع `List` لا يمتلك حجمًا معروفًا، وهو ما سنوضحه.
 
-<Listing number="15-2" file-name="src/main.rs" caption="The first attempt at defining an enum to represent a cons list data structure of `i32` values">
+<Listing number="15-2" file-name="src/main.rs" caption="المحاولة الأولى لتعريف enum لتمثيل هيكل بيانات قائمة cons من قيم `i32`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-02/src/main.rs:here}}
@@ -120,15 +66,11 @@ we’ll demonstrate.
 
 </Listing>
 
-> Note: We’re implementing a cons list that holds only `i32` values for the
-> purposes of this example. We could have implemented it using generics, as we
-> discussed in Chapter 10, to define a cons list type that could store values of
-> any type.
+> ملاحظة: نحن ننفذ قائمة cons تحتفظ فقط بقيم `i32` لأغراض هذا المثال. كان يمكننا تنفيذها باستخدام الأنواع العامة (generics)، كما ناقشنا في الفصل 10، لتعريف نوع قائمة cons يمكن أن يخزن قيمًا من أي نوع.
 
-Using the `List` type to store the list `1, 2, 3` would look like the code in
-Listing 15-3.
+استخدام نوع `List` لتخزين القائمة `1, 2, 3` سيبدو مثل الكود في القائمة 15-3.
 
-<Listing number="15-3" file-name="src/main.rs" caption="Using the `List` enum to store the list `1, 2, 3`">
+<Listing number="15-3" file-name="src/main.rs" caption="استخدام enum `List` لتخزين القائمة `1, 2, 3`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-03/src/main.rs:here}}
@@ -136,15 +78,11 @@ Listing 15-3.
 
 </Listing>
 
-The first `Cons` value holds `1` and another `List` value. This `List` value is
-another `Cons` value that holds `2` and another `List` value. This `List` value
-is one more `Cons` value that holds `3` and a `List` value, which is finally
-`Nil`, the non-recursive variant that signals the end of the list.
+قيمة `Cons` الأولى تحتفظ بـ `1` وقيمة `List` أخرى. قيمة `List` هذه هي قيمة `Cons` أخرى تحتفظ بـ `2` وقيمة `List` أخرى. قيمة `List` هذه هي قيمة `Cons` واحدة أخرى تحتفظ بـ `3` وقيمة `List`، والتي هي أخيرًا `Nil`، المتغير غير التكراري الذي يشير إلى نهاية القائمة.
 
-If we try to compile the code in Listing 15-3, we get the error shown in
-Listing 15-4.
+إذا حاولنا ترجمة الكود في القائمة 15-3، سنحصل على الخطأ الموضح في القائمة 15-4.
 
-<Listing number="15-4" caption="The error we get when attempting to define a recursive enum">
+<Listing number="15-4" caption="الخطأ الذي نحصل عليه عند محاولة تعريف enum تكراري">
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
@@ -152,50 +90,31 @@ Listing 15-4.
 
 </Listing>
 
-The error shows this type “has infinite size.” The reason is that we’ve defined
-`List` with a variant that is recursive: It holds another value of itself
-directly. As a result, Rust can’t figure out how much space it needs to store a
-`List` value. Let’s break down why we get this error. First, we’ll look at how
-Rust decides how much space it needs to store a value of a non-recursive type.
+يوضح الخطأ أن هذا النوع "له حجم لا نهائي". السبب هو أننا عرّفنا `List` بمتغير تكراري: يحتفظ بقيمة أخرى من نفسه مباشرة. نتيجة لذلك، لا تستطيع Rust معرفة كم من المساحة يحتاج لتخزين قيمة `List`. دعنا نحلل سبب حصولنا على هذا الخطأ. أولاً، سننظر في كيفية قرار Rust لكمية المساحة التي يحتاجها لتخزين قيمة من نوع غير تكراري.
 
-#### Computing the Size of a Non-Recursive Type
+#### حساب حجم النوع غير التكراري
 
-Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
-definitions in Chapter 6:
+تذكر enum `Message` الذي عرفناه في القائمة 6-2 عندما ناقشنا تعريفات enum في الفصل 6:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-02/src/main.rs:here}}
 ```
 
-To determine how much space to allocate for a `Message` value, Rust goes
-through each of the variants to see which variant needs the most space. Rust
-sees that `Message::Quit` doesn’t need any space, `Message::Move` needs enough
-space to store two `i32` values, and so forth. Because only one variant will be
-used, the most space a `Message` value will need is the space it would take to
-store the largest of its variants.
+لتحديد كم من المساحة لتخصيصها لقيمة `Message`، تمر Rust عبر كل من المتغيرات لمعرفة أي متغير يحتاج إلى أكبر مساحة. تجد Rust أن `Message::Quit` لا يحتاج إلى أي مساحة، `Message::Move` يحتاج إلى مساحة كافية لتخزين قيمتين `i32`، وهكذا. لأن متغيرًا واحدًا فقط سيتم استخدامه، فإن أكثر مساحة ستحتاجها قيمة `Message` هي المساحة التي ستستغرقها لتخزين الأكبر من متغيراتها.
 
-Contrast this with what happens when Rust tries to determine how much space a
-recursive type like the `List` enum in Listing 15-2 needs. The compiler starts
-by looking at the `Cons` variant, which holds a value of type `i32` and a value
-of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
-an `i32` plus the size of a `List`. To figure out how much memory the `List`
-type needs, the compiler looks at the variants, starting with the `Cons`
-variant. The `Cons` variant holds a value of type `i32` and a value of type
-`List`, and this process continues infinitely, as shown in Figure 15-1.
+قارن هذا مع ما يحدث عندما تحاول Rust تحديد كم من المساحة يحتاجها نوع تكراري مثل enum `List` في القائمة 15-2. يبدأ المترجم بالنظر إلى متغير `Cons`، الذي يحتفظ بقيمة من نوع `i32` وقيمة من نوع `List`. لذلك، يحتاج `Cons` إلى مقدار من المساحة يساوي حجم `i32` بالإضافة إلى حجم `List`. لمعرفة كم من الذاكرة يحتاجها نوع `List`، ينظر المترجم إلى المتغيرات، بدءًا من متغير `Cons`. يحتفظ متغير `Cons` بقيمة من نوع `i32` وقيمة من نوع `List`، وتستمر هذه العملية إلى ما لا نهاية، كما هو موضح في الشكل 15-1.
 
 <img alt="An infinite Cons list: a rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Cons' and a smaller version of the outer 'Cons' rectangle. The 'Cons' rectangles continue to hold smaller and smaller versions of themselves until the smallest comfortably sized rectangle holds an infinity symbol, indicating that this repetition goes on forever." src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 15-1: An infinite `List` consisting of infinite
-`Cons` variants</span>
+<span class="caption">الشكل 15-1: `List` لا نهائية تتكون من متغيرات `Cons` لا نهائية</span>
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-boxt-to-get-a-recursive-type-with-a-known-size"></a>
 
-#### Getting a Recursive Type with a Known Size
+#### الحصول على نوع تكراري بحجم معروف
 
-Because Rust can’t figure out how much space to allocate for recursively
-defined types, the compiler gives an error with this helpful suggestion:
+نظرًا لأن Rust لا يمكنها معرفة كم من المساحة لتخصيصها للأنواع المعرّفة بشكل تكراري، يعطي المترجم خطأ مع هذا الاقتراح المفيد:
 
 <!-- manual-regeneration
 after doing automatic regeneration, look at listings/ch15-smart-pointers/listing-15-03/output.txt and copy the relevant line
@@ -208,23 +127,13 @@ help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
   |               ++++    +
 ```
 
-In this suggestion, _indirection_ means that instead of storing a value
-directly, we should change the data structure to store the value indirectly by
-storing a pointer to the value instead.
+في هذا الاقتراح، _التوجيه غير المباشر_ (indirection) يعني أنه بدلاً من تخزين قيمة مباشرة، يجب أن نغير هيكل البيانات لتخزين القيمة بشكل غير مباشر عن طريق تخزين مؤشر إلى القيمة بدلاً من ذلك.
 
-Because a `Box<T>` is a pointer, Rust always knows how much space a `Box<T>`
-needs: A pointer’s size doesn’t change based on the amount of data it’s
-pointing to. This means we can put a `Box<T>` inside the `Cons` variant instead
-of another `List` value directly. The `Box<T>` will point to the next `List`
-value that will be on the heap rather than inside the `Cons` variant.
-Conceptually, we still have a list, created with lists holding other lists, but
-this implementation is now more like placing the items next to one another
-rather than inside one another.
+لأن `Box<T>` هو مؤشر، تعرف Rust دائمًا كم من المساحة يحتاجها `Box<T>`: حجم المؤشر لا يتغير بناءً على كمية البيانات التي يشير إليها. هذا يعني أن بإمكاننا وضع `Box<T>` داخل متغير `Cons` بدلاً من قيمة `List` أخرى مباشرة. سيشير `Box<T>` إلى قيمة `List` التالية التي ستكون على الكومة بدلاً من داخل متغير `Cons`. من الناحية المفاهيمية، لا يزال لدينا قائمة، تم إنشاؤها بقوائم تحتفظ بقوائم أخرى، لكن هذا التنفيذ الآن أشبه بوضع العناصر بجانب بعضها البعض بدلاً من داخل بعضها البعض.
 
-We can change the definition of the `List` enum in Listing 15-2 and the usage
-of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile.
+يمكننا تغيير تعريف enum `List` في القائمة 15-2 واستخدام `List` في القائمة 15-3 إلى الكود في القائمة 15-5، والذي سيتم ترجمته.
 
-<Listing number="15-5" file-name="src/main.rs" caption="The definition of `List` that uses `Box<T>` in order to have a known size">
+<Listing number="15-5" file-name="src/main.rs" caption="تعريف `List` الذي يستخدم `Box<T>` من أجل الحصول على حجم معروف">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-05/src/main.rs}}
@@ -232,32 +141,14 @@ of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile.
 
 </Listing>
 
-The `Cons` variant needs the size of an `i32` plus the space to store the box’s
-pointer data. The `Nil` variant stores no values, so it needs less space on the
-stack than the `Cons` variant. We now know that any `List` value will take up
-the size of an `i32` plus the size of a box’s pointer data. By using a box,
-we’ve broken the infinite, recursive chain, so the compiler can figure out the
-size it needs to store a `List` value. Figure 15-2 shows what the `Cons`
-variant looks like now.
+يحتاج متغير `Cons` إلى حجم `i32` بالإضافة إلى المساحة لتخزين بيانات مؤشر الصندوق. متغير `Nil` لا يخزن أي قيم، لذلك يحتاج إلى مساحة أقل على المكدس من متغير `Cons`. نعلم الآن أن أي قيمة `List` ستشغل حجم `i32` بالإضافة إلى حجم بيانات مؤشر الصندوق. باستخدام صندوق، كسرنا السلسلة اللا نهائية التكرارية، حتى يتمكن المترجم من معرفة الحجم الذي يحتاجه لتخزين قيمة `List`. يوضح الشكل 15-2 كيف يبدو متغير `Cons` الآن.
 
 <img alt="A rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Box' with one inner rectangle that contains the label 'usize', representing the finite size of the box's pointer." src="img/trpl15-02.svg" class="center" />
 
-<span class="caption">Figure 15-2: A `List` that is not infinitely sized,
-because `Cons` holds a `Box`</span>
+<span class="caption">الشكل 15-2: `List` ذات حجم ليس لا نهائيًا، لأن `Cons` تحتفظ بـ `Box`</span>
 
-Boxes provide only the indirection and heap allocation; they don’t have any
-other special capabilities, like those we’ll see with the other smart pointer
-types. They also don’t have the performance overhead that these special
-capabilities incur, so they can be useful in cases like the cons list where the
-indirection is the only feature we need. We’ll look at more use cases for boxes
-in Chapter 18.
+توفر الصناديق التوجيه غير المباشر وتخصيص الكومة فقط؛ ليس لديها أي قدرات خاصة أخرى، مثل تلك التي سنراها مع أنواع المؤشرات الذكية الأخرى. كما أنها لا تحتوي على عبء الأداء الذي تتكبده هذه القدرات الخاصة، لذلك يمكن أن تكون مفيدة في حالات مثل قائمة cons حيث التوجيه غير المباشر هو الميزة الوحيدة التي نحتاجها. سننظر في المزيد من حالات الاستخدام للصناديق في الفصل 18.
 
-The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
-which allows `Box<T>` values to be treated like references. When a `Box<T>`
-value goes out of scope, the heap data that the box is pointing to is cleaned
-up as well because of the `Drop` trait implementation. These two traits will be
-even more important to the functionality provided by the other smart pointer
-types we’ll discuss in the rest of this chapter. Let’s explore these two traits
-in more detail.
+نوع `Box<T>` هو مؤشر ذكي لأنه ينفذ سِمة `Deref`، والتي تسمح لقيم `Box<T>` بالتعامل معها كمراجع. عندما تخرج قيمة `Box<T>` عن النطاق، يتم تنظيف بيانات الكومة التي يشير إليها الصندوق أيضًا بسبب تنفيذ سِمة `Drop`. ستكون هاتان السمتان أكثر أهمية للوظائف التي توفرها أنواع المؤشرات الذكية الأخرى التي سنناقشها في بقية هذا الفصل. دعنا نستكشف هاتين السمتين بمزيد من التفصيل.
 
 [trait-objects]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior

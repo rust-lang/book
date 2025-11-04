@@ -1,43 +1,43 @@
-## Cargo Workspaces
+## مساحات عمل Cargo
 
-In Chapter 12, we built a package that included a binary crate and a library
-crate. As your project develops, you might find that the library crate
-continues to get bigger and you want to split your package further into
-multiple library crates. Cargo offers a feature called _workspaces_ that can
-help manage multiple related packages that are developed in tandem.
+في الفصل 12، بنينا حزمة تضمنت صندوق ثنائي وصندوق مكتبة.
+مع تطور مشروعك، قد تجد أن صندوق المكتبة
+يستمر في النمو وتريد تقسيم حزمتك أكثر إلى
+صناديق مكتبة متعددة. يقدم Cargo ميزة تسمى _مساحات العمل_ (workspaces) التي يمكن أن
+تساعد في إدارة حزم متعددة ذات صلة يتم تطويرها معًا.
 
-### Creating a Workspace
+### إنشاء مساحة عمل
 
-A _workspace_ is a set of packages that share the same _Cargo.lock_ and output
-directory. Let’s make a project using a workspace—we’ll use trivial code so
-that we can concentrate on the structure of the workspace. There are multiple
-ways to structure a workspace, so we'll just show one common way. We’ll have a
-workspace containing a binary and two libraries. The binary, which will provide
-the main functionality, will depend on the two libraries. One library will
-provide an `add_one` function and the other library an `add_two` function.
-These three crates will be part of the same workspace. We’ll start by creating
-a new directory for the workspace:
+_مساحة العمل_ (workspace) هي مجموعة من الحزم التي تشترك في نفس _Cargo.lock_ ودليل الإخراج.
+لنقم بإنشاء مشروع باستخدام مساحة عمل—سنستخدم كودًا بسيطًا حتى
+نتمكن من التركيز على هيكل مساحة العمل. هناك طرق متعددة
+لهيكلة مساحة عمل، لذا سنعرض فقط طريقة شائعة واحدة. سيكون لدينا
+مساحة عمل تحتوي على ملف ثنائي ومكتبتين. سيوفر الملف الثنائي، الذي
+الوظيفة الرئيسية، سيعتمد على المكتبتين. ستوفر إحدى المكتبات
+دالة `add_one` والمكتبة الأخرى دالة `add_two`.
+ستكون هذه الصناديق الثلاثة جزءًا من نفس مساحة العمل. سنبدأ بإنشاء
+دليل جديد لمساحة العمل:
 
 ```console
 $ mkdir add
 $ cd add
 ```
 
-Next, in the _add_ directory, we create the _Cargo.toml_ file that will
-configure the entire workspace. This file won’t have a `[package]` section.
-Instead, it will start with a `[workspace]` section that will allow us to add
-members to the workspace. We also make a point to use the latest and greatest
-version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` value to `"3"`:
+بعد ذلك، في دليل _add_، نُنشئ ملف _Cargo.toml_ الذي سـ
+يهيئ مساحة العمل بأكملها. لن يحتوي هذا الملف على قسم `[package]`.
+بدلاً من ذلك، سيبدأ بقسم `[workspace]` الذي سيسمح لنا بإضافة
+أعضاء إلى مساحة العمل. نحن أيضًا نحرص على استخدام أحدث وأفضل
+إصدار من خوارزمية محلل Cargo في مساحة عملنا عن طريق تعيين قيمة
+`resolver` إلى `"3"`:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">اسم الملف: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace/add/Cargo.toml}}
 ```
 
-Next, we’ll create the `adder` binary crate by running `cargo new` within the
-_add_ directory:
+بعد ذلك، سننشئ صندوق `adder` الثنائي عن طريق تشغيل `cargo new` داخل
+دليل _add_:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
@@ -53,16 +53,16 @@ $ cargo new adder
       Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
-Running `cargo new` inside a workspace also automatically adds the newly created
-package to the `members` key in the `[workspace]` definition in the workspace
-_Cargo.toml_, like this:
+تشغيل `cargo new` داخل مساحة عمل يضيف أيضًا تلقائيًا الحزمة المُنشأة حديثًا
+إلى مفتاح `members` في تعريف `[workspace]` في ملف _Cargo.toml_
+الخاص بمساحة العمل، كالتالي:
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/output-only-01-adder-crate/add/Cargo.toml}}
 ```
 
-At this point, we can build the workspace by running `cargo build`. The files
-in your _add_ directory should look like this:
+في هذه المرحلة، يمكننا بناء مساحة العمل عن طريق تشغيل `cargo build`. يجب أن تبدو الملفات
+في دليل _add_ الخاص بك كالتالي:
 
 ```text
 ├── Cargo.lock
@@ -74,21 +74,21 @@ in your _add_ directory should look like this:
 └── target
 ```
 
-The workspace has one _target_ directory at the top level that the compiled
-artifacts will be placed into; the `adder` package doesn’t have its own
-_target_ directory. Even if we were to run `cargo build` from inside the
-_adder_ directory, the compiled artifacts would still end up in _add/target_
-rather than _add/adder/target_. Cargo structures the _target_ directory in a
-workspace like this because the crates in a workspace are meant to depend on
-each other. If each crate had its own _target_ directory, each crate would have
-to recompile each of the other crates in the workspace to place the artifacts
-in its own _target_ directory. By sharing one _target_ directory, the crates
-can avoid unnecessary rebuilding.
+تحتوي مساحة العمل على دليل _target_ واحد في المستوى الأعلى الذي سيتم
+وضع المصنوعات المصرّفة فيه؛ حزمة `adder` ليس لديها دليل _target_
+الخاص بها. حتى لو كنا سنشغل `cargo build` من داخل
+دليل _adder_، فإن المصنوعات المصرّفة ستنتهي في _add/target_
+بدلاً من _add/adder/target_. يُهيكل Cargo دليل _target_ في
+مساحة عمل بهذه الطريقة لأن الصناديق في مساحة عمل من المفترض أن تعتمد على
+بعضها البعض. إذا كان لكل صندوق دليل _target_ الخاص به، فسيتعين على كل صندوق
+إعادة تصريف كل من الصناديق الأخرى في مساحة العمل لوضع المصنوعات
+في دليل _target_ الخاص به. من خلال مشاركة دليل _target_ واحد، يمكن للصناديق
+تجنب إعادة البناء غير الضرورية.
 
-### Creating the Second Package in the Workspace
+### إنشاء الحزمة الثانية في مساحة العمل
 
-Next, let’s create another member package in the workspace and call it
-`add_one`. Generate a new library crate named `add_one`:
+بعد ذلك، لنُنشئ حزمة عضو أخرى في مساحة العمل ونسميها
+`add_one`. أنشئ صندوق مكتبة جديد باسم `add_one`:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
@@ -104,16 +104,15 @@ $ cargo new add_one --lib
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
-The top-level _Cargo.toml_ will now include the _add_one_ path in the `members`
-list:
+سيتضمن ملف _Cargo.toml_ في المستوى الأعلى الآن مسار _add_one_ في قائمة `members`:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">اسم الملف: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
-Your _add_ directory should now have these directories and files:
+يجب أن يحتوي دليل _add_ الخاص بك الآن على هذه الأدلة والملفات:
 
 ```text
 ├── Cargo.lock
@@ -129,32 +128,32 @@ Your _add_ directory should now have these directories and files:
 └── target
 ```
 
-In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
+في ملف _add_one/src/lib.rs_، لنضف دالة `add_one`:
 
-<span class="filename">Filename: add_one/src/lib.rs</span>
+<span class="filename">اسم الملف: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-Now we can have the `adder` package with our binary depend on the `add_one`
-package that has our library. First, we’ll need to add a path dependency on
-`add_one` to _adder/Cargo.toml_.
+الآن يمكننا جعل حزمة `adder` مع ملفنا الثنائي تعتمد على حزمة `add_one`
+التي لديها مكتبتنا. أولاً، سنحتاج إلى إضافة تبعية مسار على
+`add_one` إلى _adder/Cargo.toml_.
 
-<span class="filename">Filename: adder/Cargo.toml</span>
+<span class="filename">اسم الملف: adder/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-Cargo doesn’t assume that crates in a workspace will depend on each other, so
-we need to be explicit about the dependency relationships.
+لا يفترض Cargo أن الصناديق في مساحة عمل ستعتمد على بعضها البعض، لذا
+نحتاج إلى أن نكون صريحين بشأن علاقات التبعية.
 
-Next, let’s use the `add_one` function (from the `add_one` crate) in the
-`adder` crate. Open the _adder/src/main.rs_ file and change the `main`
-function to call the `add_one` function, as in Listing 14-7.
+بعد ذلك، لنستخدم دالة `add_one` (من صندوق `add_one`) في
+صندوق `adder`. افتح ملف _adder/src/main.rs_ وغيّر دالة `main`
+لاستدعاء دالة `add_one`، كما في Listing 14-7.
 
-<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
+<Listing number="14-7" file-name="adder/src/main.rs" caption="استخدام صندوق مكتبة `add_one` من صندوق `adder`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
@@ -162,8 +161,8 @@ function to call the `add_one` function, as in Listing 14-7.
 
 </Listing>
 
-Let’s build the workspace by running `cargo build` in the top-level _add_
-directory!
+لنبني مساحة العمل عن طريق تشغيل `cargo build` في دليل _add_
+في المستوى الأعلى!
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -178,9 +177,9 @@ $ cargo build
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
 ```
 
-To run the binary crate from the _add_ directory, we can specify which package
-in the workspace we want to run by using the `-p` argument and the package name
-with `cargo run`:
+لتشغيل الصندوق الثنائي من دليل _add_، يمكننا تحديد الحزمة
+في مساحة العمل التي نريد تشغيلها باستخدام معامل `-p` واسم الحزمة
+مع `cargo run`:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -195,23 +194,23 @@ $ cargo run -p adder
 Hello, world! 10 plus one is 11!
 ```
 
-This runs the code in _adder/src/main.rs_, which depends on the `add_one` crate.
+هذا يشغل الكود في _adder/src/main.rs_، والذي يعتمد على صندوق `add_one`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="depending-on-an-external-package-in-a-workspace"></a>
 
-### Depending on an External Package
+### الاعتماد على حزمة خارجية
 
-Notice that the workspace has only one _Cargo.lock_ file at the top level,
-rather than having a _Cargo.lock_ in each crate’s directory. This ensures that
-all crates are using the same version of all dependencies. If we add the `rand`
-package to the _adder/Cargo.toml_ and _add_one/Cargo.toml_ files, Cargo will
-resolve both of those to one version of `rand` and record that in the one
-_Cargo.lock_. Making all crates in the workspace use the same dependencies
-means the crates will always be compatible with each other. Let’s add the
-`rand` crate to the `[dependencies]` section in the _add_one/Cargo.toml_ file
-so that we can use the `rand` crate in the `add_one` crate:
+لاحظ أن مساحة العمل لديها ملف _Cargo.lock_ واحد فقط في المستوى الأعلى،
+بدلاً من وجود _Cargo.lock_ في دليل كل صندوق. هذا يضمن
+أن جميع الصناديق تستخدم نفس الإصدار من جميع التبعيات. إذا أضفنا حزمة `rand`
+إلى ملفات _adder/Cargo.toml_ و _add_one/Cargo.toml_، فسيحل Cargo
+كلاً منهما إلى إصدار واحد من `rand` ويسجل ذلك في ملف _Cargo.lock_
+الواحد. جعل جميع الصناديق في مساحة العمل تستخدم نفس التبعيات
+يعني أن الصناديق ستكون دائمًا متوافقة مع بعضها البعض. دعنا نضيف
+صندوق `rand` إلى قسم `[dependencies]` في ملف _add_one/Cargo.toml_
+حتى نتمكن من استخدام صندوق `rand` في صندوق `add_one`:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -219,16 +218,16 @@ so that we can use the `rand` crate in the `add_one` crate:
 * ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
 -->
 
-<span class="filename">Filename: add_one/Cargo.toml</span>
+<span class="filename">اسم الملف: add_one/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
 ```
 
-We can now add `use rand;` to the _add_one/src/lib.rs_ file, and building the
-whole workspace by running `cargo build` in the _add_ directory will bring in
-and compile the `rand` crate. We will get one warning because we aren’t
-referring to the `rand` we brought into scope:
+يمكننا الآن إضافة `use rand;` إلى ملف _add_one/src/lib.rs_، وبناء
+مساحة العمل بأكملها عن طريق تشغيل `cargo build` في دليل _add_ سيُحضر
+ويصرّف صندوق `rand`. سنحصل على تحذير واحد لأننا لا
+نشير إلى `rand` الذي أحضرناه إلى النطاق:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
@@ -256,11 +255,11 @@ warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` t
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.95s
 ```
 
-The top-level _Cargo.lock_ now contains information about the dependency of
-`add_one` on `rand`. However, even though `rand` is used somewhere in the
-workspace, we can’t use it in other crates in the workspace unless we add
-`rand` to their _Cargo.toml_ files as well. For example, if we add `use rand;`
-to the _adder/src/main.rs_ file for the `adder` package, we’ll get an error:
+يحتوي ملف _Cargo.lock_ في المستوى الأعلى الآن على معلومات حول تبعية
+`add_one` على `rand`. ومع ذلك، على الرغم من استخدام `rand` في مكان ما في
+مساحة العمل، لا يمكننا استخدامه في صناديق أخرى في مساحة العمل ما لم
+نضف `rand` إلى ملفات _Cargo.toml_ الخاصة بها أيضًا. على سبيل المثال، إذا أضفنا `use rand;`
+إلى ملف _adder/src/main.rs_ لحزمة `adder`، سنحصل على خطأ:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-03-use-rand/add
@@ -279,33 +278,33 @@ error[E0432]: unresolved import `rand`
   |     ^^^^ no external crate `rand`
 ```
 
-To fix this, edit the _Cargo.toml_ file for the `adder` package and indicate
-that `rand` is a dependency for it as well. Building the `adder` package will
-add `rand` to the list of dependencies for `adder` in _Cargo.lock_, but no
-additional copies of `rand` will be downloaded. Cargo will ensure that every
-crate in every package in the workspace using the `rand` package will use the
-same version as long as they specify compatible versions of `rand`, saving us
-space and ensuring that the crates in the workspace will be compatible with
-each other.
+لإصلاح هذا، حرّر ملف _Cargo.toml_ لحزمة `adder` وأشر إلى
+أن `rand` هو أيضًا تبعية لها. بناء حزمة `adder` سيضيف
+`rand` إلى قائمة تبعيات `adder` في _Cargo.lock_، ولكن لن
+يتم تنزيل نسخ إضافية من `rand`. سيضمن Cargo أن كل
+صندوق في كل حزمة في مساحة العمل التي تستخدم حزمة `rand` ستستخدم
+نفس الإصدار طالما حددت إصدارات متوافقة من `rand`، مما يوفر لنا
+مساحة ويضمن أن الصناديق في مساحة العمل ستكون متوافقة مع
+بعضها البعض.
 
-If crates in the workspace specify incompatible versions of the same
-dependency, Cargo will resolve each of them but will still try to resolve as
-few versions as possible.
+إذا حددت الصناديق في مساحة العمل إصدارات غير متوافقة من نفس
+التبعية، سيحل Cargo كل منها ولكن سيظل يحاول حل أقل
+عدد ممكن من الإصدارات.
 
-### Adding a Test to a Workspace
+### إضافة اختبار إلى مساحة عمل
 
-For another enhancement, let’s add a test of the `add_one::add_one` function
-within the `add_one` crate:
+لتحسين آخر، دعنا نضيف اختبارًا لدالة `add_one::add_one`
+داخل صندوق `add_one`:
 
-<span class="filename">Filename: add_one/src/lib.rs</span>
+<span class="filename">اسم الملف: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add_one/src/lib.rs}}
 ```
 
-Now run `cargo test` in the top-level _add_ directory. Running `cargo test` in
-a workspace structured like this one will run the tests for all the crates in
-the workspace:
+الآن قم بتشغيل `cargo test` في دليل _add_ في المستوى الأعلى. تشغيل `cargo test` في
+مساحة عمل مهيكلة مثل هذه سيشغل الاختبارات لجميع الصناديق في
+مساحة العمل:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -339,14 +338,14 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-The first section of the output shows that the `it_works` test in the `add_one`
-crate passed. The next section shows that zero tests were found in the `adder`
-crate, and then the last section shows that zero documentation tests were found
-in the `add_one` crate.
+يُظهر القسم الأول من المخرجات أن اختبار `it_works` في صندوق `add_one`
+نجح. يُظهر القسم التالي أنه لم يتم العثور على اختبارات في صندوق `adder`،
+ثم يُظهر القسم الأخير أنه لم يتم العثور على اختبارات توثيق في
+صندوق `add_one`.
 
-We can also run tests for one particular crate in a workspace from the
-top-level directory by using the `-p` flag and specifying the name of the crate
-we want to test:
+يمكننا أيضًا تشغيل اختبارات لصندوق معين في مساحة عمل من
+الدليل في المستوى الأعلى باستخدام علامة `-p` وتحديد اسم الصندوق
+الذي نريد اختباره:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -371,19 +370,19 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-This output shows `cargo test` only ran the tests for the `add_one` crate and
-didn’t run the `adder` crate tests.
+يُظهر هذا المخرج أن `cargo test` شغّل فقط الاختبارات لصندوق `add_one` ولم
+يشغّل اختبارات صندوق `adder`.
 
-If you publish the crates in the workspace to
-[crates.io](https://crates.io/)<!-- ignore -->, each crate in the workspace
-will need to be published separately. Like `cargo test`, we can publish a
-particular crate in our workspace by using the `-p` flag and specifying the
-name of the crate we want to publish.
+إذا نشرت الصناديق في مساحة العمل إلى
+[crates.io](https://crates.io/)<!-- ignore -->، فسيحتاج كل صندوق في مساحة العمل
+إلى نشره بشكل منفصل. مثل `cargo test`، يمكننا نشر
+صندوق معين في مساحة عملنا باستخدام علامة `-p` وتحديد
+اسم الصندوق الذي نريد نشره.
 
-For additional practice, add an `add_two` crate to this workspace in a similar
-way as the `add_one` crate!
+لممارسة إضافية، أضف صندوق `add_two` إلى مساحة العمل هذه بطريقة مماثلة
+لصندوق `add_one`!
 
-As your project grows, consider using a workspace: It enables you to work with
-smaller, easier-to-understand components than one big blob of code.
-Furthermore, keeping the crates in a workspace can make coordination between
-crates easier if they are often changed at the same time.
+مع نمو مشروعك، فكّر في استخدام مساحة عمل: من الأسهل فهم
+مكونات أصغر وأسهل من كتلة كبيرة واحدة من الكود.
+علاوة على ذلك، الحفاظ على الصناديق في مساحة عمل يمكن أن يجعل التنسيق بين
+الصناديق أسهل إذا كان يتم تغييرها في نفس الوقت.

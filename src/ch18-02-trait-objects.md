@@ -2,72 +2,25 @@
 
 <a id="using-trait-objects-that-allow-for-values-of-different-types"></a>
 
-## Using Trait Objects to Abstract over Shared Behavior
+## استخدام كائنات السِمة للتجريد على السلوك المشترك
 
-In Chapter 8, we mentioned that one limitation of vectors is that they can
-store elements of only one type. We created a workaround in Listing 8-9 where
-we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
-and text. This meant we could store different types of data in each cell and
-still have a vector that represented a row of cells. This is a perfectly good
-solution when our interchangeable items are a fixed set of types that we know
-when our code is compiled.
+في الفصل 8، ذكرنا أن أحد قيود المتجهات (vectors) هو أنها يمكن أن تخزن عناصر من نوع واحد فقط. أنشأنا حلاً بديلاً في القائمة 8-9 حيث عرّفنا تعداد `SpreadsheetCell` الذي كان لديه متغيرات لحمل الأعداد الصحيحة والعشرية والنصوص. هذا يعني أنه يمكننا تخزين أنواع مختلفة من البيانات في كل خلية ولا يزال لدينا متجه يمثل صفًا من الخلايا. هذا حل جيد تمامًا عندما تكون عناصرنا القابلة للتبديل مجموعة ثابتة من الأنواع التي نعرفها عندما يتم تصريف كودنا.
 
-However, sometimes we want our library user to be able to extend the set of
-types that are valid in a particular situation. To show how we might achieve
-this, we’ll create an example graphical user interface (GUI) tool that iterates
-through a list of items, calling a `draw` method on each one to draw it to the
-screen—a common technique for GUI tools. We’ll create a library crate called
-`gui` that contains the structure of a GUI library. This crate might include
-some types for people to use, such as `Button` or `TextField`. In addition,
-`gui` users will want to create their own types that can be drawn: For
-instance, one programmer might add an `Image`, and another might add a
-`SelectBox`.
+ومع ذلك، في بعض الأحيان نريد أن يتمكن مستخدم مكتبتنا من توسيع مجموعة الأنواع الصالحة في موقف معين. لإظهار كيف يمكننا تحقيق ذلك، سنقوم بإنشاء مثال لأداة واجهة مستخدم رسومية (GUI) تتكرر عبر قائمة من العناصر، وتستدعي دالة `draw` على كل واحدة لرسمها على الشاشة—وهي تقنية شائعة لأدوات GUI. سنقوم بإنشاء صندوق مكتبة يسمى `gui` يحتوي على بنية مكتبة GUI. قد يتضمن هذا الصندوق بعض الأنواع لاستخدامها من قبل الناس، مثل `Button` أو `TextField`. بالإضافة إلى ذلك، سيرغب مستخدمو `gui` في إنشاء أنواعهم الخاصة التي يمكن رسمها: على سبيل المثال، قد يضيف أحد المبرمجين `Image`، وقد يضيف آخر `SelectBox`.
 
-At the time of writing the library, we can’t know and define all the types
-other programmers might want to create. But we do know that `gui` needs to keep
-track of many values of different types, and it needs to call a `draw` method
-on each of these differently typed values. It doesn’t need to know exactly what
-will happen when we call the `draw` method, just that the value will have that
-method available for us to call.
+في وقت كتابة المكتبة، لا يمكننا معرفة وتعريف جميع الأنواع التي قد يرغب المبرمجون الآخرون في إنشائها. لكننا نعلم أن `gui` يحتاج إلى تتبع العديد من القيم من أنواع مختلفة، ويحتاج إلى استدعاء دالة `draw` على كل من هذه القيم المختلفة الأنواع. لا يحتاج إلى معرفة بالضبط ما سيحدث عندما نستدعي دالة `draw`، فقط أن القيمة ستكون لديها تلك الدالة متاحة لنا لنستدعيها.
 
-To do this in a language with inheritance, we might define a class named
-`Component` that has a method named `draw` on it. The other classes, such as
-`Button`, `Image`, and `SelectBox`, would inherit from `Component` and thus
-inherit the `draw` method. They could each override the `draw` method to define
-their custom behavior, but the framework could treat all of the types as if
-they were `Component` instances and call `draw` on them. But because Rust
-doesn’t have inheritance, we need another way to structure the `gui` library to
-allow users to create new types compatible with the library.
+للقيام بذلك في لغة تحتوي على وراثة، قد نعرّف فئة باسم `Component` لها دالة باسم `draw` عليها. الفئات الأخرى، مثل `Button` و`Image` و`SelectBox`، سترث من `Component` وبالتالي ترث دالة `draw`. يمكن لكل منها تجاوز دالة `draw` لتعريف سلوكها المخصص، لكن الإطار يمكن أن يتعامل مع جميع الأنواع كما لو كانت نسخًا من `Component` ويستدعي `draw` عليها. لكن نظرًا لأن Rust لا تحتوي على وراثة، نحتاج إلى طريقة أخرى لهيكلة مكتبة `gui` للسماح للمستخدمين بإنشاء أنواع جديدة متوافقة مع المكتبة.
 
-### Defining a Trait for Common Behavior
+### تعريف سِمة للسلوك المشترك
 
-To implement the behavior that we want `gui` to have, we’ll define a trait
-named `Draw` that will have one method named `draw`. Then, we can define a
-vector that takes a trait object. A _trait object_ points to both an instance
-of a type implementing our specified trait and a table used to look up trait
-methods on that type at runtime. We create a trait object by specifying some
-sort of pointer, such as a reference or a `Box<T>` smart pointer, then the
-`dyn` keyword, and then specifying the relevant trait. (We’ll talk about the
-reason trait objects must use a pointer in [“Dynamically Sized Types and the
-`Sized` Trait”][dynamically-sized]<!-- ignore --> in Chapter 20.) We can use
-trait objects in place of a generic or concrete type. Wherever we use a trait
-object, Rust’s type system will ensure at compile time that any value used in
-that context will implement the trait object’s trait. Consequently, we don’t
-need to know all the possible types at compile time.
+لتنفيذ السلوك الذي نريد أن يكون لـ `gui`، سنعرّف سِمة (trait) باسم `Draw` سيكون لها دالة واحدة باسم `draw`. بعد ذلك، يمكننا تعريف متجه يأخذ كائن سِمة (trait object). _كائن السِمة_ (trait object) يشير إلى كل من نسخة من نوع يُنفذ السِمة المحددة وجدول يُستخدم للبحث عن دوال السِمة على هذا النوع في وقت التشغيل. نقوم بإنشاء كائن سِمة من خلال تحديد نوع من المؤشر، مثل مرجع أو مؤشر ذكي `Box<T>`، ثم الكلمة المفتاحية `dyn`، ثم تحديد السِمة ذات الصلة. (سنتحدث عن سبب وجوب استخدام كائنات السِمة لمؤشر في ["أنواع الحجم الديناميكي وسِمة `Sized`"][dynamically-sized]<!-- ignore --> في الفصل 20.) يمكننا استخدام كائنات السِمة بدلاً من نوع عام أو نوع محدد. أينما نستخدم كائن سِمة، سيضمن نظام الأنواع في Rust في وقت التصريف أن أي قيمة تُستخدم في هذا السياق ستُنفذ سِمة كائن السِمة. وبالتالي، لا نحتاج إلى معرفة جميع الأنواع المحتملة في وقت التصريف.
 
-We’ve mentioned that, in Rust, we refrain from calling structs and enums
-“objects” to distinguish them from other languages’ objects. In a struct or
-enum, the data in the struct fields and the behavior in `impl` blocks are
-separated, whereas in other languages, the data and behavior combined into one
-concept is often labeled an object. Trait objects differ from objects in other
-languages in that we can’t add data to a trait object. Trait objects aren’t as
-generally useful as objects in other languages: Their specific purpose is to
-allow abstraction across common behavior.
+ذكرنا أنه في Rust، نمتنع عن تسمية البُنى والتعدادات "كائنات" لتمييزها عن كائنات اللغات الأخرى. في بنية أو تعداد، البيانات في حقول البنية والسلوك في كتل `impl` منفصلان، بينما في اللغات الأخرى، البيانات والسلوك المجمعان في مفهوم واحد غالبًا ما يُسمى كائنًا. كائنات السِمة تختلف عن الكائنات في اللغات الأخرى في أننا لا يمكننا إضافة بيانات إلى كائن سِمة. كائنات السِمة ليست مفيدة بشكل عام مثل الكائنات في اللغات الأخرى: غرضها المحدد هو السماح بالتجريد عبر السلوك المشترك.
 
-Listing 18-3 shows how to define a trait named `Draw` with one method named
-`draw`.
+القائمة 18-3 توضح كيفية تعريف سِمة باسم `Draw` مع دالة واحدة باسم `draw`.
 
-<Listing number="18-3" file-name="src/lib.rs" caption="Definition of the `Draw` trait">
+<Listing number="18-3" file-name="src/lib.rs" caption="تعريف السِمة `Draw`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-03/src/lib.rs}}
@@ -75,13 +28,9 @@ Listing 18-3 shows how to define a trait named `Draw` with one method named
 
 </Listing>
 
-This syntax should look familiar from our discussions on how to define traits
-in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
-`Screen` that holds a vector named `components`. This vector is of type
-`Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside a
-`Box` that implements the `Draw` trait.
+يجب أن يبدو هذا الصياغة مألوفًا من مناقشاتنا حول كيفية تعريف السِمات في الفصل 10. بعد ذلك يأتي بعض الصياغة الجديدة: القائمة 18-4 تعرّف بنية باسم `Screen` تحتوي على متجه باسم `components`. هذا المتجه من النوع `Box<dyn Draw>`، وهو كائن سِمة؛ إنه بديل لأي نوع داخل `Box` يُنفذ السِمة `Draw`.
 
-<Listing number="18-4" file-name="src/lib.rs" caption="Definition of the `Screen` struct with a `components` field holding a vector of trait objects that implement the `Draw` trait">
+<Listing number="18-4" file-name="src/lib.rs" caption="تعريف بنية `Screen` مع حقل `components` يحتوي على متجه من كائنات السِمة التي تُنفذ السِمة `Draw`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-04/src/lib.rs:here}}
@@ -89,10 +38,9 @@ in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
 
 </Listing>
 
-On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 18-5.
+على بنية `Screen`، سنعرّف دالة باسم `run` ستستدعي دالة `draw` على كل من مكوناتها `components`، كما هو موضح في القائمة 18-5.
 
-<Listing number="18-5" file-name="src/lib.rs" caption="A `run` method on `Screen` that calls the `draw` method on each component">
+<Listing number="18-5" file-name="src/lib.rs" caption="دالة `run` على `Screen` تستدعي دالة `draw` على كل مكون">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-05/src/lib.rs:here}}
@@ -100,14 +48,9 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 
 </Listing>
 
-This works differently from defining a struct that uses a generic type
-parameter with trait bounds. A generic type parameter can be substituted with
-only one concrete type at a time, whereas trait objects allow for multiple
-concrete types to fill in for the trait object at runtime. For example, we
-could have defined the `Screen` struct using a generic type and a trait bound,
-as in Listing 18-6.
+هذا يعمل بشكل مختلف عن تعريف بنية تستخدم معامل نوع عام مع قيود سِمة. يمكن استبدال معامل نوع عام بنوع محدد واحد فقط في المرة الواحدة، بينما تسمح كائنات السِمة بملء أنواع محددة متعددة لكائن السِمة في وقت التشغيل. على سبيل المثال، كان بإمكاننا تعريف بنية `Screen` باستخدام نوع عام وقيد سِمة، كما في القائمة 18-6.
 
-<Listing number="18-6" file-name="src/lib.rs" caption="An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds">
+<Listing number="18-6" file-name="src/lib.rs" caption="تنفيذ بديل لبنية `Screen` ودالتها `run` باستخدام الأنواع العامة وقيود السِمات">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-06/src/lib.rs:here}}
@@ -115,25 +58,15 @@ as in Listing 18-6.
 
 </Listing>
 
-This restricts us to a `Screen` instance that has a list of components all of
-type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
-collections, using generics and trait bounds is preferable because the
-definitions will be monomorphized at compile time to use the concrete types.
+هذا يقيدنا بنسخة `Screen` لها قائمة مكونات كلها من نوع `Button` أو كلها من نوع `TextField`. إذا كان لديك دائمًا مجموعات متجانسة فقط، فإن استخدام الأنواع العامة وقيود السِمات هو الأفضل لأن التعريفات ستكون أحادية الشكل (monomorphized) في وقت التصريف لاستخدام الأنواع المحددة.
 
-On the other hand, with the method using trait objects, one `Screen` instance
-can hold a `Vec<T>` that contains a `Box<Button>` as well as a
-`Box<TextField>`. Let’s look at how this works, and then we’ll talk about the
-runtime performance implications.
+من ناحية أخرى، مع الدالة التي تستخدم كائنات السِمة، يمكن لنسخة واحدة من `Screen` أن تحتوي على `Vec<T>` يحتوي على `Box<Button>` بالإضافة إلى `Box<TextField>`. دعونا ننظر إلى كيفية عمل هذا، ثم سنتحدث عن تأثيرات الأداء في وقت التشغيل.
 
-### Implementing the Trait
+### تنفيذ السِمة
 
-Now we’ll add some types that implement the `Draw` trait. We’ll provide the
-`Button` type. Again, actually implementing a GUI library is beyond the scope
-of this book, so the `draw` method won’t have any useful implementation in its
-body. To imagine what the implementation might look like, a `Button` struct
-might have fields for `width`, `height`, and `label`, as shown in Listing 18-7.
+الآن سنضيف بعض الأنواع التي تُنفذ السِمة `Draw`. سنوفر نوع `Button`. مرة أخرى، تنفيذ مكتبة GUI فعلاً يتجاوز نطاق هذا الكتاب، لذا لن تحتوي دالة `draw` على أي تنفيذ مفيد في جسمها. لتخيل كيف قد يبدو التنفيذ، قد تحتوي بنية `Button` على حقول لـ `width` و`height` و`label`، كما هو موضح في القائمة 18-7.
 
-<Listing number="18-7" file-name="src/lib.rs" caption="A `Button` struct that implements the `Draw` trait">
+<Listing number="18-7" file-name="src/lib.rs" caption="بنية `Button` التي تُنفذ السِمة `Draw`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-07/src/lib.rs:here}}
@@ -141,21 +74,11 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 18-7.
 
 </Listing>
 
-The `width`, `height`, and `label` fields on `Button` will differ from the
-fields on other components; for example, a `TextField` type might have those
-same fields plus a `placeholder` field. Each of the types we want to draw on
-the screen will implement the `Draw` trait but will use different code in the
-`draw` method to define how to draw that particular type, as `Button` has here
-(without the actual GUI code, as mentioned). The `Button` type, for instance,
-might have an additional `impl` block containing methods related to what
-happens when a user clicks the button. These kinds of methods won’t apply to
-types like `TextField`.
+حقول `width` و`height` و`label` على `Button` ستختلف عن الحقول على المكونات الأخرى؛ على سبيل المثال، قد يحتوي نوع `TextField` على نفس هذه الحقول بالإضافة إلى حقل `placeholder`. سيُنفذ كل من الأنواع التي نريد رسمها على الشاشة السِمة `Draw` لكن سيستخدم كودًا مختلفًا في دالة `draw` لتعريف كيفية رسم هذا النوع المعين، كما يحتوي `Button` هنا (دون كود GUI الفعلي، كما ذكرنا). قد يكون لنوع `Button`، على سبيل المثال، كتلة `impl` إضافية تحتوي على دوال تتعلق بما يحدث عندما ينقر مستخدم على الزر. هذه الأنواع من الدوال لن تنطبق على أنواع مثل `TextField`.
 
-If someone using our library decides to implement a `SelectBox` struct that has
-`width`, `height`, and `options` fields, they would implement the `Draw` trait
-on the `SelectBox` type as well, as shown in Listing 18-8.
+إذا قرر شخص يستخدم مكتبتنا تنفيذ بنية `SelectBox` تحتوي على حقول `width` و`height` و`options`، فسينفذون السِمة `Draw` على نوع `SelectBox` أيضًا، كما هو موضح في القائمة 18-8.
 
-<Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
+<Listing number="18-8" file-name="src/main.rs" caption="صندوق آخر يستخدم `gui` ويُنفذ السِمة `Draw` على بنية `SelectBox`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-08/src/main.rs:here}}
@@ -163,13 +86,9 @@ on the `SelectBox` type as well, as shown in Listing 18-8.
 
 </Listing>
 
-Our library’s user can now write their `main` function to create a `Screen`
-instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
-by putting each in a `Box<T>` to become a trait object. They can then call the
-`run` method on the `Screen` instance, which will call `draw` on each of the
-components. Listing 18-9 shows this implementation.
+يمكن لمستخدم مكتبتنا الآن كتابة دالة `main` الخاصة بهم لإنشاء نسخة `Screen`. إلى نسخة `Screen`، يمكنهم إضافة `SelectBox` و`Button` بوضع كل منهما في `Box<T>` ليصبح كائن سِمة. يمكنهم بعد ذلك استدعاء دالة `run` على نسخة `Screen`، والتي ستستدعي `draw` على كل من المكونات. القائمة 18-9 توضح هذا التنفيذ.
 
-<Listing number="18-9" file-name="src/main.rs" caption="Using trait objects to store values of different types that implement the same trait">
+<Listing number="18-9" file-name="src/main.rs" caption="استخدام كائنات السِمة لتخزين قيم من أنواع مختلفة تُنفذ نفس السِمة">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/main.rs:here}}
@@ -177,32 +96,15 @@ components. Listing 18-9 shows this implementation.
 
 </Listing>
 
-When we wrote the library, we didn’t know that someone might add the
-`SelectBox` type, but our `Screen` implementation was able to operate on the
-new type and draw it because `SelectBox` implements the `Draw` trait, which
-means it implements the `draw` method.
+عندما كتبنا المكتبة، لم نكن نعلم أن شخصًا ما قد يضيف نوع `SelectBox`، لكن تنفيذ `Screen` الخاص بنا كان قادرًا على العمل على النوع الجديد ورسمه لأن `SelectBox` يُنفذ السِمة `Draw`، مما يعني أنه يُنفذ دالة `draw`.
 
-This concept—of being concerned only with the messages a value responds to
-rather than the value’s concrete type—is similar to the concept of _duck
-typing_ in dynamically typed languages: If it walks like a duck and quacks like
-a duck, then it must be a duck! In the implementation of `run` on `Screen` in
-Listing 18-5, `run` doesn’t need to know what the concrete type of each
-component is. It doesn’t check whether a component is an instance of a `Button`
-or a `SelectBox`, it just calls the `draw` method on the component. By
-specifying `Box<dyn Draw>` as the type of the values in the `components`
-vector, we’ve defined `Screen` to need values that we can call the `draw`
-method on.
+هذا المفهوم—من الاهتمام فقط بالرسائل التي تستجيب لها القيمة بدلاً من النوع المحدد للقيمة—يشبه مفهوم _كتابة البط_ (duck typing) في اللغات ذات الكتابة الديناميكية: إذا كان يمشي مثل البطة ويصدر أصواتًا مثل البطة، فهو بطة! في تنفيذ `run` على `Screen` في القائمة 18-5، لا تحتاج `run` إلى معرفة ما هو النوع المحدد لكل مكون. لا تتحقق مما إذا كان المكون نسخة من `Button` أو `SelectBox`، بل تستدعي فقط دالة `draw` على المكون. من خلال تحديد `Box<dyn Draw>` كنوع القيم في متجه `components`، عرّفنا `Screen` لتحتاج إلى قيم يمكننا استدعاء دالة `draw` عليها.
 
-The advantage of using trait objects and Rust’s type system to write code
-similar to code using duck typing is that we never have to check whether a
-value implements a particular method at runtime or worry about getting errors
-if a value doesn’t implement a method but we call it anyway. Rust won’t compile
-our code if the values don’t implement the traits that the trait objects need.
+ميزة استخدام كائنات السِمة ونظام الأنواع في Rust لكتابة كود مشابه للكود الذي يستخدم كتابة البط هي أننا لن نضطر أبدًا إلى التحقق مما إذا كانت القيمة تُنفذ دالة معينة في وقت التشغيل أو القلق بشأن الحصول على أخطاء إذا كانت القيمة لا تُنفذ دالة لكننا نستدعيها على أي حال. لن يُصرّف Rust كودنا إذا كانت القيم لا تُنفذ السِمات التي تحتاجها كائنات السِمة.
 
-For example, Listing 18-10 shows what happens if we try to create a `Screen`
-with a `String` as a component.
+على سبيل المثال، القائمة 18-10 توضح ما يحدث إذا حاولنا إنشاء `Screen` بـ `String` كمكون.
 
-<Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
+<Listing number="18-10" file-name="src/main.rs" caption="محاولة استخدام نوع لا يُنفذ سِمة كائن السِمة">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/main.rs}}
@@ -210,45 +112,23 @@ with a `String` as a component.
 
 </Listing>
 
-We’ll get this error because `String` doesn’t implement the `Draw` trait:
+سنحصل على هذا الخطأ لأن `String` لا يُنفذ السِمة `Draw`:
 
 ```console
 {{#include ../listings/ch18-oop/listing-18-10/output.txt}}
 ```
 
-This error lets us know that either we’re passing something to `Screen` that we
-didn’t mean to pass and so should pass a different type, or we should implement
-`Draw` on `String` so that `Screen` is able to call `draw` on it.
+يعلمنا هذا الخطأ أننا إما نُمرر شيئًا إلى `Screen` لم نقصد تمريره وبالتالي يجب أن نُمرر نوعًا مختلفًا، أو يجب أن نُنفذ `Draw` على `String` حتى تتمكن `Screen` من استدعاء `draw` عليها.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="trait-objects-perform-dynamic-dispatch"></a>
 
-### Performing Dynamic Dispatch
+### إجراء الإرسال الديناميكي
 
-Recall in [“Performance of Code Using
-Generics”][performance-of-code-using-generics]<!-- ignore --> in Chapter 10 our
-discussion on the monomorphization process performed on generics by the
-compiler: The compiler generates nongeneric implementations of functions and
-methods for each concrete type that we use in place of a generic type
-parameter. The code that results from monomorphization is doing _static
-dispatch_, which is when the compiler knows what method you’re calling at
-compile time. This is opposed to _dynamic dispatch_, which is when the compiler
-can’t tell at compile time which method you’re calling. In dynamic dispatch
-cases, the compiler emits code that at runtime will know which method to call.
+تذكر في ["أداء الكود الذي يستخدم الأنواع العامة"][performance-of-code-using-generics]<!-- ignore --> في الفصل 10 مناقشتنا حول عملية أحادية الشكل (monomorphization) التي يقوم بها المُصرف على الأنواع العامة: يُنشئ المُصرف تنفيذات غير عامة للدوال والأساليب لكل نوع محدد نستخدمه بدلاً من معامل نوع عام. الكود الذي ينتج عن أحادية الشكل يقوم بـ _الإرسال الثابت_ (static dispatch)، وهو عندما يعرف المُصرف أي دالة تستدعيها في وقت التصريف. هذا يقابل _الإرسال الديناميكي_ (dynamic dispatch)، وهو عندما لا يستطيع المُصرف معرفة أي دالة تستدعيها في وقت التصريف. في حالات الإرسال الديناميكي، يُصدر المُصرف كودًا سيعرف في وقت التشغيل أي دالة يستدعيها.
 
-When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
-know all the types that might be used with the code that’s using trait objects,
-so it doesn’t know which method implemented on which type to call. Instead, at
-runtime, Rust uses the pointers inside the trait object to know which method to
-call. This lookup incurs a runtime cost that doesn’t occur with static dispatch.
-Dynamic dispatch also prevents the compiler from choosing to inline a method’s
-code, which in turn prevents some optimizations, and Rust has some rules about
-where you can and cannot use dynamic dispatch, called _dyn compatibility_. Those
-rules are beyond the scope of this discussion, but you can read more about them
-[in the reference][dyn-compatibility]<!-- ignore -->. However, we did get extra
-flexibility in the code that we wrote in Listing 18-5 and were able to support
-in Listing 18-9, so it’s a trade-off to consider.
+عندما نستخدم كائنات السِمة، يجب على Rust استخدام الإرسال الديناميكي. لا يعرف المُصرف جميع الأنواع التي قد تُستخدم مع الكود الذي يستخدم كائنات السِمة، لذا لا يعرف أي دالة مُنفذة على أي نوع يستدعيها. بدلاً من ذلك، في وقت التشغيل، تستخدم Rust المؤشرات داخل كائن السِمة لمعرفة أي دالة يستدعيها. يتحمل هذا البحث تكلفة في وقت التشغيل لا تحدث مع الإرسال الثابت. يمنع الإرسال الديناميكي أيضًا المُصرف من اختيار إدراج كود الدالة مضمنًا، مما يمنع بعض التحسينات، ولدى Rust بعض القواعد حول أين يمكنك وأين لا يمكنك استخدام الإرسال الديناميكي، تُسمى _توافق dyn_ (dyn compatibility). هذه القواعد تتجاوز نطاق هذا النقاش، لكن يمكنك قراءة المزيد عنها [في المرجع][dyn-compatibility]<!-- ignore -->. ومع ذلك، حصلنا على مرونة إضافية في الكود الذي كتبناه في القائمة 18-5 وتمكنا من دعمه في القائمة 18-9، لذا فهو مفاضلة يجب أخذها في الاعتبار.
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait

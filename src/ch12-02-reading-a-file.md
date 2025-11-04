@@ -1,13 +1,12 @@
-## Reading a File
+## قراءة ملف
 
-Now we’ll add functionality to read the file specified in the `file_path`
-argument. First, we need a sample file to test it with: We’ll use a file with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
-has an Emily Dickinson poem that will work well! Create a file called
-_poem.txt_ at the root level of your project, and enter the poem “I’m Nobody!
-Who are you?”
+الآن سنضيف وظيفة لقراءة الملف المحدد في معامل `file_path`. أولاً، نحتاج إلى ملف
+عينة لاختباره: سنستخدم ملفًا يحتوي على كمية صغيرة من النص على عدة أسطر مع بعض
+الكلمات المكررة. تحتوي القائمة 12-3 على قصيدة لإيميلي ديكنسون ستعمل بشكل جيد!
+أنشئ ملفًا يُسمى _poem.txt_ في المستوى الجذري لمشروعك، وأدخل القصيدة "I'm
+Nobody! Who are you?"
 
-<Listing number="12-3" file-name="poem.txt" caption="A poem by Emily Dickinson makes a good test case.">
+<Listing number="12-3" file-name="poem.txt" caption="قصيدة لإيميلي ديكنسون تُشكل حالة اختبار جيدة.">
 
 ```text
 {{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
@@ -15,10 +14,10 @@ Who are you?”
 
 </Listing>
 
-With the text in place, edit _src/main.rs_ and add code to read the file, as
-shown in Listing 12-4.
+مع وجود النص في مكانه، عدّل _src/main.rs_ وأضف كودًا لقراءة الملف، كما هو موضح
+في القائمة 12-4.
 
-<Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
+<Listing number="12-4" file-name="src/main.rs" caption="قراءة محتويات الملف المحدد بواسطة المعامل الثاني">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
@@ -26,31 +25,27 @@ shown in Listing 12-4.
 
 </Listing>
 
-First, we bring in a relevant part of the standard library with a `use`
-statement: We need `std::fs` to handle files.
+أولاً، نُدخل جزءًا ذا صلة من المكتبة القياسية باستخدام عبارة `use`: نحتاج إلى
+`std::fs` للتعامل مع الملفات.
 
-In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
-that file, and returns a value of type `std::io::Result<String>` that contains
-the file’s contents.
+في `main`، تأخذ العبارة الجديدة `fs::read_to_string` معامل `file_path`، وتفتح
+ذلك الملف، وتُرجع قيمة من نوع `std::io::Result<String>` تحتوي على محتويات
+الملف.
 
-After that, we again add a temporary `println!` statement that prints the value
-of `contents` after the file is read so that we can check that the program is
-working so far.
+بعد ذلك، نضيف مرة أخرى عبارة `println!` مؤقتة تطبع قيمة `contents` بعد قراءة
+الملف حتى نتمكن من التحقق من أن البرنامج يعمل حتى الآن.
 
-Let’s run this code with any string as the first command line argument (because
-we haven’t implemented the searching part yet) and the _poem.txt_ file as the
-second argument:
+لنقم بتشغيل هذا الكود بأي نص كمعامل سطر الأوامر الأول (لأننا لم ننفذ جزء البحث
+بعد) والملف _poem.txt_ كمعامل ثانٍ:
 
 ```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
-Great! The code read and then printed the contents of the file. But the code
-has a few flaws. At the moment, the `main` function has multiple
-responsibilities: Generally, functions are clearer and easier to maintain if
-each function is responsible for only one idea. The other problem is that we’re
-not handling errors as well as we could. The program is still small, so these
-flaws aren’t a big problem, but as the program grows, it will be harder to fix
-them cleanly. It’s a good practice to begin refactoring early on when
-developing a program because it’s much easier to refactor smaller amounts of
-code. We’ll do that next.
+رائع! قرأ الكود ثم طبع محتويات الملف. لكن الكود به بعض العيوب. في الوقت الحالي،
+تمتلك دالة `main` مسؤوليات متعددة: بشكل عام، تكون الدوال أكثر وضوحًا وأسهل في
+الصيانة إذا كانت كل دالة مسؤولة عن فكرة واحدة فقط. المشكلة الأخرى هي أننا لا
+نتعامل مع الأخطاء بشكل جيد كما يمكننا. لا يزال البرنامج صغيرًا، لذا هذه العيوب
+ليست مشكلة كبيرة، لكن مع نمو البرنامج، سيكون من الأصعب إصلاحها بشكل نظيف. من
+الممارسات الجيدة البدء في إعادة الهيكلة (refactoring) مبكرًا عند تطوير برنامج
+لأنه من الأسهل بكثير إعادة هيكلة كميات أصغر من الكود. سنفعل ذلك بعد ذلك.

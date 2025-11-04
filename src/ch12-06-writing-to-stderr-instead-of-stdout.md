@@ -2,64 +2,59 @@
 
 <a id="writing-error-messages-to-standard-error-instead-of-standard-output"></a>
 
-## Redirecting Errors to Standard Error
+## إعادة توجيه الأخطاء إلى الخطأ القياسي
 
-At the moment, we’re writing all of our output to the terminal using the
-`println!` macro. In most terminals, there are two kinds of output: _standard
-output_ (`stdout`) for general information and _standard error_ (`stderr`) for
-error messages. This distinction enables users to choose to direct the
-successful output of a program to a file but still print error messages to the
-screen.
+في الوقت الحالي، نكتب كل إخراجنا إلى الطرفية باستخدام ماكرو `println!`. في
+معظم الطرفيات، يوجد نوعان من الإخراج: _الإخراج القياسي_ (`stdout`) للمعلومات
+العامة و_الخطأ القياسي_ (`stderr`) لرسائل الخطأ. يتيح هذا التمييز للمستخدمين
+اختيار توجيه الإخراج الناجح لبرنامج إلى ملف لكن لا يزال بإمكانهم طباعة رسائل
+الخطأ على الشاشة.
 
-The `println!` macro is only capable of printing to standard output, so we have
-to use something else to print to standard error.
+ماكرو `println!` قادر فقط على الطباعة إلى الإخراج القياسي، لذا علينا استخدام
+شيء آخر للطباعة إلى الخطأ القياسي.
 
-### Checking Where Errors Are Written
+### التحقق من مكان كتابة الأخطاء
 
-First, let’s observe how the content printed by `minigrep` is currently being
-written to standard output, including any error messages we want to write to
-standard error instead. We’ll do that by redirecting the standard output stream
-to a file while intentionally causing an error. We won’t redirect the standard
-error stream, so any content sent to standard error will continue to display on
-the screen.
+أولاً، لنلاحظ كيف يتم حاليًا كتابة المحتوى الذي يطبعه `minigrep` إلى الإخراج
+القياسي، بما في ذلك أي رسائل خطأ نريد كتابتها إلى الخطأ القياسي بدلاً من ذلك.
+سنفعل ذلك عن طريق إعادة توجيه تدفق الإخراج القياسي إلى ملف مع التسبب عمدًا في
+خطأ. لن نعيد توجيه تدفق الخطأ القياسي، لذا سيستمر عرض أي محتوى يتم إرساله إلى
+الخطأ القياسي على الشاشة.
 
-Command line programs are expected to send error messages to the standard error
-stream so that we can still see error messages on the screen even if we
-redirect the standard output stream to a file. Our program is not currently
-well behaved: We’re about to see that it saves the error message output to a
-file instead!
+من المتوقع أن ترسل برامج سطر الأوامر رسائل الخطأ إلى تدفق الخطأ القياسي حتى
+نتمكن من رؤية رسائل الخطأ على الشاشة حتى لو قمنا بإعادة توجيه تدفق الإخراج
+القياسي إلى ملف. برنامجنا حاليًا لا يتصرف بشكل جيد: نحن على وشك أن نرى أنه يحفظ
+إخراج رسالة الخطأ في ملف بدلاً من ذلك!
 
-To demonstrate this behavior, we’ll run the program with `>` and the file path,
-_output.txt_, that we want to redirect the standard output stream to. We won’t
-pass any arguments, which should cause an error:
+لإثبات هذا السلوك، سنشغل البرنامج مع `>` ومسار الملف، _output.txt_، الذي نريد
+إعادة توجيه تدفق الإخراج القياسي إليه. لن نمرر أي معاملات، مما يجب أن يتسبب في
+خطأ:
 
 ```console
 $ cargo run > output.txt
 ```
 
-The `>` syntax tells the shell to write the contents of standard output to
-_output.txt_ instead of the screen. We didn’t see the error message we were
-expecting printed to the screen, so that means it must have ended up in the
-file. This is what _output.txt_ contains:
+بناء جملة `>` يخبر shell بكتابة محتويات الإخراج القياسي إلى _output.txt_ بدلاً
+من الشاشة. لم نرَ رسالة الخطأ التي كنا نتوقع طباعتها على الشاشة، لذا يعني ذلك
+أنها انتهت في الملف. هذا ما يحتويه _output.txt_:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
 
-Yup, our error message is being printed to standard output. It’s much more
-useful for error messages like this to be printed to standard error so that
-only data from a successful run ends up in the file. We’ll change that.
+نعم، رسالة الخطأ الخاصة بنا تُطبع إلى الإخراج القياسي. من الأكثر فائدة بكثير
+طباعة رسائل الخطأ مثل هذه إلى الخطأ القياسي بحيث تنتهي فقط البيانات من تشغيل
+ناجح في الملف. سنغير ذلك.
 
-### Printing Errors to Standard Error
+### طباعة الأخطاء إلى الخطأ القياسي
 
-We’ll use the code in Listing 12-24 to change how error messages are printed.
-Because of the refactoring we did earlier in this chapter, all the code that
-prints error messages is in one function, `main`. The standard library provides
-the `eprintln!` macro that prints to the standard error stream, so let’s change
-the two places we were calling `println!` to print errors to use `eprintln!`
-instead.
+سنستخدم الكود في القائمة 12-24 لتغيير كيفية طباعة رسائل الخطأ. بسبب إعادة
+الهيكلة التي قمنا بها في وقت سابق من هذا الفصل، كل الكود الذي يطبع رسائل الخطأ
+موجود في دالة واحدة، `main`. توفر المكتبة القياسية ماكرو `eprintln!` الذي يطبع
+إلى تدفق الخطأ القياسي، لذا لنغير المكانين اللذين كنا نستدعي فيهما `println!`
+لطباعة الأخطاء لاستخدام `eprintln!` بدلاً من ذلك.
 
-<Listing number="12-24" file-name="src/main.rs" caption="Writing error messages to standard error instead of standard output using `eprintln!`">
+<Listing number="12-24" file-name="src/main.rs" caption="كتابة رسائل الخطأ إلى الخطأ القياسي بدلاً من الإخراج القياسي باستخدام `eprintln!`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
@@ -67,46 +62,44 @@ instead.
 
 </Listing>
 
-Let’s now run the program again in the same way, without any arguments and
-redirecting standard output with `>`:
+لنشغل البرنامج الآن مرة أخرى بنفس الطريقة، بدون أي معاملات وإعادة توجيه الإخراج
+القياسي بـ `>`:
 
 ```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see the error onscreen and _output.txt_ contains nothing, which is the
-behavior we expect of command line programs.
+الآن نرى الخطأ على الشاشة و_output.txt_ لا يحتوي على شيء، وهو السلوك الذي
+نتوقعه من برامج سطر الأوامر.
 
-Let’s run the program again with arguments that don’t cause an error but still
-redirect standard output to a file, like so:
+لنشغل البرنامج مرة أخرى بمعاملات لا تتسبب في خطأ ولكن لا تزال تعيد توجيه
+الإخراج القياسي إلى ملف، مثل:
 
 ```console
 $ cargo run -- to poem.txt > output.txt
 ```
 
-We won’t see any output to the terminal, and _output.txt_ will contain our
-results:
+لن نرى أي إخراج إلى الطرفية، و_output.txt_ سيحتوي على نتائجنا:
 
-<span class="filename">Filename: output.txt</span>
+<span class="filename">اسم الملف: output.txt</span>
 
 ```text
 Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using standard output for successful output
-and standard error for error output as appropriate.
+يوضح هذا أننا نستخدم الآن الإخراج القياسي للإخراج الناجح والخطأ القياسي لإخراج
+الخطأ بشكل مناسب.
 
-## Summary
+## ملخص
 
-This chapter recapped some of the major concepts you’ve learned so far and
-covered how to perform common I/O operations in Rust. By using command line
-arguments, files, environment variables, and the `eprintln!` macro for printing
-errors, you’re now prepared to write command line applications. Combined with
-the concepts in previous chapters, your code will be well organized, store data
-effectively in the appropriate data structures, handle errors nicely, and be
-well tested.
+لقد راجع هذا الفصل بعض المفاهيم الرئيسية التي تعلمتها حتى الآن وغطى كيفية
+إجراء عمليات إدخال/إخراج شائعة في Rust. باستخدام معاملات سطر الأوامر،
+والملفات، ومتغيرات البيئة، وماكرو `eprintln!` لطباعة الأخطاء، أنت الآن مستعد
+لكتابة تطبيقات سطر الأوامر. بالإضافة إلى المفاهيم في الفصول السابقة، سيكون
+كودك منظمًا بشكل جيد، وسيخزن البيانات بفعالية في بنى البيانات المناسبة، وسيتعامل
+مع الأخطاء بشكل جيد، وسيكون مختبرًا بشكل جيد.
 
-Next, we’ll explore some Rust features that were influenced by functional
-languages: closures and iterators.
+بعد ذلك، سنستكشف بعض ميزات Rust التي تأثرت باللغات الوظيفية: الإغلاقات
+والمُكرِّرات.

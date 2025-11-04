@@ -1,41 +1,38 @@
 <!-- Old headings. Do not remove or links may break. -->
 <a id="developing-the-librarys-functionality-with-test-driven-development"></a>
 
-## Adding Functionality with Test-Driven Development
+## إضافة وظيفة باستخدام التطوير الموجه بالاختبار
 
-Now that we have the search logic in _src/lib.rs_ separate from the `main`
-function, it’s much easier to write tests for the core functionality of our
-code. We can call functions directly with various arguments and check return
-values without having to call our binary from the command line.
+الآن بعد أن أصبح لدينا منطق البحث في _src/lib.rs_ منفصلاً عن دالة `main`، أصبح
+من الأسهل بكثير كتابة اختبارات للوظيفة الأساسية لكودنا. يمكننا استدعاء الدوال
+مباشرة بمعاملات مختلفة والتحقق من قيم الإرجاع دون الحاجة إلى استدعاء ملفنا
+الثنائي من سطر الأوامر.
 
-In this section, we’ll add the searching logic to the `minigrep` program using
-the test-driven development (TDD) process with the following steps:
+في هذا القسم، سنضيف منطق البحث إلى برنامج `minigrep` باستخدام عملية التطوير
+الموجه بالاختبار (TDD) بالخطوات التالية:
 
-1. Write a test that fails and run it to make sure it fails for the reason you
-   expect.
-2. Write or modify just enough code to make the new test pass.
-3. Refactor the code you just added or changed and make sure the tests continue
-   to pass.
-4. Repeat from step 1!
+1. اكتب اختبارًا يفشل وشغّله للتأكد من أنه يفشل للسبب الذي تتوقعه.
+2. اكتب أو عدّل كودًا كافيًا فقط لجعل الاختبار الجديد ينجح.
+3. أعد هيكلة الكود الذي أضفته أو غيرته للتو وتأكد من أن الاختبارات تستمر في
+   النجاح.
+4. كرر من الخطوة 1!
 
-Though it’s just one of many ways to write software, TDD can help drive code
-design. Writing the test before you write the code that makes the test pass
-helps maintain high test coverage throughout the process.
+على الرغم من أنها مجرد واحدة من العديد من الطرق لكتابة البرامج، يمكن أن يساعد
+TDD في دفع تصميم الكود. كتابة الاختبار قبل كتابة الكود الذي يجعل الاختبار ينجح
+يساعد في الحفاظ على تغطية اختبار عالية طوال العملية.
 
-We’ll test-drive the implementation of the functionality that will actually do
-the searching for the query string in the file contents and produce a list of
-lines that match the query. We’ll add this functionality in a function called
-`search`.
+سنقوم باختبار دفع تطبيق الوظيفة التي ستقوم فعليًا بالبحث عن نص الاستعلام في
+محتويات الملف وإنتاج قائمة بالأسطر التي تطابق الاستعلام. سنضيف هذه الوظيفة في
+دالة تُسمى `search`.
 
-### Writing a Failing Test
+### كتابة اختبار فاشل
 
-In _src/lib.rs_, we’ll add a `tests` module with a test function, as we did in
-[Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the
-behavior we want the `search` function to have: It will take a query and the
-text to search, and it will return only the lines from the text that contain
-the query. Listing 12-15 shows this test.
+في _src/lib.rs_، سنضيف وحدة `tests` مع دالة اختبار، كما فعلنا في [الفصل
+11][ch11-anatomy]<!-- ignore -->. تحدد دالة الاختبار السلوك الذي نريد أن تتمتع به
+دالة `search`: ستأخذ استعلامًا والنص المراد البحث فيه، وستُرجع فقط الأسطر من
+النص التي تحتوي على الاستعلام. توضح القائمة 12-15 هذا الاختبار.
 
-<Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function for the functionality we wish we had">
+<Listing number="12-15" file-name="src/lib.rs" caption="إنشاء اختبار فاشل لدالة `search` للوظيفة التي نتمنى أن نمتلكها">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
@@ -43,21 +40,20 @@ the query. Listing 12-15 shows this test.
 
 </Listing>
 
-This test searches for the string `"duct"`. The text we’re searching is three
-lines, only one of which contains `"duct"` (note that the backslash after the
-opening double quote tells Rust not to put a newline character at the beginning
-of the contents of this string literal). We assert that the value returned from
-the `search` function contains only the line we expect.
+يبحث هذا الاختبار عن النص `"duct"`. النص الذي نبحث فيه هو ثلاثة أسطر، واحد فقط
+منها يحتوي على `"duct"` (لاحظ أن الشرطة المائلة العكسية بعد علامة الاقتباس
+المزدوجة الافتتاحية تخبر Rust بعدم وضع حرف سطر جديد في بداية محتويات هذا النص
+الحرفي). نؤكد أن القيمة المُرجعة من دالة `search` تحتوي فقط على السطر الذي
+نتوقعه.
 
-If we run this test, it will currently fail because the `unimplemented!` macro
-panics with the message “not implemented”. In accordance with TDD principles,
-we’ll take a small step of adding just enough code to get the test to not panic
-when calling the function by defining the `search` function to always return an
-empty vector, as shown in Listing 12-16. Then, the test should compile and fail
-because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`.
+إذا قمنا بتشغيل هذا الاختبار، فسيفشل حاليًا لأن ماكرو `unimplemented!` يسبب ذعرًا
+برسالة "not implemented". وفقًا لمبادئ TDD، سنأخذ خطوة صغيرة بإضافة كود كافٍ فقط
+لعدم حدوث ذعر للاختبار عند استدعاء الدالة من خلال تعريف دالة `search` لإرجاع
+متجه فارغ دائمًا، كما هو موضح في القائمة 12-16. بعد ذلك، يجب أن يُصرّف الاختبار
+ويفشل لأن المتجه الفارغ لا يطابق متجهًا يحتوي على السطر `"safe, fast,
+productive."`.
 
-<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so that calling it won’t panic">
+<Listing number="12-16" file-name="src/lib.rs" caption="تعريف ما يكفي فقط من دالة `search` بحيث لا يتسبب استدعاؤها في ذعر">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
@@ -65,62 +61,55 @@ fast, productive."`.
 
 </Listing>
 
-Now let’s discuss why we need to define an explicit lifetime `'a` in the
-signature of `search` and use that lifetime with the `contents` argument and
-the return value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that
-the lifetime parameters specify which argument lifetime is connected to the
-lifetime of the return value. In this case, we indicate that the returned
-vector should contain string slices that reference slices of the argument
-`contents` (rather than the argument `query`).
+الآن لنناقش لماذا نحتاج إلى تعريف مدة صلاحية صريحة `'a` في توقيع `search`
+واستخدام تلك المدة مع معامل `contents` وقيمة الإرجاع. تذكر في [الفصل
+10][ch10-lifetimes]<!-- ignore --> أن معاملات مدة الصلاحية تحدد أي معامل مدة
+صلاحية متصل بمدة صلاحية قيمة الإرجاع. في هذه الحالة، نشير إلى أن المتجه المُرجع
+يجب أن يحتوي على شرائح نصية تشير إلى شرائح من معامل `contents` (بدلاً من معامل
+`query`).
 
-In other words, we tell Rust that the data returned by the `search` function
-will live as long as the data passed into the `search` function in the
-`contents` argument. This is important! The data referenced _by_ a slice needs
-to be valid for the reference to be valid; if the compiler assumes we’re making
-string slices of `query` rather than `contents`, it will do its safety checking
-incorrectly.
+بعبارة أخرى، نخبر Rust أن البيانات المُرجعة بواسطة دالة `search` ستعيش طالما
+البيانات الممررة إلى دالة `search` في معامل `contents`. هذا مهم! البيانات
+المشار إليها _بواسطة_ شريحة يجب أن تكون صالحة حتى يكون المَرجِع صالحًا؛ إذا
+افترض المصرِّف أننا ننشئ شرائح نصية من `query` بدلاً من `contents`، فسيقوم
+بفحص الأمان بشكل غير صحيح.
 
-If we forget the lifetime annotations and try to compile this function, we’ll
-get this error:
+إذا نسينا توضيحات مدة الصلاحية وحاولنا تصريف هذه الدالة، فسنحصل على هذا الخطأ:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust can’t know which of the two parameters we need for the output, so we need
-to tell it explicitly. Note that the help text suggests specifying the same
-lifetime parameter for all the parameters and the output type, which is
-incorrect! Because `contents` is the parameter that contains all of our text
-and we want to return the parts of that text that match, we know `contents` is
-the only parameter that should be connected to the return value using the
-lifetime syntax.
+لا يمكن لـ Rust معرفة أي من المعاملين نحتاجه للإخراج، لذا نحتاج إلى إخباره
+صراحةً. لاحظ أن نص المساعدة يقترح تحديد نفس معامل مدة الصلاحية لجميع المعاملات
+ونوع الإخراج، وهذا غير صحيح! لأن `contents` هو المعامل الذي يحتوي على كل نصنا
+ونريد إرجاع أجزاء من ذلك النص التي تطابق، نعلم أن `contents` هو المعامل الوحيد
+الذي يجب أن يكون متصلاً بقيمة الإرجاع باستخدام بناء جملة مدة الصلاحية.
 
-Other programming languages don’t require you to connect arguments to return
-values in the signature, but this practice will get easier over time. You might
-want to compare this example with the examples in the [“Validating References
-with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section
-in Chapter 10.
+لا تتطلب منك لغات البرمجة الأخرى ربط المعاملات بقيم الإرجاع في التوقيع، لكن هذه
+الممارسة ستصبح أسهل مع مرور الوقت. قد ترغب في مقارنة هذا المثال بالأمثلة في
+قسم ["التحقق من المَراجِع باستخدام مُدد
+الصلاحية"][validating-references-with-lifetimes]<!-- ignore --> في الفصل 10.
 
-### Writing Code to Pass the Test
+### كتابة كود لاجتياز الاختبار
 
-Currently, our test is failing because we always return an empty vector. To fix
-that and implement `search`, our program needs to follow these steps:
+حاليًا، يفشل اختبارنا لأننا نعيد دائمًا متجهًا فارغًا. لإصلاح ذلك وتطبيق
+`search`، يحتاج برنامجنا إلى اتباع هذه الخطوات:
 
-1. Iterate through each line of the contents.
-2. Check whether the line contains our query string.
-3. If it does, add it to the list of values we’re returning.
-4. If it doesn’t, do nothing.
-5. Return the list of results that match.
+1. التكرار عبر كل سطر من المحتويات.
+2. التحقق مما إذا كان السطر يحتوي على نص استعلامنا.
+3. إذا كان كذلك، أضفه إلى قائمة القيم التي نعيدها.
+4. إذا لم يكن كذلك، لا تفعل شيئًا.
+5. أرجع قائمة النتائج التي تطابق.
 
-Let’s work through each step, starting with iterating through lines.
+لنعمل عبر كل خطوة، بدءًا من التكرار عبر الأسطر.
 
-#### Iterating Through Lines with the `lines` Method
+#### التكرار عبر الأسطر باستخدام تابع `lines`
 
-Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note that
-this won’t compile yet.
+لدى Rust تابع مفيد للتعامل مع التكرار سطرًا بسطر من النصوص، يُسمى بشكل مناسب
+`lines`، والذي يعمل كما هو موضح في القائمة 12-17. لاحظ أن هذا لن يُصرّف بعد.
 
-<Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
+<Listing number="12-17" file-name="src/lib.rs" caption="التكرار عبر كل سطر في `contents`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
@@ -128,19 +117,19 @@ this won’t compile yet.
 
 </Listing>
 
-The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13-iterators]<!-- ignore -->. But recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
-`for` loop with an iterator to run some code on each item in a collection.
+يُرجع تابع `lines` مُكرِّرًا. سنتحدث عن المُكرِّرات بعمق في [الفصل
+13][ch13-iterators]<!-- ignore -->. لكن تذكر أنك رأيت هذه الطريقة لاستخدام
+مُكرِّر في [القائمة 3-5][ch3-iter]<!-- ignore -->، حيث استخدمنا حلقة `for` مع
+مُكرِّر لتشغيل بعض الكود على كل عنصر في مجموعة.
 
-#### Searching Each Line for the Query
+#### البحث في كل سطر عن الاستعلام
 
-Next, we’ll check whether the current line contains our query string.
-Fortunately, strings have a helpful method named `contains` that does this for
-us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note that this still won’t compile yet.
+بعد ذلك، سنتحقق مما إذا كان السطر الحالي يحتوي على نص استعلامنا. لحسن الحظ،
+لدى النصوص تابع مفيد يُسمى `contains` يفعل ذلك لنا! أضف استدعاءً لتابع
+`contains` في دالة `search`، كما هو موضح في القائمة 12-18. لاحظ أن هذا لن يُصرّف
+بعد.
 
-<Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
+<Listing number="12-18" file-name="src/lib.rs" caption="إضافة وظيفة لمعرفة ما إذا كان السطر يحتوي على النص في `query`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
@@ -148,18 +137,16 @@ Listing 12-18. Note that this still won’t compile yet.
 
 </Listing>
 
-At the moment, we’re building up functionality. To get the code to compile, we
-need to return a value from the body as we indicated we would in the function
-signature.
+في الوقت الحالي، نقوم ببناء الوظيفة. للحصول على الكود للتصريف، نحتاج إلى إرجاع
+قيمة من الجسم كما أشرنا إليه في توقيع الدالة.
 
-#### Storing Matching Lines
+#### تخزين الأسطر المطابقة
 
-To finish this function, we need a way to store the matching lines that we want
-to return. For that, we can make a mutable vector before the `for` loop and
-call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+لإنهاء هذه الدالة، نحتاج إلى طريقة لتخزين الأسطر المطابقة التي نريد إرجاعها.
+لذلك، يمكننا إنشاء متجه قابل للتغيير قبل حلقة `for` واستدعاء تابع `push` لتخزين
+`line` في المتجه. بعد حلقة `for`، نعيد المتجه، كما هو موضح في القائمة 12-19.
 
-<Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so that we can return them">
+<Listing number="12-19" file-name="src/lib.rs" caption="تخزين الأسطر التي تطابق حتى نتمكن من إرجاعها">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
@@ -167,49 +154,47 @@ we return the vector, as shown in Listing 12-19.
 
 </Listing>
 
-Now the `search` function should return only the lines that contain `query`,
-and our test should pass. Let’s run the test:
+الآن يجب أن تُرجع دالة `search` فقط الأسطر التي تحتوي على `query`، ويجب أن ينجح
+اختبارنا. لنقم بتشغيل الاختبار:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
-Our test passed, so we know it works!
+نجح اختبارنا، إذن نحن نعلم أنه يعمل!
 
-At this point, we could consider opportunities for refactoring the
-implementation of the search function while keeping the tests passing to
-maintain the same functionality. The code in the search function isn’t too bad,
-but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where
-we’ll explore iterators in detail, and look at how to improve it.
+في هذه المرحلة، يمكننا أن ننظر في فرص لإعادة هيكلة تطبيق دالة البحث مع الحفاظ
+على نجاح الاختبارات للحفاظ على نفس الوظيفة. الكود في دالة البحث ليس سيئًا جدًا،
+لكنه لا يستفيد من بعض الميزات المفيدة للمُكرِّرات. سنعود إلى هذا المثال في
+[الفصل 13][ch13-iterators]<!-- ignore -->، حيث سنستكشف المُكرِّرات بالتفصيل،
+وننظر في كيفية تحسينه.
 
-Now the entire program should work! Let’s try it out, first with a word that
-should return exactly one line from the Emily Dickinson poem: _frog_.
+الآن يجب أن يعمل البرنامج بأكمله! لنجربه، أولاً بكلمة يجب أن تعيد سطرًا واحدًا
+بالضبط من قصيدة إيميلي ديكنسون: _frog_.
 
 ```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
-Cool! Now let’s try a word that will match multiple lines, like _body_:
+رائع! الآن لنجرب كلمة ستطابق عدة أسطر، مثل _body_:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
-And finally, let’s make sure that we don’t get any lines when we search for a
-word that isn’t anywhere in the poem, such as _monomorphization_:
+وأخيرًا، لنتأكد من أننا لا نحصل على أي أسطر عندما نبحث عن كلمة غير موجودة في
+القصيدة، مثل _monomorphization_:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 
-Excellent! We’ve built our own mini version of a classic tool and learned a lot
-about how to structure applications. We’ve also learned a bit about file input
-and output, lifetimes, testing, and command line parsing.
+ممتاز! لقد بنينا نسختنا الصغيرة الخاصة من أداة كلاسيكية وتعلمنا الكثير عن كيفية
+هيكلة التطبيقات. لقد تعلمنا أيضًا القليل عن إدخال وإخراج الملفات، ومُدد
+الصلاحية، والاختبار، وتحليل سطر الأوامر.
 
-To round out this project, we’ll briefly demonstrate how to work with
-environment variables and how to print to standard error, both of which are
-useful when you’re writing command line programs.
+لتكملة هذا المشروع، سنوضح بإيجاز كيفية العمل مع متغيرات البيئة وكيفية الطباعة
+إلى الخطأ القياسي، وكلاهما مفيد عند كتابة برامج سطر الأوامر.
 
 [validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function

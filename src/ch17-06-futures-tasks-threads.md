@@ -1,68 +1,25 @@
-## Putting It All Together: Futures, Tasks, and Threads
+## الجمع بين كل شيء: المستقبلات والمهام والخيوط
 
-As we saw in [Chapter 16][ch16]<!-- ignore -->, threads provide one approach to
-concurrency. We’ve seen another approach in this chapter: using async with
-futures and streams. If you’re wondering when to choose one method over the other,
-the answer is: it depends! And in many cases, the choice isn’t threads _or_
-async but rather threads _and_ async.
+كما رأينا في [الفصل 16][ch16]<!-- ignore -->، توفر الخيوط نهجًا واحدًا للتزامن. لقد رأينا نهجًا آخر في هذا الفصل: استخدام async مع المستقبلات والتدفقات. إذا كنت تتساءل متى تختار إحدى الطريقتين على الأخرى، فالإجابة هي: يعتمد! وفي كثير من الحالات، لا يكون الخيار هو الخيوط _أو_ async بل الخيوط _و_ async.
 
-Many operating systems have supplied threading-based concurrency models for
-decades now, and many programming languages support them as a result. However,
-these models are not without their tradeoffs. On many operating systems, they
-use a fair bit of memory for each thread. Threads are also only an option when
-your operating system and hardware support them. Unlike mainstream desktop and
-mobile computers, some embedded systems don’t have an OS at all, so they also
-don’t have threads.
+توفر العديد من أنظمة التشغيل نماذج تزامن قائمة على الخيوط منذ عقود، ودعمت العديد من لغات البرمجة لها نتيجة لذلك. ومع ذلك، هذه النماذج ليست بدون مقايضاتها. في العديد من أنظمة التشغيل، تستخدم قدرًا لا بأس به من الذاكرة لكل خيط. الخيوط هي أيضًا خيار فقط عندما يدعمها نظام التشغيل والأجهزة. على عكس أجهزة الكمبيوتر المكتبية والمحمولة السائدة، بعض الأنظمة المضمنة ليس لديها نظام تشغيل على الإطلاق، لذلك ليس لديها خيوط أيضًا.
 
-The async model provides a different—and ultimately complementary—set of
-tradeoffs. In the async model, concurrent operations don’t require their own
-threads. Instead, they can run on tasks, as when we used `trpl::spawn_task` to
-kick off work from a synchronous function in the streams section. A task is
-similar to a thread, but instead of being managed by the operating system, it’s
-managed by library-level code: the runtime.
+يوفر نموذج async مجموعة مختلفة - وفي النهاية تكميلية - من المقايضات. في نموذج async، لا تتطلب العمليات المتزامنة خيوطها الخاصة. بدلاً من ذلك، يمكنها العمل على المهام، كما هو الحال عندما استخدمنا `trpl::spawn_task` لبدء العمل من دالة متزامنة في قسم التدفقات. المهمة تشبه الخيط، ولكن بدلاً من إدارتها بواسطة نظام التشغيل، تتم إدارتها بواسطة كود مستوى المكتبة: بيئة التشغيل.
 
-There’s a reason the APIs for spawning threads and spawning tasks are so
-similar. Threads act as a boundary for sets of synchronous operations;
-concurrency is possible _between_ threads. Tasks act as a boundary for sets of
-_asynchronous_ operations; concurrency is possible both _between_ and _within_
-tasks, because a task can switch between futures in its body. Finally, futures
-are Rust’s most granular unit of concurrency, and each future may represent a
-tree of other futures. The runtime—specifically, its executor—manages tasks,
-and tasks manage futures. In that regard, tasks are similar to lightweight,
-runtime-managed threads with added capabilities that come from being managed by
-a runtime instead of by the operating system.
+هناك سبب لكون واجهات برمجة التطبيقات لإنشاء الخيوط وإنشاء المهام متشابهة جدًا. الخيوط تعمل كحدود لمجموعات من العمليات المتزامنة؛ التزامن ممكن _بين_ الخيوط. المهام تعمل كحدود لمجموعات من العمليات _غير المتزامنة_؛ التزامن ممكن _بين_ و _داخل_ المهام، لأن المهمة يمكنها التبديل بين المستقبلات في نصها. أخيرًا، المستقبلات هي أصغر وحدة تزامن في Rust، وكل مستقبل قد يمثل شجرة من المستقبلات الأخرى. بيئة التشغيل - على وجه الخصوص، منفذها - تدير المهام، والمهام تدير المستقبلات. من هذا المنظور، المهام تشبه الخيوط الخفيفة المدارة من بيئة التشغيل مع قدرات إضافية تأتي من كونها مدارة من بيئة تشغيل بدلاً من نظام التشغيل.
 
-This doesn’t mean that async tasks are always better than threads (or vice
-versa). Concurrency with threads is in some ways a simpler programming model
-than concurrency with `async`. That can be a strength or a weakness. Threads are
-somewhat “fire and forget”; they have no native equivalent to a future, so they
-simply run to completion without being interrupted except by the operating
-system itself.
+هذا لا يعني أن المهام غير المتزامنة أفضل دائمًا من الخيوط (أو العكس). التزامن مع الخيوط هو في بعض النواحي نموذج برمجة أبسط من التزامن مع `async`. هذا يمكن أن يكون نقطة قوة أو ضعف. الخيوط إلى حد ما "إطلاق ونسيان"؛ ليس لديها ما يعادل الأصلي للمستقبل، لذلك تعمل فقط حتى الاكتمال دون انقطاع باستثناء من قبل نظام التشغيل نفسه.
 
-And it turns out that threads and tasks often work
-very well together, because tasks can (at least in some runtimes) be moved
-around between threads. In fact, under the hood, the runtime we’ve been
-using—including the `spawn_blocking` and `spawn_task` functions—is multithreaded
-by default! Many runtimes use an approach called _work stealing_ to
-transparently move tasks around between threads, based on how the threads are
-currently being utilized, to improve the system’s overall performance. That
-approach actually requires threads _and_ tasks, and therefore futures.
+واتضح أن الخيوط والمهام غالبًا ما تعمل بشكل جيد معًا، لأنه يمكن نقل المهام (على الأقل في بعض بيئات التشغيل) بين الخيوط. في الواقع، تحت الغطاء، بيئة التشغيل التي كنا نستخدمها - بما في ذلك دالتي `spawn_blocking` و `spawn_task` - متعددة الخيوط بشكل افتراضي! العديد من بيئات التشغيل تستخدم نهجًا يسمى _سرقة العمل_ (work stealing) لنقل المهام بشفافية بين الخيوط، بناءً على كيفية استخدام الخيوط حاليًا، لتحسين الأداء الكلي للنظام. يتطلب هذا النهج في الواقع الخيوط _والمهام_، وبالتالي المستقبلات.
 
-When thinking about which method to use when, consider these rules of thumb:
+عند التفكير في الطريقة التي يجب استخدامها، ضع في اعتبارك قواعد الإبهام التالية:
 
-- If the work is _very parallelizable_ (that is, CPU-bound), such as processing
-  a bunch of data where each part can be processed separately, threads are a
-  better choice.
-- If the work is _very concurrent_ (that is, I/O-bound), such as handling
-  messages from a bunch of different sources that may come in at different
-  intervals or different rates, async is a better choice.
+- إذا كان العمل _متوازيًا جدًا_ (أي، مرتبط بالمعالج)، مثل معالجة مجموعة من البيانات حيث يمكن معالجة كل جزء بشكل منفصل، فالخيوط هي خيار أفضل.
+- إذا كان العمل _متزامنًا جدًا_ (أي، مرتبط بالإدخال/الإخراج)، مثل معالجة الرسائل من مجموعة من المصادر المختلفة التي قد تأتي في أوقات مختلفة أو بمعدلات مختلفة، فإن async هو خيار أفضل.
 
-And if you need both parallelism and concurrency, you don’t have to choose
-between threads and async. You can use them together freely, letting each
-play the part it’s best at. For example, Listing 17-25 shows a fairly common
-example of this kind of mix in real-world Rust code.
+وإذا كنت بحاجة إلى التوازي والتزامن معًا، فليس عليك الاختيار بين الخيوط و async. يمكنك استخدامها معًا بحرية، مما يسمح لكل منهما بلعب الدور الذي يتقنه. على سبيل المثال، القائمة 17-25 تُظهر مثالاً شائعًا إلى حد ما لهذا النوع من المزيج في كود Rust في العالم الحقيقي.
 
-<Listing number="17-25" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
+<Listing number="17-25" caption="إرسال الرسائل بكود حجب في خيط وانتظار الرسائل في كتلة async" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:all}}
@@ -70,34 +27,17 @@ example of this kind of mix in real-world Rust code.
 
 </Listing>
 
-We begin by creating an async channel, then spawning a thread that takes
-ownership of the sender side of the channel using the `move` keyword. Within
-the thread, we send the numbers 1 through 10, sleeping for a second between
-each. Finally, we run a future created with an async block passed to
-`trpl::block_on` just as we have throughout the chapter. In that future, we
-await those messages, just as in the other message-passing examples we have
-seen.
+نبدأ بإنشاء قناة async، ثم إنشاء خيط يأخذ ملكية جانب المرسل من القناة باستخدام الكلمة الأساسية `move`. داخل الخيط، نرسل الأرقام من 1 إلى 10، مع النوم لمدة ثانية واحدة بين كل رقم. أخيرًا، نشغل مستقبلًا تم إنشاؤه باستخدام كتلة async ممررة إلى `trpl::block_on` تمامًا كما فعلنا في جميع أنحاء الفصل. في ذلك المستقبل، ننتظر تلك الرسائل، تمامًا كما في أمثلة تمرير الرسائل الأخرى التي رأيناها.
 
-To return to the scenario we opened the chapter with, imagine running a set of
-video encoding tasks using a dedicated thread (because video encoding is
-compute-bound) but notifying the UI that those operations are done with an
-async channel. There are countless examples of these kinds of combinations in
-real-world use cases.
+للعودة إلى السيناريو الذي فتحنا به الفصل، تخيل تشغيل مجموعة من مهام ترميز الفيديو باستخدام خيط مخصص (لأن ترميز الفيديو مرتبط بالحساب) ولكن إخطار واجهة المستخدم بأن تلك العمليات قد انتهت باستخدام قناة async. هناك أمثلة لا حصر لها من هذه الأنواع من المجموعات في حالات الاستخدام في العالم الحقيقي.
 
-## Summary
+## الخلاصة
 
-This isn’t the last you’ll see of concurrency in this book. The project in
-[Chapter 21][ch21]<!-- ignore --> will apply these concepts in a more realistic
-situation than the simpler examples discussed here and compare problem-solving
-with threading versus tasks and futures more directly.
+هذا ليس آخر ما ستراه من التزامن في هذا الكتاب. سيطبق المشروع في [الفصل 21][ch21]<!-- ignore --> هذه المفاهيم في وضع أكثر واقعية من الأمثلة الأبسط التي نوقشت هنا ويقارن حل المشكلات بالخيوط مقابل المهام والمستقبلات بشكل أكثر مباشرة.
 
-No matter which of these approaches you choose, Rust gives you the tools you
-need to write safe, fast, concurrent code—whether for a high-throughput web
-server or an embedded operating system.
+بغض النظر عن أي من هذه الأساليب التي تختارها، تمنحك Rust الأدوات التي تحتاجها لكتابة كود آمن وسريع ومتزامن - سواء لخادم ويب عالي الإنتاجية أو نظام تشغيل مضمن.
 
-Next, we’ll talk about idiomatic ways to model problems and structure solutions
-as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
-relate to those you might be familiar with from object-oriented programming.
+بعد ذلك، سنتحدث عن الطرق الاصطلاحية لنمذجة المشكلات وهيكلة الحلول مع نمو برامج Rust الخاصة بك. بالإضافة إلى ذلك، سنناقش كيفية ارتباط تعابير Rust بتلك التي قد تكون معتادًا عليها من البرمجة كائنية التوجه.
 
 [ch16]: http://localhost:3000/ch16-00-concurrency.html
 [combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions

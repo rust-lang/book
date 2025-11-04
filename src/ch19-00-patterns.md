@@ -1,29 +1,15 @@
-# Patterns and Matching
+# الأنماط والمطابقة
 
-Patterns are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+الأنماط (Patterns) هي بناء جملة خاص في Rust لمطابقة بنية الأنواع، سواء كانت معقدة أو بسيطة. استخدام الأنماط بالاقتران مع تعبيرات `match` والبنى الأخرى يمنحك المزيد من التحكم في تدفق التحكم في البرنامج. يتكون النمط (pattern) من مزيج من العناصر التالية:
 
-- Literals
-- Destructured arrays, enums, structs, or tuples
-- Variables
-- Wildcards
-- Placeholders
+- القيم الحرفية (Literals)
+- المصفوفات أو التعدادات أو الهياكل أو الصفوف المفككة
+- المتغيرات
+- أحرف البدل (Wildcards)
+- العناصر النائبة (Placeholders)
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
-contexts in which patterns are valid, these components describe the shape of
-data. Our program then matches values against the patterns to determine whether
-it has the correct shape of data to continue running a particular piece of code.
+بعض الأمثلة على الأنماط تشمل `x` و `(a, 3)` و `Some(Color::Red)`. في السياقات التي تكون فيها الأنماط صالحة، تصف هذه المكونات شكل البيانات. ثم يطابق برنامجنا القيم مع الأنماط لتحديد ما إذا كان لديه الشكل الصحيح من البيانات لمتابعة تشغيل جزء معين من الكود.
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin-sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+لاستخدام نمط، نقارنه ببعض القيم. إذا طابق النمط القيمة، نستخدم أجزاء القيمة في كودنا. تذكّر تعبيرات `match` في الفصل 6 التي استخدمت الأنماط، مثل مثال آلة فرز العملات. إذا كانت القيمة تناسب شكل النمط، يمكننا استخدام القطع المسماة. إذا لم يكن كذلك، فإن الكود المرتبط بالنمط لن يتم تشغيله.
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between refutable and irrefutable
-patterns, and the different kinds of pattern syntax that you might see. By the
-end of the chapter, you’ll know how to use patterns to express many concepts in
-a clear way.
+هذا الفصل عبارة عن مرجع لكل ما يتعلق بالأنماط. سنغطي الأماكن الصالحة لاستخدام الأنماط، والفرق بين الأنماط القابلة للدحض (refutable) وغير القابلة للدحض (irrefutable)، والأنواع المختلفة من بناء جملة الأنماط التي قد تراها. بحلول نهاية الفصل، ستعرف كيفية استخدام الأنماط للتعبير عن العديد من المفاهيم بطريقة واضحة.

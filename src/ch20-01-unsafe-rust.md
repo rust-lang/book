@@ -1,100 +1,51 @@
-## Unsafe Rust
+## Rust غير الآمن
 
-All the code we’ve discussed so far has had Rust’s memory safety guarantees
-enforced at compile time. However, Rust has a second language hidden inside it
-that doesn’t enforce these memory safety guarantees: It’s called _unsafe Rust_
-and works just like regular Rust but gives us extra superpowers.
+جميع الأكواد التي ناقشناها حتى الآن كانت لديها ضمانات أمان الذاكرة في Rust مفروضة في وقت الترجمة. ومع ذلك، لدى Rust لغة ثانية مخفية بداخلها لا تفرض ضمانات أمان الذاكرة هذه: تُسمى _unsafe Rust_ (Rust غير الآمن) وتعمل تمامًا مثل Rust العادي ولكنها تمنحنا قوى خارقة إضافية.
 
-Unsafe Rust exists because, by nature, static analysis is conservative. When
-the compiler tries to determine whether or not code upholds the guarantees,
-it’s better for it to reject some valid programs than to accept some invalid
-programs. Although the code _might_ be okay, if the Rust compiler doesn’t have
-enough information to be confident, it will reject the code. In these cases,
-you can use unsafe code to tell the compiler, “Trust me, I know what I’m
-doing.” Be warned, however, that you use unsafe Rust at your own risk: If you
-use unsafe code incorrectly, problems can occur due to memory unsafety, such as
-null pointer dereferencing.
+يوجد Rust غير الآمن لأن التحليل الثابت بطبيعته محافظ. عندما يحاول المترجم تحديد ما إذا كان الكود يحافظ على الضمانات أم لا، من الأفضل له رفض بعض البرامج الصحيحة بدلاً من قبول بعض البرامج غير الصحيحة. على الرغم من أن الكود _قد_ يكون صحيحًا، إذا لم يكن لدى مترجم Rust معلومات كافية ليكون واثقًا، فسيرفض الكود. في هذه الحالات، يمكنك استخدام الكود غير الآمن لإخبار المترجم، "ثق بي، أعرف ما أفعله". كن على حذر، مع ذلك، أنك تستخدم Rust غير الآمن على مسؤوليتك الخاصة: إذا استخدمت الكود غير الآمن بشكل غير صحيح، يمكن أن تحدث مشاكل بسبب عدم أمان الذاكرة، مثل إلغاء مرجعية مؤشر فارغ.
 
-Another reason Rust has an unsafe alter ego is that the underlying computer
-hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
-couldn’t do certain tasks. Rust needs to allow you to do low-level systems
-programming, such as directly interacting with the operating system or even
-writing your own operating system. Working with low-level systems programming
-is one of the goals of the language. Let’s explore what we can do with unsafe
-Rust and how to do it.
+سبب آخر لوجود نسخة غير آمنة من Rust هو أن الأجهزة الحاسوبية الأساسية غير آمنة بطبيعتها. إذا لم يسمح لك Rust بإجراء عمليات غير آمنة، لن تتمكن من القيام بمهام معينة. يحتاج Rust إلى السماح لك بإجراء برمجة أنظمة منخفضة المستوى، مثل التفاعل مباشرة مع نظام التشغيل أو حتى كتابة نظام التشغيل الخاص بك. العمل مع برمجة الأنظمة منخفضة المستوى هو أحد أهداف اللغة. دعنا نستكشف ما يمكننا فعله مع Rust غير الآمن وكيفية القيام بذلك.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="unsafe-superpowers"></a>
 
-### Performing Unsafe Superpowers
+### تنفيذ القوى الخارقة غير الآمنة
 
-To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take five actions in unsafe Rust that you
-can’t in safe Rust, which we call _unsafe superpowers_. Those superpowers
-include the ability to:
+للتبديل إلى Rust غير الآمن، استخدم الكلمة المفتاحية `unsafe` ثم ابدأ كتلة جديدة تحتوي على الكود غير الآمن. يمكنك اتخاذ خمسة إجراءات في Rust غير الآمن لا يمكنك القيام بها في Rust الآمن، والتي نسميها _القوى الخارقة غير الآمنة_ (unsafe superpowers). تشمل هذه القوى الخارقة القدرة على:
 
-1. Dereference a raw pointer.
-1. Call an unsafe function or method.
-1. Access or modify a mutable static variable.
-1. Implement an unsafe trait.
-1. Access fields of `union`s.
+1. إلغاء مرجعية مؤشر خام (raw pointer).
+1. استدعاء دالة أو طريقة غير آمنة.
+1. الوصول إلى متغير ثابت قابل للتغيير أو تعديله.
+1. تطبيق سِمَة غير آمنة.
+1. الوصول إلى حقول `union`.
 
-It’s important to understand that `unsafe` doesn’t turn off the borrow checker
-or disable any of Rust’s other safety checks: If you use a reference in unsafe
-code, it will still be checked. The `unsafe` keyword only gives you access to
-these five features that are then not checked by the compiler for memory
-safety. You’ll still get some degree of safety inside an unsafe block.
+من المهم أن نفهم أن `unsafe` لا يوقف فاحص الاستعارة (borrow checker) أو يعطل أي من فحوصات الأمان الأخرى في Rust: إذا استخدمت مرجعًا في كود غير آمن، فسيتم فحصه. الكلمة المفتاحية `unsafe` تمنحك فقط الوصول إلى هذه الميزات الخمس التي لا يتم فحصها بعد ذلك من قبل المترجم لأمان الذاكرة. ستحصل على درجة معينة من الأمان داخل كتلة غير آمنة.
 
-In addition, `unsafe` does not mean the code inside the block is necessarily
-dangerous or that it will definitely have memory safety problems: The intent is
-that as the programmer, you’ll ensure that the code inside an `unsafe` block
-will access memory in a valid way.
+بالإضافة إلى ذلك، `unsafe` لا يعني أن الكود داخل الكتلة خطير بالضرورة أو أنه سيواجه بالتأكيد مشاكل في أمان الذاكرة: القصد هو أنك كمبرمج، ستضمن أن الكود داخل كتلة `unsafe` سيصل إلى الذاكرة بطريقة صحيحة.
 
-People are fallible and mistakes will happen, but by requiring these five
-unsafe operations to be inside blocks annotated with `unsafe`, you’ll know that
-any errors related to memory safety must be within an `unsafe` block. Keep
-`unsafe` blocks small; you’ll be thankful later when you investigate memory
-bugs.
+البشر قابلون للخطأ وستحدث أخطاء، ولكن بمطالبة هذه العمليات الخمس غير الآمنة بأن تكون داخل كتل موسومة بـ `unsafe`، ستعرف أن أي أخطاء تتعلق بأمان الذاكرة يجب أن تكون داخل كتلة `unsafe`. اجعل كتل `unsafe` صغيرة؛ ستكون ممتنًا لذلك لاحقًا عند التحقيق في أخطاء الذاكرة.
 
-To isolate unsafe code as much as possible, it’s best to enclose such code
-within a safe abstraction and provide a safe API, which we’ll discuss later in
-the chapter when we examine unsafe functions and methods. Parts of the standard
-library are implemented as safe abstractions over unsafe code that has been
-audited. Wrapping unsafe code in a safe abstraction prevents uses of `unsafe`
-from leaking out into all the places that you or your users might want to use
-the functionality implemented with `unsafe` code, because using a safe
-abstraction is safe.
+لعزل الكود غير الآمن قدر الإمكان، من الأفضل إحاطة هذا الكود داخل تجريد آمن وتوفير واجهة برمجة تطبيقات آمنة (API)، والتي سنناقشها لاحقًا في الفصل عندما نفحص الدوال والطرق غير الآمنة. أجزاء من المكتبة القياسية مطبقة كتجريدات آمنة على كود غير آمن تم تدقيقه. تغليف الكود غير الآمن في تجريد آمن يمنع استخدامات `unsafe` من التسرب إلى جميع الأماكن التي قد ترغب أنت أو مستخدموك في استخدام الوظيفة المطبقة بكود `unsafe`، لأن استخدام تجريد آمن آمن.
 
-Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
-some abstractions that provide a safe interface to unsafe code.
+لنلقِ نظرة على كل من القوى الخارقة غير الآمنة الخمس بدورها. سننظر أيضًا إلى بعض التجريدات التي توفر واجهة آمنة للكود غير الآمن.
 
-### Dereferencing a Raw Pointer
+### إلغاء مرجعية مؤشر خام
 
-In Chapter 4, in the [“Dangling References”][dangling-references]<!-- ignore
---> section, we mentioned that the compiler ensures that references are always
-valid. Unsafe Rust has two new types called _raw pointers_ that are similar to
-references. As with references, raw pointers can be immutable or mutable and
-are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the
-dereference operator; it’s part of the type name. In the context of raw
-pointers, _immutable_ means that the pointer can’t be directly assigned to
-after being dereferenced.
+في الفصل 4، في قسم ["المراجع المتدلية"][dangling-references]<!-- ignore -->، ذكرنا أن المترجم يضمن أن المراجع صحيحة دائمًا. Rust غير الآمن لديه نوعان جديدان يسميان _raw pointers_ (مؤشرات خام) يشبهان المراجع. كما هو الحال مع المراجع، يمكن أن تكون المؤشرات الخام غير قابلة للتغيير أو قابلة للتغيير وتُكتب كـ `*const T` و `*mut T`، على التوالي. العلامة النجمية ليست معامل إلغاء المرجعية؛ إنها جزء من اسم النوع. في سياق المؤشرات الخام، _غير قابل للتغيير_ يعني أنه لا يمكن تعيين المؤشر مباشرة بعد إلغاء مرجعيته.
 
-Different from references and smart pointers, raw pointers:
+تختلف المؤشرات الخام عن المراجع والمؤشرات الذكية في أنها:
 
-- Are allowed to ignore the borrowing rules by having both immutable and
-  mutable pointers or multiple mutable pointers to the same location
-- Aren’t guaranteed to point to valid memory
-- Are allowed to be null
-- Don’t implement any automatic cleanup
+- يُسمح لها بتجاهل قواعد الاستعارة من خلال وجود مؤشرات غير قابلة للتغيير وقابلة للتغيير أو مؤشرات قابلة للتغيير متعددة إلى نفس الموقع
+- لا يُضمن أن تشير إلى ذاكرة صحيحة
+- يُسمح لها بأن تكون فارغة (null)
+- لا تطبق أي تنظيف تلقائي
 
-By opting out of having Rust enforce these guarantees, you can give up
-guaranteed safety in exchange for greater performance or the ability to
-interface with another language or hardware where Rust’s guarantees don’t apply.
+من خلال إلغاء الاشتراك في جعل Rust يفرض هذه الضمانات، يمكنك التخلي عن الأمان المضمون مقابل أداء أكبر أو القدرة على التواصل مع لغة أخرى أو أجهزة حيث لا تنطبق ضمانات Rust.
 
-Listing 20-1 shows how to create an immutable and a mutable raw pointer.
+يُظهر القائمة 20-1 كيفية إنشاء مؤشر خام غير قابل للتغيير وقابل للتغيير.
 
-<Listing number="20-1" caption="Creating raw pointers with the raw borrow operators">
+<Listing number="20-1" caption="إنشاء مؤشرات خام باستخدام معاملات الاستعارة الخام">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-01/src/main.rs:here}}
@@ -102,27 +53,13 @@ Listing 20-1 shows how to create an immutable and a mutable raw pointer.
 
 </Listing>
 
-Notice that we don’t include the `unsafe` keyword in this code. We can create
-raw pointers in safe code; we just can’t dereference raw pointers outside an
-unsafe block, as you’ll see in a bit.
+لاحظ أننا لا نضمن الكلمة المفتاحية `unsafe` في هذا الكود. يمكننا إنشاء مؤشرات خام في كود آمن؛ لا يمكننا فقط إلغاء مرجعية المؤشرات الخام خارج كتلة غير آمنة، كما سترى بعد قليل.
 
-We’ve created raw pointers by using the raw borrow operators: `&raw const num`
-creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `*mut
-i32` mutable raw pointer. Because we created them directly from a local
-variable, we know these particular raw pointers are valid, but we can’t make
-that assumption about just any raw pointer.
+لقد أنشأنا مؤشرات خام باستخدام معاملات الاستعارة الخام: `&raw const num` ينشئ مؤشرًا خامًا غير قابل للتغيير `*const i32`، و `&raw mut num` ينشئ مؤشرًا خامًا قابلًا للتغيير `*mut i32`. لأننا أنشأناها مباشرة من متغير محلي، نعلم أن هذه المؤشرات الخام بالذات صحيحة، ولكن لا يمكننا عمل هذا الافتراض حول أي مؤشر خام.
 
-To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
-so certain of, using the keyword `as` to cast a value instead of using the raw
-borrow operator. Listing 20-2 shows how to create a raw pointer to an arbitrary
-location in memory. Trying to use arbitrary memory is undefined: There might be
-data at that address or there might not, the compiler might optimize the code
-so that there is no memory access, or the program might terminate with a
-segmentation fault. Usually, there is no good reason to write code like this,
-especially in cases where you can use a raw borrow operator instead, but it is
-possible.
+لإثبات ذلك، سنقوم بعد ذلك بإنشاء مؤشر خام لا يمكننا أن نكون واثقين من صحته، باستخدام الكلمة المفتاحية `as` لتحويل قيمة بدلاً من استخدام معامل الاستعارة الخام. توضح القائمة 20-2 كيفية إنشاء مؤشر خام إلى موقع عشوائي في الذاكرة. محاولة استخدام ذاكرة عشوائية غير محددة: قد تكون هناك بيانات في هذا العنوان أو قد لا تكون، قد يحسّن المترجم الكود بحيث لا يكون هناك وصول إلى الذاكرة، أو قد ينتهي البرنامج بخطأ تجزئة (segmentation fault). عادةً، لا يوجد سبب وجيه لكتابة كود مثل هذا، خاصة في الحالات التي يمكنك فيها استخدام معامل استعارة خام بدلاً من ذلك، ولكنه ممكن.
 
-<Listing number="20-2" caption="Creating a raw pointer to an arbitrary memory address">
+<Listing number="20-2" caption="إنشاء مؤشر خام إلى عنوان ذاكرة عشوائي">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-02/src/main.rs:here}}
@@ -130,11 +67,9 @@ possible.
 
 </Listing>
 
-Recall that we can create raw pointers in safe code, but we can’t dereference
-raw pointers and read the data being pointed to. In Listing 20-3, we use the
-dereference operator `*` on a raw pointer that requires an `unsafe` block.
+تذكر أنه يمكننا إنشاء مؤشرات خام في كود آمن، ولكن لا يمكننا إلغاء مرجعية المؤشرات الخام وقراءة البيانات المُشار إليها. في القائمة 20-3، نستخدم معامل إلغاء المرجعية `*` على مؤشر خام يتطلب كتلة `unsafe`.
 
-<Listing number="20-3" caption="Dereferencing raw pointers within an `unsafe` block">
+<Listing number="20-3" caption="إلغاء مرجعية المؤشرات الخام داخل كتلة `unsafe`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-03/src/main.rs:here}}
@@ -142,70 +77,37 @@ dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
 </Listing>
 
-Creating a pointer does no harm; it’s only when we try to access the value that
-it points at that we might end up dealing with an invalid value.
+إنشاء مؤشر لا يسبب أي ضرر؛ فقط عندما نحاول الوصول إلى القيمة التي يشير إليها قد ننتهي بالتعامل مع قيمة غير صحيحة.
 
-Note also that in Listings 20-1 and 20-3, we created `*const i32` and `*mut
-i32` raw pointers that both pointed to the same memory location, where `num` is
-stored. If we instead tried to create an immutable and a mutable reference to
-`num`, the code would not have compiled because Rust’s ownership rules don’t
-allow a mutable reference at the same time as any immutable references. With
-raw pointers, we can create a mutable pointer and an immutable pointer to the
-same location and change data through the mutable pointer, potentially creating
-a data race. Be careful!
+لاحظ أيضًا أننا في القوائم 20-1 و 20-3، أنشأنا مؤشرات خام `*const i32` و `*mut i32` كلاهما يشير إلى نفس موقع الذاكرة، حيث يتم تخزين `num`. إذا حاولنا بدلاً من ذلك إنشاء مرجع غير قابل للتغيير وقابل للتغيير إلى `num`، لن يتم ترجمة الكود لأن قواعد الملكية في Rust لا تسمح بمرجع قابل للتغيير في نفس الوقت مع أي مراجع غير قابلة للتغيير. مع المؤشرات الخام، يمكننا إنشاء مؤشر قابل للتغيير ومؤشر غير قابل للتغيير إلى نفس الموقع وتغيير البيانات من خلال المؤشر القابل للتغيير، مما قد يؤدي إلى سباق بيانات (data race). كن حذرًا!
 
-With all of these dangers, why would you ever use raw pointers? One major use
-case is when interfacing with C code, as you’ll see in the next section.
-Another case is when building up safe abstractions that the borrow checker
-doesn’t understand. We’ll introduce unsafe functions and then look at an
-example of a safe abstraction that uses unsafe code.
+مع كل هذه المخاطر، لماذا تستخدم المؤشرات الخام؟ حالة استخدام رئيسية واحدة هي عند التواصل مع كود C، كما سترى في القسم التالي. حالة أخرى هي عند بناء تجريدات آمنة لا يفهمها فاحص الاستعارة. سنقدم الدوال غير الآمنة ثم ننظر في مثال لتجريد آمن يستخدم كود غير آمن.
 
-### Calling an Unsafe Function or Method
+### استدعاء دالة أو طريقة غير آمنة
 
-The second type of operation you can perform in an unsafe block is calling
-unsafe functions. Unsafe functions and methods look exactly like regular
-functions and methods, but they have an extra `unsafe` before the rest of the
-definition. The `unsafe` keyword in this context indicates the function has
-requirements we need to uphold when we call this function, because Rust can’t
-guarantee we’ve met these requirements. By calling an unsafe function within an
-`unsafe` block, we’re saying that we’ve read this function’s documentation and
-we take responsibility for upholding the function’s contracts.
+النوع الثاني من العمليات التي يمكنك إجراؤها في كتلة غير آمنة هو استدعاء الدوال غير الآمنة. تبدو الدوال والطرق غير الآمنة تمامًا مثل الدوال والطرق العادية، ولكن لديها كلمة `unsafe` إضافية قبل بقية التعريف. تشير الكلمة المفتاحية `unsafe` في هذا السياق إلى أن الدالة لديها متطلبات نحتاج إلى الحفاظ عليها عند استدعاء هذه الدالة، لأن Rust لا يمكنه ضمان أننا استوفينا هذه المتطلبات. من خلال استدعاء دالة غير آمنة داخل كتلة `unsafe`، نقول أننا قرأنا وثائق هذه الدالة ونتحمل مسؤولية الحفاظ على عقود الدالة.
 
-Here is an unsafe function named `dangerous` that doesn’t do anything in its
-body:
+إليك دالة غير آمنة تسمى `dangerous` لا تفعل شيئًا في جسمها:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-01-unsafe-fn/src/main.rs:here}}
 ```
 
-We must call the `dangerous` function within a separate `unsafe` block. If we
-try to call `dangerous` without the `unsafe` block, we’ll get an error:
+يجب أن نستدعي الدالة `dangerous` داخل كتلة `unsafe` منفصلة. إذا حاولنا استدعاء `dangerous` بدون كتلة `unsafe`، سنحصل على خطأ:
 
 ```console
 {{#include ../listings/ch20-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
-With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s
-documentation, we understand how to use it properly, and we’ve verified that
-we’re fulfilling the contract of the function.
+مع كتلة `unsafe`، نؤكد لـ Rust أننا قرأنا وثائق الدالة، ونفهم كيفية استخدامها بشكل صحيح، وتحققنا من أننا نفي بعقد الدالة.
 
-To perform unsafe operations in the body of an `unsafe` function, you still
-need to use an `unsafe` block, just as within a regular function, and the
-compiler will warn you if you forget. This helps us keep `unsafe` blocks as
-small as possible, as unsafe operations may not be needed across the whole
-function body.
+لتنفيذ عمليات غير آمنة في جسم دالة `unsafe`، لا تزال بحاجة إلى استخدام كتلة `unsafe`، تمامًا كما في دالة عادية، وسيحذرك المترجم إذا نسيت. هذا يساعدنا في الحفاظ على كتل `unsafe` صغيرة قدر الإمكان، حيث قد لا تكون هناك حاجة لعمليات غير آمنة عبر جسم الدالة بأكمله.
 
-#### Creating a Safe Abstraction over Unsafe Code
+#### إنشاء تجريد آمن على كود غير آمن
 
-Just because a function contains unsafe code doesn’t mean we need to mark the
-entire function as unsafe. In fact, wrapping unsafe code in a safe function is
-a common abstraction. As an example, let’s study the `split_at_mut` function
-from the standard library, which requires some unsafe code. We’ll explore how
-we might implement it. This safe method is defined on mutable slices: It takes
-one slice and makes it two by splitting the slice at the index given as an
-argument. Listing 20-4 shows how to use `split_at_mut`.
+مجرد كون دالة تحتوي على كود غير آمن لا يعني أننا بحاجة إلى وضع علامة على الدالة بأكملها على أنها غير آمنة. في الواقع، تغليف الكود غير الآمن في دالة آمنة هو تجريد شائع. كمثال، دعنا ندرس الدالة `split_at_mut` من المكتبة القياسية، والتي تتطلب بعض الكود غير الآمن. سنستكشف كيف يمكننا تطبيقها. هذه الطريقة الآمنة معرفة على الشرائح القابلة للتغيير: تأخذ شريحة واحدة وتجعلها اثنتين بتقسيم الشريحة عند الفهرس المعطى كوسيطة. توضح القائمة 20-4 كيفية استخدام `split_at_mut`.
 
-<Listing number="20-4" caption="Using the safe `split_at_mut` function">
+<Listing number="20-4" caption="استخدام الدالة الآمنة `split_at_mut`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-04/src/main.rs:here}}
@@ -213,12 +115,9 @@ argument. Listing 20-4 shows how to use `split_at_mut`.
 
 </Listing>
 
-We can’t implement this function using only safe Rust. An attempt might look
-something like Listing 20-5, which won’t compile. For simplicity, we’ll
-implement `split_at_mut` as a function rather than a method and only for slices
-of `i32` values rather than for a generic type `T`.
+لا يمكننا تطبيق هذه الدالة باستخدام Rust الآمن فقط. قد تبدو المحاولة كالقائمة 20-5، والتي لن تُترجم. للبساطة، سنطبق `split_at_mut` كدالة بدلاً من طريقة وفقط للشرائح من قيم `i32` بدلاً من نوع عام `T`.
 
-<Listing number="20-5" caption="An attempted implementation of `split_at_mut` using only safe Rust">
+<Listing number="20-5" caption="محاولة تطبيق `split_at_mut` باستخدام Rust الآمن فقط">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-05/src/main.rs:here}}
@@ -226,32 +125,21 @@ of `i32` values rather than for a generic type `T`.
 
 </Listing>
 
-This function first gets the total length of the slice. Then, it asserts that
-the index given as a parameter is within the slice by checking whether it’s
-less than or equal to the length. The assertion means that if we pass an index
-that is greater than the length to split the slice at, the function will panic
-before it attempts to use that index.
+تحصل هذه الدالة أولاً على الطول الإجمالي للشريحة. ثم تؤكد أن الفهرس المعطى كمعامل ضمن الشريحة من خلال التحقق مما إذا كان أقل من أو يساوي الطول. يعني التأكيد أنه إذا مررنا فهرسًا أكبر من الطول لتقسيم الشريحة عنده، ستصاب الدالة بالذعر (panic) قبل محاولة استخدام هذا الفهرس.
 
-Then, we return two mutable slices in a tuple: one from the start of the
-original slice to the `mid` index and another from `mid` to the end of the
-slice.
+ثم نعيد شريحتين قابلتين للتغيير في tuple: واحدة من بداية الشريحة الأصلية إلى فهرس `mid` وأخرى من `mid` إلى نهاية الشريحة.
 
-When we try to compile the code in Listing 20-5, we’ll get an error:
+عندما نحاول ترجمة الكود في القائمة 20-5، سنحصل على خطأ:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-05/output.txt}}
 ```
 
-Rust’s borrow checker can’t understand that we’re borrowing different parts of
-the slice; it only knows that we’re borrowing from the same slice twice.
-Borrowing different parts of a slice is fundamentally okay because the two
-slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
-know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
+فاحص الاستعارة في Rust لا يستطيع فهم أننا نستعير أجزاء مختلفة من الشريحة؛ يعلم فقط أننا نستعير من نفس الشريحة مرتين. استعارة أجزاء مختلفة من شريحة صحيح بشكل أساسي لأن الشريحتين لا تتداخلان، لكن Rust ليس ذكيًا بما يكفي لمعرفة ذلك. عندما نعلم أن الكود صحيح، لكن Rust لا يعلم، حان الوقت للوصول إلى الكود غير الآمن.
 
-Listing 20-6 shows how to use an `unsafe` block, a raw pointer, and some calls
-to unsafe functions to make the implementation of `split_at_mut` work.
+توضح القائمة 20-6 كيفية استخدام كتلة `unsafe`، ومؤشر خام، وبعض الاستدعاءات للدوال غير الآمنة لجعل تطبيق `split_at_mut` يعمل.
 
-<Listing number="20-6" caption="Using unsafe code in the implementation of the `split_at_mut` function">
+<Listing number="20-6" caption="استخدام كود غير آمن في تطبيق الدالة `split_at_mut`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-06/src/main.rs:here}}
@@ -259,42 +147,17 @@ to unsafe functions to make the implementation of `split_at_mut` work.
 
 </Listing>
 
-Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> section in
-Chapter 4 that a slice is a pointer to some data and the length of the slice.
-We use the `len` method to get the length of a slice and the `as_mut_ptr`
-method to access the raw pointer of a slice. In this case, because we have a
-mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
-`*mut i32`, which we’ve stored in the variable `ptr`.
+تذكر من قسم ["نوع الشريحة"][the-slice-type]<!-- ignore --> في الفصل 4 أن الشريحة هي مؤشر إلى بعض البيانات وطول الشريحة. نستخدم طريقة `len` للحصول على طول الشريحة وطريقة `as_mut_ptr` للوصول إلى المؤشر الخام للشريحة. في هذه الحالة، لأن لدينا شريحة قابلة للتغيير من قيم `i32`، تعيد `as_mut_ptr` مؤشرًا خامًا بنوع `*mut i32`، والذي قمنا بتخزينه في المتغير `ptr`.
 
-We keep the assertion that the `mid` index is within the slice. Then, we get to
-the unsafe code: The `slice::from_raw_parts_mut` function takes a raw pointer
-and a length, and it creates a slice. We use this function to create a slice
-that starts from `ptr` and is `mid` items long. Then, we call the `add` method
-on `ptr` with `mid` as an argument to get a raw pointer that starts at `mid`,
-and we create a slice using that pointer and the remaining number of items
-after `mid` as the length.
+نحتفظ بالتأكيد على أن فهرس `mid` ضمن الشريحة. ثم نصل إلى الكود غير الآمن: تأخذ الدالة `slice::from_raw_parts_mut` مؤشرًا خامًا وطولًا، وتنشئ شريحة. نستخدم هذه الدالة لإنشاء شريحة تبدأ من `ptr` وبطول `mid` عنصرًا. ثم نستدعي طريقة `add` على `ptr` مع `mid` كوسيطة للحصول على مؤشر خام يبدأ عند `mid`، وننشئ شريحة باستخدام ذلك المؤشر وعدد العناصر المتبقية بعد `mid` كالطول.
 
-The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
-pointer and must trust that this pointer is valid. The `add` method on raw
-pointers is also unsafe because it must trust that the offset location is also
-a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
-`slice::from_raw_parts_mut` and `add` so that we could call them. By looking at
-the code and by adding the assertion that `mid` must be less than or equal to
-`len`, we can tell that all the raw pointers used within the `unsafe` block
-will be valid pointers to data within the slice. This is an acceptable and
-appropriate use of `unsafe`.
+الدالة `slice::from_raw_parts_mut` غير آمنة لأنها تأخذ مؤشرًا خامًا ويجب أن تثق في أن هذا المؤشر صحيح. طريقة `add` على المؤشرات الخام غير آمنة أيضًا لأنها يجب أن تثق في أن موقع الإزاحة هو أيضًا مؤشر صحيح. لذلك، كان علينا وضع كتلة `unsafe` حول استدعاءاتنا لـ `slice::from_raw_parts_mut` و `add` حتى نتمكن من استدعائها. من خلال النظر إلى الكود ومن خلال إضافة التأكيد على أن `mid` يجب أن يكون أقل من أو يساوي `len`، يمكننا أن نقول أن جميع المؤشرات الخام المستخدمة داخل كتلة `unsafe` ستكون مؤشرات صحيحة للبيانات داخل الشريحة. هذا استخدام مقبول ومناسب لـ `unsafe`.
 
-Note that we don’t need to mark the resultant `split_at_mut` function as
-`unsafe`, and we can call this function from safe Rust. We’ve created a safe
-abstraction to the unsafe code with an implementation of the function that uses
-`unsafe` code in a safe way, because it creates only valid pointers from the
-data this function has access to.
+لاحظ أننا لسنا بحاجة إلى وضع علامة على دالة `split_at_mut` الناتجة بـ `unsafe`، ويمكننا استدعاء هذه الدالة من Rust الآمن. لقد أنشأنا تجريدًا آمنًا للكود غير الآمن مع تطبيق للدالة يستخدم كود `unsafe` بطريقة آمنة، لأنه ينشئ فقط مؤشرات صحيحة من البيانات التي لدى هذه الدالة وصول إليها.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 20-7 would
-likely crash when the slice is used. This code takes an arbitrary memory
-location and creates a slice 10,000 items long.
+في المقابل، من المحتمل أن يتعطل استخدام `slice::from_raw_parts_mut` في القائمة 20-7 عند استخدام الشريحة. يأخذ هذا الكود موقع ذاكرة عشوائي وينشئ شريحة بطول 10,000 عنصر.
 
-<Listing number="20-7" caption="Creating a slice from an arbitrary memory location">
+<Listing number="20-7" caption="إنشاء شريحة من موقع ذاكرة عشوائي">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-07/src/main.rs:here}}
@@ -302,26 +165,15 @@ location and creates a slice 10,000 items long.
 
 </Listing>
 
-We don’t own the memory at this arbitrary location, and there is no guarantee
-that the slice this code creates contains valid `i32` values. Attempting to use
-`values` as though it’s a valid slice results in undefined behavior.
+نحن لا نمتلك الذاكرة في هذا الموقع العشوائي، ولا يوجد ضمان بأن الشريحة التي ينشئها هذا الكود تحتوي على قيم `i32` صحيحة. محاولة استخدام `values` كما لو كانت شريحة صحيحة تؤدي إلى سلوك غير محدد.
 
-#### Using `extern` Functions to Call External Code
+#### استخدام دوال `extern` لاستدعاء كود خارجي
 
-Sometimes your Rust code might need to interact with code written in another
-language. For this, Rust has the keyword `extern` that facilitates the creation
-and use of a _Foreign Function Interface (FFI)_, which is a way for a
-programming language to define functions and enable a different (foreign)
-programming language to call those functions.
+في بعض الأحيان، قد يحتاج كود Rust الخاص بك إلى التفاعل مع كود مكتوب بلغة أخرى. لذلك، لدى Rust الكلمة المفتاحية `extern` التي تسهل إنشاء واستخدام _واجهة دالة أجنبية_ (Foreign Function Interface أو FFI)، وهي طريقة للغة برمجة لتعريف الدوال وتمكين لغة برمجة مختلفة (أجنبية) من استدعاء تلك الدوال.
 
-Listing 20-8 demonstrates how to set up an integration with the `abs` function
-from the C standard library. Functions declared within `extern` blocks are
-generally unsafe to call from Rust code, so `extern` blocks must also be marked
-`unsafe`. The reason is that other languages don’t enforce Rust’s rules and
-guarantees, and Rust can’t check them, so responsibility falls on the
-programmer to ensure safety.
+توضح القائمة 20-8 كيفية إعداد تكامل مع الدالة `abs` من مكتبة C القياسية. الدوال المعلنة داخل كتل `extern` غير آمنة للاستدعاء من كود Rust بشكل عام، لذلك يجب أن تكون كتل `extern` موسومة أيضًا بـ `unsafe`. السبب هو أن اللغات الأخرى لا تفرض قواعد وضمانات Rust، ولا يمكن لـ Rust فحصها، لذا تقع المسؤولية على المبرمج لضمان الأمان.
 
-<Listing number="20-8" file-name="src/main.rs" caption="Declaring and calling an `extern` function defined in another language">
+<Listing number="20-8" file-name="src/main.rs" caption="التصريح عن واستدعاء دالة `extern` معرفة في لغة أخرى">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-08/src/main.rs}}
@@ -329,22 +181,11 @@ programmer to ensure safety.
 
 </Listing>
 
-Within the `unsafe extern "C"` block, we list the names and signatures of
-external functions from another language we want to call. The `"C"` part
-defines which _application binary interface (ABI)_ the external function uses:
-The ABI defines how to call the function at the assembly level. The `"C"` ABI
-is the most common and follows the C programming language’s ABI. Information
-about all the ABIs Rust supports is available in [the Rust Reference][ABI].
+داخل كتلة `unsafe extern "C"`، نسرد أسماء وتوقيعات الدوال الخارجية من لغة أخرى التي نريد استدعاءها. يحدد جزء `"C"` أي _واجهة ثنائية للتطبيق_ (application binary interface أو ABI) تستخدمها الدالة الخارجية: يحدد ABI كيفية استدعاء الدالة على مستوى التجميع. ABI `"C"` هو الأكثر شيوعًا ويتبع ABI لغة البرمجة C. معلومات عن جميع ABIs التي يدعمها Rust متاحة في [مرجع Rust][ABI].
 
-Every item declared within an `unsafe extern` block is implicitly unsafe.
-However, some FFI functions *are* safe to call. For example, the `abs` function
-from C’s standard library does not have any memory safety considerations, and we
-know it can be called with any `i32`. In cases like this, we can use the `safe`
-keyword to say that this specific function is safe to call even though it is in
-an `unsafe extern` block. Once we make that change, calling it no longer
-requires an `unsafe` block, as shown in Listing 20-9.
+كل عنصر معلن داخل كتلة `unsafe extern` غير آمن ضمنيًا. ومع ذلك، بعض دوال FFI *آمنة* للاستدعاء. على سبيل المثال، دالة `abs` من المكتبة القياسية لـ C ليس لديها أي اعتبارات لأمان الذاكرة، ونعلم أنه يمكن استدعاؤها مع أي `i32`. في حالات مثل هذه، يمكننا استخدام الكلمة المفتاحية `safe` للقول بأن هذه الدالة المحددة آمنة للاستدعاء حتى لو كانت في كتلة `unsafe extern`. بمجرد إجراء هذا التغيير، لم يعد استدعاؤها يتطلب كتلة `unsafe`، كما هو موضح في القائمة 20-9.
 
-<Listing number="20-9" file-name="src/main.rs" caption="Explicitly marking a function as `safe` within an `unsafe extern` block and calling it safely">
+<Listing number="20-9" file-name="src/main.rs" caption="وضع علامة صريحة على دالة بـ `safe` داخل كتلة `unsafe extern` واستدعاءها بأمان">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-09/src/main.rs}}
@@ -352,28 +193,13 @@ requires an `unsafe` block, as shown in Listing 20-9.
 
 </Listing>
 
-Marking a function as `safe` does not inherently make it safe! Instead, it is
-like a promise you are making to Rust that it is safe. It is still your
-responsibility to make sure that promise is kept!
+وضع علامة على دالة بـ `safe` لا يجعلها آمنة بطبيعتها! بدلاً من ذلك، إنه مثل وعد تقطعه لـ Rust بأنها آمنة. لا يزال من مسؤوليتك التأكد من أن هذا الوعد يُحفظ!
 
-#### Calling Rust Functions from Other Languages
+#### استدعاء دوال Rust من لغات أخرى
 
-We can also use `extern` to create an interface that allows other languages to
-call Rust functions. Instead of creating a whole `extern` block, we add the
-`extern` keyword and specify the ABI to use just before the `fn` keyword for
-the relevant function. We also need to add an `#[unsafe(no_mangle)]` annotation
-to tell the Rust compiler not to mangle the name of this function. _Mangling_
-is when a compiler changes the name we’ve given a function to a different name
-that contains more information for other parts of the compilation process to
-consume but is less human readable. Every programming language compiler mangles
-names slightly differently, so for a Rust function to be nameable by other
-languages, we must disable the Rust compiler’s name mangling. This is unsafe
-because there might be name collisions across libraries without the built-in
-mangling, so it is our responsibility to make sure the name we choose is safe
-to export without mangling.
+يمكننا أيضًا استخدام `extern` لإنشاء واجهة تسمح للغات أخرى باستدعاء دوال Rust. بدلاً من إنشاء كتلة `extern` كاملة، نضيف الكلمة المفتاحية `extern` ونحدد ABI للاستخدام قبل الكلمة المفتاحية `fn` للدالة ذات الصلة. نحتاج أيضًا إلى إضافة تعليق توضيحي `#[unsafe(no_mangle)]` لإخبار مترجم Rust بعدم تشويش اسم هذه الدالة. _التشويش_ (Mangling) هو عندما يغير المترجم الاسم الذي أعطيناه لدالة إلى اسم مختلف يحتوي على مزيد من المعلومات لأجزاء أخرى من عملية الترجمة لاستهلاكها ولكنه أقل قابلية للقراءة من قبل البشر. كل مترجم لغة برمجة يشوش الأسماء بشكل مختلف قليلاً، لذلك لكي يمكن لدالة Rust أن تكون قابلة للتسمية من قبل اللغات الأخرى، يجب علينا تعطيل تشويش اسم مترجم Rust. هذا غير آمن لأنه قد تكون هناك تضاربات في الأسماء عبر المكتبات بدون التشويش المدمج، لذلك من مسؤوليتنا التأكد من أن الاسم الذي نختاره آمن للتصدير دون تشويش.
 
-In the following example, we make the `call_from_c` function accessible from C
-code, after it’s compiled to a shared library and linked from C:
+في المثال التالي، نجعل دالة `call_from_c` قابلة للوصول من كود C، بعد ترجمتها إلى مكتبة مشتركة وربطها من C:
 
 ```
 #[unsafe(no_mangle)]
@@ -382,21 +208,15 @@ pub extern "C" fn call_from_c() {
 }
 ```
 
-This usage of `extern` requires `unsafe` only in the attribute, not on the
-`extern` block.
+هذا الاستخدام لـ `extern` يتطلب `unsafe` فقط في السمة، وليس على كتلة `extern`.
 
-### Accessing or Modifying a Mutable Static Variable
+### الوصول إلى متغير ثابت قابل للتغيير أو تعديله
 
-In this book, we’ve not yet talked about global variables, which Rust does
-support but which can be problematic with Rust’s ownership rules. If two
-threads are accessing the same mutable global variable, it can cause a data
-race.
+في هذا الكتاب، لم نتحدث بعد عن المتغيرات العامة (global variables)، والتي يدعمها Rust ولكنها يمكن أن تكون إشكالية مع قواعد الملكية في Rust. إذا كان هناك خيطان (threads) يصلان إلى نفس المتغير العام القابل للتغيير، يمكن أن يتسبب ذلك في سباق بيانات.
 
-In Rust, global variables are called _static_ variables. Listing 20-10 shows an
-example declaration and use of a static variable with a string slice as a
-value.
+في Rust، تُسمى المتغيرات العامة _static_ (متغيرات ثابتة). توضح القائمة 20-10 مثالاً على التصريح عن واستخدام متغير ثابت مع شريحة سلسلة كقيمة.
 
-<Listing number="20-10" file-name="src/main.rs" caption="Defining and using an immutable static variable">
+<Listing number="20-10" file-name="src/main.rs" caption="تعريف واستخدام متغير ثابت غير قابل للتغيير">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-10/src/main.rs}}
@@ -404,22 +224,11 @@ value.
 
 </Listing>
 
-Static variables are similar to constants, which we discussed in the
-[“Declaring Constants”][constants]<!-- ignore --> section in Chapter 3. The
-names of static variables are in `SCREAMING_SNAKE_CASE` by convention. Static
-variables can only store references with the `'static` lifetime, which means
-the Rust compiler can figure out the lifetime and we aren’t required to
-annotate it explicitly. Accessing an immutable static variable is safe.
+المتغيرات الثابتة مشابهة للثوابت، والتي ناقشناها في قسم ["التصريح عن الثوابت"][constants]<!-- ignore --> في الفصل 3. أسماء المتغيرات الثابتة في `SCREAMING_SNAKE_CASE` بالاتفاق. يمكن للمتغيرات الثابتة تخزين مراجع فقط مع مدة الصلاحية `'static`، مما يعني أن مترجم Rust يمكنه معرفة مدة الصلاحية ولسنا مطالبين بالتعليق عليها صراحة. الوصول إلى متغير ثابت غير قابل للتغيير آمن.
 
-A subtle difference between constants and immutable static variables is that
-values in a static variable have a fixed address in memory. Using the value
-will always access the same data. Constants, on the other hand, are allowed to
-duplicate their data whenever they’re used. Another difference is that static
-variables can be mutable. Accessing and modifying mutable static variables is
-_unsafe_. Listing 20-11 shows how to declare, access, and modify a mutable
-static variable named `COUNTER`.
+الفرق الدقيق بين الثوابت والمتغيرات الثابتة غير القابلة للتغيير هو أن القيم في متغير ثابت لها عنوان ثابت في الذاكرة. استخدام القيمة سيصل دائمًا إلى نفس البيانات. من ناحية أخرى، يُسمح للثوابت بتكرار بياناتها كلما تم استخدامها. فرق آخر هو أن المتغيرات الثابتة يمكن أن تكون قابلة للتغيير. الوصول إلى وتعديل المتغيرات الثابتة القابلة للتغيير _غير آمن_. توضح القائمة 20-11 كيفية التصريح عن والوصول إلى وتعديل متغير ثابت قابل للتغيير يُسمى `COUNTER`.
 
-<Listing number="20-11" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe.">
+<Listing number="20-11" file-name="src/main.rs" caption="القراءة من أو الكتابة إلى متغير ثابت قابل للتغيير غير آمنة.">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-11/src/main.rs}}
@@ -427,46 +236,19 @@ static variable named `COUNTER`.
 
 </Listing>
 
-As with regular variables, we specify mutability using the `mut` keyword. Any
-code that reads or writes from `COUNTER` must be within an `unsafe` block. The
-code in Listing 20-11 compiles and prints `COUNTER: 3` as we would expect
-because it’s single threaded. Having multiple threads access `COUNTER` would
-likely result in data races, so it is undefined behavior. Therefore, we need to
-mark the entire function as `unsafe` and document the safety limitation so that
-anyone calling the function knows what they are and are not allowed to do
-safely.
+كما هو الحال مع المتغيرات العادية، نحدد القابلية للتغيير باستخدام الكلمة المفتاحية `mut`. يجب أن يكون أي كود يقرأ من أو يكتب إلى `COUNTER` داخل كتلة `unsafe`. يُترجم الكود في القائمة 20-11 ويطبع `COUNTER: 3` كما نتوقع لأنه أحادي الخيط. وجود خيوط متعددة تصل إلى `COUNTER` من المحتمل أن يؤدي إلى سباقات بيانات، لذلك هو سلوك غير محدد. لذلك، نحتاج إلى وضع علامة على الدالة بأكملها بـ `unsafe` وتوثيق قيد الأمان حتى يعرف أي شخص يستدعي الدالة ما يُسمح وما لا يُسمح به القيام به بأمان.
 
-Whenever we write an unsafe function, it is idiomatic to write a comment
-starting with `SAFETY` and explaining what the caller needs to do to call the
-function safely. Likewise, whenever we perform an unsafe operation, it is
-idiomatic to write a comment starting with `SAFETY` to explain how the safety
-rules are upheld.
+كلما كتبنا دالة غير آمنة، من المعتاد كتابة تعليق يبدأ بـ `SAFETY` ويشرح ما يحتاج المتصل إلى فعله لاستدعاء الدالة بأمان. بالمثل، كلما نفذنا عملية غير آمنة، من المعتاد كتابة تعليق يبدأ بـ `SAFETY` لشرح كيف يتم الحفاظ على قواعد الأمان.
 
-Additionally, the compiler will deny by default any attempt to create
-references to a mutable static variable through a compiler lint. You must
-either explicitly opt out of that lint’s protections by adding an
-`#[allow(static_mut_refs)]` annotation or access the mutable static variable
-via a raw pointer created with one of the raw borrow operators. That includes
-cases where the reference is created invisibly, as when it is used in the
-`println!` in this code listing. Requiring references to static mutable
-variables to be created via raw pointers helps make the safety requirements for
-using them more obvious.
+بالإضافة إلى ذلك، سيرفض المترجم افتراضيًا أي محاولة لإنشاء مراجع لمتغير ثابت قابل للتغيير من خلال فحص المترجم (lint). يجب عليك إما إلغاء الاشتراك صراحة من حمايات ذلك الفحص بإضافة تعليق توضيحي `#[allow(static_mut_refs)]` أو الوصول إلى المتغير الثابت القابل للتغيير عبر مؤشر خام تم إنشاؤه باستخدام أحد معاملات الاستعارة الخام. يتضمن ذلك الحالات التي يتم فيها إنشاء المرجع بشكل غير مرئي، كما هو الحال عند استخدامه في `println!` في هذه القائمة. يساعد طلب إنشاء مراجع لمتغيرات ثابتة قابلة للتغيير عبر مؤشرات خام في جعل متطلبات الأمان لاستخدامها أكثر وضوحًا.
 
-With mutable data that is globally accessible, it’s difficult to ensure that
-there are no data races, which is why Rust considers mutable static variables
-to be unsafe. Where possible, it’s preferable to use the concurrency techniques
-and thread-safe smart pointers we discussed in Chapter 16 so that the compiler
-checks that data access from different threads is done safely.
+مع البيانات القابلة للتغيير التي يمكن الوصول إليها عالميًا، من الصعب ضمان عدم وجود سباقات بيانات، وهذا هو السبب في أن Rust يعتبر المتغيرات الثابتة القابلة للتغيير غير آمنة. حيثما أمكن، من الأفضل استخدام تقنيات التزامن والمؤشرات الذكية الآمنة للخيوط التي ناقشناها في الفصل 16 بحيث يفحص المترجم أن الوصول إلى البيانات من خيوط مختلفة يتم بشكل آمن.
 
-### Implementing an Unsafe Trait
+### تطبيق سِمَة غير آمنة
 
-We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
-least one of its methods has some invariant that the compiler can’t verify. We
-declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
-and marking the implementation of the trait as `unsafe` too, as shown in
-Listing 20-12.
+يمكننا استخدام `unsafe` لتطبيق سِمَة غير آمنة. السِمَة غير آمنة عندما يكون لدى واحدة على الأقل من طرقها بعض الثوابت التي لا يستطيع المترجم التحقق منها. نعلن أن السِمَة `unsafe` بإضافة الكلمة المفتاحية `unsafe` قبل `trait` ووضع علامة على تطبيق السِمَة بـ `unsafe` أيضًا، كما هو موضح في القائمة 20-12.
 
-<Listing number="20-12" caption="Defining and implementing an unsafe trait">
+<Listing number="20-12" caption="تعريف وتطبيق سِمَة غير آمنة">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-12/src/main.rs:here}}
@@ -474,91 +256,43 @@ Listing 20-12.
 
 </Listing>
 
-By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
-the compiler can’t verify.
+باستخدام `unsafe impl`، نعد بأننا سنحافظ على الثوابت التي لا يستطيع المترجم التحقق منها.
 
-As an example, recall the `Send` and `Sync` marker traits we discussed in the
-[“Extensible Concurrency with `Send` and `Sync`”][send-and-sync]<!-- ignore -->
-section in Chapter 16: The compiler implements these traits automatically if
-our types are composed entirely of other types that implement `Send` and
-`Sync`. If we implement a type that contains a type that does not implement
-`Send` or `Sync`, such as raw pointers, and we want to mark that type as `Send`
-or `Sync`, we must use `unsafe`. Rust can’t verify that our type upholds the
-guarantees that it can be safely sent across threads or accessed from multiple
-threads; therefore, we need to do those checks manually and indicate as such
-with `unsafe`.
+كمثال، تذكر سِمَتي التعليم `Send` و `Sync` اللتين ناقشناهما في قسم ["التزامن القابل للتوسيع مع `Send` و `Sync`"][send-and-sync]<!-- ignore --> في الفصل 16: ينفذ المترجم هاتين السِمَتين تلقائيًا إذا كانت أنواعنا مكونة بالكامل من أنواع أخرى تنفذ `Send` و `Sync`. إذا نفذنا نوعًا يحتوي على نوع لا ينفذ `Send` أو `Sync`، مثل المؤشرات الخام، ونريد وضع علامة على هذا النوع بـ `Send` أو `Sync`، يجب علينا استخدام `unsafe`. لا يستطيع Rust التحقق من أن نوعنا يحافظ على الضمانات بأنه يمكن إرساله بأمان عبر الخيوط أو الوصول إليه من خيوط متعددة؛ لذلك، نحتاج إلى إجراء تلك الفحوصات يدويًا والإشارة إلى ذلك بـ `unsafe`.
 
-### Accessing Fields of a Union
+### الوصول إلى حقول union
 
-The final action that works only with `unsafe` is accessing fields of a union.
-A *union* is similar to a `struct`, but only one declared field is used in a
-particular instance at one time. Unions are primarily used to interface with
-unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
-the type of the data currently being stored in the union instance. You can
-learn more about unions in [the Rust Reference][unions].
+الإجراء النهائي الذي يعمل فقط مع `unsafe` هو الوصول إلى حقول union. *union* مشابه لـ `struct`، ولكن يُستخدم حقل واحد فقط معلن في نسخة معينة في وقت واحد. تُستخدم الاتحادات بشكل أساسي للتواصل مع الاتحادات في كود C. الوصول إلى حقول الاتحاد غير آمن لأن Rust لا يمكنه ضمان نوع البيانات المخزنة حاليًا في نسخة الاتحاد. يمكنك معرفة المزيد عن الاتحادات في [مرجع Rust][unions].
 
-### Using Miri to Check Unsafe Code
+### استخدام Miri للتحقق من الكود غير الآمن
 
-When writing unsafe code, you might want to check that what you have written
-actually is safe and correct. One of the best ways to do that is to use Miri,
-an official Rust tool for detecting undefined behavior. Whereas the borrow
-checker is a _static_ tool that works at compile time, Miri is a _dynamic_
-tool that works at runtime. It checks your code by running your program, or
-its test suite, and detecting when you violate the rules it understands about
-how Rust should work.
+عند كتابة كود غير آمن، قد ترغب في التحقق من أن ما كتبته آمن وصحيح فعلاً. إحدى أفضل الطرق للقيام بذلك هي استخدام Miri، وهي أداة Rust رسمية لاكتشاف السلوك غير المحدد. في حين أن فاحص الاستعارة هو أداة _ثابتة_ تعمل في وقت الترجمة، فإن Miri هي أداة _ديناميكية_ تعمل في وقت التشغيل. تفحص كودك من خلال تشغيل برنامجك، أو مجموعة الاختبارات الخاصة به، وتكتشف متى تنتهك القواعد التي تفهمها حول كيفية عمل Rust.
 
-Using Miri requires a nightly build of Rust (which we talk about more in
-[Appendix G: How Rust is Made and “Nightly Rust”][nightly]<!-- ignore -->). You
-can install both a nightly version of Rust and the Miri tool by typing `rustup
-+nightly component add miri`. This does not change what version of Rust your
-project uses; it only adds the tool to your system so you can use it when you
-want to. You can run Miri on a project by typing `cargo +nightly miri run` or
-`cargo +nightly miri test`.
+يتطلب استخدام Miri إصدارًا ليليًا (nightly) من Rust (الذي نتحدث عنه أكثر في [الملحق G: كيف يتم إنشاء Rust و"Nightly Rust"][nightly]<!-- ignore -->). يمكنك تثبيت كل من الإصدار الليلي من Rust وأداة Miri بكتابة `rustup +nightly component add miri`. هذا لا يغير إصدار Rust الذي يستخدمه مشروعك؛ بل يضيف الأداة فقط إلى نظامك حتى تتمكن من استخدامها عندما تريد. يمكنك تشغيل Miri على مشروع بكتابة `cargo +nightly miri run` أو `cargo +nightly miri test`.
 
-For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-7.
+لمثال على مدى فائدة ذلك، ضع في الاعتبار ما يحدث عندما نشغله على القائمة 20-7.
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-07/output.txt}}
 ```
 
-Miri correctly warns us that we’re casting an integer to a pointer, which might
-be a problem, but Miri can’t determine whether a problem exists because it
-doesn’t know how the pointer originated. Then, Miri returns an error where
-Listing 20-7 has undefined behavior because we have a dangling pointer. Thanks
-to Miri, we now know there is a risk of undefined behavior, and we can think
-about how to make the code safe. In some cases, Miri can even make
-recommendations about how to fix errors.
+يحذرنا Miri بشكل صحيح من أننا نقوم بتحويل عدد صحيح إلى مؤشر، والذي قد يكون مشكلة، لكن Miri لا يمكنه تحديد ما إذا كانت هناك مشكلة لأنه لا يعرف كيف نشأ المؤشر. ثم يعيد Miri خطأً حيث تحتوي القائمة 20-7 على سلوك غير محدد لأن لدينا مؤشر متدلي (dangling pointer). بفضل Miri، نعلم الآن أن هناك خطرًا من السلوك غير المحدد، ويمكننا التفكير في كيفية جعل الكود آمنًا. في بعض الحالات، يمكن لـ Miri حتى تقديم توصيات حول كيفية إصلاح الأخطاء.
 
-Miri doesn’t catch everything you might get wrong when writing unsafe code.
-Miri is a dynamic analysis tool, so it only catches problems with code that
-actually gets run. That means you will need to use it in conjunction with good
-testing techniques to increase your confidence about the unsafe code you have
-written. Miri also does not cover every possible way your code can be unsound.
+لا يلتقط Miri كل ما قد تخطئ فيه عند كتابة كود غير آمن. Miri هي أداة تحليل ديناميكي، لذلك تلتقط فقط المشاكل مع الكود الذي يتم تشغيله فعلاً. هذا يعني أنك ستحتاج إلى استخدامها مع تقنيات اختبار جيدة لزيادة ثقتك في الكود غير الآمن الذي كتبته. أيضًا لا يغطي Miri كل طريقة ممكنة لأن يكون كودك غير سليم.
 
-Put another way: If Miri _does_ catch a problem, you know there’s a bug, but
-just because Miri _doesn’t_ catch a bug doesn’t mean there isn’t a problem. It
-can catch a lot, though. Try running it on the other examples of unsafe code in
-this chapter and see what it says!
+بطريقة أخرى: إذا _اكتشف_ Miri مشكلة، فأنت تعلم أن هناك خطأ، ولكن لمجرد أن Miri _لم يكتشف_ خطأً لا يعني أنه لا توجد مشكلة. يمكنه اكتشاف الكثير، مع ذلك. حاول تشغيله على الأمثلة الأخرى للكود غير الآمن في هذا الفصل وانظر ما يقوله!
 
-You can learn more about Miri at [its GitHub repository][miri].
+يمكنك معرفة المزيد عن Miri في [مستودع GitHub الخاص به][miri].
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="when-to-use-unsafe-code"></a>
 
-### Using Unsafe Code Correctly
+### استخدام الكود غير الآمن بشكل صحيح
 
-Using `unsafe` to use one of the five superpowers just discussed isn’t wrong or
-even frowned upon, but it is trickier to get `unsafe` code correct because the
-compiler can’t help uphold memory safety. When you have a reason to use
-`unsafe` code, you can do so, and having the explicit `unsafe` annotation makes
-it easier to track down the source of problems when they occur. Whenever you
-write unsafe code, you can use Miri to help you be more confident that the code
-you have written upholds Rust’s rules.
+استخدام `unsafe` لاستخدام أحد القوى الخارقة الخمس المذكورة للتو ليس خطأ أو حتى مستهجنًا، ولكن من الأصعب الحصول على كود `unsafe` صحيح لأن المترجم لا يستطيع المساعدة في الحفاظ على أمان الذاكرة. عندما يكون لديك سبب لاستخدام كود `unsafe`، يمكنك القيام بذلك، ووجود تعليق توضيحي `unsafe` صريح يجعل من الأسهل تتبع مصدر المشاكل عند حدوثها. كلما كتبت كود غير آمن، يمكنك استخدام Miri لمساعدتك على أن تكون أكثر ثقة في أن الكود الذي كتبته يحافظ على قواعد Rust.
 
-For a much deeper exploration of how to work effectively with unsafe Rust, read
-Rust’s official guide for `unsafe`, [The Rustonomicon][nomicon].
+لاستكشاف أعمق بكثير لكيفية العمل بفعالية مع Rust غير الآمن، اقرأ دليل Rust الرسمي لـ `unsafe`، [The Rustonomicon][nomicon].
 
 [dangling-references]: ch04-02-references-and-borrowing.html#dangling-references
 [ABI]: ../reference/items/external-blocks.html#abi

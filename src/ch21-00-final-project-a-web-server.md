@@ -1,41 +1,23 @@
-# Final Project: Building a Multithreaded Web Server
+# المشروع النهائي: بناء خادوم ويب متعدد الخيوط
 
-It’s been a long journey, but we’ve reached the end of the book. In this
-chapter, we’ll build one more project together to demonstrate some of the
-concepts we covered in the final chapters, as well as recap some earlier
-lessons.
+لقد كانت رحلة طويلة، ولكننا وصلنا إلى نهاية الكتاب. في هذا الفصل، سنبني مشروعًا آخر معًا لنوضح بعض المفاهيم التي غطيناها في الفصول الأخيرة، بالإضافة إلى تلخيص بعض الدروس السابقة.
 
-For our final project, we’ll make a web server that says “Hello!” and looks like
-Figure 21-1 in a web browser.
+لمشروعنا النهائي، سنصنع خادوم ويب يقول "Hello!" ويبدو مثل الشكل 21-1 في متصفح الويب.
 
-Here is our plan for building the web server:
+فيما يلي خطتنا لبناء الخادوم:
 
-1. Learn a bit about TCP and HTTP.
-2. Listen for TCP connections on a socket.
-3. Parse a small number of HTTP requests.
-4. Create a proper HTTP response.
-5. Improve the throughput of our server with a thread pool.
+1. تعلم قليلاً عن TCP و HTTP.
+2. الاستماع لاتصالات TCP على مقبس.
+3. تحليل عدد صغير من طلبات HTTP.
+4. إنشاء استجابة HTTP مناسبة.
+5. تحسين الإنتاجية throughput لخادومنا باستخدام مجمع خيوط thread pool.
 
-<img alt="Screenshot of a web browser visiting the address 127.0.0.1:8080 displaying a webpage with the text content “Hello! Hi from Rust”" src="img/trpl21-01.png" class="center" style="width: 50%;" />
+<img alt="Screenshot of a web browser visiting the address 127.0.0.1:8080 displaying a webpage with the text content "Hello! Hi from Rust"" src="img/trpl21-01.png" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 21-1: Our final shared project</span>
+<span class="caption">الشكل 21-1: مشروعنا النهائي المشترك</span>
 
-Before we get started, we should mention two details. First, the method we’ll
-use won’t be the best way to build a web server with Rust. Community members
-have published a number of production-ready crates available at
-[crates.io](https://crates.io/) that provide more complete web server and
-thread pool implementations than we’ll build. However, our intention in this
-chapter is to help you learn, not to take the easy route. Because Rust is a
-systems programming language, we can choose the level of abstraction we want to
-work with and can go to a lower level than is possible or practical in other
-languages.
+قبل أن نبدأ، يجب أن نذكر تفصيلتين. أولاً، الطريقة التي سنستخدمها لن تكون أفضل طريقة لبناء خادوم ويب باستخدام Rust. نشر أعضاء المجتمع عددًا من الحزم crates الجاهزة للإنتاج المتاحة على [crates.io](https://crates.io/) والتي توفر تطبيقات أكثر اكتمالاً لخادوم الويب ومجمع الخيوط مما سنبنيه. ومع ذلك، فإن نيتنا في هذا الفصل هي مساعدتك على التعلم، وليس اتخاذ الطريق السهل. نظرًا لأن Rust هي لغة برمجة أنظمة systems programming language، يمكننا اختيار مستوى التجريد abstraction الذي نريد العمل به ويمكننا الذهاب إلى مستوى أدنى مما هو ممكن أو عملي في لغات أخرى.
 
-Second, we will not be using async and await here. Building a thread pool is a
-big enough challenge on its own, without adding in building an async runtime!
-However, we will note how async and await might be applicable to some of the
-same problems we will see in this chapter. Ultimately, as we noted back in
-Chapter 17, many async runtimes use thread pools for managing their work.
+ثانيًا، لن نستخدم async و await هنا. بناء مجمع خيوط هو تحدٍ كبير بما فيه الكفاية بمفرده، دون إضافة بناء async runtime! ومع ذلك، سنلاحظ كيف يمكن أن تنطبق async و await على بعض المشاكل نفسها التي سنراها في هذا الفصل. في النهاية، كما لاحظنا في الفصل 17، تستخدم العديد من async runtimes مجمعات الخيوط thread pools لإدارة عملها.
 
-We’ll therefore write the basic HTTP server and thread pool manually so that
-you can learn the general ideas and techniques behind the crates you might use
-in the future.
+لذلك سنكتب خادوم HTTP الأساسي ومجمع الخيوط يدويًا حتى تتمكن من تعلم الأفكار والتقنيات العامة وراء الحزم crates التي قد تستخدمها في المستقبل.

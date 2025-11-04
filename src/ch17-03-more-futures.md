@@ -3,26 +3,15 @@
 
 <a id="yielding"></a>
 
-### Yielding Control to the Runtime
+### تسليم السيطرة إلى بيئة التشغيل
 
-Recall from the [“Our First Async Program”][async-program]<!-- ignore -->
-section that at each await point, Rust gives a runtime a chance to pause the
-task and switch to another one if the future being awaited isn’t ready. The
-inverse is also true: Rust _only_ pauses async blocks and hands control back to
-a runtime at an await point. Everything between await points is synchronous.
+تذكر من قسم ["برنامجنا الأول غير المتزامن"][async-program]<!-- ignore --> أنه في كل نقطة await، تمنح Rust بيئة التشغيل فرصة لإيقاف المهمة مؤقتًا والتبديل إلى أخرى إذا لم يكن المستقبل الذي تنتظره جاهزًا. العكس صحيح أيضًا: Rust _فقط_ توقف كتل async وتعيد التحكم إلى بيئة التشغيل في نقطة await. كل شيء بين نقاط await هو متزامن.
 
-That means if you do a bunch of work in an async block without an await point,
-that future will block any other futures from making progress. You may sometimes
-hear this referred to as one future _starving_ other futures. In some cases,
-that may not be a big deal. However, if you are doing some kind of expensive
-setup or long-running work, or if you have a future that will keep doing some
-particular task indefinitely, you’ll need to think about when and where to hand
-control back to the runtime.
+هذا يعني أنه إذا قمت بالكثير من العمل في كتلة async بدون نقطة await، فإن ذلك المستقبل سيحجب أي مستقبلات أخرى من إحراز تقدم. قد تسمع هذا أحيانًا يشار إليه باسم مستقبل واحد _يجوّع_ (starving) مستقبلات أخرى. في بعض الحالات، قد لا يكون ذلك صفقة كبيرة. ومع ذلك، إذا كنت تقوم ببعض أنواع الإعداد المكلف أو العمل طويل الأمد، أو إذا كان لديك مستقبل سيستمر في القيام ببعض المهام المعينة إلى أجل غير مسمى، فستحتاج إلى التفكير في متى وأين تعيد التحكم إلى بيئة التشغيل.
 
-Let’s simulate a long-running operation to illustrate the starvation problem,
-then explore how to solve it. Listing 17-14 introduces a `slow` function.
+لنحاكي عملية طويلة الأمد لتوضيح مشكلة التجويع، ثم استكشف كيفية حلها. تقدم القائمة 17-14 دالة `slow`.
 
-<Listing number="17-14" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
+<Listing number="17-14" caption="استخدام `thread::sleep` لمحاكاة العمليات البطيئة" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:slow}}
@@ -30,15 +19,11 @@ then explore how to solve it. Listing 17-14 introduces a `slow` function.
 
 </Listing>
 
-This code uses `std::thread::sleep` instead of `trpl::sleep` so that calling
-`slow` will block the current thread for some number of milliseconds. We can
-use `slow` to stand in for real-world operations that are both long-running and
-blocking.
+يستخدم هذا الكود `std::thread::sleep` بدلاً من `trpl::sleep` بحيث يؤدي استدعاء `slow` إلى حجب الخيط الحالي لعدد معين من الميلي ثانية. يمكننا استخدام `slow` كبديل لعمليات العالم الحقيقي التي تكون طويلة الأمد وحاجبة.
 
-In Listing 17-15, we use `slow` to emulate doing this kind of CPU-bound work in
-a pair of futures.
+في القائمة 17-15، نستخدم `slow` لمحاكاة القيام بهذا النوع من العمل المرتبط بالمعالج في زوج من المستقبلات.
 
-<Listing number="17-15" caption="Calling `slow` to simulate running slow operations" file-name="src/main.rs">
+<Listing number="17-15" caption="استدعاء `slow` لمحاكاة تشغيل العمليات البطيئة" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:slow-futures}}
@@ -46,13 +31,12 @@ a pair of futures.
 
 </Listing>
 
-Each future hands control back to the runtime only _after_ carrying out a bunch
-of slow operations. If you run this code, you will see this output:
+كل مستقبل يعيد التحكم إلى بيئة التشغيل فقط _بعد_ تنفيذ مجموعة من العمليات البطيئة. إذا قمت بتشغيل هذا الكود، سترى هذا الناتج:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-15/
 cargo run
-copy just the output
+انسخ الناتج فقط
 -->
 
 ```text
@@ -68,22 +52,11 @@ copy just the output
 'a' finished.
 ```
 
-As with Listing 17-5 where we used `trpl::select` to race futures fetching two
-URLs, `select` still finishes as soon as `a` is done. There’s no interleaving
-between the calls to `slow` in the two futures, though. The `a` future does all
-of its work until the `trpl::sleep` call is awaited, then the `b` future does
-all of its work until its own `trpl::sleep` call is awaited, and finally the
-`a` future completes. To allow both futures to make progress between their slow
-tasks, we need await points so we can hand control back to the runtime. That
-means we need something we can await!
+كما هو الحال مع القائمة 17-5 حيث استخدمنا `trpl::select` للتسابق بين المستقبلات التي تجلب عنواني URL، لا يزال `select` ينتهي بمجرد انتهاء `a`. ومع ذلك، لا يوجد تداخل بين استدعاءات `slow` في المستقبلين. ينفذ مستقبل `a` كل عمله حتى يتم انتظار استدعاء `trpl::sleep`، ثم ينفذ مستقبل `b` كل عمله حتى يتم انتظار استدعاء `trpl::sleep` الخاص به، وأخيرًا يكتمل مستقبل `a`. للسماح لكلا المستقبلين بإحراز تقدم بين مهامهما البطيئة، نحتاج إلى نقاط await حتى نتمكن من إعادة التحكم إلى بيئة التشغيل. هذا يعني أننا بحاجة إلى شيء يمكننا انتظاره!
 
-We can already see this kind of handoff happening in Listing 17-15: if we
-removed the `trpl::sleep` at the end of the `a` future, it would complete
-without the `b` future running _at all_. Let’s try using the `trpl::sleep`
-function as a starting point for letting operations switch off making progress,
-as shown in Listing 17-16.
+يمكننا بالفعل رؤية هذا النوع من التسليم يحدث في القائمة 17-15: إذا أزلنا `trpl::sleep` في نهاية مستقبل `a`، فسيكتمل دون تشغيل مستقبل `b` _على الإطلاق_. دعنا نحاول استخدام دالة `trpl::sleep` كنقطة انطلاق للسماح للعمليات بالتبديل في إحراز التقدم، كما هو موضح في القائمة 17-16.
 
-<Listing number="17-16" caption="Using `trpl::sleep` to let operations switch off making progress" file-name="src/main.rs">
+<Listing number="17-16" caption="استخدام `trpl::sleep` للسماح للعمليات بالتبديل في إحراز التقدم" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-16/src/main.rs:here}}
@@ -91,13 +64,12 @@ as shown in Listing 17-16.
 
 </Listing>
 
-We’ve added `trpl::sleep` calls with await points between each call to `slow`.
-Now the two futures’ work is interleaved:
+أضفنا استدعاءات `trpl::sleep` مع نقاط await بين كل استدعاء لـ `slow`. الآن يتداخل عمل المستقبلين:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
 cargo run
-copy just the output
+انسخ الناتج فقط
 -->
 
 ```text
@@ -112,18 +84,11 @@ copy just the output
 'a' finished.
 ```
 
-The `a` future still runs for a bit before handing off control to `b`, because
-it calls `slow` before ever calling `trpl::sleep`, but after that the futures
-swap back and forth each time one of them hits an await point. In this case, we
-have done that after every call to `slow`, but we could break up the work in
-whatever way makes the most sense to us.
+لا يزال مستقبل `a` يعمل لبعض الوقت قبل تسليم التحكم إلى `b`، لأنه يستدعي `slow` قبل أن يستدعي `trpl::sleep`، ولكن بعد ذلك يتبادل المستقبلان ذهابًا وإيابًا في كل مرة يصل أحدهما إلى نقطة await. في هذه الحالة، فعلنا ذلك بعد كل استدعاء لـ `slow`، ولكن يمكننا تقسيم العمل بأي طريقة منطقية بالنسبة لنا.
 
-We don’t really want to _sleep_ here, though: we want to make progress as fast
-as we can. We just need to hand back control to the runtime. We can do that
-directly, using the `trpl::yield_now` function. In Listing 17-17, we replace
-all those `trpl::sleep` calls with `trpl::yield_now`.
+لا نريد حقًا _النوم_ هنا؛ نريد إحراز تقدم في أسرع وقت ممكن. نحتاج فقط إلى إعادة التحكم إلى بيئة التشغيل. يمكننا القيام بذلك مباشرة، باستخدام دالة `trpl::yield_now`. في القائمة 17-17، نستبدل جميع استدعاءات `trpl::sleep` تلك بـ `trpl::yield_now`.
 
-<Listing number="17-17" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
+<Listing number="17-17" caption="استخدام `yield_now` للسماح للعمليات بالتبديل في إحراز التقدم" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-17/src/main.rs:yields}}
@@ -131,42 +96,19 @@ all those `trpl::sleep` calls with `trpl::yield_now`.
 
 </Listing>
 
-This code is both clearer about the actual intent and can be significantly
-faster than using `sleep`, because timers such as the one used by `sleep` often
-have limits on how granular they can be. The version of `sleep` we are using,
-for example, will always sleep for at least a millisecond, even if we pass it a
-`Duration` of one nanosecond. Again, modern computers are _fast_: they can do a
-lot in one millisecond!
+هذا الكود أوضح بكثير حول النية الفعلية ويمكن أن يكون أسرع بكثير من استخدام `sleep`، لأن المؤقتات مثل تلك التي يستخدمها `sleep` غالبًا ما تكون لها حدود على مدى دقتها. نسخة `sleep` التي نستخدمها، على سبيل المثال، ستنام دائمًا لمدة ميلي ثانية واحدة على الأقل، حتى لو مررناها `Duration` من نانو ثانية واحدة. مرة أخرى، أجهزة الكمبيوتر الحديثة _سريعة_: يمكنها القيام بالكثير في ميلي ثانية واحدة!
 
-This means that async can be useful even for compute-bound tasks, depending on
-what else your program is doing, because it provides a useful tool for
-structuring the relationships between different parts of the program (but at a
-cost of the overhead of the async state machine). This is a form of
-_cooperative multitasking_, where each future has the power to determine when
-it hands over control via await points. Each future therefore also has the
-responsibility to avoid blocking for too long. In some Rust-based embedded
-operating systems, this is the _only_ kind of multitasking!
+هذا يعني أن async يمكن أن يكون مفيدًا حتى للمهام المرتبطة بالحساب، اعتمادًا على ما يفعله باقي برنامجك، لأنه يوفر أداة مفيدة لهيكلة العلاقات بين أجزاء مختلفة من البرنامج (ولكن على حساب النفقات العامة لآلة حالة async). هذا شكل من أشكال _تعدد المهام التعاوني_ (cooperative multitasking)، حيث لكل مستقبل القدرة على تحديد متى يسلم السيطرة عبر نقاط await. وبالتالي فإن لكل مستقبل أيضًا مسؤولية تجنب الحجب لفترة طويلة جدًا. في بعض أنظمة التشغيل المضمنة المستندة إلى Rust، هذا هو النوع _الوحيد_ من تعدد المهام!
 
-In real-world code, you won’t usually be alternating function calls with await
-points on every single line, of course. While yielding control in this way is
-relatively inexpensive, it’s not free. In many cases, trying to break up a
-compute-bound task might make it significantly slower, so sometimes it’s better
-for _overall_ performance to let an operation block briefly. Always
-measure to see what your code’s actual performance bottlenecks are. The
-underlying dynamic is important to keep in mind, though, if you _are_ seeing a
-lot of work happening in serial that you expected to happen concurrently!
+في كود العالم الحقيقي، لن تتناوب عادةً استدعاءات الدوال مع نقاط await في كل سطر واحد، بالطبع. بينما إعادة السيطرة بهذه الطريقة غير مكلفة نسبيًا، إلا أنها ليست مجانية. في كثير من الحالات، قد تؤدي محاولة تقسيم مهمة مرتبطة بالحساب إلى جعلها أبطأ بكثير، لذلك في بعض الأحيان يكون من الأفضل للأداء _العام_ السماح لعملية ما بالحجب لفترة وجيزة. قم دائمًا بالقياس لمعرفة ما هي اختناقات الأداء الفعلية للكود الخاص بك. الديناميكية الأساسية مهمة أن نضعها في الاعتبار، مع ذلك، إذا كنت _ترى_ الكثير من العمل يحدث بشكل تسلسلي كنت تتوقع أن يحدث بشكل متزامن!
 
-### Building Our Own Async Abstractions
+### بناء تجريدات Async الخاصة بنا
 
-We can also compose futures together to create new patterns. For example, we can
-build a `timeout` function with async building blocks we already have. When
-we’re done, the result will be another building block we could use to create
-still more async abstractions.
+يمكننا أيضًا تكوين المستقبلات معًا لإنشاء أنماط جديدة. على سبيل المثال، يمكننا بناء دالة `timeout` مع أحجار البناء غير المتزامنة التي لدينا بالفعل. عندما ننتهي، ستكون النتيجة حجر بناء آخر يمكننا استخدامه لإنشاء المزيد من التجريدات غير المتزامنة.
 
-Listing 17-18 shows how we would expect this `timeout` to work with a slow
-future.
+توضح القائمة 17-18 كيف نتوقع أن يعمل `timeout` هذا مع مستقبل بطيء.
 
-<Listing number="17-18" caption="Using our imagined `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
+<Listing number="17-18" caption="استخدام `timeout` المتخيل لتشغيل عملية بطيئة مع حد زمني" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
@@ -174,23 +116,18 @@ future.
 
 </Listing>
 
-Let’s implement this! To begin, let’s think about the API for `timeout`:
+لنقم بتنفيذ هذا! للبدء، دعنا نفكر في واجهة برمجة التطبيقات لـ `timeout`:
 
-- It needs to be an async function itself so we can await it.
-- Its first parameter should be a future to run. We can make it generic to allow
-  it to work with any future.
-- Its second parameter will be the maximum time to wait. If we use a `Duration`,
-  that will make it easy to pass along to `trpl::sleep`.
-- It should return a `Result`. If the future completes successfully, the
-  `Result` will be `Ok` with the value produced by the future. If the timeout
-  elapses first, the `Result` will be `Err` with the duration that the timeout
-  waited for.
+- يجب أن تكون دالة async نفسها حتى نتمكن من انتظارها.
+- يجب أن يكون معاملها الأول مستقبلًا لتشغيله. يمكننا جعله عامًا للسماح له بالعمل مع أي مستقبل.
+- سيكون معاملها الثاني هو الحد الأقصى للوقت للانتظار. إذا استخدمنا `Duration`، فسيسهل ذلك تمريره إلى `trpl::sleep`.
+- يجب أن يُرجع `Result`. إذا اكتمل المستقبل بنجاح، سيكون `Result` هو `Ok` مع القيمة التي ينتجها المستقبل. إذا انقضى المهلة أولاً، سيكون `Result` هو `Err` مع المدة التي انتظرتها المهلة.
 
-Listing 17-19 shows this declaration.
+توضح القائمة 17-19 هذا التصريح.
 
 <!-- This is not tested because it intentionally does not compile. -->
 
-<Listing number="17-19" caption="Defining the signature of `timeout`" file-name="src/main.rs">
+<Listing number="17-19" caption="تحديد توقيع `timeout`" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:declaration}}
@@ -198,15 +135,11 @@ Listing 17-19 shows this declaration.
 
 </Listing>
 
-That satisfies our goals for the types. Now let’s think about the _behavior_ we
-need: we want to race the future passed in against the duration. We can use
-`trpl::sleep` to make a timer future from the duration, and use `trpl::select`
-to run that timer with the future the caller passes in.
+هذا يلبي أهدافنا للأنواع. الآن دعنا نفكر في _السلوك_ الذي نحتاجه: نريد التسابق بين المستقبل الممرر والمدة. يمكننا استخدام `trpl::sleep` لصنع مستقبل مؤقت من المدة، واستخدام `trpl::select` لتشغيل ذلك المؤقت مع المستقبل الذي يمرره المتصل.
 
-In Listing 17-20, we implement `timeout` by matching on the result of awaiting
-`trpl::select`.
+في القائمة 17-20، ننفذ `timeout` عن طريق المطابقة على نتيجة انتظار `trpl::select`.
 
-<Listing number="17-20" caption="Defining `timeout` with `select` and `sleep`" file-name="src/main.rs">
+<Listing number="17-20" caption="تحديد `timeout` باستخدام `select` و `sleep`" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:implementation}}
@@ -214,36 +147,20 @@ In Listing 17-20, we implement `timeout` by matching on the result of awaiting
 
 </Listing>
 
-The implementation of `trpl::select` is not fair: it always polls arguments in
-the order in which they are passed (other `select` implementations will
-randomly choose which argument to poll first). Thus, we pass `future_to_try` to
-`select` first so it gets a chance to complete even if `max_time` is a very
-short duration. If `future_to_try` finishes first, `select` will return `Left`
-with the output from `future_to_try`. If `timer` finishes first, `select` will
-return `Right` with the timer’s output of `()`.
+تنفيذ `trpl::select` ليس عادلاً: فهو يستطلع الوسائط دائمًا بالترتيب الذي يتم تمريرها به (تنفيذات `select` الأخرى ستختار عشوائيًا الوسيطة التي يجب استطلاعها أولاً). وبالتالي، نمرر `future_to_try` إلى `select` أولاً حتى تحصل على فرصة للاكتمال حتى لو كانت `max_time` مدة قصيرة جدًا. إذا انتهى `future_to_try` أولاً، سيُرجع `select` `Left` مع الناتج من `future_to_try`. إذا انتهى `timer` أولاً، سيُرجع `select` `Right` مع ناتج المؤقت `()`.
 
-If the `future_to_try` succeeds and we get a `Left(output)`, we return
-`Ok(output)`. If the sleep timer elapses instead and we get a `Right(())`, we
-ignore the `()` with `_` and return `Err(max_time)` instead.
+إذا نجح `future_to_try` وحصلنا على `Left(output)`، نُرجع `Ok(output)`. إذا انقضى مؤقت النوم بدلاً من ذلك وحصلنا على `Right(())`، نتجاهل `()` بـ `_` ونُرجع `Err(max_time)` بدلاً من ذلك.
 
-With that, we have a working `timeout` built out of two other async helpers. If
-we run our code, it will print the failure mode after the timeout:
+بذلك، لدينا `timeout` عامل مبني من مساعدين غير متزامنين آخرين. إذا قمنا بتشغيل الكود الخاص بنا، فسيطبع وضع الفشل بعد المهلة:
 
 ```text
 Failed after 2 seconds
 ```
 
-Because futures compose with other futures, you can build really powerful tools
-using smaller async building blocks. For example, you can use this same
-approach to combine timeouts with retries, and in turn use those with
-operations such as network calls (such as those in Listing 17-5).
+نظرًا لأن المستقبلات تتكون مع مستقبلات أخرى، يمكنك بناء أدوات قوية حقًا باستخدام أحجار بناء غير متزامنة أصغر. على سبيل المثال، يمكنك استخدام نفس النهج لدمج المهلات الزمنية مع إعادة المحاولة، وبدورها استخدام تلك مع عمليات مثل استدعاءات الشبكة (مثل تلك الموجودة في القائمة 17-5).
 
-In practice, you’ll usually work directly with `async` and `await`, and
-secondarily with functions such as `select` and macros such as the `join!`
-macro to control how the outermost futures are executed.
+في الممارسة العملية، ستعمل عادةً مباشرة مع `async` و `await`، وثانويًا مع دوال مثل `select` وماكرو مثل ماكرو `join!` للتحكم في كيفية تنفيذ المستقبلات الخارجية.
 
-We’ve now seen a number of ways to work with multiple futures at the same time.
-Up next, we’ll look at how we can work with multiple futures in a sequence over
-time with _streams_.
+لقد رأينا الآن عددًا من الطرق للعمل مع مستقبلات متعددة في نفس الوقت. بعد ذلك، سننظر في كيفية العمل مع مستقبلات متعددة في تسلسل بمرور الوقت مع _التدفقات_ (streams).
 
 [async-program]: ch17-01-futures-and-syntax.html#our-first-async-program

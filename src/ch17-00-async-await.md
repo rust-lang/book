@@ -1,167 +1,73 @@
-# Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams
+# أساسيات البرمجة غير المتزامنة: Async و Await والمستقبلات والتدفقات
 
-Many operations we ask the computer to do can take a while to finish. It would
-be nice if we could do something else while we’re waiting for those
-long-running processes to complete. Modern computers offer two techniques for
-working on more than one operation at a time: parallelism and concurrency. Our
-programs’ logic, however, is written in a mostly linear fashion. We’d like to
-be able to specify the operations a program should perform and points at which
-a function could pause and some other part of the program could run instead,
-without needing to specify up front exactly the order and manner in which each
-bit of code should run. _Asynchronous programming_ is an abstraction that lets
-us express our code in terms of potential pausing points and eventual results
-that takes care of the details of coordination for us.
+العديد من العمليات التي نطلب من الكمبيوتر القيام بها يمكن أن تستغرق وقتًا طويلاً لإنهائها. سيكون من الجيد لو تمكنا من القيام بشيء آخر أثناء انتظار هذه العمليات طويلة الأمد لتكتمل. توفر أجهزة الكمبيوتر الحديثة تقنيتين للعمل على أكثر من عملية في نفس الوقت: التوازي (parallelism) والتزامن (concurrency). ومع ذلك، يتم كتابة منطق برامجنا بطريقة خطية في الغالب. نود أن نكون قادرين على تحديد العمليات التي يجب على البرنامج تنفيذها والنقاط التي يمكن فيها لدالة أن تتوقف مؤقتًا وتشغيل جزء آخر من البرنامج بدلاً من ذلك، دون الحاجة إلى تحديد الترتيب والطريقة التي يجب أن تعمل بها كل جزء من الكود بشكل مسبق. _البرمجة غير المتزامنة_ (Asynchronous programming) هي تجريد يتيح لنا التعبير عن الكود الخاص بنا من حيث نقاط التوقف المحتملة والنتائج النهائية التي تهتم بتفاصيل التنسيق نيابة عنا.
 
-This chapter builds on Chapter 16’s use of threads for parallelism and
-concurrency by introducing an alternative approach to writing code: Rust’s
-futures, streams, and the `async` and `await` syntax that let us express how
-operations could be asynchronous, and the third-party crates that implement
-asynchronous runtimes: code that manages and coordinates the execution of
-asynchronous operations.
+يعتمد هذا الفصل على استخدام الفصل 16 للخيوط (threads) للتوازي والتزامن من خلال تقديم نهج بديل لكتابة الكود: مستقبلات Rust (futures) والتدفقات (streams) وصيغة `async` و `await` التي تتيح لنا التعبير عن كيفية أن تكون العمليات غير متزامنة، والمكتبات الخارجية (crates) التي تنفذ بيئات التشغيل غير المتزامنة (asynchronous runtimes): الكود الذي يدير وينسق تنفيذ العمليات غير المتزامنة.
 
-Let’s consider an example. Say you’re exporting a video you’ve created of a
-family celebration, an operation that could take anywhere from minutes to
-hours. The video export will use as much CPU and GPU power as it can. If you
-had only one CPU core and your operating system didn’t pause that export until
-it completed—that is, if it executed the export _synchronously_—you couldn’t do
-anything else on your computer while that task was running. That would be a
-pretty frustrating experience. Fortunately, your computer’s operating system
-can, and does, invisibly interrupt the export often enough to let you get other
-work done simultaneously.
+لنفكر في مثال. لنفترض أنك تقوم بتصدير فيديو قمت بإنشائه لاحتفال عائلي، عملية يمكن أن تستغرق من دقائق إلى ساعات. سيستخدم تصدير الفيديو أكبر قدر ممكن من قوة المعالج (CPU) ومعالج الرسومات (GPU). إذا كان لديك نواة معالج واحدة فقط ولم يقم نظام التشغيل الخاص بك بإيقاف عملية التصدير مؤقتًا حتى تكتمل - أي إذا قام بتنفيذ التصدير _بشكل متزامن_ (synchronously) - فلن تتمكن من القيام بأي شيء آخر على جهاز الكمبيوتر الخاص بك أثناء تشغيل هذه المهمة. سيكون ذلك تجربة محبطة للغاية. لحسن الحظ، يمكن لنظام تشغيل جهاز الكمبيوتر الخاص بك، ويفعل ذلك، مقاطعة التصدير بشكل غير مرئي بشكل متكرر بما يكفي للسماح لك بإنجاز أعمال أخرى في وقت واحد.
 
-Now say you’re downloading a video shared by someone else, which can also take
-a while but does not take up as much CPU time. In this case, the CPU has to
-wait for data to arrive from the network. While you can start reading the data
-once it starts to arrive, it might take some time for all of it to show up.
-Even once the data is all present, if the video is quite large, it could take
-at least a second or two to load it all. That might not sound like much, but
-it’s a very long time for a modern processor, which can perform billions of
-operations every second. Again, your operating system will invisibly interrupt
-your program to allow the CPU to perform other work while waiting for the
-network call to finish.
+الآن لنفترض أنك تقوم بتنزيل فيديو شاركه شخص آخر، والذي يمكن أن يستغرق أيضًا بعض الوقت ولكنه لا يستهلك الكثير من وقت المعالج. في هذه الحالة، يجب على المعالج الانتظار حتى تصل البيانات من الشبكة. بينما يمكنك البدء في قراءة البيانات بمجرد أن تبدأ في الوصول، قد يستغرق الأمر بعض الوقت حتى يصل كل شيء. حتى بمجرد وصول جميع البيانات، إذا كان الفيديو كبيرًا جدًا، فقد يستغرق تحميله بالكامل ثانية أو ثانيتين على الأقل. قد لا يبدو ذلك كثيرًا، ولكنه وقت طويل جدًا بالنسبة لمعالج حديث، والذي يمكنه تنفيذ مليارات العمليات كل ثانية. مرة أخرى، سيقوم نظام التشغيل بمقاطعة برنامجك بشكل غير مرئي للسماح للمعالج بأداء أعمال أخرى أثناء انتظار اكتمال استدعاء الشبكة.
 
-The video export is an example of a _CPU-bound_ or _compute-bound_ operation.
-It’s limited by the computer’s potential data processing speed within the CPU
-or GPU, and how much of that speed it can dedicate to the operation. The video
-download is an example of an _I/O-bound_ operation, because it’s limited by the
-speed of the computer’s _input and output_; it can only go as fast as the data
-can be sent across the network.
+تصدير الفيديو هو مثال على عملية _مرتبطة بالمعالج_ (CPU-bound) أو _مرتبطة بالحساب_ (compute-bound). إنها محدودة بسرعة معالجة البيانات المحتملة للكمبيوتر داخل المعالج أو معالج الرسومات، ومقدار تلك السرعة التي يمكن تخصيصها للعملية. تنزيل الفيديو هو مثال على عملية _مرتبطة بالإدخال/الإخراج_ (I/O-bound)، لأنها محدودة بسرعة _إدخال وإخراج_ الكمبيوتر؛ يمكن أن تسير بسرعة إرسال البيانات عبر الشبكة فقط.
 
-In both of these examples, the operating system’s invisible interrupts provide
-a form of concurrency. That concurrency happens only at the level of the entire
-program, though: the operating system interrupts one program to let other
-programs get work done. In many cases, because we understand our programs at a
-much more granular level than the operating system does, we can spot
-opportunities for concurrency that the operating system can’t see.
+في كلا المثالين، توفر المقاطعات غير المرئية لنظام التشغيل شكلاً من أشكال التزامن. ومع ذلك، يحدث هذا التزامن فقط على مستوى البرنامج بالكامل: يقاطع نظام التشغيل برنامجًا واحدًا للسماح لبرامج أخرى بإنجاز العمل. في كثير من الحالات، نظرًا لأننا نفهم برامجنا على مستوى أكثر تفصيلاً مما يفعله نظام التشغيل، يمكننا اكتشاف فرص للتزامن لا يستطيع نظام التشغيل رؤيتها.
 
-For example, if we’re building a tool to manage file downloads, we should be
-able to write our program so that starting one download won’t lock up the UI,
-and users should be able to start multiple downloads at the same time. Many
-operating system APIs for interacting with the network are _blocking_, though;
-that is, they block the program’s progress until the data they’re processing is
-completely ready.
+على سبيل المثال، إذا كنا نقوم ببناء أداة لإدارة تنزيلات الملفات، فيجب أن نكون قادرين على كتابة برنامجنا بحيث لا يؤدي بدء تنزيل واحد إلى تجميد واجهة المستخدم، ويجب أن يكون المستخدمون قادرين على بدء تنزيلات متعددة في نفس الوقت. العديد من واجهات برمجة التطبيقات (APIs) لنظام التشغيل للتفاعل مع الشبكة هي _حجب_ (blocking)؛ أي أنها تحجب تقدم البرنامج حتى تصبح البيانات التي تتم معالجتها جاهزة تمامًا.
 
-> Note: This is how _most_ function calls work, if you think about it. However,
-> the term _blocking_ is usually reserved for function calls that interact with
-> files, the network, or other resources on the computer, because those are the
-> cases where an individual program would benefit from the operation being
-> _non_-blocking.
+> ملاحظة: هذه هي الطريقة التي تعمل بها _معظم_ استدعاءات الدوال، إذا فكرت في الأمر. ومع ذلك، عادةً ما يتم حجز مصطلح _blocking_ لاستدعاءات الدوال التي تتفاعل مع الملفات أو الشبكة أو الموارد الأخرى على الكمبيوتر، لأن هذه هي الحالات التي يستفيد فيها البرنامج الفردي من كون العملية _غير حاجبة_ (non-blocking).
 
-We could avoid blocking our main thread by spawning a dedicated thread to
-download each file. However, the overhead of the system resources used by those
-threads would eventually become a problem. It would be preferable if the call
-didn’t block in the first place, and instead we could define a number of tasks
-that we’d like our program to complete and allow the runtime to choose the best
-order and manner in which to run them.
+يمكننا تجنب حجب الخيط الرئيسي عن طريق إنشاء خيط مخصص لتنزيل كل ملف. ومع ذلك، فإن النفقات العامة لموارد النظام المستخدمة من قبل تلك الخيوط ستصبح في النهاية مشكلة. سيكون من الأفضل لو لم يقم الاستدعاء بالحجب في المقام الأول، وبدلاً من ذلك يمكننا تحديد عدد من المهام (tasks) التي نرغب في إكمالها في برنامجنا والسماح لبيئة التشغيل باختيار أفضل ترتيب وطريقة لتشغيلها.
 
-That is exactly what Rust’s _async_ (short for _asynchronous_) abstraction
-gives us. In this chapter, you’ll learn all about async as we cover the
-following topics:
+هذا بالضبط ما يمنحنا إياه تجريد _async_ في Rust (اختصار لـ _asynchronous_). في هذا الفصل، ستتعلم كل شيء عن async بينما نغطي المواضيع التالية:
 
-- How to use Rust’s `async` and `await` syntax and execute asynchronous
-  functions with a runtime
-- How to use the async model to solve some of the same challenges we looked at
-  in Chapter 16
-- How multithreading and async provide complementary solutions that you can
-  combine in many cases
+- كيفية استخدام صيغة `async` و `await` في Rust وتنفيذ الدوال غير المتزامنة باستخدام بيئة تشغيل
+- كيفية استخدام نموذج async لحل بعض التحديات نفسها التي نظرنا إليها في الفصل 16
+- كيف يوفر تعدد الخيوط (multithreading) و async حلولاً تكميلية يمكنك دمجها في كثير من الحالات
 
-Before we see how async works in practice, though, we need to take a short
-detour to discuss the differences between parallelism and concurrency.
+ولكن قبل أن نرى كيف يعمل async عمليًا، نحتاج إلى التحدث قليلاً عن الاختلافات بين التوازي والتزامن.
 
-## Parallelism and Concurrency
+## التوازي والتزامن
 
-We’ve treated parallelism and concurrency as mostly interchangeable so far. Now
-we need to distinguish between them more precisely, because the differences
-will show up as we start working.
+لقد تعاملنا مع التوازي (parallelism) والتزامن (concurrency) على أنهما متبادلان إلى حد كبير حتى الآن. الآن نحتاج إلى التمييز بينهما بشكل أكثر دقة، لأن الاختلافات ستظهر عندما نبدأ العمل.
 
-Consider the different ways a team could split up work on a software project.
-You could assign a single member multiple tasks, assign each member one task,
-or use a mix of the two approaches.
+لنفكر في الطرق المختلفة التي يمكن لفريق تقسيم العمل فيها على مشروع برمجي. يمكنك تعيين عدة مهام لعضو واحد، أو تعيين مهمة واحدة لكل عضو، أو استخدام مزيج من النهجين.
 
-When an individual works on several different tasks before any of them is
-complete, this is _concurrency_. One way to implement concurrency is similar to
-having two different projects checked out on your computer, and when you get
-bored or stuck on one project, you switch to the other. You’re just one person,
-so you can’t make progress on both tasks at the exact same time, but you can
-multitask, making progress on one at a time by switching between them (see
-Figure 17-1).
+عندما يعمل فرد واحد على عدة مهام مختلفة قبل اكتمال أي منها، فهذا هو _التزامن_ (concurrency). إحدى الطرق لتنفيذ التزامن تشبه وجود مشروعين مختلفين على جهاز الكمبيوتر الخاص بك، وعندما تشعر بالملل أو تعلق في مشروع واحد، تنتقل إلى الآخر. أنت مجرد شخص واحد، لذلك لا يمكنك إحراز تقدم في كلتا المهمتين في نفس الوقت بالضبط، ولكن يمكنك تعدد المهام، وإحراز تقدم في واحدة في كل مرة عن طريق التبديل بينهما (انظر الشكل 17-1).
 
 <figure>
 
-<img src="img/trpl17-01.svg" class="center" alt="A diagram with stacked boxes labeled Task A and Task B, with diamonds in them representing subtasks. Arrows point from A1 to B1, B1 to A2, A2 to B2, B2 to A3, A3 to A4, and A4 to B3. The arrows between the subtasks cross the boxes between Task A and Task B." />
+<img src="img/trpl17-01.svg" class="center" alt="رسم تخطيطي يحتوي على صناديق مكدسة تحمل علامات المهمة A والمهمة B، مع الماس فيها يمثل مهام فرعية. تشير الأسهم من A1 إلى B1، وB1 إلى A2، وA2 إلى B2، وB2 إلى A3، وA3 إلى A4، وA4 إلى B3. تعبر الأسهم بين المهام الفرعية الصناديق بين المهمة A والمهمة B." />
 
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
+<figcaption>الشكل 17-1: سير عمل متزامن، التبديل بين المهمة A والمهمة B</figcaption>
 
 </figure>
 
-When the team splits up a group of tasks by having each member take one task
-and work on it alone, this is _parallelism_. Each person on the team can make
-progress at the exact same time (see Figure 17-2).
+عندما يقسم الفريق مجموعة من المهام من خلال قيام كل عضو بمهمة واحدة والعمل عليها بمفرده، فهذا هو _التوازي_ (parallelism). يمكن لكل شخص في الفريق إحراز تقدم في نفس الوقت بالضبط (انظر الشكل 17-2).
 
 <figure>
 
-<img src="img/trpl17-02.svg" class="center" alt="A diagram with stacked boxes labeled Task A and Task B, with diamonds in them representing subtasks. Arrows point from A1 to A2, A2 to A3, A3 to A4, B1 to B2, and B2 to B3. No arrows cross between the boxes for Task A and Task B." />
+<img src="img/trpl17-02.svg" class="center" alt="رسم تخطيطي يحتوي على صناديق مكدسة تحمل علامات المهمة A والمهمة B، مع الماس فيها يمثل مهام فرعية. تشير الأسهم من A1 إلى A2، وA2 إلى A3، وA3 إلى A4، وB1 إلى B2، وB2 إلى B3. لا توجد أسهم تعبر بين الصناديق للمهمة A والمهمة B." />
 
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
+<figcaption>الشكل 17-2: سير عمل متوازي، حيث يحدث العمل على المهمة A والمهمة B بشكل مستقل</figcaption>
 
 </figure>
 
-In both of these workflows, you might have to coordinate between different
-tasks. Maybe you thought the task assigned to one person was totally
-independent from everyone else’s work, but it actually requires another person
-on the team to finish their task first. Some of the work could be done in
-parallel, but some of it was actually _serial_: it could only happen in a
-series, one task after the other, as in Figure 17-3.
+في كلا سير العمل هذين، قد تحتاج إلى التنسيق بين المهام المختلفة. ربما كنت تعتقد أن المهمة المعينة لشخص واحد كانت مستقلة تمامًا عن عمل الآخرين، ولكنها في الواقع تتطلب من شخص آخر في الفريق إنهاء مهمته أولاً. يمكن إنجاز بعض الأعمال بالتوازي، لكن بعضها كان في الواقع _تسلسليًا_ (serial): يمكن أن يحدث فقط في سلسلة، مهمة تلو الأخرى، كما في الشكل 17-3.
 
 <figure>
 
-<img src="img/trpl17-03.svg" class="center" alt="A diagram with stacked boxes labeled Task A and Task B, with diamonds in them representing subtasks. In Task A, arrows point from A1 to A2, from A2 to a pair of thick vertical lines like a “pause” symbol, and from that symbol to A3. In task B, arrows point from B1 to B2, from B2 to B3, from B3 to A3, and from B3 to B4." />
+<img src="img/trpl17-03.svg" class="center" alt="رسم تخطيطي يحتوي على صناديق مكدسة تحمل علامات المهمة A والمهمة B، مع الماس فيها يمثل مهام فرعية. في المهمة A، تشير الأسهم من A1 إلى A2، ومن A2 إلى زوج من الخطوط العمودية السميكة مثل رمز "إيقاف مؤقت"، ومن ذلك الرمز إلى A3. في المهمة B، تشير الأسهم من B1 إلى B2، ومن B2 إلى B3، ومن B3 إلى A3، ومن B3 إلى B4." />
 
-<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until Task A3 is blocked on the results of Task B3.</figcaption>
+<figcaption>الشكل 17-3: سير عمل متوازي جزئيًا، حيث يحدث العمل على المهمة A والمهمة B بشكل مستقل حتى يتم حظر المهمة A3 على نتائج المهمة B3.</figcaption>
 
 </figure>
 
-Likewise, you might realize that one of your own tasks depends on another of
-your tasks. Now your concurrent work has also become serial.
+وبالمثل، قد تدرك أن إحدى مهامك الخاصة تعتمد على مهمة أخرى من مهامك. الآن أصبح عملك المتزامن تسلسليًا أيضًا.
 
-Parallelism and concurrency can intersect with each other, too. If you learn
-that a colleague is stuck until you finish one of your tasks, you’ll probably
-focus all your efforts on that task to “unblock” your colleague. You and your
-coworker are no longer able to work in parallel, and you’re also no longer able
-to work concurrently on your own tasks.
+يمكن أن يتقاطع التوازي والتزامن مع بعضهما البعض أيضًا. إذا علمت أن زميلاً عالق حتى تنتهي من إحدى مهامك، فستركز على الأرجح كل جهودك على تلك المهمة لـ "إلغاء حظر" زميلك. لم تعد أنت وزميلك قادرين على العمل بالتوازي، كما أنك لم تعد قادرًا على العمل بشكل متزامن على مهامك الخاصة.
 
-The same basic dynamics come into play with software and hardware. On a machine
-with a single CPU core, the CPU can perform only one operation at a time, but
-it can still work concurrently. Using tools such as threads, processes, and
-async, the computer can pause one activity and switch to others before
-eventually cycling back to that first activity again. On a machine with
-multiple CPU cores, it can also do work in parallel. One core can be performing
-one task while another core performs a completely unrelated one, and those
-operations actually happen at the same time.
+تنطبق نفس الديناميكيات الأساسية على البرامج والأجهزة. على جهاز بنواة معالج واحدة، يمكن للمعالج القيام بعملية واحدة فقط في كل مرة، ولكن لا يزال بإمكانه العمل بشكل متزامن. باستخدام أدوات مثل الخيوط والعمليات و async، يمكن للكمبيوتر إيقاف نشاط واحد مؤقتًا والتبديل إلى أنشطة أخرى قبل العودة في النهاية إلى النشاط الأول مرة أخرى. على جهاز بنوى معالج متعددة، يمكنه أيضًا القيام بالعمل بالتوازي. يمكن لنواة واحدة أداء مهمة واحدة بينما تؤدي نواة أخرى مهمة غير ذات صلة تمامًا، وتحدث هذه العمليات فعليًا في نفس الوقت.
 
-Running async code in Rust usually happens concurrently. Depending on the
-hardware, the operating system, and the async runtime we are using (more on
-async runtimes shortly), that concurrency may also use parallelism under the
-hood.
+عادةً ما يحدث تشغيل كود async في Rust بشكل متزامن. اعتمادًا على الأجهزة ونظام التشغيل وبيئة التشغيل غير المتزامنة التي نستخدمها (المزيد عن بيئات التشغيل غير المتزامنة قريبًا)، قد يستخدم هذا التزامن أيضًا التوازي تحت الغطاء.
 
-Now, let’s dive into how async programming in Rust actually works.
+الآن، لننتقل إلى كيفية عمل البرمجة غير المتزامنة في Rust فعليًا.

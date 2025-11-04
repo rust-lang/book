@@ -1,21 +1,12 @@
-## Reference Cycles Can Leak Memory
+## دورات المراجع يمكن أن تسرب الذاكرة
 
-Rust’s memory safety guarantees make it difficult, but not impossible, to
-accidentally create memory that is never cleaned up (known as a _memory leak_).
-Preventing memory leaks entirely is not one of Rust’s guarantees, meaning
-memory leaks are memory safe in Rust. We can see that Rust allows memory leaks
-by using `Rc<T>` and `RefCell<T>`: It’s possible to create references where
-items refer to each other in a cycle. This creates memory leaks because the
-reference count of each item in the cycle will never reach 0, and the values
-will never be dropped.
+ضمانات أمان الذاكرة في Rust تجعل من الصعب، ولكن ليس من المستحيل، إنشاء ذاكرة لا يتم تنظيفها أبدًا (المعروفة باسم _تسرب الذاكرة_ memory leak). منع تسرب الذاكرة بالكامل ليس أحد ضمانات Rust، مما يعني أن تسربات الذاكرة آمنة للذاكرة في Rust. يمكننا أن نرى أن Rust تسمح بتسرب الذاكرة باستخدام `Rc<T>` و `RefCell<T>`: من الممكن إنشاء مراجع حيث تشير العناصر إلى بعضها البعض في دورة. هذا ينشئ تسربات ذاكرة لأن عدد المراجع لكل عنصر في الدورة لن يصل أبدًا إلى 0، ولن يتم إسقاط القيم أبدًا.
 
-### Creating a Reference Cycle
+### إنشاء دورة مرجع
 
-Let’s look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing
-15-25.
+دعنا ننظر في كيف يمكن أن تحدث دورة مرجع وكيفية منعها، بدءًا من تعريف enum `List` ووسيلة `tail` في القائمة 15-25.
 
-<Listing number="15-25" file-name="src/main.rs" caption="A cons list definition that holds a `RefCell<T>` so that we can modify what a `Cons` variant is referring to">
+<Listing number="15-25" file-name="src/main.rs" caption="تعريف قائمة cons يحتفظ بـ `RefCell<T>` بحيث يمكننا تعديل ما يشير إليه متغير `Cons`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs:here}}
@@ -23,20 +14,11 @@ starting with the definition of the `List` enum and a `tail` method in Listing
 
 </Listing>
 
-We’re using another variation of the `List` definition from Listing 15-5. The
-second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value as we did in Listing
-15-24, we want to modify the `List` value a `Cons` variant is pointing to.
-We’re also adding a `tail` method to make it convenient for us to access the
-second item if we have a `Cons` variant.
+نستخدم تنويعة أخرى من تعريف `List` من القائمة 15-5. العنصر الثاني في متغير `Cons` هو الآن `RefCell<Rc<List>>`، مما يعني أنه بدلاً من القدرة على تعديل قيمة `i32` كما فعلنا في القائمة 15-24، نريد تعديل قيمة `List` التي يشير إليها متغير `Cons`. نضيف أيضًا وسيلة `tail` لجعل الوصول إلى العنصر الثاني مريحًا لنا إذا كان لدينا متغير `Cons`.
 
-In Listing 15-26, we’re adding a `main` function that uses the definitions in
-Listing 15-25. This code creates a list in `a` and a list in `b` that points to
-the list in `a`. Then, it modifies the list in `a` to point to `b`, creating a
-reference cycle. There are `println!` statements along the way to show what the
-reference counts are at various points in this process.
+في القائمة 15-26، نضيف دالة `main` تستخدم التعريفات في القائمة 15-25. هذا الكود ينشئ قائمة في `a` وقائمة في `b` تشير إلى القائمة في `a`. بعد ذلك، يعدل القائمة في `a` لتشير إلى `b`، مما ينشئ دورة مرجع. هناك عبارات `println!` على طول الطريق لإظهار ما هي أعداد المراجع في نقاط مختلفة في هذه العملية.
 
-<Listing number="15-26" file-name="src/main.rs" caption="Creating a reference cycle of two `List` values pointing to each other">
+<Listing number="15-26" file-name="src/main.rs" caption="إنشاء دورة مرجع من قيمتي `List` تشيران إلى بعضهما البعض">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-26/src/main.rs:here}}
@@ -44,133 +26,63 @@ reference counts are at various points in this process.
 
 </Listing>
 
-We create an `Rc<List>` instance holding a `List` value in the variable `a`
-with an initial list of `5, Nil`. We then create an `Rc<List>` instance holding
-another `List` value in the variable `b` that contains the value `10` and
-points to the list in `a`.
+ننشئ نسخة `Rc<List>` تحتفظ بقيمة `List` في المتغير `a` مع قائمة أولية من `5, Nil`. بعد ذلك ننشئ نسخة `Rc<List>` تحتفظ بقيمة `List` أخرى في المتغير `b` تحتوي على القيمة `10` وتشير إلى القائمة في `a`.
 
-We modify `a` so that it points to `b` instead of `Nil`, creating a cycle. We
-do that by using the `tail` method to get a reference to the
-`RefCell<Rc<List>>` in `a`, which we put in the variable `link`. Then, we use
-the `borrow_mut` method on the `RefCell<Rc<List>>` to change the value inside
-from an `Rc<List>` that holds a `Nil` value to the `Rc<List>` in `b`.
+نعدل `a` بحيث تشير إلى `b` بدلاً من `Nil`، مما ينشئ دورة. نقوم بذلك باستخدام وسيلة `tail` للحصول على مرجع إلى `RefCell<Rc<List>>` في `a`، والتي نضعها في المتغير `link`. بعد ذلك، نستخدم وسيلة `borrow_mut` على `RefCell<Rc<List>>` لتغيير القيمة داخل من `Rc<List>` التي تحتفظ بقيمة `Nil` إلى `Rc<List>` في `b`.
 
-When we run this code, keeping the last `println!` commented out for the
-moment, we’ll get this output:
+عندما نشغل هذا الكود، مع إبقاء آخر `println!` معلقة التعليق في الوقت الحالي، سنحصل على هذا المخرج:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 
-The reference count of the `Rc<List>` instances in both `a` and `b` is 2 after
-we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
-variable `b`, which decreases the reference count of the `b` `Rc<List>`
-instance from 2 to 1. The memory that `Rc<List>` has on the heap won’t be
-dropped at this point because its reference count is 1, not 0. Then, Rust drops
-`a`, which decreases the reference count of the `a` `Rc<List>` instance from 2
-to 1 as well. This instance’s memory can’t be dropped either, because the other
-`Rc<List>` instance still refers to it. The memory allocated to the list will
-remain uncollected forever. To visualize this reference cycle, we’ve created
-the diagram in Figure 15-4.
+عدد المراجع لنسخ `Rc<List>` في كل من `a` و `b` هو 2 بعد أن نغير القائمة في `a` لتشير إلى `b`. في نهاية `main`، تسقط Rust المتغير `b`، مما يقلل عدد المراجع لنسخة `b` `Rc<List>` من 2 إلى 1. لن يتم إسقاط الذاكرة التي لدى `Rc<List>` على الكومة في هذه النقطة لأن عدد مراجعها هو 1، وليس 0. بعد ذلك، تسقط Rust `a`، مما يقلل عدد المراجع لنسخة `a` `Rc<List>` من 2 إلى 1 أيضًا. لا يمكن إسقاط ذاكرة هذه النسخة أيضًا، لأن نسخة `Rc<List>` الأخرى لا تزال تشير إليها. ستبقى الذاكرة المخصصة للقائمة غير مجموعة إلى الأبد. لتصور هذه الدورة المرجعية، أنشأنا المخطط في الشكل 15-4.
 
 <img alt="A rectangle labeled 'a' that points to a rectangle containing the integer 5. A rectangle labeled 'b' that points to a rectangle containing the integer 10. The rectangle containing 5 points to the rectangle containing 10, and the rectangle containing 10 points back to the rectangle containing 5, creating a cycle." src="img/trpl15-04.svg" class="center" />
 
-<span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
-pointing to each other</span>
+<span class="caption">الشكل 15-4: دورة مرجع من القوائم `a` و `b` تشير إلى بعضها البعض</span>
 
-If you uncomment the last `println!` and run the program, Rust will try to
-print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
-overflows the stack.
+إذا ألغيت تعليق آخر `println!` وشغلت البرنامج، ستحاول Rust طباعة هذه الدورة مع `a` تشير إلى `b` تشير إلى `a` وهكذا حتى تتدفق المكدس.
 
-Compared to a real-world program, the consequences of creating a reference
-cycle in this example aren’t very dire: Right after we create the reference
-cycle, the program ends. However, if a more complex program allocated lots of
-memory in a cycle and held onto it for a long time, the program would use more
-memory than it needed and might overwhelm the system, causing it to run out of
-available memory.
+بالمقارنة مع برنامج في العالم الحقيقي، عواقب إنشاء دورة مرجع في هذا المثال ليست خطيرة جدًا: مباشرة بعد إنشاء دورة المرجع، ينتهي البرنامج. ومع ذلك، إذا خصص برنامج أكثر تعقيدًا الكثير من الذاكرة في دورة واحتفظ بها لفترة طويلة، سيستخدم البرنامج ذاكرة أكثر مما يحتاج وقد يطغى على النظام، مما يتسبب في نفاد الذاكرة المتاحة.
 
-Creating reference cycles is not easily done, but it’s not impossible either.
-If you have `RefCell<T>` values that contain `Rc<T>` values or similar nested
-combinations of types with interior mutability and reference counting, you must
-ensure that you don’t create cycles; you can’t rely on Rust to catch them.
-Creating a reference cycle would be a logic bug in your program that you should
-use automated tests, code reviews, and other software development practices to
-minimize.
+إنشاء دورات مراجع ليس سهلاً، ولكنه ليس مستحيلاً أيضًا. إذا كان لديك قيم `RefCell<T>` تحتوي على قيم `Rc<T>` أو مجموعات متداخلة مماثلة من الأنواع ذات القابلية للتغيير الداخلية وعد المراجع، يجب عليك التأكد من أنك لا تنشئ دورات؛ لا يمكنك الاعتماد على Rust لاكتشافها. إنشاء دورة مرجع سيكون خطأ منطقيًا في برنامجك يجب عليك استخدام الاختبارات الآلية، ومراجعات الكود، وممارسات تطوير البرمجيات الأخرى لتقليله.
 
-Another solution for avoiding reference cycles is reorganizing your data
-structures so that some references express ownership and some references don’t.
-As a result, you can have cycles made up of some ownership relationships and
-some non-ownership relationships, and only the ownership relationships affect
-whether or not a value can be dropped. In Listing 15-25, we always want `Cons`
-variants to own their list, so reorganizing the data structure isn’t possible.
-Let’s look at an example using graphs made up of parent nodes and child nodes
-to see when non-ownership relationships are an appropriate way to prevent
-reference cycles.
+حل آخر لتجنب دورات المراجع هو إعادة تنظيم هياكل البيانات الخاصة بك بحيث تعبر بعض المراجع عن الملكية وبعض المراجع لا تعبر عنها. نتيجة لذلك، يمكن أن يكون لديك دورات مكونة من بعض علاقات الملكية وبعض العلاقات غير الملكية، وفقط علاقات الملكية تؤثر على ما إذا كان يمكن إسقاط قيمة أم لا. في القائمة 15-25، نريد دائمًا أن تمتلك متغيرات `Cons` قائمتها، لذلك إعادة تنظيم هيكل البيانات غير ممكنة. دعنا ننظر في مثال باستخدام الرسوم البيانية المكونة من عقد أبوية وعقد فرعية لمعرفة متى تكون العلاقات غير الملكية طريقة مناسبة لمنع دورات المراجع.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="preventing-reference-cycles-turning-an-rct-into-a-weakt"></a>
 
-### Preventing Reference Cycles Using `Weak<T>`
+### منع دورات المراجع باستخدام `Weak<T>`
 
-So far, we’ve demonstrated that calling `Rc::clone` increases the
-`strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
-up if its `strong_count` is 0. You can also create a weak reference to the
-value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
-reference to the `Rc<T>`. *Strong references* are how you can share ownership
-of an `Rc<T>` instance. *Weak references* don’t express an ownership
-relationship, and their count doesn’t affect when an `Rc<T>` instance is
-cleaned up. They won’t cause a reference cycle, because any cycle involving
-some weak references will be broken once the strong reference count of values
-involved is 0.
+حتى الآن، أظهرنا أن استدعاء `Rc::clone` يزيد `strong_count` لنسخة `Rc<T>`، ويتم تنظيف نسخة `Rc<T>` فقط إذا كان `strong_count` الخاص بها هو 0. يمكنك أيضًا إنشاء مرجع ضعيف إلى القيمة داخل نسخة `Rc<T>` عن طريق استدعاء `Rc::downgrade` وتمرير مرجع إلى `Rc<T>`. *المراجع القوية* (Strong references) هي كيفية مشاركة ملكية نسخة `Rc<T>`. *المراجع الضعيفة* (Weak references) لا تعبر عن علاقة ملكية، وعددها لا يؤثر على وقت تنظيف نسخة `Rc<T>`. لن تتسبب في دورة مرجع، لأن أي دورة تتضمن بعض المراجع الضعيفة ستُكسر بمجرد أن يكون عدد المراجع القوية للقيم المعنية هو 0.
 
-When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
-Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
-`Rc::downgrade` increases the `weak_count` by 1. The `Rc<T>` type uses
-`weak_count` to keep track of how many `Weak<T>` references exist, similar to
-`strong_count`. The difference is the `weak_count` doesn’t need to be 0 for the
-`Rc<T>` instance to be cleaned up.
+عندما تستدعي `Rc::downgrade`، تحصل على مؤشر ذكي من نوع `Weak<T>`. بدلاً من زيادة `strong_count` في نسخة `Rc<T>` بمقدار 1، يزيد استدعاء `Rc::downgrade` `weak_count` بمقدار 1. يستخدم نوع `Rc<T>` `weak_count` لتتبع عدد مراجع `Weak<T>` الموجودة، على غرار `strong_count`. الفرق هو أن `weak_count` لا يحتاج إلى أن يكون 0 لكي يتم تنظيف نسخة `Rc<T>`.
 
-Because the value that `Weak<T>` references might have been dropped, to do
-anything with the value that a `Weak<T>` is pointing to you must make sure the
-value still exists. Do this by calling the `upgrade` method on a `Weak<T>`
-instance, which will return an `Option<Rc<T>>`. You’ll get a result of `Some`
-if the `Rc<T>` value has not been dropped yet and a result of `None` if the
-`Rc<T>` value has been dropped. Because `upgrade` returns an `Option<Rc<T>>`,
-Rust will ensure that the `Some` case and the `None` case are handled, and
-there won’t be an invalid pointer.
+لأن القيمة التي يشير إليها `Weak<T>` قد تكون قد أُسقطت، للقيام بأي شيء مع القيمة التي يشير إليها `Weak<T>`، يجب عليك التأكد من أن القيمة لا تزال موجودة. قم بذلك عن طريق استدعاء وسيلة `upgrade` على نسخة `Weak<T>`، والتي ستعيد `Option<Rc<T>>`. ستحصل على نتيجة `Some` إذا لم يتم إسقاط قيمة `Rc<T>` بعد ونتيجة `None` إذا تم إسقاط قيمة `Rc<T>`. لأن `upgrade` تعيد `Option<Rc<T>>`، ستضمن Rust أنه سيتم التعامل مع حالة `Some` وحالة `None`، ولن يكون هناك مؤشر غير صالح.
 
-As an example, rather than using a list whose items know only about the next
-item, we’ll create a tree whose items know about their child items _and_ their
-parent items.
+كمثال، بدلاً من استخدام قائمة تعرف عناصرها فقط العنصر التالي، سننشئ شجرة تعرف عناصرها عن عناصرها الفرعية _و_ عناصرها الأبوية.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-a-tree-data-structure-a-node-with-child-nodes"></a>
 
-#### Creating a Tree Data Structure
+#### إنشاء هيكل بيانات شجرة
 
-To start, we’ll build a tree with nodes that know about their child nodes.
-We’ll create a struct named `Node` that holds its own `i32` value as well as
-references to its child `Node` values:
+للبدء، سنبني شجرة مع عقد تعرف عن عقدها الفرعية. سننشئ struct باسم `Node` يحتفظ بقيمة `i32` الخاصة به بالإضافة إلى مراجع إلى قيم `Node` الفرعية الخاصة به:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:here}}
 ```
 
-We want a `Node` to own its children, and we want to share that ownership with
-variables so that we can access each `Node` in the tree directly. To do this,
-we define the `Vec<T>` items to be values of type `Rc<Node>`. We also want to
-modify which nodes are children of another node, so we have a `RefCell<T>` in
-`children` around the `Vec<Rc<Node>>`.
+نريد أن تمتلك `Node` أطفالها، ونريد مشاركة هذه الملكية مع المتغيرات بحيث يمكننا الوصول إلى كل `Node` في الشجرة مباشرة. للقيام بذلك، نعرّف عناصر `Vec<T>` لتكون قيمًا من نوع `Rc<Node>`. نريد أيضًا تعديل العقد التي هي أطفال لعقدة أخرى، لذلك لدينا `RefCell<T>` في `children` حول `Vec<Rc<Node>>`.
 
-Next, we’ll use our struct definition and create one `Node` instance named
-`leaf` with the value `3` and no children, and another instance named `branch`
-with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
+بعد ذلك، سنستخدم تعريف struct الخاص بنا وننشئ نسخة `Node` واحدة باسم `leaf` بالقيمة `3` وبدون أطفال، ونسخة أخرى باسم `branch` بالقيمة `5` و `leaf` كأحد أطفالها، كما هو موضح في القائمة 15-27.
 
-<Listing number="15-27" file-name="src/main.rs" caption="Creating a `leaf` node with no children and a `branch` node with `leaf` as one of its children">
+<Listing number="15-27" file-name="src/main.rs" caption="إنشاء عقدة `leaf` بدون أطفال وعقدة `branch` مع `leaf` كأحد أطفالها">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:there}}
@@ -178,42 +90,25 @@ with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
 
 </Listing>
 
-We clone the `Rc<Node>` in `leaf` and store that in `branch`, meaning the
-`Node` in `leaf` now has two owners: `leaf` and `branch`. We can get from
-`branch` to `leaf` through `branch.children`, but there’s no way to get from
-`leaf` to `branch`. The reason is that `leaf` has no reference to `branch` and
-doesn’t know they’re related. We want `leaf` to know that `branch` is its
-parent. We’ll do that next.
+نستنسخ `Rc<Node>` في `leaf` ونخزن ذلك في `branch`، مما يعني أن `Node` في `leaf` لديه الآن مالكان: `leaf` و `branch`. يمكننا الوصول من `branch` إلى `leaf` من خلال `branch.children`، لكن لا توجد طريقة للوصول من `leaf` إلى `branch`. السبب هو أن `leaf` ليس لديه مرجع إلى `branch` ولا يعرف أنهما مرتبطان. نريد أن تعرف `leaf` أن `branch` هي والدها. سنفعل ذلك بعد ذلك.
 
-#### Adding a Reference from a Child to Its Parent
+#### إضافة مرجع من طفل إلى والده
 
-To make the child node aware of its parent, we need to add a `parent` field to
-our `Node` struct definition. The trouble is in deciding what the type of
-`parent` should be. We know it can’t contain an `Rc<T>`, because that would
-create a reference cycle with `leaf.parent` pointing to `branch` and
-`branch.children` pointing to `leaf`, which would cause their `strong_count`
-values to never be 0.
+لجعل العقدة الفرعية على دراية بوالدها، نحتاج إلى إضافة حقل `parent` إلى تعريف struct `Node` الخاص بنا. المشكلة في تحديد ما يجب أن يكون نوع `parent`. نعلم أنه لا يمكن أن يحتوي على `Rc<T>`، لأن ذلك سينشئ دورة مرجع مع `leaf.parent` تشير إلى `branch` و `branch.children` تشير إلى `leaf`، مما سيتسبب في أن قيم `strong_count` الخاصة بهم لن تكون أبدًا 0.
 
-Thinking about the relationships another way, a parent node should own its
-children: If a parent node is dropped, its child nodes should be dropped as
-well. However, a child should not own its parent: If we drop a child node, the
-parent should still exist. This is a case for weak references!
+التفكير في العلاقات بطريقة أخرى، يجب أن تمتلك العقدة الأبوية أطفالها: إذا تم إسقاط عقدة أبوية، يجب أيضًا إسقاط عقدها الفرعية. ومع ذلك، يجب ألا يمتلك الطفل والده: إذا أسقطنا عقدة فرعية، يجب أن يبقى الوالد موجودًا. هذه حالة للمراجع الضعيفة!
 
-So, instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
-specifically a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks
-like this:
+لذلك، بدلاً من `Rc<T>`، سنجعل نوع `parent` يستخدم `Weak<T>`، على وجه التحديد `RefCell<Weak<Node>>`. الآن تعريف struct `Node` الخاص بنا يبدو كالتالي:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:here}}
 ```
 
-A node will be able to refer to its parent node but doesn’t own its parent. In
-Listing 15-28, we update `main` to use this new definition so that the `leaf`
-node will have a way to refer to its parent, `branch`.
+ستكون العقدة قادرة على الإشارة إلى عقدتها الأبوية لكنها لا تمتلك والدها. في القائمة 15-28، نحدّث `main` لاستخدام هذا التعريف الجديد بحيث يكون لعقدة `leaf` طريقة للإشارة إلى والدها، `branch`.
 
-<Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node, `branch`">
+<Listing number="15-28" file-name="src/main.rs" caption="عقدة `leaf` مع مرجع ضعيف لعقدتها الأبوية، `branch`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:there}}
@@ -221,30 +116,17 @@ node will have a way to refer to its parent, `branch`.
 
 </Listing>
 
-Creating the `leaf` node looks similar to Listing 15-27 with the exception of
-the `parent` field: `leaf` starts out without a parent, so we create a new,
-empty `Weak<Node>` reference instance.
+إنشاء عقدة `leaf` يبدو مشابهًا للقائمة 15-27 باستثناء حقل `parent`: تبدأ `leaf` بدون والد، لذلك ننشئ نسخة `Weak<Node>` جديدة فارغة.
 
-At this point, when we try to get a reference to the parent of `leaf` by using
-the `upgrade` method, we get a `None` value. We see this in the output from the
-first `println!` statement:
+في هذه المرحلة، عندما نحاول الحصول على مرجع لوالد `leaf` باستخدام وسيلة `upgrade`، نحصل على قيمة `None`. نرى هذا في المخرج من عبارة `println!` الأولى:
 
 ```text
 leaf parent = None
 ```
 
-When we create the `branch` node, it will also have a new `Weak<Node>`
-reference in the `parent` field because `branch` doesn’t have a parent node. We
-still have `leaf` as one of the children of `branch`. Once we have the `Node`
-instance in `branch`, we can modify `leaf` to give it a `Weak<Node>` reference
-to its parent. We use the `borrow_mut` method on the `RefCell<Weak<Node>>` in
-the `parent` field of `leaf`, and then we use the `Rc::downgrade` function to
-create a `Weak<Node>` reference to `branch` from the `Rc<Node>` in `branch`.
+عندما ننشئ عقدة `branch`، سيكون لديها أيضًا مرجع `Weak<Node>` جديد في حقل `parent` لأن `branch` ليس لديها عقدة أبوية. لا تزال لدينا `leaf` كأحد أطفال `branch`. بمجرد أن يكون لدينا نسخة `Node` في `branch`، يمكننا تعديل `leaf` لإعطائها مرجع `Weak<Node>` لوالدها. نستخدم وسيلة `borrow_mut` على `RefCell<Weak<Node>>` في حقل `parent` من `leaf`، ثم نستخدم دالة `Rc::downgrade` لإنشاء مرجع `Weak<Node>` لـ `branch` من `Rc<Node>` في `branch`.
 
-When we print the parent of `leaf` again, this time we’ll get a `Some` variant
-holding `branch`: Now `leaf` can access its parent! When we print `leaf`, we
-also avoid the cycle that eventually ended in a stack overflow like we had in
-Listing 15-26; the `Weak<Node>` references are printed as `(Weak)`:
+عندما نطبع والد `leaf` مرة أخرى، هذه المرة سنحصل على متغير `Some` يحتفظ بـ `branch`: الآن يمكن لـ `leaf` الوصول إلى والدها! عندما نطبع `leaf`، نتجنب أيضًا الدورة التي انتهت في النهاية بتدفق المكدس كما حدث في القائمة 15-26؛ يتم طباعة مراجع `Weak<Node>` كـ `(Weak)`:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -252,19 +134,13 @@ children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
 children: RefCell { value: [] } }] } })
 ```
 
-The lack of infinite output indicates that this code didn’t create a reference
-cycle. We can also tell this by looking at the values we get from calling
-`Rc::strong_count` and `Rc::weak_count`.
+عدم وجود مخرج لا نهائي يشير إلى أن هذا الكود لم ينشئ دورة مرجع. يمكننا أيضًا معرفة ذلك من خلال النظر في القيم التي نحصل عليها من استدعاء `Rc::strong_count` و `Rc::weak_count`.
 
-#### Visualizing Changes to `strong_count` and `weak_count`
+#### تصور التغييرات في `strong_count` و `weak_count`
 
-Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
-instances change by creating a new inner scope and moving the creation of
-`branch` into that scope. By doing so, we can see what happens when `branch` is
-created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29.
+دعنا ننظر في كيفية تغيير قيم `strong_count` و `weak_count` لنسخ `Rc<Node>` من خلال إنشاء نطاق داخلي جديد ونقل إنشاء `branch` إلى هذا النطاق. من خلال القيام بذلك، يمكننا أن نرى ما يحدث عند إنشاء `branch` ثم إسقاطها عندما تخرج عن النطاق. التعديلات موضحة في القائمة 15-29.
 
-<Listing number="15-29" file-name="src/main.rs" caption="Creating `branch` in an inner scope and examining strong and weak reference counts">
+<Listing number="15-29" file-name="src/main.rs" caption="إنشاء `branch` في نطاق داخلي وفحص أعداد المراجع القوية والضعيفة">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-29/src/main.rs:here}}
@@ -272,52 +148,22 @@ in Listing 15-29.
 
 </Listing>
 
-After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
-count of 0. In the inner scope, we create `branch` and associate it with
-`leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
-will have a strong count of 1 and a weak count of 1 (for `leaf.parent` pointing
-to `branch` with a `Weak<Node>`). When we print the counts in `leaf`, we’ll see
-it will have a strong count of 2 because `branch` now has a clone of the
-`Rc<Node>` of `leaf` stored in `branch.children` but will still have a weak
-count of 0.
+بعد إنشاء `leaf`، لدى `Rc<Node>` الخاص بها عدد قوي من 1 وعدد ضعيف من 0. في النطاق الداخلي، ننشئ `branch` ونربطها بـ `leaf`، عند هذه النقطة عندما نطبع الأعداد، سيكون لدى `Rc<Node>` في `branch` عدد قوي من 1 وعدد ضعيف من 1 (لـ `leaf.parent` التي تشير إلى `branch` مع `Weak<Node>`). عندما نطبع الأعداد في `leaf`، سنرى أنها ستكون لديها عدد قوي من 2 لأن `branch` لديها الآن نسخة من `Rc<Node>` من `leaf` مخزنة في `branch.children` لكن سيكون لديها عدد ضعيف من 0.
 
-When the inner scope ends, `branch` goes out of scope and the strong count of
-the `Rc<Node>` decreases to 0, so its `Node` is dropped. The weak count of 1
-from `leaf.parent` has no bearing on whether or not `Node` is dropped, so we
-don’t get any memory leaks!
+عندما ينتهي النطاق الداخلي، تخرج `branch` عن النطاق وينخفض العدد القوي لـ `Rc<Node>` إلى 0، لذلك يتم إسقاط `Node` الخاص بها. العدد الضعيف 1 من `leaf.parent` ليس له تأثير على ما إذا كان سيتم إسقاط `Node` أم لا، لذلك لا نحصل على أي تسربات ذاكرة!
 
-If we try to access the parent of `leaf` after the end of the scope, we’ll get
-`None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong
-count of 1 and a weak count of 0 because the variable `leaf` is now the only
-reference to the `Rc<Node>` again.
+إذا حاولنا الوصول إلى والد `leaf` بعد نهاية النطاق، سنحصل على `None` مرة أخرى. في نهاية البرنامج، لدى `Rc<Node>` في `leaf` عدد قوي من 1 وعدد ضعيف من 0 لأن المتغير `leaf` هو الآن المرجع الوحيد لـ `Rc<Node>` مرة أخرى.
 
-All of the logic that manages the counts and value dropping is built into
-`Rc<T>` and `Weak<T>` and their implementations of the `Drop` trait. By
-specifying that the relationship from a child to its parent should be a
-`Weak<T>` reference in the definition of `Node`, you’re able to have parent
-nodes point to child nodes and vice versa without creating a reference cycle
-and memory leaks.
+كل المنطق الذي يدير الأعداد وإسقاط القيمة مدمج في `Rc<T>` و `Weak<T>` وتنفيذاتهما لسِمة `Drop`. من خلال تحديد أن العلاقة من طفل إلى والده يجب أن تكون مرجع `Weak<T>` في تعريف `Node`، فإنك قادر على جعل العقد الأبوية تشير إلى العقد الفرعية والعكس بالعكس دون إنشاء دورة مرجع وتسربات ذاكرة.
 
-## Summary
+## الملخص
 
-This chapter covered how to use smart pointers to make different guarantees and
-trade-offs from those Rust makes by default with regular references. The
-`Box<T>` type has a known size and points to data allocated on the heap. The
-`Rc<T>` type keeps track of the number of references to data on the heap so
-that the data can have multiple owners. The `RefCell<T>` type with its interior
-mutability gives us a type that we can use when we need an immutable type but
-need to change an inner value of that type; it also enforces the borrowing
-rules at runtime instead of at compile time.
+يغطي هذا الفصل كيفية استخدام المؤشرات الذكية لتقديم ضمانات ومقايضات مختلفة عن تلك التي تقدمها Rust افتراضيًا بالمراجع العادية. نوع `Box<T>` له حجم معروف ويشير إلى البيانات المخصصة على الكومة. يتتبع نوع `Rc<T>` عدد المراجع للبيانات على الكومة بحيث يمكن أن يكون للبيانات مالكون متعددون. نوع `RefCell<T>` مع قابليته للتغيير الداخلية يمنحنا نوعًا يمكننا استخدامه عندما نحتاج إلى نوع غير قابل للتغيير ولكننا بحاجة لتغيير قيمة داخلية لهذا النوع؛ كما يفرض قواعد الاستعارة في وقت التشغيل بدلاً من وقت الترجمة.
 
-Also discussed were the `Deref` and `Drop` traits, which enable a lot of the
-functionality of smart pointers. We explored reference cycles that can cause
-memory leaks and how to prevent them using `Weak<T>`.
+تمت مناقشة سِمتي `Deref` و `Drop` أيضًا، اللتان تتيحان الكثير من وظائف المؤشرات الذكية. استكشفنا دورات المراجع التي يمكن أن تتسبب في تسربات ذاكرة وكيفية منعها باستخدام `Weak<T>`.
 
-If this chapter has piqued your interest and you want to implement your own
-smart pointers, check out [“The Rustonomicon”][nomicon] for more useful
-information.
+إذا أثار هذا الفصل اهتمامك وتريد تنفيذ مؤشراتك الذكية الخاصة، راجع ["The Rustonomicon"][nomicon] لمزيد من المعلومات المفيدة.
 
-Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
-smart pointers.
+بعد ذلك، سنتحدث عن التزامن في Rust. ستتعلم حتى عن بعض المؤشرات الذكية الجديدة.
 
 [nomicon]: ../nomicon/index.html

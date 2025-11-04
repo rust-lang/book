@@ -1,46 +1,19 @@
-# Smart Pointers
+# المؤشرات الذكية
 
-A pointer is a general concept for a variable that contains an address in
-memory. This address refers to, or “points at,” some other data. The most
-common kind of pointer in Rust is a reference, which you learned about in
-Chapter 4. References are indicated by the `&` symbol and borrow the value they
-point to. They don’t have any special capabilities other than referring to
-data, and they have no overhead.
+المؤشر (pointer) هو مفهوم عام لمتغير يحتوي على عنوان في الذاكرة. هذا العنوان يشير إلى، أو "يؤشر على" بيانات أخرى. النوع الأكثر شيوعًا من المؤشرات في Rust هو المرجع (reference)، والذي تعلمته في الفصل 4. تُشار إلى المراجع بالرمز `&` وتستعير القيمة التي تشير إليها. لا تمتلك أي قدرات خاصة غير الإشارة إلى البيانات، وليس لها أي عبء إضافي.
 
-_Smart pointers_, on the other hand, are data structures that act like a
-pointer but also have additional metadata and capabilities. The concept of
-smart pointers isn’t unique to Rust: Smart pointers originated in C++ and exist
-in other languages as well. Rust has a variety of smart pointers defined in the
-standard library that provide functionality beyond that provided by references.
-To explore the general concept, we’ll look at a couple of different examples of
-smart pointers, including a _reference counting_ smart pointer type. This
-pointer enables you to allow data to have multiple owners by keeping track of
-the number of owners and, when no owners remain, cleaning up the data.
+من ناحية أخرى، _المؤشرات الذكية_ (Smart pointers) هي هياكل بيانات تتصرف كمؤشر ولكن لديها أيضًا بيانات وصفية (metadata) وقدرات إضافية. مفهوم المؤشرات الذكية ليس فريدًا لـ Rust: نشأت المؤشرات الذكية في C++ وموجودة في لغات أخرى أيضًا. لدى Rust مجموعة متنوعة من المؤشرات الذكية المعرّفة في المكتبة القياسية التي توفر وظائف تتجاوز تلك التي توفرها المراجع. لاستكشاف المفهوم العام، سننظر في زوجين من الأمثلة المختلفة للمؤشرات الذكية، بما في ذلك نوع المؤشر الذكي _لعد المراجع_ (reference counting). يتيح لك هذا المؤشر السماح للبيانات بأن يكون لها مالكين متعددين من خلال تتبع عدد المالكين، وعندما لا يبقى أي مالكين، يتم تنظيف البيانات.
 
-In Rust, with its concept of ownership and borrowing, there is an additional
-difference between references and smart pointers: While references only borrow
-data, in many cases smart pointers _own_ the data they point to.
+في Rust، مع مفهوم الملكية (ownership) والاستعارة (borrowing)، هناك اختلاف إضافي بين المراجع والمؤشرات الذكية: بينما المراجع تستعير البيانات فقط، في كثير من الحالات المؤشرات الذكية _تمتلك_ البيانات التي تشير إليها.
 
-Smart pointers are usually implemented using structs. Unlike an ordinary
-struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
-trait allows an instance of the smart pointer struct to behave like a reference
-so that you can write your code to work with either references or smart
-pointers. The `Drop` trait allows you to customize the code that’s run when an
-instance of the smart pointer goes out of scope. In this chapter, we’ll discuss
-both of these traits and demonstrate why they’re important to smart pointers.
+عادةً ما يتم تنفيذ المؤشرات الذكية باستخدام structs. على عكس struct عادي، تنفذ المؤشرات الذكية سِمات `Deref` و `Drop`. سِمة `Deref` تسمح لنسخة من struct المؤشر الذكي بالتصرف كمرجع حتى تتمكن من كتابة الكود الخاص بك للعمل مع المراجع أو المؤشرات الذكية. سِمة `Drop` تسمح لك بتخصيص الكود الذي يتم تشغيله عندما تخرج نسخة من المؤشر الذكي عن النطاق. في هذا الفصل، سنناقش كلتا هاتين السمتين ونوضح لماذا هما مهمتان للمؤشرات الذكية.
 
-Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won’t cover every existing smart pointer. Many
-libraries have their own smart pointers, and you can even write your own. We’ll
-cover the most common smart pointers in the standard library:
+نظرًا لأن نمط المؤشر الذكي هو نمط تصميم عام يستخدم بشكل متكرر في Rust، فلن يغطي هذا الفصل كل المؤشرات الذكية الموجودة. العديد من المكتبات لديها مؤشراتها الذكية الخاصة، ويمكنك حتى كتابة مؤشراتك الذكية الخاصة. سنغطي المؤشرات الذكية الأكثر شيوعًا في المكتبة القياسية:
 
-- `Box<T>`, for allocating values on the heap
-- `Rc<T>`, a reference counting type that enables multiple ownership
-- `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
-  the borrowing rules at runtime instead of compile time
+- `Box<T>`، لتخصيص القيم على الكومة (heap)
+- `Rc<T>`، نوع عد المراجع الذي يتيح الملكية المتعددة
+- `Ref<T>` و `RefMut<T>`، يتم الوصول إليها من خلال `RefCell<T>`، وهو نوع يفرض قواعد الاستعارة في وقت التشغيل بدلاً من وقت الترجمة
 
-In addition, we’ll cover the _interior mutability_ pattern where an immutable
-type exposes an API for mutating an interior value. We’ll also discuss
-reference cycles: how they can leak memory and how to prevent them.
+بالإضافة إلى ذلك، سنغطي نمط _القابلية للتغيير الداخلية_ (interior mutability) حيث يعرض نوع غير قابل للتغيير واجهة برمجية (API) لتغيير قيمة داخلية. سنناقش أيضًا دورات المراجع (reference cycles): كيف يمكن أن تتسبب في تسرب الذاكرة وكيفية منعها.
 
-Let’s dive in!
+لنبدأ!

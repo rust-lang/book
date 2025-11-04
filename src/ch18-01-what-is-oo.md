@@ -1,50 +1,22 @@
-## Characteristics of Object-Oriented Languages
+## خصائص اللغات الكائنية التوجه
 
-There is no consensus in the programming community about what features a
-language must have to be considered object oriented. Rust is influenced by many
-programming paradigms, including OOP; for example, we explored the features
-that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics—namely, objects, encapsulation, and
-inheritance. Let’s look at what each of those characteristics means and whether
-Rust supports it.
+لا يوجد إجماع في مجتمع البرمجة حول الميزات التي يجب أن تمتلكها اللغة لتُعتبر كائنية التوجه. تتأثر Rust بالعديد من نماذج البرمجة، بما في ذلك OOP؛ على سبيل المثال، استكشفنا الميزات التي جاءت من البرمجة الوظيفية في الفصل 13. يُمكن القول أن لغات OOP تشترك في خصائص شائعة معينة—وهي: الكائنات، والتغليف، والوراثة. لننظر إلى ما تعنيه كل من هذه الخصائص وما إذا كانت Rust تدعمها.
 
-### Objects Contain Data and Behavior
+### الكائنات تحتوي على بيانات وسلوك
 
-The book _Design Patterns: Elements of Reusable Object-Oriented Software_ by
-Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley,
-1994), colloquially referred to as _The Gang of Four_ book, is a catalog of
-object-oriented design patterns. It defines OOP in this way:
+الكتاب _Design Patterns: Elements of Reusable Object-Oriented Software_ لإريك جاما، وريتشارد هيلم، ورالف جونسون، وجون فليسيدس (Addison-Wesley، 1994)، والمشار إليه بشكل عامي باسم كتاب _The Gang of Four_، هو كتالوج لأنماط التصميم الكائنية التوجه. يُعرّف OOP بهذه الطريقة:
 
-> Object-oriented programs are made up of objects. An **object** packages both
-> data and the procedures that operate on that data. The procedures are
-> typically called **methods** or **operations**.
+> البرامج الكائنية التوجه مكونة من كائنات. **الكائن** (object) يُحزّم كلاً من البيانات والإجراءات التي تعمل على تلك البيانات. عادة ما تُسمى الإجراءات **الدوال** (methods) أو **العمليات** (operations).
 
-Using this definition, Rust is object oriented: Structs and enums have data,
-and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t _called_ objects, they provide the same
-functionality, according to the Gang of Four’s definition of objects.
+باستخدام هذا التعريف، Rust كائنية التوجه: تحتوي البُنى (Structs) والتعدادات (enums) على بيانات، وتوفر كتل `impl` دوالاً على البُنى والتعدادات. حتى لو لم تُسمى البُنى والتعدادات التي تحتوي على دوال _كائنات_، فإنها توفر نفس الوظيفة، وفقًا لتعريف Gang of Four للكائنات.
 
-### Encapsulation That Hides Implementation Details
+### التغليف الذي يخفي تفاصيل التنفيذ
 
-Another aspect commonly associated with OOP is the idea of _encapsulation_,
-which means that the implementation details of an object aren’t accessible to
-code using that object. Therefore, the only way to interact with an object is
-through its public API; code using the object shouldn’t be able to reach into
-the object’s internals and change data or behavior directly. This enables the
-programmer to change and refactor an object’s internals without needing to
-change the code that uses the object.
+جانب آخر يُرتبط عادة مع OOP هو فكرة _التغليف_ (encapsulation)، والتي تعني أن تفاصيل التنفيذ الخاصة بالكائن ليست متاحة للكود الذي يستخدم ذلك الكائن. وبالتالي، الطريقة الوحيدة للتفاعل مع الكائن هي من خلال واجهة برمجة التطبيقات العامة (public API) الخاصة به؛ لا يجب أن يتمكن الكود الذي يستخدم الكائن من الوصول إلى تفاصيل الكائن الداخلية وتغيير البيانات أو السلوك مباشرة. هذا يُمكّن المبرمج من تغيير وإعادة هيكلة تفاصيل الكائن الداخلية دون الحاجة إلى تغيير الكود الذي يستخدم الكائن.
 
-We discussed how to control encapsulation in Chapter 7: We can use the `pub`
-keyword to decide which modules, types, functions, and methods in our code
-should be public, and by default everything else is private. For example, we
-can define a struct `AveragedCollection` that has a field containing a vector
-of `i32` values. The struct can also have a field that contains the average of
-the values in the vector, meaning the average doesn’t have to be computed on
-demand whenever anyone needs it. In other words, `AveragedCollection` will
-cache the calculated average for us. Listing 18-1 has the definition of the
-`AveragedCollection` struct.
+ناقشنا كيفية التحكم في التغليف في الفصل 7: يمكننا استخدام الكلمة المفتاحية `pub` لتحديد أي من الوحدات والأنواع والدوال والدوال في كودنا يجب أن تكون عامة، وبشكل افتراضي كل شيء آخر خاص. على سبيل المثال، يمكننا تعريف بنية `AveragedCollection` التي تحتوي على حقل يحتوي على متجه من قيم `i32`. يمكن أن تحتوي البنية أيضًا على حقل يحتوي على متوسط القيم في المتجه، مما يعني أن المتوسط لا يجب حسابه عند الطلب كلما احتاجه أحد. بمعنى آخر، ستُخزن `AveragedCollection` المتوسط المحسوب لنا في ذاكرة التخزين المؤقتة. القائمة 18-1 تحتوي على تعريف بنية `AveragedCollection`.
 
-<Listing number="18-1" file-name="src/lib.rs" caption="An `AveragedCollection` struct that maintains a list of integers and the average of the items in the collection">
+<Listing number="18-1" file-name="src/lib.rs" caption="بنية `AveragedCollection` التي تحتفظ بقائمة من الأعداد الصحيحة ومتوسط العناصر في المجموعة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-01/src/lib.rs}}
@@ -52,13 +24,9 @@ cache the calculated average for us. Listing 18-1 has the definition of the
 
 </Listing>
 
-The struct is marked `pub` so that other code can use it, but the fields within
-the struct remain private. This is important in this case because we want to
-ensure that whenever a value is added or removed from the list, the average is
-also updated. We do this by implementing `add`, `remove`, and `average` methods
-on the struct, as shown in Listing 18-2.
+البنية محددة بـ `pub` حتى يتمكن الكود الآخر من استخدامها، لكن الحقول داخل البنية تظل خاصة. هذا مهم في هذه الحالة لأننا نريد التأكد من أنه كلما تمت إضافة قيمة أو إزالتها من القائمة، يتم تحديث المتوسط أيضًا. نقوم بذلك من خلال تنفيذ الدوال `add` و`remove` و`average` على البنية، كما هو موضح في القائمة 18-2.
 
-<Listing number="18-2" file-name="src/lib.rs" caption="Implementations of the public methods `add`, `remove`, and `average` on `AveragedCollection`">
+<Listing number="18-2" file-name="src/lib.rs" caption="تنفيذات الدوال العامة `add` و`remove` و`average` على `AveragedCollection`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-02/src/lib.rs:here}}
@@ -66,84 +34,32 @@ on the struct, as shown in Listing 18-2.
 
 </Listing>
 
-The public methods `add`, `remove`, and `average` are the only ways to access
-or modify data in an instance of `AveragedCollection`. When an item is added to
-`list` using the `add` method or removed using the `remove` method, the
-implementations of each call the private `update_average` method that handles
-updating the `average` field as well.
+الدوال العامة `add` و`remove` و`average` هي الطرق الوحيدة للوصول إلى أو تعديل البيانات في نسخة من `AveragedCollection`. عندما يتم إضافة عنصر إلى `list` باستخدام دالة `add` أو إزالته باستخدام دالة `remove`، تقوم تنفيذات كل منهما باستدعاء دالة `update_average` الخاصة التي تتعامل مع تحديث حقل `average` أيضًا.
 
-We leave the `list` and `average` fields private so that there is no way for
-external code to add or remove items to or from the `list` field directly;
-otherwise, the `average` field might become out of sync when the `list`
-changes. The `average` method returns the value in the `average` field,
-allowing external code to read the `average` but not modify it.
+نترك حقلي `list` و`average` خاصين حتى لا توجد طريقة للكود الخارجي لإضافة أو إزالة عناصر من أو إلى حقل `list` مباشرة؛ وإلا قد يصبح حقل `average` غير متزامن عندما يتغير `list`. تُرجع دالة `average` القيمة في حقل `average`، مما يسمح للكود الخارجي بقراءة `average` ولكن ليس تعديله.
 
-Because we’ve encapsulated the implementation details of the struct
-`AveragedCollection`, we can easily change aspects, such as the data structure,
-in the future. For instance, we could use a `HashSet<i32>` instead of a
-`Vec<i32>` for the `list` field. As long as the signatures of the `add`,
-`remove`, and `average` public methods stayed the same, code using
-`AveragedCollection` wouldn’t need to change. If we made `list` public instead,
-this wouldn’t necessarily be the case: `HashSet<i32>` and `Vec<i32>` have
-different methods for adding and removing items, so the external code would
-likely have to change if it were modifying `list` directly.
+نظرًا لأننا غلّفنا تفاصيل التنفيذ الخاصة ببنية `AveragedCollection`، يمكننا بسهولة تغيير جوانب، مثل هيكل البيانات، في المستقبل. على سبيل المثال، يمكننا استخدام `HashSet<i32>` بدلاً من `Vec<i32>` لحقل `list`. طالما بقيت توقيعات الدوال العامة `add` و`remove` و`average` كما هي، فإن الكود الذي يستخدم `AveragedCollection` لن يحتاج إلى التغيير. إذا جعلنا `list` عامة بدلاً من ذلك، فلن يكون هذا هو الحال بالضرورة: `HashSet<i32>` و`Vec<i32>` لديهما دوال مختلفة لإضافة وإزالة العناصر، لذلك من المحتمل أن يضطر الكود الخارجي إلى التغيير إذا كان يُعدل `list` مباشرة.
 
-If encapsulation is a required aspect for a language to be considered object
-oriented, then Rust meets that requirement. The option to use `pub` or not for
-different parts of code enables encapsulation of implementation details.
+إذا كان التغليف جانبًا مطلوبًا لاعتبار لغة ما كائنية التوجه، فإن Rust تفي بهذا المتطلب. يُمكّن خيار استخدام `pub` أو عدم استخدامه لأجزاء مختلفة من الكود من تغليف تفاصيل التنفيذ.
 
-### Inheritance as a Type System and as Code Sharing
+### الوراثة كنظام نوع ومشاركة للكود
 
-_Inheritance_ is a mechanism whereby an object can inherit elements from
-another object’s definition, thus gaining the parent object’s data and behavior
-without you having to define them again.
+_الوراثة_ (Inheritance) هي آلية يمكن من خلالها لكائن أن يرث عناصر من تعريف كائن آخر، وبالتالي يكتسب بيانات وسلوك الكائن الأب دون الحاجة إلى تعريفها مرة أخرى.
 
-If a language must have inheritance to be object oriented, then Rust is not
-such a language. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations without using a macro.
+إذا كان يجب أن يكون للغة وراثة لتكون كائنية التوجه، فإن Rust ليست مثل هذه اللغة. لا توجد طريقة لتعريف بنية ترث حقول وتنفيذات دوال البنية الأب دون استخدام ماكرو.
 
-However, if you’re used to having inheritance in your programming toolbox, you
-can use other solutions in Rust, depending on your reason for reaching for
-inheritance in the first place.
+ومع ذلك، إذا كنت معتادًا على وجود الوراثة في صندوق أدوات البرمجة الخاص بك، يمكنك استخدام حلول أخرى في Rust، اعتمادًا على سبب لجوئك إلى الوراثة في المقام الأول.
 
-You would choose inheritance for two main reasons. One is for reuse of code:
-You can implement particular behavior for one type, and inheritance enables you
-to reuse that implementation for a different type. You can do this in a limited
-way in Rust code using default trait method implementations, which you saw in
-Listing 10-14 when we added a default implementation of the `summarize` method
-on the `Summary` trait. Any type implementing the `Summary` trait would have
-the `summarize` method available on it without any further code. This is
-similar to a parent class having an implementation of a method and an
-inheriting child class also having the implementation of the method. We can
-also override the default implementation of the `summarize` method when we
-implement the `Summary` trait, which is similar to a child class overriding the
-implementation of a method inherited from a parent class.
+ستختار الوراثة لسببين رئيسيين. أحدهما هو إعادة استخدام الكود: يمكنك تنفيذ سلوك معين لنوع واحد، وتُمكّنك الوراثة من إعادة استخدام هذا التنفيذ لنوع مختلف. يمكنك القيام بذلك بطريقة محدودة في كود Rust باستخدام التنفيذات الافتراضية لدوال السِمة (trait)، والتي رأيتها في القائمة 10-14 عندما أضفنا تنفيذًا افتراضيًا لدالة `summarize` على السِمة (trait) `Summary`. أي نوع يُنفذ السِمة `Summary` سيكون لديه دالة `summarize` متاحة عليه دون أي كود إضافي. هذا مشابه لفئة أب (parent class) تحتوي على تنفيذ لدالة وفئة فرع (child class) ترث وتحتوي أيضًا على تنفيذ الدالة. يمكننا أيضًا تجاوز التنفيذ الافتراضي لدالة `summarize` عندما نُنفذ السِمة `Summary`، وهو ما يشبه فئة فرع تتجاوز تنفيذ دالة موروثة من فئة أب.
 
-The other reason to use inheritance relates to the type system: to enable a
-child type to be used in the same places as the parent type. This is also
-called _polymorphism_, which means that you can substitute multiple objects for
-each other at runtime if they share certain characteristics.
+السبب الآخر لاستخدام الوراثة يتعلق بنظام النوع: لتمكين استخدام نوع فرع في نفس الأماكن التي يُستخدم فيها النوع الأب. هذا يُسمى أيضًا _تعدد الأشكال_ (polymorphism)، والذي يعني أنه يمكنك استبدال كائنات متعددة ببعضها البعض في وقت التشغيل إذا كانت تشترك في خصائص معينة.
 
-> ### Polymorphism
+> ### تعدد الأشكال
 >
-> To many people, polymorphism is synonymous with inheritance. But it’s
-> actually a more general concept that refers to code that can work with data of
-> multiple types. For inheritance, those types are generally subclasses.
+> بالنسبة للكثيرين، تعدد الأشكال مرادف للوراثة. لكنه في الواقع مفهوم أكثر عمومية يشير إلى الكود الذي يمكن أن يعمل مع بيانات من أنواع متعددة. بالنسبة للوراثة، تلك الأنواع عادة ما تكون فئات فرعية (subclasses).
 >
-> Rust instead uses generics to abstract over different possible types and
-> trait bounds to impose constraints on what those types must provide. This is
-> sometimes called _bounded parametric polymorphism_.
+> بدلاً من ذلك، تستخدم Rust الأنواع العامة (generics) للتجريد على أنواع محتملة مختلفة وقيود السِمات (trait bounds) لفرض قيود على ما يجب أن توفره تلك الأنواع. هذا يُسمى أحيانًا _تعدد الأشكال البارامتري المحدود_ (bounded parametric polymorphism).
 
-Rust has chosen a different set of trade-offs by not offering inheritance.
-Inheritance is often at risk of sharing more code than necessary. Subclasses
-shouldn’t always share all characteristics of their parent class but will do so
-with inheritance. This can make a program’s design less flexible. It also
-introduces the possibility of calling methods on subclasses that don’t make
-sense or that cause errors because the methods don’t apply to the subclass. In
-addition, some languages will only allow _single inheritance_ (meaning a
-subclass can only inherit from one class), further restricting the flexibility
-of a program’s design.
+اختارت Rust مجموعة مختلفة من المفاضلات بعدم تقديم الوراثة. غالبًا ما تكون الوراثة معرضة لخطر مشاركة كود أكثر من اللازم. لا يجب أن تشترك الفئات الفرعية دائمًا في جميع خصائص فئتها الأب ولكنها ستفعل ذلك مع الوراثة. هذا يمكن أن يجعل تصميم البرنامج أقل مرونة. كما أنه يُقدم إمكانية استدعاء دوال على الفئات الفرعية التي لا معنى لها أو تتسبب في أخطاء لأن الدوال لا تنطبق على الفئة الفرعية. بالإضافة إلى ذلك، ستسمح بعض اللغات فقط بـ _الوراثة الفردية_ (single inheritance) (بمعنى أن الفئة الفرعية يمكن أن ترث من فئة واحدة فقط)، مما يقيد مرونة تصميم البرنامج أكثر.
 
-For these reasons, Rust takes the different approach of using trait objects
-instead of inheritance to achieve polymorphism at runtime. Let’s look at how
-trait objects work.
+لهذه الأسباب، تتخذ Rust نهجًا مختلفًا باستخدام كائنات السِمة (trait objects) بدلاً من الوراثة لتحقيق تعدد الأشكال في وقت التشغيل. دعونا ننظر إلى كيفية عمل كائنات السِمة.
