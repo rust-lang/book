@@ -1,28 +1,14 @@
-## Advanced Functions and Closures
+## الدوال والإغلاقات المتقدمة
 
-This section explores some advanced features related to functions and closures,
-including function pointers and returning closures.
+يستكشف هذا القسم بعض الميزات المتقدمة المتعلقة بالدوال والإغلاقات، بما في ذلك مؤشرات الدوال وإرجاع الإغلاقات.
 
-### Function Pointers
+### مؤشرات الدوال
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase _f_), not to be confused with the
-`Fn` closure trait. The `fn` type is called a _function pointer_. Passing
-functions with function pointers will allow you to use functions as arguments
-to other functions.
+لقد تحدثنا عن كيفية تمرير الإغلاقات إلى الدوال؛ يمكنك أيضًا تمرير الدوال العادية إلى الدوال! هذه التقنية مفيدة عندما تريد تمرير دالة قمت بتعريفها بالفعل بدلاً من تعريف إغلاق جديد. يتم تحويل الدوال إلى النوع `fn` (بحرف _f_ صغير)، دون الخلط مع سِمَة الإغلاق `Fn`. يُسمى نوع `fn` _مؤشر دالة_ (function pointer). تمرير الدوال بمؤشرات الدوال سيسمح لك باستخدام الدوال كوسائط لدوال أخرى.
 
-The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds 1 to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
-function `f` twice, passing it the `arg` value, then adds the two function call
-results together. The `main` function calls `do_twice` with the arguments
-`add_one` and `5`.
+بناء الجملة لتحديد أن معامل هو مؤشر دالة مشابه لبناء جملة الإغلاقات، كما هو موضح في القائمة 20-28، حيث عرفنا دالة `add_one` التي تضيف 1 إلى معاملها. تأخذ الدالة `do_twice` معاملين: مؤشر دالة لأي دالة تأخذ معامل `i32` وتعيد `i32`، وقيمة `i32` واحدة. تستدعي الدالة `do_twice` الدالة `f` مرتين، تمرر لها قيمة `arg`، ثم تضيف نتائج استدعاء الدالتين معًا. تستدعي الدالة `main` الدالة `do_twice` بالوسائط `add_one` و `5`.
 
-<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="استخدام نوع `fn` لقبول مؤشر دالة كوسيطة">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
@@ -30,31 +16,17 @@ results together. The `main` function calls `do_twice` with the arguments
 
 </Listing>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+يطبع هذا الكود `The answer is: 12`. نحدد أن المعامل `f` في `do_twice` هو `fn` يأخذ معامل واحد من النوع `i32` ويعيد `i32`. يمكننا بعد ذلك استدعاء `f` في جسم `do_twice`. في `main`، يمكننا تمرير اسم الدالة `add_one` كوسيطة أولى لـ `do_twice`.
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+على عكس الإغلاقات، `fn` هو نوع بدلاً من سِمَة، لذلك نحدد `fn` كنوع المعامل مباشرة بدلاً من التصريح عن معامل نوع عام بإحدى سِمَات `Fn` كقيد سِمَة.
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), meaning you can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so that your functions can accept either
-functions or closures.
+تطبق مؤشرات الدوال جميع سِمَات الإغلاق الثلاث (`Fn`، `FnMut`، و `FnOnce`)، مما يعني أنه يمكنك دائمًا تمرير مؤشر دالة كوسيطة لدالة تتوقع إغلاقًا. من الأفضل كتابة الدوال باستخدام نوع عام وإحدى سِمَات الإغلاق بحيث يمكن لدوالك قبول الدوال أو الإغلاقات.
 
-That said, one example of where you would want to only accept `fn` and not
-closures is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+ومع ذلك، مثال واحد على حالة تريد فيها قبول `fn` فقط وليس الإغلاقات هو عند التواصل مع كود خارجي لا يحتوي على إغلاقات: دوال C يمكنها قبول الدوال كوسائط، لكن C لا تحتوي على إغلاقات.
 
-As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` method to turn a vector of
-numbers into a vector of strings, we could use a closure, as in Listing 20-29.
+كمثال على حالة يمكنك فيها استخدام إما إغلاق معرف مضمّن أو دالة مسماة، دعنا ننظر إلى استخدام طريقة `map` التي توفرها سِمَة `Iterator` في المكتبة القياسية. لاستخدام طريقة `map` لتحويل متجه من الأرقام إلى متجه من السلاسل، يمكننا استخدام إغلاق، كما في القائمة 20-29.
 
-<Listing number="20-29" caption="Using a closure with the `map` method to convert numbers to strings">
+<Listing number="20-29" caption="استخدام إغلاق مع طريقة `map` لتحويل الأرقام إلى سلاسل">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-29/src/main.rs:here}}
@@ -62,10 +34,9 @@ numbers into a vector of strings, we could use a closure, as in Listing 20-29.
 
 </Listing>
 
-Or we could name a function as the argument to `map` instead of the closure.
-Listing 20-30 shows what this would look like.
+أو يمكننا تسمية دالة كوسيطة لـ `map` بدلاً من الإغلاق. توضح القائمة 20-30 كيف سيبدو ذلك.
 
-<Listing number="20-30" caption="Using the `String::to_string` function with the `map` method to convert numbers to strings">
+<Listing number="20-30" caption="استخدام دالة `String::to_string` مع طريقة `map` لتحويل الأرقام إلى سلاسل">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-30/src/main.rs:here}}
@@ -73,21 +44,13 @@ Listing 20-30 shows what this would look like.
 
 </Listing>
 
-Note that we must use the fully qualified syntax that we talked about in the
-[“Advanced Traits”][advanced-traits]<!-- ignore --> section because there are
-multiple functions available named `to_string`.
+لاحظ أنه يجب علينا استخدام بناء الجملة المؤهل بالكامل الذي تحدثنا عنه في قسم ["السِمَات المتقدمة"][advanced-traits]<!-- ignore --> لأن هناك دوال متعددة متاحة تُسمى `to_string`.
 
-Here, we’re using the `to_string` function defined in the `ToString` trait,
-which the standard library has implemented for any type that implements
-`Display`.
+هنا، نستخدم دالة `to_string` المعرفة في سِمَة `ToString`، والتي طبقتها المكتبة القياسية لأي نوع يطبق `Display`.
 
-Recall from the [“Enum Values”][enum-values]<!-- ignore --> section in Chapter
-6 that the name of each enum variant that we define also becomes an initializer
-function. We can use these initializer functions as function pointers that
-implement the closure traits, which means we can specify the initializer
-functions as arguments for methods that take closures, as seen in Listing 20-31.
+تذكر من قسم ["قيم Enum"][enum-values]<!-- ignore --> في الفصل 6 أن اسم كل متغير enum نعرفه يصبح أيضًا دالة تهيئة. يمكننا استخدام دوال التهيئة هذه كمؤشرات دوال تطبق سِمَات الإغلاق، مما يعني أنه يمكننا تحديد دوال التهيئة كوسائط للطرق التي تأخذ إغلاقات، كما هو موضح في القائمة 20-31.
 
-<Listing number="20-31" caption="Using an enum initializer with the `map` method to create a `Status` instance from numbers">
+<Listing number="20-31" caption="استخدام مُهيئ enum مع طريقة `map` لإنشاء نسخة `Status` من الأرقام">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/src/main.rs:here}}
@@ -95,26 +58,15 @@ functions as arguments for methods that take closures, as seen in Listing 20-31.
 
 </Listing>
 
-Here, we create `Status::Value` instances using each `u32` value in the range
-that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style and some people prefer to use closures. They
-compile to the same code, so use whichever style is clearer to you.
+هنا، ننشئ نسخ `Status::Value` باستخدام كل قيمة `u32` في النطاق الذي يتم استدعاء `map` عليه باستخدام دالة التهيئة لـ `Status::Value`. يفضل بعض الناس هذا الأسلوب وبعض الناس يفضلون استخدام الإغلاقات. إنها تُترجم إلى نفس الكود، لذلك استخدم أي أسلوب أوضح لك.
 
-### Returning Closures
+### إرجاع الإغلاقات
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. However, you can’t usually do that with closures because they don’t
-have a concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type if the closure captures any values from its
-scope, for example.
+يتم تمثيل الإغلاقات بالسِمَات، مما يعني أنك لا تستطيع إرجاع الإغلاقات مباشرة. في معظم الحالات التي قد ترغب فيها في إرجاع سِمَة، يمكنك بدلاً من ذلك استخدام النوع الملموس الذي يطبق السِمَة كقيمة إرجاع للدالة. ومع ذلك، لا يمكنك عادةً فعل ذلك مع الإغلاقات لأنها لا تحتوي على نوع ملموس قابل للإرجاع؛ لا يُسمح لك باستخدام مؤشر الدالة `fn` كنوع إرجاع إذا كان الإغلاق يلتقط أي قيم من نطاقه، على سبيل المثال.
 
-Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce`, and `FnMut`.
-For example, the code in Listing 20-32 will compile just fine.
+بدلاً من ذلك، ستستخدم عادةً بناء جملة `impl Trait` الذي تعلمناه في الفصل 10. يمكنك إرجاع أي نوع دالة، باستخدام `Fn`، `FnOnce`، و `FnMut`. على سبيل المثال، سيتم ترجمة الكود في القائمة 20-32 بشكل جيد.
 
-<Listing number="20-32" caption="Returning a closure from a function using the `impl Trait` syntax">
+<Listing number="20-32" caption="إرجاع إغلاق من دالة باستخدام بناء جملة `impl Trait`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-32/src/lib.rs}}
@@ -122,14 +74,9 @@ For example, the code in Listing 20-32 will compile just fine.
 
 </Listing>
 
-However, as we noted in the [“Inferring and Annotating Closure
-Types”][closure-types]<!-- ignore --> section in Chapter 13, each closure is
-also its own distinct type. If you need to work with multiple functions that
-have the same signature but different implementations, you will need to use a
-trait object for them. Consider what happens if you write code like that shown
-in Listing 20-33.
+ومع ذلك، كما لاحظنا في قسم ["استنتاج وتعليق أنواع الإغلاق"][closure-types]<!-- ignore --> في الفصل 13، كل إغلاق هو أيضًا نوعه المميز الخاص. إذا كنت بحاجة إلى العمل مع دوال متعددة لها نفس التوقيع ولكن تطبيقات مختلفة، ستحتاج إلى استخدام كائن سِمَة لها. ضع في اعتبارك ما يحدث إذا كتبت كودًا مثل ذلك الموضح في القائمة 20-33.
 
-<Listing file-name="src/main.rs" number="20-33" caption="Creating a `Vec<T>` of closures defined by functions that return `impl Fn` types">
+<Listing file-name="src/main.rs" number="20-33" caption="إنشاء `Vec<T>` من الإغلاقات المعرفة بواسطة دوال تعيد أنواع `impl Fn`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/src/main.rs}}
@@ -137,27 +84,15 @@ in Listing 20-33.
 
 </Listing>
 
-Here we have two functions, `returns_closure` and `returns_initialized_closure`,
-which both return `impl Fn(i32) -> i32`. Notice that the closures that they
-return are different, even though they implement the same type. If we try to
-compile this, Rust lets us know that it won’t work:
+لدينا هنا دالتان، `returns_closure` و `returns_initialized_closure`، وكلاهما يعيد `impl Fn(i32) -> i32`. لاحظ أن الإغلاقات التي تعيدها مختلفة، على الرغم من أنها تطبق نفس النوع. إذا حاولنا ترجمة هذا، سيخبرنا Rust أنه لن يعمل:
 
 ```text
 {{#include ../listings/ch20-advanced-features/listing-20-33/output.txt}}
 ```
 
-The error message tells us that whenever we return an `impl Trait`, Rust
-creates a unique _opaque type_, a type where we cannot see into the details of
-what Rust constructs for us, nor can we guess the type Rust will generate to
-write ourselves. So, even though these functions return closures that implement
-the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for each are
-distinct. (This is similar to how Rust produces different concrete types for
-distinct async blocks even when they have the same output type, as we saw in
-[“The `Pin` Type and the `Unpin` Trait”][future-types]<!-- ignore --> in
-Chapter 17.) We have seen a solution to this problem a few times now: We can
-use a trait object, as in Listing 20-34.
+تخبرنا رسالة الخطأ أنه كلما أعدنا `impl Trait`، ينشئ Rust _نوعًا معتمًا_ (opaque type) فريدًا، وهو نوع لا يمكننا رؤية تفاصيل ما ينشئه Rust لنا، ولا يمكننا تخمين النوع الذي سينشئه Rust لنكتبه بأنفسنا. لذلك، على الرغم من أن هذه الدوال تعيد إغلاقات تطبق نفس السِمَة، `Fn(i32) -> i32`، فإن الأنواع المعتمة التي ينشئها Rust لكل منها مميزة. (هذا مشابه لكيفية إنتاج Rust أنواعًا ملموسة مختلفة لكتل async مميزة حتى عندما يكون لها نفس نوع الإخراج، كما رأينا في ["نوع `Pin` وسِمَة `Unpin`"][future-types]<!-- ignore --> في الفصل 17.) لقد رأينا حلاً لهذه المشكلة عدة مرات الآن: يمكننا استخدام كائن سِمَة، كما في القائمة 20-34.
 
-<Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so that they have the same type">
+<Listing number="20-34" caption="إنشاء `Vec<T>` من الإغلاقات المعرفة بواسطة دوال تعيد `Box<dyn Fn>` بحيث يكون لها نفس النوع">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
@@ -165,11 +100,9 @@ use a trait object, as in Listing 20-34.
 
 </Listing>
 
-This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects To Abstract over Shared
-Behavior”][trait-objects]<!-- ignore --> in Chapter 18.
+سيتم ترجمة هذا الكود بشكل جيد. لمزيد من المعلومات حول كائنات السِمَات، راجع قسم ["استخدام كائنات السِمَات للتجريد فوق السلوك المشترك"][trait-objects]<!-- ignore --> في الفصل 18.
 
-Next, let’s look at macros!
+بعد ذلك، دعنا ننظر إلى الماكرو!
 
 [advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values

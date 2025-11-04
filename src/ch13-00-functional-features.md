@@ -1,24 +1,14 @@
-# Functional Language Features: Iterators and Closures
+# الميزات البرمجية الوظيفية: المُكرِّرات والإغلاقات
 
-Rust’s design has taken inspiration from many existing languages and
-techniques, and one significant influence is _functional programming_.
-Programming in a functional style often includes using functions as values by
-passing them in arguments, returning them from other functions, assigning them
-to variables for later execution, and so forth.
+استلهم تصميم Rust من العديد من اللغات والتقنيات الموجودة، وأحد التأثيرات المهمة هو _البرمجة الوظيفية_. غالبًا ما تتضمن البرمجة بأسلوب وظيفي استخدام الدوال كقيم من خلال تمريرها في الوسائط، وإرجاعها من دوال أخرى، وتعيينها إلى متغيرات للتنفيذ لاحقًا، وما إلى ذلك.
 
-In this chapter, we won’t debate the issue of what functional programming is or
-isn’t but will instead discuss some features of Rust that are similar to
-features in many languages often referred to as functional.
+في هذا الفصل، لن نناقش مسألة ماهية البرمجة الوظيفية أو عدمها، ولكننا سنناقش بدلاً من ذلك بعض ميزات Rust التي تشبه الميزات في العديد من اللغات التي يشار إليها غالبًا بأنها وظيفية.
 
-More specifically, we’ll cover:
+على وجه التحديد، سنغطي:
 
-- _Closures_, a function-like construct you can store in a variable
-- _Iterators_, a way of processing a series of elements
-- How to use closures and iterators to improve the I/O project in Chapter 12
-- The performance of closures and iterators (spoiler alert: They’re faster than
-  you might think!)
+- _الإغلاقات_ (Closures)، بنية شبيهة بالدوال يمكنك تخزينها في متغيّر
+- _المُكرِّرات_ (Iterators)، طريقة لمعالجة سلسلة من العناصر
+- كيفية استخدام الإغلاقات والمُكرِّرات لتحسين مشروع الإدخال/الإخراج في الفصل 12
+- أداء الإغلاقات والمُكرِّرات (تنبيه مفاجئ: إنها أسرع مما قد تعتقد!)
 
-We’ve already covered some other Rust features, such as pattern matching and
-enums, that are also influenced by the functional style. Because mastering
-closures and iterators is an important part of writing fast, idiomatic, Rust
-code, we’ll devote this entire chapter to them.
+لقد غطينا بالفعل بعض ميزات Rust الأخرى، مثل مطابقة الأنماط والتعدادات، والتي تتأثر أيضًا بالأسلوب الوظيفي. نظرًا لأن إتقان الإغلاقات والمُكرِّرات يعد جزءًا مهمًا من كتابة كود Rust سريع وأصيل، سنخصص هذا الفصل بأكمله لها.

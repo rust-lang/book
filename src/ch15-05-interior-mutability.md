@@ -1,147 +1,77 @@
-## `RefCell<T>` and the Interior Mutability Pattern
+## `RefCell<T>` ونمط القابلية للتغيير الداخلية
 
-_Interior mutability_ is a design pattern in Rust that allows you to mutate
-data even when there are immutable references to that data; normally, this
-action is disallowed by the borrowing rules. To mutate data, the pattern uses
-`unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. Unsafe code indicates to the compiler that we’re
-checking the rules manually instead of relying on the compiler to check them
-for us; we will discuss unsafe code more in Chapter 20.
+_القابلية للتغيير الداخلية_ (Interior mutability) هي نمط تصميم في Rust يسمح لك بتغيير البيانات حتى عندما تكون هناك مراجع غير قابلة للتغيير لتلك البيانات؛ عادةً، هذا الإجراء ممنوع بموجب قواعد الاستعارة. لتغيير البيانات، يستخدم النمط كود `unsafe` داخل هيكل بيانات لثني قواعد Rust المعتادة التي تحكم التغيير والاستعارة. يشير الكود غير الآمن (Unsafe code) للمترجم أننا نفحص القواعد يدويًا بدلاً من الاعتماد على المترجم للتحقق منها لنا؛ سنناقش الكود غير الآمن بمزيد من التفصيل في الفصل 20.
 
-We can use types that use the interior mutability pattern only when we can
-ensure that the borrowing rules will be followed at runtime, even though the
-compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
-safe API, and the outer type is still immutable.
+يمكننا استخدام الأنواع التي تستخدم نمط القابلية للتغيير الداخلية فقط عندما يمكننا ضمان اتباع قواعد الاستعارة في وقت التشغيل، حتى لو لم يتمكن المترجم من ضمان ذلك. يتم بعد ذلك تضمين الكود `unsafe` المعني في واجهة برمجية آمنة (safe API)، والنوع الخارجي لا يزال غير قابل للتغيير.
 
-Let’s explore this concept by looking at the `RefCell<T>` type that follows the
-interior mutability pattern.
+دعنا نستكشف هذا المفهوم من خلال النظر في نوع `RefCell<T>` الذي يتبع نمط القابلية للتغيير الداخلية.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="enforcing-borrowing-rules-at-runtime-with-refcellt"></a>
 
-### Enforcing Borrowing Rules at Runtime
+### فرض قواعد الاستعارة في وقت التشغيل
 
-Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
-it holds. So, what makes `RefCell<T>` different from a type like `Box<T>`?
-Recall the borrowing rules you learned in Chapter 4:
+على عكس `Rc<T>`، يمثل نوع `RefCell<T>` ملكية واحدة على البيانات التي يحتفظ بها. إذن، ما الذي يجعل `RefCell<T>` مختلفًا عن نوع مثل `Box<T>`؟ تذكر قواعد الاستعارة التي تعلمتها في الفصل 4:
 
-- At any given time, you can have _either_ one mutable reference or any number
-  of immutable references (but not both).
-- References must always be valid.
+- في أي وقت معين، يمكن أن يكون لديك _إما_ مرجع قابل للتغيير واحد أو أي عدد من المراجع غير القابلة للتغيير (ولكن ليس كلاهما).
+- يجب أن تكون المراجع دائمًا صالحة.
 
-With references and `Box<T>`, the borrowing rules’ invariants are enforced at
-compile time. With `RefCell<T>`, these invariants are enforced _at runtime_.
-With references, if you break these rules, you’ll get a compiler error. With
-`RefCell<T>`, if you break these rules, your program will panic and exit.
+مع المراجع و `Box<T>`، يتم فرض ثوابت قواعد الاستعارة في وقت الترجمة. مع `RefCell<T>`، يتم فرض هذه الثوابت _في وقت التشغيل_. مع المراجع، إذا كسرت هذه القواعد، ستحصل على خطأ مترجم. مع `RefCell<T>`، إذا كسرت هذه القواعد، سينهار برنامجك (panic) ويخرج.
 
-The advantages of checking the borrowing rules at compile time are that errors
-will be caught sooner in the development process, and there is no impact on
-runtime performance because all the analysis is completed beforehand. For those
-reasons, checking the borrowing rules at compile time is the best choice in the
-majority of cases, which is why this is Rust’s default.
+مزايا التحقق من قواعد الاستعارة في وقت الترجمة هي أن الأخطاء سيتم اكتشافها في وقت مبكر من عملية التطوير، وليس هناك تأثير على أداء وقت التشغيل لأن جميع التحليلات تكتمل مسبقًا. لهذه الأسباب، التحقق من قواعد الاستعارة في وقت الترجمة هو الخيار الأفضل في غالبية الحالات، وهذا هو سبب كون هذا هو الافتراضي في Rust.
 
-The advantage of checking the borrowing rules at runtime instead is that
-certain memory-safe scenarios are then allowed, where they would’ve been
-disallowed by the compile-time checks. Static analysis, like the Rust compiler,
-is inherently conservative. Some properties of code are impossible to detect by
-analyzing the code: The most famous example is the Halting Problem, which is
-beyond the scope of this book but is an interesting topic to research.
+ميزة التحقق من قواعد الاستعارة في وقت التشغيل بدلاً من ذلك هي أنه يُسمح بعد ذلك ببعض السيناريوهات الآمنة للذاكرة، حيث كانت ستُمنع بواسطة الفحوصات في وقت الترجمة. التحليل الثابت (Static analysis)، مثل مترجم Rust، متحفظ بطبيعته. بعض خصائص الكود من المستحيل اكتشافها عن طريق تحليل الكود: المثال الأكثر شهرة هو مشكلة التوقف (Halting Problem)، والتي تتجاوز نطاق هذا الكتاب ولكنها موضوع مثير للاهتمام للبحث.
 
-Because some analysis is impossible, if the Rust compiler can’t be sure the
-code complies with the ownership rules, it might reject a correct program; in
-this way, it’s conservative. If Rust accepted an incorrect program, users
-wouldn’t be able to trust the guarantees Rust makes. However, if Rust rejects a
-correct program, the programmer will be inconvenienced, but nothing
-catastrophic can occur. The `RefCell<T>` type is useful when you’re sure your
-code follows the borrowing rules but the compiler is unable to understand and
-guarantee that.
+لأن بعض التحليلات مستحيلة، إذا لم يتمكن مترجم Rust من التأكد من امتثال الكود لقواعد الملكية، فقد يرفض برنامجًا صحيحًا؛ بهذه الطريقة، يكون متحفظًا. إذا قبلت Rust برنامجًا غير صحيح، لن يتمكن المستخدمون من الوثوق بالضمانات التي تقدمها Rust. ومع ذلك، إذا رفضت Rust برنامجًا صحيحًا، سيُزعج المبرمج، لكن لا يمكن أن يحدث شيء كارثي. نوع `RefCell<T>` مفيد عندما تكون متأكدًا من أن كودك يتبع قواعد الاستعارة لكن المترجم غير قادر على الفهم والضمان.
 
-Similar to `Rc<T>`, `RefCell<T>` is only for use in single-threaded scenarios
-and will give you a compile-time error if you try using it in a multithreaded
-context. We’ll talk about how to get the functionality of `RefCell<T>` in a
-multithreaded program in Chapter 16.
+مثل `Rc<T>`، `RefCell<T>` مخصص للاستخدام فقط في سيناريوهات أحادية الخيط وسيعطيك خطأ وقت ترجمة إذا حاولت استخدامه في سياق متعدد الخيوط. سنتحدث عن كيفية الحصول على وظائف `RefCell<T>` في برنامج متعدد الخيوط في الفصل 16.
 
-Here is a recap of the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
+إليك ملخص للأسباب لاختيار `Box<T>` أو `Rc<T>` أو `RefCell<T>`:
 
-- `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>`
-  have single owners.
-- `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>`
-  allows only immutable borrows checked at compile time; `RefCell<T>` allows
-  immutable or mutable borrows checked at runtime.
-- Because `RefCell<T>` allows mutable borrows checked at runtime, you can
-  mutate the value inside the `RefCell<T>` even when the `RefCell<T>` is
-  immutable.
+- `Rc<T>` يتيح مالكين متعددين لنفس البيانات؛ `Box<T>` و `RefCell<T>` لديهما مالكين فرديين.
+- `Box<T>` يسمح باستعارات غير قابلة للتغيير أو قابلة للتغيير يتم فحصها في وقت الترجمة؛ `Rc<T>` يسمح فقط باستعارات غير قابلة للتغيير يتم فحصها في وقت الترجمة؛ `RefCell<T>` يسمح باستعارات غير قابلة للتغيير أو قابلة للتغيير يتم فحصها في وقت التشغيل.
+- لأن `RefCell<T>` يسمح باستعارات قابلة للتغيير يتم فحصها في وقت التشغيل، يمكنك تغيير القيمة داخل `RefCell<T>` حتى عندما يكون `RefCell<T>` غير قابل للتغيير.
 
-Mutating the value inside an immutable value is the interior mutability
-pattern. Let’s look at a situation in which interior mutability is useful and
-examine how it’s possible.
+تغيير القيمة داخل قيمة غير قابلة للتغيير هو نمط القابلية للتغيير الداخلية. دعنا ننظر في موقف يكون فيه القابلية للتغيير الداخلية مفيدة ونفحص كيف يكون ذلك ممكنًا.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="interior-mutability-a-mutable-borrow-to-an-immutable-value"></a>
 
-### Using Interior Mutability
+### استخدام القابلية للتغيير الداخلية
 
-A consequence of the borrowing rules is that when you have an immutable value,
-you can’t borrow it mutably. For example, this code won’t compile:
+نتيجة لقواعد الاستعارة هي أنه عندما يكون لديك قيمة غير قابلة للتغيير، لا يمكنك استعارتها بشكل قابل للتغيير. على سبيل المثال، هذا الكود لن يُترجم:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/src/main.rs}}
 ```
 
-If you tried to compile this code, you’d get the following error:
+إذا حاولت ترجمة هذا الكود، ستحصل على الخطأ التالي:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/output.txt}}
 ```
 
-However, there are situations in which it would be useful for a value to mutate
-itself in its methods but appear immutable to other code. Code outside the
-value’s methods would not be able to mutate the value. Using `RefCell<T>` is
-one way to get the ability to have interior mutability, but `RefCell<T>`
-doesn’t get around the borrowing rules completely: The borrow checker in the
-compiler allows this interior mutability, and the borrowing rules are checked
-at runtime instead. If you violate the rules, you’ll get a `panic!` instead of
-a compiler error.
+ومع ذلك، هناك مواقف يكون فيها من المفيد لقيمة أن تغير نفسها في وسائلها ولكن تبدو غير قابلة للتغيير للكود الآخر. لن يتمكن الكود خارج وسائل القيمة من تغيير القيمة. استخدام `RefCell<T>` هو إحدى الطرق للحصول على القدرة على الحصول على قابلية للتغيير الداخلية، لكن `RefCell<T>` لا يتجاوز قواعد الاستعارة بالكامل: فاحص الاستعارة (borrow checker) في المترجم يسمح بهذه القابلية للتغيير الداخلية، ويتم فحص قواعد الاستعارة في وقت التشغيل بدلاً من ذلك. إذا انتهكت القواعد، ستحصل على `panic!` بدلاً من خطأ مترجم.
 
-Let’s work through a practical example where we can use `RefCell<T>` to mutate
-an immutable value and see why that is useful.
+دعنا نعمل من خلال مثال عملي حيث يمكننا استخدام `RefCell<T>` لتغيير قيمة غير قابلة للتغيير ونرى لماذا يكون ذلك مفيدًا.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="a-use-case-for-interior-mutability-mock-objects"></a>
 
-#### Testing with Mock Objects
+#### الاختبار باستخدام الكائنات الوهمية
 
-Sometimes during testing a programmer will use a type in place of another type,
-in order to observe particular behavior and assert that it’s implemented
-correctly. This placeholder type is called a _test double_. Think of it in the
-sense of a stunt double in filmmaking, where a person steps in and substitutes
-for an actor to do a particularly tricky scene. Test doubles stand in for other
-types when we’re running tests. _Mock objects_ are specific types of test
-doubles that record what happens during a test so that you can assert that the
-correct actions took place.
+أحيانًا خلال الاختبار سيستخدم المبرمج نوعًا بدلاً من نوع آخر، من أجل مراقبة سلوك معين والتأكد من أنه منفذ بشكل صحيح. يسمى هذا النوع البديل _اختبار مزدوج_ (test double). فكر فيه بمعنى بديل الحركات الخطرة (stunt double) في صناعة الأفلام، حيث يتدخل شخص ويستبدل ممثلاً للقيام بمشهد صعب بشكل خاص. تقف البدائل الاختبارية بدلاً من الأنواع الأخرى عندما نقوم بتشغيل الاختبارات. _الكائنات الوهمية_ (Mock objects) هي أنواع محددة من البدائل الاختبارية التي تسجل ما يحدث خلال اختبار بحيث يمكنك التأكد من حدوث الإجراءات الصحيحة.
 
-Rust doesn’t have objects in the same sense as other languages have objects,
-and Rust doesn’t have mock object functionality built into the standard library
-as some other languages do. However, you can definitely create a struct that
-will serve the same purposes as a mock object.
+ليس لدى Rust كائنات بنفس المعنى الذي تمتلكه اللغات الأخرى للكائنات، وليس لدى Rust وظيفة كائن وهمي مدمجة في المكتبة القياسية كما تفعل بعض اللغات الأخرى. ومع ذلك، يمكنك بالتأكيد إنشاء struct سيخدم نفس أغراض الكائن الوهمي.
 
-Here’s the scenario we’ll test: We’ll create a library that tracks a value
-against a maximum value and sends messages based on how close to the maximum
-value the current value is. This library could be used to keep track of a
-user’s quota for the number of API calls they’re allowed to make, for example.
+هذا هو السيناريو الذي سنختبره: سننشئ مكتبة تتتبع قيمة مقابل قيمة قصوى وترسل رسائل بناءً على مدى قرب القيمة الحالية من القيمة القصوى. يمكن استخدام هذه المكتبة لتتبع حصة المستخدم لعدد استدعاءات API المسموح لهم بإجرائها، على سبيل المثال.
 
-Our library will only provide the functionality of tracking how close to the
-maximum a value is and what the messages should be at what times. Applications
-that use our library will be expected to provide the mechanism for sending the
-messages: The application could show the message to the user directly, send an
-email, send a text message, or do something else. The library doesn’t need to
-know that detail. All it needs is something that implements a trait we’ll
-provide, called `Messenger`. Listing 15-20 shows the library code.
+ستوفر مكتبتنا فقط وظيفة تتبع مدى قرب القيمة من القيمة القصوى وما يجب أن تكون الرسائل في أي أوقات. من المتوقع أن توفر التطبيقات التي تستخدم مكتبتنا الآلية لإرسال الرسائل: يمكن للتطبيق إظهار الرسالة للمستخدم مباشرة، أو إرسال بريد إلكتروني، أو إرسال رسالة نصية، أو القيام بشيء آخر. لا تحتاج المكتبة لمعرفة هذا التفصيل. كل ما تحتاجه هو شيء ينفذ سِمة سنوفرها، تسمى `Messenger`. توضح القائمة 15-20 كود المكتبة.
 
-<Listing number="15-20" file-name="src/lib.rs" caption="A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels">
+<Listing number="15-20" file-name="src/lib.rs" caption="مكتبة لتتبع مدى قرب القيمة من قيمة قصوى والتحذير عندما تكون القيمة عند مستويات معينة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-20/src/lib.rs}}
@@ -149,25 +79,11 @@ provide, called `Messenger`. Listing 15-20 shows the library code.
 
 </Listing>
 
-One important part of this code is that the `Messenger` trait has one method
-called `send` that takes an immutable reference to `self` and the text of the
-message. This trait is the interface our mock object needs to implement so that
-the mock can be used in the same way a real object is. The other important part
-is that we want to test the behavior of the `set_value` method on the
-`LimitTracker`. We can change what we pass in for the `value` parameter, but
-`set_value` doesn’t return anything for us to make assertions on. We want to be
-able to say that if we create a `LimitTracker` with something that implements
-the `Messenger` trait and a particular value for `max`, the messenger is told
-to send the appropriate messages when we pass different numbers for `value`.
+جزء مهم من هذا الكود هو أن سِمة `Messenger` لديها وسيلة واحدة تسمى `send` تأخذ مرجعًا غير قابل للتغيير إلى `self` ونص الرسالة. هذه السِمة هي الواجهة التي يحتاج كائننا الوهمي لتنفيذها بحيث يمكن استخدام الوهمي بنفس الطريقة التي يُستخدم بها الكائن الحقيقي. الجزء المهم الآخر هو أننا نريد اختبار سلوك وسيلة `set_value` على `LimitTracker`. يمكننا تغيير ما نمرره لمعامل `value`، لكن `set_value` لا تعيد شيئًا لنا لإجراء تأكيدات عليه. نريد أن نكون قادرين على القول أنه إذا أنشأنا `LimitTracker` مع شيء ينفذ سِمة `Messenger` وقيمة معينة لـ `max`، يُخبر المرسل بإرسال الرسائل المناسبة عندما نمرر أرقامًا مختلفة لـ `value`.
 
-We need a mock object that, instead of sending an email or text message when we
-call `send`, will only keep track of the messages it’s told to send. We can
-create a new instance of the mock object, create a `LimitTracker` that uses the
-mock object, call the `set_value` method on `LimitTracker`, and then check that
-the mock object has the messages we expect. Listing 15-21 shows an attempt to
-implement a mock object to do just that, but the borrow checker won’t allow it.
+نحتاج إلى كائن وهمي، بدلاً من إرسال بريد إلكتروني أو رسالة نصية عندما نستدعي `send`، سيتتبع فقط الرسائل التي يُطلب منه إرسالها. يمكننا إنشاء نسخة جديدة من الكائن الوهمي، وإنشاء `LimitTracker` يستخدم الكائن الوهمي، واستدعاء وسيلة `set_value` على `LimitTracker`، ثم التحقق من أن الكائن الوهمي لديه الرسائل التي نتوقعها. توضح القائمة 15-21 محاولة لتنفيذ كائن وهمي للقيام بذلك فقط، لكن فاحص الاستعارة لن يسمح به.
 
-<Listing number="15-21" file-name="src/lib.rs" caption="An attempt to implement a `MockMessenger` that isn’t allowed by the borrow checker">
+<Listing number="15-21" file-name="src/lib.rs" caption="محاولة لتنفيذ `MockMessenger` غير مسموح به من قبل فاحص الاستعارة">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-21/src/lib.rs:here}}
@@ -175,43 +91,21 @@ implement a mock object to do just that, but the borrow checker won’t allow it
 
 </Listing>
 
-This test code defines a `MockMessenger` struct that has a `sent_messages`
-field with a `Vec` of `String` values to keep track of the messages it’s told
-to send. We also define an associated function `new` to make it convenient to
-create new `MockMessenger` values that start with an empty list of messages. We
-then implement the `Messenger` trait for `MockMessenger` so that we can give a
-`MockMessenger` to a `LimitTracker`. In the definition of the `send` method, we
-take the message passed in as a parameter and store it in the `MockMessenger`
-list of `sent_messages`.
+يعرّف كود الاختبار هذا struct `MockMessenger` الذي لديه حقل `sent_messages` مع `Vec` من قيم `String` لتتبع الرسائل التي يُطلب منه إرسالها. نعرّف أيضًا دالة مرتبطة `new` لجعل إنشاء قيم `MockMessenger` جديدة تبدأ بقائمة رسائل فارغة مريحًا. ثم ننفذ سِمة `Messenger` لـ `MockMessenger` بحيث يمكننا إعطاء `MockMessenger` إلى `LimitTracker`. في تعريف وسيلة `send`، نأخذ الرسالة الممررة كمعامل ونخزنها في قائمة `MockMessenger` من `sent_messages`.
 
-In the test, we’re testing what happens when the `LimitTracker` is told to set
-`value` to something that is more than 75 percent of the `max` value. First, we
-create a new `MockMessenger`, which will start with an empty list of messages.
-Then, we create a new `LimitTracker` and give it a reference to the new
-`MockMessenger` and a `max` value of `100`. We call the `set_value` method on
-the `LimitTracker` with a value of `80`, which is more than 75 percent of 100.
-Then, we assert that the list of messages that the `MockMessenger` is keeping
-track of should now have one message in it.
+في الاختبار، نختبر ما يحدث عندما يُخبر `LimitTracker` بتعيين `value` إلى شيء يزيد عن 75 بالمائة من قيمة `max`. أولاً، ننشئ `MockMessenger` جديد، والذي سيبدأ بقائمة رسائل فارغة. بعد ذلك، ننشئ `LimitTracker` جديد ونعطيه مرجعًا إلى `MockMessenger` الجديد وقيمة `max` من `100`. نستدعي وسيلة `set_value` على `LimitTracker` بقيمة `80`، وهي أكثر من 75 بالمائة من 100. بعد ذلك، نؤكد أن قائمة الرسائل التي يتتبعها `MockMessenger` يجب أن يكون لديها الآن رسالة واحدة فيها.
 
-However, there’s one problem with this test, as shown here:
+ومع ذلك، هناك مشكلة واحدة مع هذا الاختبار، كما هو موضح هنا:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-21/output.txt}}
 ```
 
-We can’t modify the `MockMessenger` to keep track of the messages, because the
-`send` method takes an immutable reference to `self`. We also can’t take the
-suggestion from the error text to use `&mut self` in both the `impl` method and
-the trait definition. We do not want to change the `Messenger` trait solely for
-the sake of testing. Instead, we need to find a way to make our test code work
-correctly with our existing design.
+لا يمكننا تعديل `MockMessenger` لتتبع الرسائل، لأن وسيلة `send` تأخذ مرجعًا غير قابل للتغيير إلى `self`. كما لا يمكننا أخذ الاقتراح من نص الخطأ لاستخدام `&mut self` في كل من وسيلة `impl` وتعريف السِمة. نحن لا نريد تغيير سِمة `Messenger` فقط من أجل الاختبار. بدلاً من ذلك، نحتاج إلى إيجاد طريقة لجعل كود الاختبار الخاص بنا يعمل بشكل صحيح مع تصميمنا الحالي.
 
-This is a situation in which interior mutability can help! We’ll store the
-`sent_messages` within a `RefCell<T>`, and then the `send` method will be able
-to modify `sent_messages` to store the messages we’ve seen. Listing 15-22 shows
-what that looks like.
+هذا موقف يمكن أن تساعد فيه القابلية للتغيير الداخلية! سنخزن `sent_messages` داخل `RefCell<T>`، وبعد ذلك ستتمكن وسيلة `send` من تعديل `sent_messages` لتخزين الرسائل التي رأيناها. توضح القائمة 15-22 كيف يبدو ذلك.
 
-<Listing number="15-22" file-name="src/lib.rs" caption="Using `RefCell<T>` to mutate an inner value while the outer value is considered immutable">
+<Listing number="15-22" file-name="src/lib.rs" caption="استخدام `RefCell<T>` لتغيير قيمة داخلية بينما تُعتبر القيمة الخارجية غير قابلة للتغيير">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
@@ -219,51 +113,27 @@ what that looks like.
 
 </Listing>
 
-The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
-`Vec<String>`. In the `new` function, we create a new `RefCell<Vec<String>>`
-instance around the empty vector.
+حقل `sent_messages` الآن من نوع `RefCell<Vec<String>>` بدلاً من `Vec<String>`. في دالة `new`، ننشئ نسخة `RefCell<Vec<String>>` جديدة حول المتجه الفارغ.
 
-For the implementation of the `send` method, the first parameter is still an
-immutable borrow of `self`, which matches the trait definition. We call
-`borrow_mut` on the `RefCell<Vec<String>>` in `self.sent_messages` to get a
-mutable reference to the value inside the `RefCell<Vec<String>>`, which is the
-vector. Then, we can call `push` on the mutable reference to the vector to keep
-track of the messages sent during the test.
+لتنفيذ وسيلة `send`، المعامل الأول لا يزال استعارة غير قابلة للتغيير لـ `self`، والتي تطابق تعريف السِمة. نستدعي `borrow_mut` على `RefCell<Vec<String>>` في `self.sent_messages` للحصول على مرجع قابل للتغيير إلى القيمة داخل `RefCell<Vec<String>>`، وهي المتجه. بعد ذلك، يمكننا استدعاء `push` على المرجع القابل للتغيير إلى المتجه لتتبع الرسائل المرسلة خلال الاختبار.
 
-The last change we have to make is in the assertion: To see how many items are
-in the inner vector, we call `borrow` on the `RefCell<Vec<String>>` to get an
-immutable reference to the vector.
+التغيير الأخير الذي يتعين علينا إجراؤه هو في التأكيد: لمعرفة عدد العناصر في المتجه الداخلي، نستدعي `borrow` على `RefCell<Vec<String>>` للحصول على مرجع غير قابل للتغيير إلى المتجه.
 
-Now that you’ve seen how to use `RefCell<T>`, let’s dig into how it works!
+الآن بعد أن رأيت كيفية استخدام `RefCell<T>`، دعنا نتعمق في كيفية عمله!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="keeping-track-of-borrows-at-runtime-with-refcellt"></a>
 
-#### Tracking Borrows at Runtime
+#### تتبع الاستعارات في وقت التشغيل
 
-When creating immutable and mutable references, we use the `&` and `&mut`
-syntax, respectively. With `RefCell<T>`, we use the `borrow` and `borrow_mut`
-methods, which are part of the safe API that belongs to `RefCell<T>`. The
-`borrow` method returns the smart pointer type `Ref<T>`, and `borrow_mut`
-returns the smart pointer type `RefMut<T>`. Both types implement `Deref`, so we
-can treat them like regular references.
+عند إنشاء مراجع غير قابلة للتغيير وقابلة للتغيير، نستخدم صيغة `&` و `&mut`، على التوالي. مع `RefCell<T>`، نستخدم وسيلتي `borrow` و `borrow_mut`، اللتان تنتميان إلى الواجهة البرمجية الآمنة التي تنتمي إلى `RefCell<T>`. تعيد وسيلة `borrow` نوع المؤشر الذكي `Ref<T>`، وتعيد `borrow_mut` نوع المؤشر الذكي `RefMut<T>`. كلا النوعين ينفذان `Deref`، لذلك يمكننا معاملتهما كمراجع عادية.
 
-The `RefCell<T>` keeps track of how many `Ref<T>` and `RefMut<T>` smart
-pointers are currently active. Every time we call `borrow`, the `RefCell<T>`
-increases its count of how many immutable borrows are active. When a `Ref<T>`
-value goes out of scope, the count of immutable borrows goes down by 1. Just
-like the compile-time borrowing rules, `RefCell<T>` lets us have many immutable
-borrows or one mutable borrow at any point in time.
+يتتبع `RefCell<T>` عدد المؤشرات الذكية `Ref<T>` و `RefMut<T>` النشطة حاليًا. في كل مرة نستدعي فيها `borrow`، يزيد `RefCell<T>` عدده لعدد الاستعارات غير القابلة للتغيير النشطة. عندما تخرج قيمة `Ref<T>` عن النطاق، ينخفض عدد الاستعارات غير القابلة للتغيير بمقدار 1. تمامًا مثل قواعد الاستعارة في وقت الترجمة، يتيح لنا `RefCell<T>` الحصول على العديد من الاستعارات غير القابلة للتغيير أو استعارة قابلة للتغيير واحدة في أي نقطة زمنية.
 
-If we try to violate these rules, rather than getting a compiler error as we
-would with references, the implementation of `RefCell<T>` will panic at
-runtime. Listing 15-23 shows a modification of the implementation of `send` in
-Listing 15-22. We’re deliberately trying to create two mutable borrows active
-for the same scope to illustrate that `RefCell<T>` prevents us from doing this
-at runtime.
+إذا حاولنا انتهاك هذه القواعد، بدلاً من الحصول على خطأ مترجم كما سنفعل مع المراجع، سينهار تنفيذ `RefCell<T>` في وقت التشغيل. توضح القائمة 15-23 تعديلاً لتنفيذ `send` في القائمة 15-22. نحاول عمدًا إنشاء استعارتين قابلتين للتغيير نشطتين لنفس النطاق لتوضيح أن `RefCell<T>` يمنعنا من القيام بذلك في وقت التشغيل.
 
-<Listing number="15-23" file-name="src/lib.rs" caption="Creating two mutable references in the same scope to see that `RefCell<T>` will panic">
+<Listing number="15-23" file-name="src/lib.rs" caption="إنشاء مرجعين قابلين للتغيير في نفس النطاق لرؤية أن `RefCell<T>` سينهار">
 
 ```rust,ignore,panics
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-23/src/lib.rs:here}}
@@ -271,52 +141,28 @@ at runtime.
 
 </Listing>
 
-We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
-from `borrow_mut`. Then, we create another mutable borrow in the same way in
-the variable `two_borrow`. This makes two mutable references in the same scope,
-which isn’t allowed. When we run the tests for our library, the code in Listing
-15-23 will compile without any errors, but the test will fail:
+ننشئ متغيرًا `one_borrow` للمؤشر الذكي `RefMut<T>` المعاد من `borrow_mut`. بعد ذلك، ننشئ استعارة قابلة للتغيير أخرى بنفس الطريقة في المتغير `two_borrow`. هذا يصنع مرجعين قابلين للتغيير في نفس النطاق، وهو غير مسموح. عندما نشغل اختبارات مكتبتنا، سيُترجم الكود في القائمة 15-23 بدون أي أخطاء، لكن الاختبار سيفشل:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-23/output.txt}}
 ```
 
-Notice that the code panicked with the message `already borrowed:
-BorrowMutError`. This is how `RefCell<T>` handles violations of the borrowing
-rules at runtime.
+لاحظ أن الكود انهار مع الرسالة `already borrowed: BorrowMutError`. هذه هي الطريقة التي يتعامل بها `RefCell<T>` مع انتهاكات قواعد الاستعارة في وقت التشغيل.
 
-Choosing to catch borrowing errors at runtime rather than compile time, as
-we’ve done here, means you’d potentially be finding mistakes in your code later
-in the development process: possibly not until your code was deployed to
-production. Also, your code would incur a small runtime performance penalty as
-a result of keeping track of the borrows at runtime rather than compile time.
-However, using `RefCell<T>` makes it possible to write a mock object that can
-modify itself to keep track of the messages it has seen while you’re using it
-in a context where only immutable values are allowed. You can use `RefCell<T>`
-despite its trade-offs to get more functionality than regular references
-provide.
+اختيار اكتشاف أخطاء الاستعارة في وقت التشغيل بدلاً من وقت الترجمة، كما فعلنا هنا، يعني أنك ستكتشف الأخطاء في كودك لاحقًا في عملية التطوير: ربما لن يكون ذلك حتى يتم نشر كودك للإنتاج. كما سيتكبد كودك عقوبة أداء صغيرة في وقت التشغيل نتيجة لتتبع الاستعارات في وقت التشغيل بدلاً من وقت الترجمة. ومع ذلك، استخدام `RefCell<T>` يجعل من الممكن كتابة كائن وهمي يمكنه تعديل نفسه لتتبع الرسائل التي رآها أثناء استخدامه في سياق حيث يُسمح فقط بالقيم غير القابلة للتغيير. يمكنك استخدام `RefCell<T>` على الرغم من مقايضاته للحصول على وظائف أكثر مما توفره المراجع العادية.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="having-multiple-owners-of-mutable-data-by-combining-rc-t-and-ref-cell-t"></a>
 <a id="allowing-multiple-owners-of-mutable-data-with-rct-and-refcellt"></a>
 
-### Allowing Multiple Owners of Mutable Data
+### السماح بمالكين متعددين للبيانات القابلة للتغيير
 
-A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
-`Rc<T>` lets you have multiple owners of some data, but it only gives immutable
-access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
-get a value that can have multiple owners _and_ that you can mutate!
+طريقة شائعة لاستخدام `RefCell<T>` هي بالاقتران مع `Rc<T>`. تذكر أن `Rc<T>` يتيح لك الحصول على مالكين متعددين لبعض البيانات، لكنه يمنح فقط وصولاً غير قابل للتغيير لتلك البيانات. إذا كان لديك `Rc<T>` يحتفظ بـ `RefCell<T>`، يمكنك الحصول على قيمة يمكن أن يكون لها مالكون متعددون _و_ يمكنك تغييرها!
 
-For example, recall the cons list example in Listing 15-18 where we used
-`Rc<T>` to allow multiple lists to share ownership of another list. Because
-`Rc<T>` holds only immutable values, we can’t change any of the values in the
-list once we’ve created them. Let’s add in `RefCell<T>` for its ability to
-change the values in the lists. Listing 15-24 shows that by using a
-`RefCell<T>` in the `Cons` definition, we can modify the value stored in all
-the lists.
+على سبيل المثال، تذكر مثال قائمة cons في القائمة 15-18 حيث استخدمنا `Rc<T>` للسماح لقوائم متعددة بمشاركة ملكية قائمة أخرى. لأن `Rc<T>` يحتفظ فقط بقيم غير قابلة للتغيير، لا يمكننا تغيير أي من القيم في القائمة بمجرد إنشائها. دعنا نضيف `RefCell<T>` لقدرتها على تغيير القيم في القوائم. توضح القائمة 15-24 أنه باستخدام `RefCell<T>` في تعريف `Cons`، يمكننا تعديل القيمة المخزنة في جميع القوائم.
 
-<Listing number="15-24" file-name="src/main.rs" caption="Using `Rc<RefCell<i32>>` to create a `List` that we can mutate">
+<Listing number="15-24" file-name="src/main.rs" caption="استخدام `Rc<RefCell<i32>>` لإنشاء `List` يمكننا تغييرها">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-24/src/main.rs}}
@@ -324,38 +170,18 @@ the lists.
 
 </Listing>
 
-We create a value that is an instance of `Rc<RefCell<i32>>` and store it in a
-variable named `value` so that we can access it directly later. Then, we create
-a `List` in `a` with a `Cons` variant that holds `value`. We need to clone
-`value` so that both `a` and `value` have ownership of the inner `5` value
-rather than transferring ownership from `value` to `a` or having `a` borrow
-from `value`.
+ننشئ قيمة هي نسخة من `Rc<RefCell<i32>>` ونخزنها في متغير يسمى `value` بحيث يمكننا الوصول إليها مباشرة لاحقًا. بعد ذلك، ننشئ `List` في `a` مع متغير `Cons` يحتفظ بـ `value`. نحتاج إلى استنساخ `value` بحيث كل من `a` و `value` لديهما ملكية القيمة الداخلية `5` بدلاً من نقل الملكية من `value` إلى `a` أو جعل `a` تستعير من `value`.
 
-We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and `c`,
-they can both refer to `a`, which is what we did in Listing 15-18.
+نغلف القائمة `a` في `Rc<T>` بحيث عندما ننشئ القوائم `b` و `c`، يمكن لكليهما الإشارة إلى `a`، وهو ما فعلناه في القائمة 15-18.
 
-After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
-value in `value`. We do this by calling `borrow_mut` on `value`, which uses the
-automatic dereferencing feature we discussed in [“Where’s the `->`
-Operator?”][wheres-the---operator]<!-- ignore --> in Chapter 5 to dereference
-the `Rc<T>` to the inner `RefCell<T>` value. The `borrow_mut` method returns a
-`RefMut<T>` smart pointer, and we use the dereference operator on it and change
-the inner value.
+بعد أن أنشأنا القوائم في `a` و `b` و `c`، نريد إضافة 10 إلى القيمة في `value`. نقوم بذلك عن طريق استدعاء `borrow_mut` على `value`، والذي يستخدم ميزة فك المرجع التلقائي التي ناقشناها في ["أين معامل `->`؟"][wheres-the---operator]<!-- ignore --> في الفصل 5 لفك مرجع `Rc<T>` إلى قيمة `RefCell<T>` الداخلية. تعيد وسيلة `borrow_mut` مؤشرًا ذكيًا `RefMut<T>`، ونستخدم معامل فك المرجع عليه ونغير القيمة الداخلية.
 
-When we print `a`, `b`, and `c`, we can see that they all have the modified
-value of `15` rather than `5`:
+عندما نطبع `a` و `b` و `c`، يمكننا أن نرى أن جميعها لديها القيمة المعدلة `15` بدلاً من `5`:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-24/output.txt}}
 ```
 
-This technique is pretty neat! By using `RefCell<T>`, we have an outwardly
-immutable `List` value. But we can use the methods on `RefCell<T>` that provide
-access to its interior mutability so that we can modify our data when we need
-to. The runtime checks of the borrowing rules protect us from data races, and
-it’s sometimes worth trading a bit of speed for this flexibility in our data
-structures. Note that `RefCell<T>` does not work for multithreaded code!
-`Mutex<T>` is the thread-safe version of `RefCell<T>`, and we’ll discuss
-`Mutex<T>` in Chapter 16.
+هذه التقنية رائعة جدًا! باستخدام `RefCell<T>`، لدينا قيمة `List` غير قابلة للتغيير ظاهريًا. لكن يمكننا استخدام الوسائل على `RefCell<T>` التي توفر الوصول إلى قابليتها للتغيير الداخلية بحيث يمكننا تعديل بياناتنا عندما نحتاج إلى ذلك. تحمينا الفحوصات في وقت التشغيل لقواعد الاستعارة من سباقات البيانات، وأحيانًا يستحق تبادل القليل من السرعة لهذه المرونة في هياكل بياناتنا. لاحظ أن `RefCell<T>` لا يعمل للكود متعدد الخيوط! `Mutex<T>` هو النسخة الآمنة للخيوط من `RefCell<T>`، وسنناقش `Mutex<T>` في الفصل 16.
 
 [wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator

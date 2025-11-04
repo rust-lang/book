@@ -1,22 +1,13 @@
-# Advanced Features
+# الميزات المتقدمة
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project, in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while but may not
-use every day. You can use this chapter as a reference for when you encounter
-any unknowns. The features covered here are useful in very specific situations.
-Although you might not reach for them often, we want to make sure you have a
-grasp of all the features Rust has to offer.
+لقد تعلمت الآن الأجزاء الأكثر استخدامًا من لغة البرمجة Rust. قبل أن نقوم بمشروع آخر في الفصل 21، سنلقي نظرة على بعض جوانب اللغة التي قد تصادفها بين الحين والآخر ولكن قد لا تستخدمها كل يوم. يمكنك استخدام هذا الفصل كمرجع عند مواجهة أي أشياء غير معروفة. الميزات المغطاة هنا مفيدة في مواقف محددة جدًا. على الرغم من أنك قد لا تلجأ إليها كثيرًا، نريد التأكد من أن لديك فهمًا لجميع الميزات التي يقدمها Rust.
 
-In this chapter, we’ll cover:
+في هذا الفصل، سنغطي:
 
-- Unsafe Rust: How to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-- Advanced traits: Associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-- Advanced types: More about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-- Advanced functions and closures: Function pointers and returning closures
-- Macros: Ways to define code that defines more code at compile time
+- Unsafe Rust (Rust غير الآمن): كيفية إلغاء الاشتراك في بعض ضمانات Rust وتحمل المسؤولية عن الحفاظ على تلك الضمانات يدويًا
+- السِمَات المتقدمة (Advanced traits): الأنواع المرتبطة، معاملات النوع الافتراضية، بناء الجملة المؤهل بالكامل، السِمَات الفائقة، ونمط newtype فيما يتعلق بالسِمَات
+- الأنواع المتقدمة (Advanced types): المزيد حول نمط newtype، أسماء مستعارة للأنواع، نوع never، والأنواع ذات الحجم الديناميكي
+- الدوال والإغلاقات المتقدمة (Advanced functions and closures): مؤشرات الدوال وإرجاع الإغلاقات
+- الماكرو (Macros): طرق لتعريف الكود الذي يحدد المزيد من الكود في وقت الترجمة
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+إنها مجموعة متنوعة من ميزات Rust مع شيء للجميع! لنبدأ!

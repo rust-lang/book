@@ -3,35 +3,22 @@
 <a id="treating-smart-pointers-like-regular-references-with-the-deref-trait"></a>
 <a id="treating-smart-pointers-like-regular-references-with-deref"></a>
 
-## Treating Smart Pointers Like Regular References
+## معاملة المؤشرات الذكية كمراجع عادية
 
-Implementing the `Deref` trait allows you to customize the behavior of the
-_dereference operator_ `*` (not to be confused with the multiplication or glob
-operator). By implementing `Deref` in such a way that a smart pointer can be
-treated like a regular reference, you can write code that operates on
-references and use that code with smart pointers too.
+تنفيذ سِمة `Deref` يسمح لك بتخصيص سلوك _معامل فك المرجع_ (dereference operator) `*` (لا يجب الخلط بينه وبين معامل الضرب أو glob). من خلال تنفيذ `Deref` بطريقة تسمح بمعاملة المؤشر الذكي كمرجع عادي، يمكنك كتابة كود يعمل على المراجع واستخدام هذا الكود مع المؤشرات الذكية أيضًا.
 
-Let’s first look at how the dereference operator works with regular references.
-Then, we’ll try to define a custom type that behaves like `Box<T>` and see why
-the dereference operator doesn’t work like a reference on our newly defined
-type. We’ll explore how implementing the `Deref` trait makes it possible for
-smart pointers to work in ways similar to references. Then, we’ll look at
-Rust’s deref coercion feature and how it lets us work with either references or
-smart pointers.
+دعنا ننظر أولاً في كيفية عمل معامل فك المرجع مع المراجع العادية. بعد ذلك، سنحاول تعريف نوع مخصص يتصرف مثل `Box<T>` ونرى لماذا لا يعمل معامل فك المرجع كمرجع على نوعنا المعرّف حديثًا. سنستكشف كيف يجعل تنفيذ سِمة `Deref` من الممكن للمؤشرات الذكية أن تعمل بطرق مشابهة للمراجع. بعد ذلك، سننظر في ميزة التحويل الضمني لفك المرجع (deref coercion) في Rust وكيف تتيح لنا العمل مع المراجع أو المؤشرات الذكية.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
 <a id="following-the-pointer-to-the-value"></a>
 
-### Following the Reference to the Value
+### تتبع المرجع إلى القيمة
 
-A regular reference is a type of pointer, and one way to think of a pointer is
-as an arrow to a value stored somewhere else. In Listing 15-6, we create a
-reference to an `i32` value and then use the dereference operator to follow the
-reference to the value.
+المرجع العادي هو نوع من المؤشرات، وطريقة واحدة للتفكير في المؤشر هي كسهم إلى قيمة مخزنة في مكان آخر. في القائمة 15-6، ننشئ مرجعًا إلى قيمة `i32` ثم نستخدم معامل فك المرجع لتتبع المرجع إلى القيمة.
 
-<Listing number="15-6" file-name="src/main.rs" caption="Using the dereference operator to follow a reference to an `i32` value">
+<Listing number="15-6" file-name="src/main.rs" caption="استخدام معامل فك المرجع لتتبع مرجع إلى قيمة `i32`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
@@ -39,32 +26,21 @@ reference to the value.
 
 </Listing>
 
-The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to
-`x`. We can assert that `x` is equal to `5`. However, if we want to make an
-assertion about the value in `y`, we have to use `*y` to follow the reference
-to the value it’s pointing to (hence, _dereference_) so that the compiler can
-compare the actual value. Once we dereference `y`, we have access to the
-integer value `y` is pointing to that we can compare with `5`.
+المتغير `x` يحتفظ بقيمة `i32` وهي `5`. نضبط `y` ليساوي مرجعًا إلى `x`. يمكننا التأكيد على أن `x` يساوي `5`. ومع ذلك، إذا أردنا إجراء تأكيد على القيمة في `y`، يجب أن نستخدم `*y` لتتبع المرجع إلى القيمة التي يشير إليها (وبالتالي، _فك المرجع_ dereference) حتى يتمكن المترجم من مقارنة القيمة الفعلية. بمجرد أن نفك مرجع `y`، يكون لدينا وصول إلى قيمة الأعداد الصحيحة التي يشير إليها `y` والتي يمكننا مقارنتها بـ `5`.
 
-If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
-error:
+إذا حاولنا كتابة `assert_eq!(5, y);` بدلاً من ذلك، سنحصل على خطأ الترجمة هذا:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/output-only-01-comparing-to-reference/output.txt}}
 ```
 
-Comparing a number and a reference to a number isn’t allowed because they’re
-different types. We must use the dereference operator to follow the reference
-to the value it’s pointing to.
+مقارنة رقم ومرجع إلى رقم غير مسموح بها لأنهما نوعان مختلفان. يجب أن نستخدم معامل فك المرجع لتتبع المرجع إلى القيمة التي يشير إليها.
 
-### Using `Box<T>` Like a Reference
+### استخدام `Box<T>` كمرجع
 
-We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
-reference; the dereference operator used on the `Box<T>` in Listing 15-7
-functions in the same way as the dereference operator used on the reference in
-Listing 15-6.
+يمكننا إعادة كتابة الكود في القائمة 15-6 لاستخدام `Box<T>` بدلاً من مرجع؛ يعمل معامل فك المرجع المستخدم على `Box<T>` في القائمة 15-7 بنفس الطريقة التي يعمل بها معامل فك المرجع المستخدم على المرجع في القائمة 15-6.
 
-<Listing number="15-7" file-name="src/main.rs" caption="Using the dereference operator on a `Box<i32>`">
+<Listing number="15-7" file-name="src/main.rs" caption="استخدام معامل فك المرجع على `Box<i32>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
@@ -72,30 +48,17 @@ Listing 15-6.
 
 </Listing>
 
-The main difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a box pointing to a copied value of `x` rather than a
-reference pointing to the value of `x`. In the last assertion, we can use the
-dereference operator to follow the box’s pointer in the same way that we did
-when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
-that enables us to use the dereference operator by defining our own box type.
+الفرق الرئيسي بين القائمة 15-7 والقائمة 15-6 هو أننا هنا نضبط `y` ليكون نسخة من صندوق يشير إلى قيمة منسوخة من `x` بدلاً من مرجع يشير إلى قيمة `x`. في التأكيد الأخير، يمكننا استخدام معامل فك المرجع لتتبع مؤشر الصندوق بنفس الطريقة التي فعلناها عندما كان `y` مرجعًا. بعد ذلك، سنستكشف ما هو مميز في `Box<T>` يتيح لنا استخدام معامل فك المرجع من خلال تعريف نوع الصندوق الخاص بنا.
 
-### Defining Our Own Smart Pointer
+### تعريف المؤشر الذكي الخاص بنا
 
-Let’s build a wrapper type similar to the `Box<T>` type provided by the
-standard library to experience how smart pointer types behave differently from
-references by default. Then, we’ll look at how to add the ability to use the
-dereference operator.
+لنبني نوع غلاف (wrapper type) مشابهًا لنوع `Box<T>` المقدم من المكتبة القياسية لتجربة كيف تتصرف أنواع المؤشرات الذكية بشكل مختلف عن المراجع بشكل افتراضي. بعد ذلك، سننظر في كيفية إضافة القدرة على استخدام معامل فك المرجع.
 
-> Note: There’s one big difference between the `MyBox<T>` type we’re about to
-> build and the real `Box<T>`: Our version will not store its data on the heap.
-> We are focusing this example on `Deref`, so where the data is actually stored
-> is less important than the pointer-like behavior.
+> ملاحظة: هناك اختلاف كبير واحد بين نوع `MyBox<T>` الذي نحن على وشك بناءه والـ `Box<T>` الحقيقي: نسختنا لن تخزن بياناتها على الكومة. نحن نركز في هذا المثال على `Deref`، لذلك فإن مكان تخزين البيانات فعليًا أقل أهمية من السلوك الشبيه بالمؤشر.
 
-The `Box<T>` type is ultimately defined as a tuple struct with one element, so
-Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
-`new` function to match the `new` function defined on `Box<T>`.
+نوع `Box<T>` معرّف في النهاية كـ struct مجموعة (tuple struct) مع عنصر واحد، لذلك تعرّف القائمة 15-8 نوع `MyBox<T>` بنفس الطريقة. سنعرّف أيضًا دالة `new` لتتطابق مع دالة `new` المعرّفة على `Box<T>`.
 
-<Listing number="15-8" file-name="src/main.rs" caption="Defining a `MyBox<T>` type">
+<Listing number="15-8" file-name="src/main.rs" caption="تعريف نوع `MyBox<T>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
@@ -103,17 +66,11 @@ Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 
 </Listing>
 
-We define a struct named `MyBox` and declare a generic parameter `T` because we
-want our type to hold values of any type. The `MyBox` type is a tuple struct
-with one element of type `T`. The `MyBox::new` function takes one parameter of
-type `T` and returns a `MyBox` instance that holds the value passed in.
+نعرّف struct باسم `MyBox` ونعلن عن معامل عام (generic parameter) `T` لأننا نريد أن يحتفظ نوعنا بقيم من أي نوع. نوع `MyBox` هو struct مجموعة مع عنصر واحد من نوع `T`. دالة `MyBox::new` تأخذ معامل واحد من نوع `T` وتعيد نسخة `MyBox` تحتفظ بالقيمة الممررة.
 
-Let’s try adding the `main` function in Listing 15-7 to Listing 15-8 and
-changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The
-code in Listing 15-9 won’t compile, because Rust doesn’t know how to
-dereference `MyBox`.
+دعنا نحاول إضافة دالة `main` في القائمة 15-7 إلى القائمة 15-8 وتغييرها لاستخدام نوع `MyBox<T>` الذي عرّفناه بدلاً من `Box<T>`. الكود في القائمة 15-9 لن يُترجم، لأن Rust لا تعرف كيفية فك مرجع `MyBox`.
 
-<Listing number="15-9" file-name="src/main.rs" caption="Attempting to use `MyBox<T>` in the same way we used references and `Box<T>`">
+<Listing number="15-9" file-name="src/main.rs" caption="محاولة استخدام `MyBox<T>` بنفس الطريقة التي استخدمنا بها المراجع و `Box<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
@@ -121,30 +78,23 @@ dereference `MyBox`.
 
 </Listing>
 
-Here’s the resultant compilation error:
+إليك خطأ الترجمة الناتج:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
 ```
 
-Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented that
-ability on our type. To enable dereferencing with the `*` operator, we
-implement the `Deref` trait.
+نوعنا `MyBox<T>` لا يمكن فك مرجعه لأننا لم ننفذ هذه القدرة على نوعنا. لتمكين فك المرجع باستخدام معامل `*`، ننفذ سِمة `Deref`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="treating-a-type-like-a-reference-by-implementing-the-deref-trait"></a>
 
-### Implementing the `Deref` Trait
+### تنفيذ سِمة `Deref`
 
-As discussed in [“Implementing a Trait on a Type”][impl-trait]<!-- ignore --> in
-Chapter 10, to implement a trait we need to provide implementations for the
-trait’s required methods. The `Deref` trait, provided by the standard library,
-requires us to implement one method named `deref` that borrows `self` and
-returns a reference to the inner data. Listing 15-10 contains an implementation
-of `Deref` to add to the definition of `MyBox<T>`.
+كما تمت مناقشته في ["تنفيذ سِمة على نوع"][impl-trait]<!-- ignore --> في الفصل 10، لتنفيذ سِمة نحتاج إلى توفير تنفيذات للوسائل المطلوبة للسِمة. سِمة `Deref`، المقدمة من المكتبة القياسية، تتطلب منا تنفيذ وسيلة واحدة باسم `deref` تستعير `self` وتعيد مرجعًا إلى البيانات الداخلية. تحتوي القائمة 15-10 على تنفيذ لـ `Deref` لإضافته إلى تعريف `MyBox<T>`.
 
-<Listing number="15-10" file-name="src/main.rs" caption="Implementing `Deref` on `MyBox<T>`">
+<Listing number="15-10" file-name="src/main.rs" caption="تنفيذ `Deref` على `MyBox<T>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
@@ -152,77 +102,38 @@ of `Deref` to add to the definition of `MyBox<T>`.
 
 </Listing>
 
-The `type Target = T;` syntax defines an associated type for the `Deref` trait
-to use. Associated types are a slightly different way of declaring a generic
-parameter, but you don’t need to worry about them for now; we’ll cover them in
-more detail in Chapter 20.
+صيغة `type Target = T;` تعرّف نوعًا مرتبطًا (associated type) لسِمة `Deref` لاستخدامه. الأنواع المرتبطة هي طريقة مختلفة قليلاً للإعلان عن معامل عام، لكن لا داعي للقلق بشأنها الآن؛ سنغطيها بمزيد من التفصيل في الفصل 20.
 
-We fill in the body of the `deref` method with `&self.0` so that `deref`
-returns a reference to the value we want to access with the `*` operator;
-recall from [“Creating Different Types with Tuple Structs”][tuple-structs]<!--
-ignore --> in Chapter 5 that `.0` accesses the first value in a tuple struct.
-The `main` function in Listing 15-9 that calls `*` on the `MyBox<T>` value now
-compiles, and the assertions pass!
+نملأ جسم وسيلة `deref` بـ `&self.0` حتى تعيد `deref` مرجعًا إلى القيمة التي نريد الوصول إليها باستخدام معامل `*`؛ تذكر من ["إنشاء أنواع مختلفة باستخدام Tuple Structs"][tuple-structs]<!-- ignore --> في الفصل 5 أن `.0` يصل إلى القيمة الأولى في struct مجموعة. دالة `main` في القائمة 15-9 التي تستدعي `*` على قيمة `MyBox<T>` تُترجم الآن، والتأكيدات تنجح!
 
-Without the `Deref` trait, the compiler can only dereference `&` references.
-The `deref` method gives the compiler the ability to take a value of any type
-that implements `Deref` and call the `deref` method to get a reference that
-it knows how to dereference.
+بدون سِمة `Deref`، يمكن للمترجم فقط فك مرجع المراجع `&`. وسيلة `deref` تعطي المترجم القدرة على أخذ قيمة من أي نوع ينفذ `Deref` واستدعاء وسيلة `deref` للحصول على مرجع `&` يعرف كيفية فك مرجعه.
 
-When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this
-code:
+عندما أدخلنا `*y` في القائمة 15-9، خلف الكواليس شغّلت Rust فعليًا هذا الكود:
 
 ```rust,ignore
 *(y.deref())
 ```
 
-Rust substitutes the `*` operator with a call to the `deref` method and then a
-plain dereference so that we don’t have to think about whether or not we need
-to call the `deref` method. This Rust feature lets us write code that functions
-identically whether we have a regular reference or a type that implements
-`Deref`.
+تستبدل Rust معامل `*` بدعوة إلى وسيلة `deref` ثم فك مرجع بسيط حتى لا نضطر للتفكير فيما إذا كنا بحاجة إلى استدعاء وسيلة `deref` أم لا. تتيح لنا هذه الميزة في Rust كتابة كود يعمل بشكل متطابق سواء كان لدينا مرجع عادي أو نوع ينفذ `Deref`.
 
-The reason the `deref` method returns a reference to a value, and that the
-plain dereference outside the parentheses in `*(y.deref())` is still necessary,
-has to do with the ownership system. If the `deref` method returned the value
-directly instead of a reference to the value, the value would be moved out of
-`self`. We don’t want to take ownership of the inner value inside `MyBox<T>` in
-this case or in most cases where we use the dereference operator.
+السبب في أن وسيلة `deref` تعيد مرجعًا إلى قيمة، وأن فك المرجع البسيط خارج الأقواس في `*(y.deref())` لا يزال ضروريًا، له علاقة بنظام الملكية. إذا أعادت وسيلة `deref` القيمة مباشرة بدلاً من مرجع إلى القيمة، سيتم نقل القيمة خارج `self`. لا نريد أخذ ملكية القيمة الداخلية داخل `MyBox<T>` في هذه الحالة أو في معظم الحالات التي نستخدم فيها معامل فك المرجع.
 
-Note that the `*` operator is replaced with a call to the `deref` method and
-then a call to the `*` operator just once, each time we use a `*` in our code.
-Because the substitution of the `*` operator does not recurse infinitely, we
-end up with data of type `i32`, which matches the `5` in `assert_eq!` in
-Listing 15-9.
+لاحظ أن معامل `*` يُستبدل بدعوة إلى وسيلة `deref` ثم دعوة إلى معامل `*` مرة واحدة فقط، في كل مرة نستخدم فيها `*` في كودنا. لأن استبدال معامل `*` لا يتكرر بشكل لا نهائي، ينتهي بنا الأمر ببيانات من نوع `i32`، والتي تطابق `5` في `assert_eq!` في القائمة 15-9.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="implicit-deref-coercions-with-functions-and-methods"></a>
 <a id="using-deref-coercions-in-functions-and-methods"></a>
 
-### Using Deref Coercion in Functions and Methods
+### استخدام التحويل الضمني لفك المرجع في الدوال والوسائل
 
-_Deref coercion_ converts a reference to a type that implements the `Deref`
-trait into a reference to another type. For example, deref coercion can convert
-`&String` to `&str` because `String` implements the `Deref` trait such that it
-returns `&str`. Deref coercion is a convenience Rust performs on arguments to
-functions and methods, and it works only on types that implement the `Deref`
-trait. It happens automatically when we pass a reference to a particular type’s
-value as an argument to a function or method that doesn’t match the parameter
-type in the function or method definition. A sequence of calls to the `deref`
-method converts the type we provided into the type the parameter needs.
+_التحويل الضمني لفك المرجع_ (Deref coercion) يحول مرجعًا إلى نوع ينفذ سِمة `Deref` إلى مرجع إلى نوع آخر. على سبيل المثال، يمكن للتحويل الضمني لفك المرجع تحويل `&String` إلى `&str` لأن `String` تنفذ سِمة `Deref` بطريقة تعيد `&str`. التحويل الضمني لفك المرجع هو ميزة راحة تؤديها Rust على معاملات الدوال والوسائل، ويعمل فقط على الأنواع التي تنفذ سِمة `Deref`. يحدث تلقائيًا عندما نمرر مرجعًا إلى قيمة نوع معين كمعامل إلى دالة أو وسيلة لا تتطابق مع نوع المعامل في تعريف الدالة أو الوسيلة. تحول سلسلة من الاستدعاءات إلى وسيلة `deref` النوع الذي قدمناه إلى النوع الذي يحتاجه المعامل.
 
-Deref coercion was added to Rust so that programmers writing function and
-method calls don’t need to add as many explicit references and dereferences
-with `&` and `*`. The deref coercion feature also lets us write more code that
-can work for either references or smart pointers.
+تمت إضافة التحويل الضمني لفك المرجع إلى Rust حتى لا يحتاج المبرمجون الذين يكتبون استدعاءات الدوال والوسائل إلى إضافة العديد من المراجع الصريحة وفك المراجع باستخدام `&` و `*`. تتيح لنا ميزة التحويل الضمني لفك المرجع أيضًا كتابة المزيد من الكود الذي يمكن أن يعمل مع المراجع أو المؤشرات الذكية.
 
-To see deref coercion in action, let’s use the `MyBox<T>` type we defined in
-Listing 15-8 as well as the implementation of `Deref` that we added in Listing
-15-10. Listing 15-11 shows the definition of a function that has a string slice
-parameter.
+لرؤية التحويل الضمني لفك المرجع في العمل، دعنا نستخدم نوع `MyBox<T>` الذي عرّفناه في القائمة 15-8 بالإضافة إلى تنفيذ `Deref` الذي أضفناه في القائمة 15-10. توضح القائمة 15-11 تعريف دالة لها معامل شريحة نصية (string slice).
 
-<Listing number="15-11" file-name="src/main.rs" caption="A `hello` function that has the parameter `name` of type `&str`">
+<Listing number="15-11" file-name="src/main.rs" caption="دالة `hello` التي لها معامل `name` من نوع `&str`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
@@ -230,11 +141,9 @@ parameter.
 
 </Listing>
 
-We can call the `hello` function with a string slice as an argument, such as
-`hello("Rust");`, for example. Deref coercion makes it possible to call `hello`
-with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12.
+يمكننا استدعاء دالة `hello` مع شريحة نصية كمعامل، مثل `hello("Rust");`، على سبيل المثال. التحويل الضمني لفك المرجع يجعل من الممكن استدعاء `hello` بمرجع إلى قيمة من نوع `MyBox<String>`، كما هو موضح في القائمة 15-12.
 
-<Listing number="15-12" file-name="src/main.rs" caption="Calling `hello` with a reference to a `MyBox<String>` value, which works because of deref coercion">
+<Listing number="15-12" file-name="src/main.rs" caption="استدعاء `hello` بمرجع إلى قيمة `MyBox<String>`، والذي يعمل بسبب التحويل الضمني لفك المرجع">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
@@ -242,19 +151,11 @@ with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12.
 
 </Listing>
 
-Here we’re calling the `hello` function with the argument `&m`, which is a
-reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
-on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
-by calling `deref`. The standard library provides an implementation of `Deref`
-on `String` that returns a string slice, and this is in the API documentation
-for `Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which
-matches the `hello` function’s definition.
+هنا نستدعي دالة `hello` مع المعامل `&m`، وهو مرجع إلى قيمة `MyBox<String>`. لأننا نفذنا سِمة `Deref` على `MyBox<T>` في القائمة 15-10، يمكن لـ Rust تحويل `&MyBox<String>` إلى `&String` عن طريق استدعاء `deref`. توفر المكتبة القياسية تنفيذًا لـ `Deref` على `String` يعيد شريحة نصية، وهذا في وثائق API لـ `Deref`. تستدعي Rust `deref` مرة أخرى لتحويل `&String` إلى `&str`, والتي تطابق تعريف دالة `hello`.
 
-If Rust didn’t implement deref coercion, we would have to write the code in
-Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value
-of type `&MyBox<String>`.
+إذا لم تنفذ Rust التحويل الضمني لفك المرجع، سنضطر لكتابة الكود في القائمة 15-13 بدلاً من الكود في القائمة 15-12 لاستدعاء `hello` بقيمة من نوع `&MyBox<String>`.
 
-<Listing number="15-13" file-name="src/main.rs" caption="The code we would have to write if Rust didn’t have deref coercion">
+<Listing number="15-13" file-name="src/main.rs" caption="الكود الذي سنضطر لكتابته إذا لم يكن لدى Rust التحويل الضمني لفك المرجع">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
@@ -262,51 +163,27 @@ of type `&MyBox<String>`.
 
 </Listing>
 
-The `(*m)` dereferences the `MyBox<String>` into a `String`. Then, the `&` and
-`[..]` take a string slice of the `String` that is equal to the whole string to
-match the signature of `hello`. This code without deref coercions is harder to
-read, write, and understand with all of these symbols involved. Deref coercion
-allows Rust to handle these conversions for us automatically.
+`(*m)` يفك مرجع `MyBox<String>` إلى `String`. ثم، يأخذ `&` و `[..]` شريحة نصية من `String` تساوي النص بأكمله لمطابقة توقيع `hello`. هذا الكود بدون التحويلات الضمنية لفك المرجع أصعب في القراءة والكتابة والفهم مع كل هذه الرموز المعنية. يتيح التحويل الضمني لفك المرجع لـ Rust التعامل مع هذه التحويلات لنا تلقائيًا.
 
-When the `Deref` trait is defined for the types involved, Rust will analyze the
-types and use `Deref::deref` as many times as necessary to get a reference to
-match the parameter’s type. The number of times that `Deref::deref` needs to be
-inserted is resolved at compile time, so there is no runtime penalty for taking
-advantage of deref coercion!
+عندما يتم تعريف سِمة `Deref` للأنواع المعنية، ستحلل Rust الأنواع وتستخدم `Deref::deref` بقدر ما هو ضروري للحصول على مرجع يطابق نوع المعامل. عدد المرات التي يجب فيها إدراج `Deref::deref` يتم حله في وقت الترجمة، لذلك لا توجد عقوبة أداء في وقت التشغيل للاستفادة من التحويل الضمني لفك المرجع!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="how-deref-coercion-interacts-with-mutability"></a>
 
-### Handling Deref Coercion with Mutable References
+### التعامل مع التحويل الضمني لفك المرجع مع المراجع القابلة للتغيير
 
-Similar to how you use the `Deref` trait to override the `*` operator on
-immutable references, you can use the `DerefMut` trait to override the `*`
-operator on mutable references.
+بطريقة مشابهة لكيفية استخدام سِمة `Deref` لتجاوز معامل `*` على المراجع غير القابلة للتغيير، يمكنك استخدام سِمة `DerefMut` لتجاوز معامل `*` على المراجع القابلة للتغيير.
 
-Rust does deref coercion when it finds types and trait implementations in three
-cases:
+تقوم Rust بالتحويل الضمني لفك المرجع عندما تجد أنواعًا وتنفيذات سِمات في ثلاث حالات:
 
-1. From `&T` to `&U` when `T: Deref<Target=U>`
-2. From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-3. From `&mut T` to `&U` when `T: Deref<Target=U>`
+1. من `&T` إلى `&U` عندما `T: Deref<Target=U>`
+2. من `&mut T` إلى `&mut U` عندما `T: DerefMut<Target=U>`
+3. من `&mut T` إلى `&U` عندما `T: Deref<Target=U>`
 
-The first two cases are the same except that the second implements mutability.
-The first case states that if you have a `&T`, and `T` implements `Deref` to
-some type `U`, you can get a `&U` transparently. The second case states that
-the same deref coercion happens for mutable references.
+الحالتان الأوليان متماثلتان باستثناء أن الثانية تنفذ القابلية للتغيير. تنص الحالة الأولى على أنه إذا كان لديك `&T`، و `T` تنفذ `Deref` إلى نوع `U`، يمكنك الحصول على `&U` بشفافية. تنص الحالة الثانية على أن نفس التحويل الضمني لفك المرجع يحدث للمراجع القابلة للتغيير.
 
-The third case is trickier: Rust will also coerce a mutable reference to an
-immutable one. But the reverse is _not_ possible: Immutable references will
-never coerce to mutable references. Because of the borrowing rules, if you have
-a mutable reference, that mutable reference must be the only reference to that
-data (otherwise, the program wouldn’t compile). Converting one mutable
-reference to one immutable reference will never break the borrowing rules.
-Converting an immutable reference to a mutable reference would require that the
-initial immutable reference is the only immutable reference to that data, but
-the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
-assumption that converting an immutable reference to a mutable reference is
-possible.
+الحالة الثالثة أصعب: ستحول Rust أيضًا مرجعًا قابلًا للتغيير إلى مرجع غير قابل للتغيير. لكن العكس _غير_ ممكن: لن تحول المراجع غير القابلة للتغيير أبدًا إلى مراجع قابلة للتغيير. بسبب قواعد الاستعارة، إذا كان لديك مرجع قابل للتغيير، يجب أن يكون هذا المرجع القابل للتغيير هو المرجع الوحيد لتلك البيانات (وإلا، لن يُترجم البرنامج). تحويل مرجع قابل للتغيير واحد إلى مرجع غير قابل للتغيير واحد لن يكسر أبدًا قواعد الاستعارة. تحويل مرجع غير قابل للتغيير إلى مرجع قابل للتغيير سيتطلب أن يكون المرجع غير القابل للتغيير الأولي هو المرجع غير القابل للتغيير الوحيد لتلك البيانات، لكن قواعد الاستعارة لا تضمن ذلك. لذلك، لا يمكن لـ Rust وضع افتراض أن تحويل مرجع غير قابل للتغيير إلى مرجع قابل للتغيير ممكن.
 
 [impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
 [tuple-structs]: ch05-01-defining-structs.html#creating-different-types-with-tuple-structs

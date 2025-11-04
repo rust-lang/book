@@ -1,43 +1,40 @@
-# An I/O Project: Building a Command Line Program
+# مشروع إدخال/إخراج: بناء برنامج سطر أوامر
 
-This chapter is a recap of the many skills you’ve learned so far and an
-exploration of a few more standard library features. We’ll build a command line
-tool that interacts with file and command line input/output to practice some of
-the Rust concepts you now have under your belt.
+يُعتبر هذا الفصل ملخصًا للعديد من المهارات التي تعلمتها حتى الآن واستكشافًا
+لبعض مزايا المكتبة القياسية الإضافية. سنقوم ببناء أداة سطر أوامر تتفاعل مع
+الملفات وإدخال/إخراج سطر الأوامر لممارسة بعض مفاهيم Rust التي أصبحت لديك الآن.
 
-Rust’s speed, safety, single binary output, and cross-platform support make it
-an ideal language for creating command line tools, so for our project, we’ll
-make our own version of the classic command line search tool `grep`
-(**g**lobally search a **r**egular **e**xpression and **p**rint). In the
-simplest use case, `grep` searches a specified file for a specified string. To
-do so, `grep` takes as its arguments a file path and a string. Then, it reads
-the file, finds lines in that file that contain the string argument, and prints
-those lines.
+تجعل سرعة Rust وأمانها وإخراجها الثنائي الواحد ودعمها عبر الأنظمة الأساسية
+المختلفة منها لغة مثالية لإنشاء أدوات سطر الأوامر، لذا في مشروعنا، سنصنع
+نسختنا الخاصة من أداة البحث الكلاسيكية `grep` (**g**lobally search a
+**r**egular **e**xpression and **p**rint). في أبسط حالة استخدام، تبحث `grep`
+في ملف محدد عن نص محدد. للقيام بذلك، تأخذ `grep` كمعاملات مسار ملف ونص. ثم
+تقرأ الملف، وتجد الأسطر في ذلك الملف التي تحتوي على معامل النص، وتطبع تلك
+الأسطر.
 
-Along the way, we’ll show how to make our command line tool use the terminal
-features that many other command line tools use. We’ll read the value of an
-environment variable to allow the user to configure the behavior of our tool.
-We’ll also print error messages to the standard error console stream (`stderr`)
-instead of standard output (`stdout`) so that, for example, the user can
-redirect successful output to a file while still seeing error messages onscreen.
+على طول الطريق، سنوضح كيفية جعل أداة سطر الأوامر الخاصة بنا تستخدم ميزات
+الطرفية التي تستخدمها العديد من أدوات سطر الأوامر الأخرى. سنقرأ قيمة متغير بيئي
+للسماح للمستخدم بتكوين سلوك أداتنا. سنطبع أيضًا رسائل الخطأ إلى تدفق وحدة
+التحكم للخطأ القياسي (`stderr`) بدلاً من الإخراج القياسي (`stdout`) بحيث،
+على سبيل المثال، يمكن للمستخدم إعادة توجيه الإخراج الناجح إلى ملف بينما لا يزال
+يرى رسائل الخطأ على الشاشة.
 
-One Rust community member, Andrew Gallant, has already created a fully
-featured, very fast version of `grep`, called `ripgrep`. By comparison, our
-version will be fairly simple, but this chapter will give you some of the
-background knowledge you need to understand a real-world project such as
-`ripgrep`.
+أحد أعضاء مجتمع Rust، Andrew Gallant، قد أنشأ بالفعل نسخة كاملة الميزات
+وسريعة جدًا من `grep`، تسمى `ripgrep`. بالمقارنة، ستكون نسختنا بسيطة إلى حد
+ما، لكن هذا الفصل سيمنحك بعض المعرفة الأساسية التي تحتاجها لفهم مشروع واقعي
+مثل `ripgrep`.
 
-Our `grep` project will combine a number of concepts you’ve learned so far:
+سيجمع مشروع `grep` الخاص بنا عددًا من المفاهيم التي تعلمتها حتى الآن:
 
-- Organizing code ([Chapter 7][ch7]<!-- ignore -->)
-- Using vectors and strings ([Chapter 8][ch8]<!-- ignore -->)
-- Handling errors ([Chapter 9][ch9]<!-- ignore -->)
-- Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore -->)
-- Writing tests ([Chapter 11][ch11]<!-- ignore -->)
+- تنظيم الكود ([الفصل 7][ch7]<!-- ignore -->)
+- استخدام المتجهات والنصوص ([الفصل 8][ch8]<!-- ignore -->)
+- معالجة الأخطاء ([الفصل 9][ch9]<!-- ignore -->)
+- استخدام السمات ومُدد الصلاحية حيثما كان ذلك مناسبًا ([الفصل 10][ch10]<!-- ignore -->)
+- كتابة الاختبارات ([الفصل 11][ch11]<!-- ignore -->)
 
-We’ll also briefly introduce closures, iterators, and trait objects, which
-[Chapter 13][ch13]<!-- ignore --> and [Chapter 18][ch18]<!-- ignore --> will
-cover in detail.
+سنقدم أيضًا بإيجاز closures (الإغلاقات) وiterators (المُكرِّرات) وtrait objects
+(كائنات السمات)، والتي سيغطيها [الفصل 13][ch13]<!-- ignore --> و[الفصل
+18][ch18]<!-- ignore --> بالتفصيل.
 
 [ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
 [ch8]: ch08-00-common-collections.html

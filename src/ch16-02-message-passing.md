@@ -2,41 +2,22 @@
 
 <a id="using-message-passing-to-transfer-data-between-threads"></a>
 
-## Transfer Data Between Threads with Message Passing
+## نقل البيانات بين الخيوط باستخدام تمرير الرسائل
 
-One increasingly popular approach to ensuring safe concurrency is message
-passing, where threads or actors communicate by sending each other messages
-containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
-“Do not communicate by sharing memory; instead, share memory by communicating.”
+أحد الأساليب الشائعة بشكل متزايد لضمان التزامن الآمن هو تمرير الرسائل (Message passing)، حيث تتواصل الخيوط أو الفاعلون (Actors) عن طريق إرسال رسائل تحتوي على بيانات لبعضهم البعض. إليك الفكرة في شعار من [توثيق لغة Go](https://golang.org/doc/effective_go.html#concurrency):
+"لا تتواصل بمشاركة الذاكرة؛ بدلاً من ذلك، شارك الذاكرة بالتواصل."
 
-To accomplish message-sending concurrency, Rust’s standard library provides an
-implementation of channels. A _channel_ is a general programming concept by
-which data is sent from one thread to another.
+لتحقيق تزامن إرسال الرسائل، توفر المكتبة القياسية لـ Rust تنفيذاً للقنوات (Channels). القناة هي مفهوم برمجي عام يتم من خلاله إرسال البيانات من خيط إلى آخر.
 
-You can imagine a channel in programming as being like a directional channel of
-water, such as a stream or a river. If you put something like a rubber duck
-into a river, it will travel downstream to the end of the waterway.
+يمكنك تخيل قناة في البرمجة على أنها قناة مائية اتجاهية، مثل جدول أو نهر. إذا وضعت شيئاً مثل بطة مطاطية في نهر، فسوف تسافر في اتجاه مجرى النهر إلى نهاية الممر المائي.
 
-A channel has two halves: a transmitter and a receiver. The transmitter half is
-the upstream location where you put the rubber duck into the river, and the
-receiver half is where the rubber duck ends up downstream. One part of your
-code calls methods on the transmitter with the data you want to send, and
-another part checks the receiving end for arriving messages. A channel is said
-to be _closed_ if either the transmitter or receiver half is dropped.
+القناة لها نصفان: مُرسِل (Transmitter) ومُستقبِل (Receiver). النصف المُرسِل هو الموقع في أعلى النهر حيث تضع البطة المطاطية في النهر، والنصف المُستقبِل هو حيث تنتهي البطة المطاطية في أسفل النهر. يستدعي جزء واحد من كودك دوال على المُرسِل بالبيانات التي تريد إرسالها، ويتحقق جزء آخر من الطرف المُستقبِل للرسائل الواردة. يُقال إن القناة مغلقة (Closed) إذا تم إسقاط (Dropped) أي من النصف المُرسِل أو المُستقبِل.
 
-Here, we’ll work up to a program that has one thread to generate values and
-send them down a channel, and another thread that will receive the values and
-print them out. We’ll be sending simple values between threads using a channel
-to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that need to communicate with each other, such as
-a chat system or a system where many threads perform parts of a calculation and
-send the parts to one thread that aggregates the results.
+هنا، سنعمل على برنامج يحتوي على خيط واحد لإنشاء قيم وإرسالها أسفل قناة، وخيط آخر سيستقبل القيم ويطبعها. سنرسل قيماً بسيطة بين الخيوط باستخدام قناة لتوضيح الميزة. بمجرد أن تصبح على دراية بالتقنية، يمكنك استخدام القنوات لأي خيوط تحتاج إلى التواصل مع بعضها البعض، مثل نظام محادثة أو نظام حيث تقوم العديد من الخيوط بأداء أجزاء من حساب وإرسال الأجزاء إلى خيط واحد يجمع النتائج.
 
-First, in Listing 16-6, we’ll create a channel but not do anything with it.
-Note that this won’t compile yet because Rust can’t tell what type of values we
-want to send over the channel.
+أولاً، في القائمة 16-6، سننشئ قناة لكن لن نفعل أي شيء بها. لاحظ أن هذا لن يترجم بعد لأن Rust لا يمكنها معرفة نوع القيم التي نريد إرسالها عبر القناة.
 
-<Listing number="16-6" file-name="src/main.rs" caption="Creating a channel and assigning the two halves to `tx` and `rx`">
+<Listing number="16-6" file-name="src/main.rs" caption="إنشاء قناة وتعيين النصفين إلى `tx` و `rx`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
@@ -44,31 +25,13 @@ want to send over the channel.
 
 </Listing>
 
-We create a new channel using the `mpsc::channel` function; `mpsc` stands for
-_multiple producer, single consumer_. In short, the way Rust’s standard library
-implements channels means a channel can have multiple _sending_ ends that
-produce values but only one _receiving_ end that consumes those values. Imagine
-multiple streams flowing together into one big river: Everything sent down any
-of the streams will end up in one river at the end. We’ll start with a single
-producer for now, but we’ll add multiple producers when we get this example
-working.
+ننشئ قناة جديدة باستخدام دالة `mpsc::channel`؛ `mpsc` يرمز إلى منتج متعدد، مستهلك واحد (Multiple producer, single consumer). باختصار، الطريقة التي تنفذ بها المكتبة القياسية لـ Rust القنوات تعني أن القناة يمكن أن يكون لها نهايات إرسال متعددة تنتج قيماً ولكن نهاية استقبال واحدة فقط تستهلك تلك القيم. تخيل جداول متعددة تتدفق معاً في نهر كبير واحد: كل شيء يتم إرساله أسفل أي من الجداول سينتهي في نهر واحد في النهاية. سنبدأ بمنتج واحد في الوقت الحالي، لكننا سنضيف منتجين متعددين عندما نجعل هذا المثال يعمل.
 
-The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end—the transmitter—and the second element of which is the receiving
-end—the receiver. The abbreviations `tx` and `rx` are traditionally used in
-many fields for _transmitter_ and _receiver_, respectively, so we name our
-variables as such to indicate each end. We’re using a `let` statement with a
-pattern that destructures the tuples; we’ll discuss the use of patterns in
-`let` statements and destructuring in Chapter 19. For now, know that using a
-`let` statement in this way is a convenient approach to extract the pieces of
-the tuple returned by `mpsc::channel`.
+تُرجع دالة `mpsc::channel` صف (Tuple)، العنصر الأول منه هو نهاية الإرسال - المُرسِل - والعنصر الثاني هو نهاية الاستقبال - المُستقبِل. الاختصارات `tx` و `rx` تُستخدم تقليدياً في العديد من المجالات لـ "مُرسِل" (Transmitter) و "مُستقبِل" (Receiver) على التوالي، لذلك نسمي متغيراتنا على هذا النحو للإشارة إلى كل نهاية. نحن نستخدم بيان `let` مع نمط (Pattern) يفكك الصفوف؛ سنناقش استخدام الأنماط في بيانات `let` والتفكيك في الفصل 19. في الوقت الحالي، اعلم أن استخدام بيان `let` بهذه الطريقة هو نهج مريح لاستخراج أجزاء الصف المُرجع من `mpsc::channel`.
 
-Let’s move the transmitting end into a spawned thread and have it send one
-string so that the spawned thread is communicating with the main thread, as
-shown in Listing 16-7. This is like putting a rubber duck in the river upstream
-or sending a chat message from one thread to another.
+دعونا ننقل النهاية المُرسلة إلى خيط مُطلق ونجعله يرسل سلسلة نصية واحدة بحيث يتواصل الخيط المُطلق مع الخيط الرئيسي، كما هو موضح في القائمة 16-7. هذا مثل وضع بطة مطاطية في النهر في أعلى المجرى أو إرسال رسالة محادثة من خيط إلى آخر.
 
-<Listing number="16-7" file-name="src/main.rs" caption='Moving `tx` to a spawned thread and sending `"hi"`'>
+<Listing number="16-7" file-name="src/main.rs" caption='نقل `tx` إلى خيط مُطلق وإرسال `"hi"`'>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
@@ -76,23 +39,13 @@ or sending a chat message from one thread to another.
 
 </Listing>
 
-Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so that the spawned thread owns `tx`. The spawned
-thread needs to own the transmitter to be able to send messages through the
-channel.
+مرة أخرى، نحن نستخدم `thread::spawn` لإنشاء خيط جديد ثم نستخدم `move` لنقل `tx` إلى الإغلاق بحيث يمتلك الخيط المُطلق `tx`. يحتاج الخيط المُطلق إلى امتلاك المُرسِل ليتمكن من إرسال الرسائل عبر القناة.
 
-The transmitter has a `send` method that takes the value we want to send. The
-`send` method returns a `Result<T, E>` type, so if the receiver has already
-been dropped and there’s nowhere to send a value, the send operation will
-return an error. In this example, we’re calling `unwrap` to panic in case of an
-error. But in a real application, we would handle it properly: Return to
-Chapter 9 to review strategies for proper error handling.
+المُرسِل لديه دالة `send` تأخذ القيمة التي نريد إرسالها. تُرجع دالة `send` نوع `Result<T, E>`، لذلك إذا تم إسقاط المُستقبِل بالفعل ولا يوجد مكان لإرسال قيمة، فستُرجع عملية الإرسال خطأً. في هذا المثال، نحن نستدعي `unwrap` للذعر في حالة حدوث خطأ. لكن في تطبيق حقيقي، سنتعامل معه بشكل صحيح: ارجع إلى الفصل 9 لمراجعة استراتيجيات المعالجة الصحيحة للأخطاء.
 
-In Listing 16-8, we’ll get the value from the receiver in the main thread. This
-is like retrieving the rubber duck from the water at the end of the river or
-receiving a chat message.
+في القائمة 16-8، سنحصل على القيمة من المُستقبِل في الخيط الرئيسي. هذا مثل استرجاع البطة المطاطية من الماء في نهاية النهر أو استقبال رسالة محادثة.
 
-<Listing number="16-8" file-name="src/main.rs" caption='Receiving the value `"hi"` in the main thread and printing it'>
+<Listing number="16-8" file-name="src/main.rs" caption='استقبال القيمة `"hi"` في الخيط الرئيسي وطباعتها'>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
@@ -100,26 +53,13 @@ receiving a chat message.
 
 </Listing>
 
-The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
-short for _receive_, which will block the main thread’s execution and wait
-until a value is sent down the channel. Once a value is sent, `recv` will
-return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
-an error to signal that no more values will be coming.
+المُستقبِل لديه دالتان مفيدتان: `recv` و `try_recv`. نحن نستخدم `recv`، اختصار لـ "استقبال" (Receive)، والتي ستحجب تنفيذ الخيط الرئيسي وتنتظر حتى يتم إرسال قيمة أسفل القناة. بمجرد إرسال قيمة، ستُرجع `recv` القيمة في `Result<T, E>`. عندما يغلق المُرسِل، ستُرجع `recv` خطأً للإشارة إلى أنه لن تأتي المزيد من القيم.
 
-The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
-immediately: an `Ok` value holding a message if one is available and an `Err`
-value if there aren’t any messages this time. Using `try_recv` is useful if
-this thread has other work to do while waiting for messages: We could write a
-loop that calls `try_recv` every so often, handles a message if one is
-available, and otherwise does other work for a little while until checking
-again.
+دالة `try_recv` لا تحجب، ولكن ستُرجع بدلاً من ذلك `Result<T, E>` على الفور: قيمة `Ok` تحتوي على رسالة إذا كانت واحدة متاحة وقيمة `Err` إذا لم تكن هناك أي رسائل هذه المرة. استخدام `try_recv` مفيد إذا كان لهذا الخيط عمل آخر يجب القيام به أثناء انتظار الرسائل: يمكننا كتابة حلقة تستدعي `try_recv` بين الحين والآخر، وتتعامل مع رسالة إذا كانت واحدة متاحة، وبخلاف ذلك تقوم بعمل آخر لفترة من الوقت قبل التحقق مرة أخرى.
 
-We’ve used `recv` in this example for simplicity; we don’t have any other work
-for the main thread to do other than wait for messages, so blocking the main
-thread is appropriate.
+استخدمنا `recv` في هذا المثال من أجل البساطة؛ ليس لدينا أي عمل آخر للخيط الرئيسي للقيام به بخلاف انتظار الرسائل، لذا فإن حجب الخيط الرئيسي مناسب.
 
-When we run the code in Listing 16-8, we’ll see the value printed from the main
-thread:
+عندما نقوم بتشغيل الكود في القائمة 16-8، سنرى القيمة مطبوعة من الخيط الرئيسي:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -129,23 +69,17 @@ changes in the compiler -->
 Got: hi
 ```
 
-Perfect!
+ممتاز!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="channels-and-ownership-transference"></a>
 
-### Transferring Ownership Through Channels
+### نقل الملكية عبر القنوات
 
-The ownership rules play a vital role in message sending because they help you
-write safe, concurrent code. Preventing errors in concurrent programming is the
-advantage of thinking about ownership throughout your Rust programs. Let’s do
-an experiment to show how channels and ownership work together to prevent
-problems: We’ll try to use a `val` value in the spawned thread _after_ we’ve
-sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn’t allowed.
+تلعب قواعد الملكية دوراً حيوياً في إرسال الرسائل لأنها تساعدك في كتابة كود آمن ومتزامن. منع الأخطاء في البرمجة المتزامنة هو ميزة التفكير في الملكية طوال برامج Rust الخاصة بك. دعونا نجري تجربة لإظهار كيف تعمل القنوات والملكية معاً لمنع المشاكل: سنحاول استخدام قيمة `val` في الخيط المُطلق بعد أن أرسلناها أسفل القناة. حاول ترجمة الكود في القائمة 16-9 لمعرفة سبب عدم السماح بهذا الكود.
 
-<Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
+<Listing number="16-9" file-name="src/main.rs" caption="محاولة استخدام `val` بعد أن أرسلناها أسفل القناة">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
@@ -153,36 +87,25 @@ this code isn’t allowed.
 
 </Listing>
 
-Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
-Allowing this would be a bad idea: Once the value has been sent to another
-thread, that thread could modify or drop it before we try to use the value
-again. Potentially, the other thread’s modifications could cause errors or
-unexpected results due to inconsistent or nonexistent data. However, Rust gives
-us an error if we try to compile the code in Listing 16-9:
+هنا، نحاول طباعة `val` بعد أن أرسلناها أسفل القناة عبر `tx.send`. السماح بهذا سيكون فكرة سيئة: بمجرد إرسال القيمة إلى خيط آخر، يمكن لهذا الخيط تعديلها أو إسقاطها قبل أن نحاول استخدام القيمة مرة أخرى. من المحتمل أن تتسبب تعديلات الخيط الآخر في حدوث أخطاء أو نتائج غير متوقعة بسبب البيانات غير المتسقة أو غير الموجودة. ومع ذلك، تعطينا Rust خطأً إذا حاولنا ترجمة الكود في القائمة 16-9:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
-Our concurrency mistake has caused a compile-time error. The `send` function
-takes ownership of its parameter, and when the value is moved the receiver
-takes ownership of it. This stops us from accidentally using the value again
-after sending it; the ownership system checks that everything is okay.
+تسبب خطأنا في التزامن في خطأ وقت الترجمة. تأخذ دالة `send` ملكية معاملها، وعندما يتم نقل القيمة، يأخذ المُستقبِل ملكيتها. هذا يمنعنا من استخدام القيمة عن طريق الخطأ مرة أخرى بعد إرسالها؛ يتحقق نظام الملكية من أن كل شيء على ما يرام.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="sending-multiple-values-and-seeing-the-receiver-waiting"></a>
 
-### Sending Multiple Values
+### إرسال قيم متعددة
 
-The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
-two separate threads were talking to each other over the channel.
+تم ترجمة الكود في القائمة 16-8 وتشغيله، لكنه لم يُظهر لنا بوضوح أن خيطين منفصلين كانا يتحدثان إلى بعضهما البعض عبر القناة.
 
-In Listing 16-10, we’ve made some modifications that will prove the code in
-Listing 16-8 is running concurrently: The spawned thread will now send multiple
-messages and pause for a second between each message.
+في القائمة 16-10، قمنا ببعض التعديلات التي ستثبت أن الكود في القائمة 16-8 يعمل بشكل متزامن: سيرسل الخيط المُطلق الآن رسائل متعددة ويتوقف لمدة ثانية واحدة بين كل رسالة.
 
-<Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each one">
+<Listing number="16-10" file-name="src/main.rs" caption="إرسال رسائل متعددة والتوقف بين كل واحدة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
@@ -190,17 +113,11 @@ messages and pause for a second between each message.
 
 </Listing>
 
-This time, the spawned thread has a vector of strings that we want to send to
-the main thread. We iterate over them, sending each individually, and pause
-between each by calling the `thread::sleep` function with a `Duration` value of
-one second.
+هذه المرة، لدى الخيط المُطلق متجه من السلاسل النصية التي نريد إرسالها إلى الخيط الرئيسي. نكرر عليها، ونرسل كل واحدة على حدة، ونتوقف بينها بالاتصال بدالة `thread::sleep` بقيمة `Duration` لمدة ثانية واحدة.
 
-In the main thread, we’re not calling the `recv` function explicitly anymore:
-Instead, we’re treating `rx` as an iterator. For each value received, we’re
-printing it. When the channel is closed, iteration will end.
+في الخيط الرئيسي، لم نعد نستدعي دالة `recv` بشكل صريح: بدلاً من ذلك، نحن نعامل `rx` كمكرر (Iterator). لكل قيمة مستلمة، نقوم بطباعتها. عندما تُغلق القناة، سينتهي التكرار.
 
-When running the code in Listing 16-10, you should see the following output
-with a one-second pause in between each line:
+عند تشغيل الكود في القائمة 16-10، يجب أن ترى الناتج التالي مع توقف لمدة ثانية واحدة بين كل سطر:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -213,22 +130,17 @@ Got: the
 Got: thread
 ```
 
-Because we don’t have any code that pauses or delays in the `for` loop in the
-main thread, we can tell that the main thread is waiting to receive values from
-the spawned thread.
+لأننا ليس لدينا أي كود يتوقف أو يتأخر في حلقة `for` في الخيط الرئيسي، يمكننا معرفة أن الخيط الرئيسي ينتظر لاستقبال القيم من الخيط المُطلق.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-multiple-producers-by-cloning-the-transmitter"></a>
 
-### Creating Multiple Producers
+### إنشاء منتجين متعددين
 
-Earlier we mentioned that `mpsc` was an acronym for _multiple producer, single
-consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10 to
-create multiple threads that all send values to the same receiver. We can do so
-by cloning the transmitter, as shown in Listing 16-11.
+ذكرنا سابقاً أن `mpsc` كانت اختصاراً لـ "منتج متعدد، مستهلك واحد" (Multiple producer, single consumer). دعونا نضع `mpsc` في الاستخدام ونوسع الكود في القائمة 16-10 لإنشاء خيوط متعددة تُرسل جميعها قيماً إلى نفس المُستقبِل. يمكننا القيام بذلك عن طريق استنساخ المُرسِل، كما هو موضح في القائمة 16-11.
 
-<Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
+<Listing number="16-11" file-name="src/main.rs" caption="إرسال رسائل متعددة من منتجين متعددين">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
@@ -236,12 +148,9 @@ by cloning the transmitter, as shown in Listing 16-11.
 
 </Listing>
 
-This time, before we create the first spawned thread, we call `clone` on the
-transmitter. This will give us a new transmitter we can pass to the first
-spawned thread. We pass the original transmitter to a second spawned thread.
-This gives us two threads, each sending different messages to the one receiver.
+هذه المرة، قبل أن ننشئ الخيط المُطلق الأول، نستدعي `clone` على المُرسِل. هذا سيعطينا مُرسِلاً جديداً يمكننا تمريره إلى الخيط المُطلق الأول. نمرر المُرسِل الأصلي إلى خيط مُطلق ثانٍ. هذا يعطينا خيطين، كل منهما يرسل رسائل مختلفة إلى مُستقبِل واحد.
 
-When you run the code, your output should look something like this:
+عند تشغيل الكود، يجب أن يبدو الناتج الخاص بك كهذا:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -258,10 +167,6 @@ Got: thread
 Got: you
 ```
 
-You might see the values in another order, depending on your system. This is
-what makes concurrency interesting as well as difficult. If you experiment with
-`thread::sleep`, giving it various values in the different threads, each run
-will be more nondeterministic and create different output each time.
+قد ترى القيم بترتيب آخر، اعتماداً على نظامك. هذا ما يجعل التزامن مثيراً للاهتمام وكذلك صعباً. إذا قمت بالتجربة مع `thread::sleep`، وإعطائها قيماً مختلفة في خيوط مختلفة، فستكون كل عملية تشغيل أكثر غير حتمية وستخلق ناتجاً مختلفاً في كل مرة.
 
-Now that we’ve looked at how channels work, let’s look at a different method of
-concurrency.
+الآن بعد أن نظرنا إلى كيفية عمل القنوات، دعونا ننظر إلى طريقة مختلفة للتزامن.

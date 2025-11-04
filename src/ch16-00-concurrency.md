@@ -1,49 +1,17 @@
-# Fearless Concurrency
+# التزامن بلا خوف
 
-Handling concurrent programming safely and efficiently is another of Rust’s
-major goals. _Concurrent programming_, in which different parts of a program
-execute independently, and _parallel programming_, in which different parts of
-a program execute at the same time, are becoming increasingly important as more
-computers take advantage of their multiple processors. Historically,
-programming in these contexts has been difficult and error-prone. Rust hopes to
-change that.
+التعامل مع البرمجة المتزامنة بشكل آمن وفعال هو أحد الأهداف الرئيسية لـ Rust.
+البرمجة المتزامنة (Concurrent programming)، التي تُنفذ فيها أجزاء مختلفة من البرنامج بشكل مستقل، والبرمجة المتوازية (Parallel programming)، التي تُنفذ فيها أجزاء مختلفة من البرنامج في نفس الوقت، أصبحتا أكثر أهمية مع استفادة المزيد من أجهزة الكمبيوتر من معالجاتها المتعددة. تاريخياً، كانت البرمجة في هذه السياقات صعبة وعرضة للأخطاء. تأمل Rust في تغيير ذلك.
 
-Initially, the Rust team thought that ensuring memory safety and preventing
-concurrency problems were two separate challenges to be solved with different
-methods. Over time, the team discovered that the ownership and type systems are
-a powerful set of tools to help manage memory safety _and_ concurrency
-problems! By leveraging ownership and type checking, many concurrency errors
-are compile-time errors in Rust rather than runtime errors. Therefore, rather
-than making you spend lots of time trying to reproduce the exact circumstances
-under which a runtime concurrency bug occurs, incorrect code will refuse to
-compile and present an error explaining the problem. As a result, you can fix
-your code while you’re working on it rather than potentially after it has been
-shipped to production. We’ve nicknamed this aspect of Rust _fearless
-concurrency_. Fearless concurrency allows you to write code that is free of
-subtle bugs and is easy to refactor without introducing new bugs.
+في البداية، اعتقد فريق Rust أن ضمان أمان الذاكرة ومنع مشاكل التزامن كانا تحديين منفصلين يجب حلهما بطرق مختلفة. مع مرور الوقت، اكتشف الفريق أن نظام الملكية (Ownership) ونظام الأنواع (Type System) هما مجموعة أدوات قوية للمساعدة في إدارة أمان الذاكرة ومشاكل التزامن! من خلال الاستفادة من الملكية والتحقق من الأنواع، تصبح العديد من أخطاء التزامن أخطاء وقت الترجمة في Rust بدلاً من أخطاء وقت التشغيل. لذلك، بدلاً من جعلك تقضي الكثير من الوقت في محاولة إعادة إنتاج الظروف الدقيقة التي يحدث فيها خطأ تزامن وقت التشغيل، فإن الكود غير الصحيح سيرفض الترجمة ويقدم خطأ يشرح المشكلة. نتيجة لذلك، يمكنك إصلاح كودك أثناء العمل عليه بدلاً من إصلاحه بعد شحنه إلى الإنتاج. لقد أطلقنا على هذا الجانب من Rust اسم التزامن بلا خوف (Fearless Concurrency). يتيح لك التزامن بلا خوف كتابة كود خالٍ من الأخطاء الدقيقة ويسهل إعادة هيكلته دون إدخال أخطاء جديدة.
 
-> Note: For simplicity’s sake, we’ll refer to many of the problems as
-> _concurrent_ rather than being more precise by saying _concurrent and/or
-> parallel_. For this chapter, please mentally substitute _concurrent and/or
-> parallel_ whenever we use _concurrent_. In the next chapter, where the
-> distinction matters more, we’ll be more specific.
+> ملاحظة: من أجل البساطة، سنشير إلى العديد من المشاكل على أنها متزامنة (Concurrent) بدلاً من أن نكون أكثر دقة بقول متزامنة و/أو متوازية (Concurrent and/or Parallel). في هذا الفصل، يرجى الاستبدال ذهنياً بـ "متزامنة و/أو متوازية" كلما استخدمنا "متزامنة". في الفصل التالي، حيث يكون التمييز أكثر أهمية، سنكون أكثر تحديداً.
 
-Many languages are dogmatic about the solutions they offer for handling
-concurrent problems. For example, Erlang has elegant functionality for
-message-passing concurrency but has only obscure ways to share state between
-threads. Supporting only a subset of possible solutions is a reasonable
-strategy for higher-level languages because a higher-level language promises
-benefits from giving up some control to gain abstractions. However, lower-level
-languages are expected to provide the solution with the best performance in any
-given situation and have fewer abstractions over the hardware. Therefore, Rust
-offers a variety of tools for modeling problems in whatever way is appropriate
-for your situation and requirements.
+العديد من اللغات متعصبة للحلول التي تقدمها للتعامل مع المشاكل المتزامنة. على سبيل المثال، تحتوي Erlang على وظائف أنيقة لتزامن تمرير الرسائل (Message-passing) ولكن لديها فقط طرق غامضة لمشاركة الحالة بين الخيوط (Threads). يعد دعم مجموعة فرعية فقط من الحلول الممكنة استراتيجية معقولة للغات عالية المستوى لأن لغة عالية المستوى تعد بفوائد من التخلي عن بعض السيطرة للحصول على التجريدات. ومع ذلك، من المتوقع أن توفر اللغات منخفضة المستوى الحل بأفضل أداء في أي موقف معين ولديها تجريدات أقل على الأجهزة. لذلك، تقدم Rust مجموعة متنوعة من الأدوات لنمذجة المشاكل بأي طريقة مناسبة لوضعك ومتطلباتك.
 
-Here are the topics we’ll cover in this chapter:
+إليك المواضيع التي سنغطيها في هذا الفصل:
 
-- How to create threads to run multiple pieces of code at the same time
-- _Message-passing_ concurrency, where channels send messages between threads
-- _Shared-state_ concurrency, where multiple threads have access to some piece
-  of data
-- The `Sync` and `Send` traits, which extend Rust’s concurrency guarantees to
-  user-defined types as well as types provided by the standard library
+- كيفية إنشاء خيوط (Threads) لتشغيل أجزاء متعددة من الكود في نفس الوقت
+- تزامن تمرير الرسائل (Message-passing)، حيث ترسل القنوات (Channels) رسائل بين الخيوط
+- تزامن الحالة المشتركة (Shared-state)، حيث يكون للخيوط المتعددة وصول إلى بعض البيانات
+- سِمات (Traits) `Sync` و `Send`، التي تمد ضمانات التزامن في Rust إلى الأنواع المعرفة من قبل المستخدم وكذلك الأنواع المقدمة من المكتبة القياسية

@@ -1,61 +1,33 @@
-## Implementing an Object-Oriented Design Pattern
+## تنفيذ نمط تصميم كائني التوجه
 
-The _state pattern_ is an object-oriented design pattern. The crux of the
-pattern is that we define a set of states a value can have internally. The
-states are represented by a set of _state objects_, and the value’s behavior
-changes based on its state. We’re going to work through an example of a blog
-post struct that has a field to hold its state, which will be a state object
-from the set “draft,” “review,” or “published.”
+_نمط الحالة_ (state pattern) هو نمط تصميم (design pattern) كائني التوجه. جوهر النمط هو أننا نعرّف مجموعة من الحالات التي يمكن أن تكون لدى القيمة داخليًا. يتم تمثيل الحالات بمجموعة من _كائنات الحالة_ (state objects)، ويتغير سلوك القيمة بناءً على حالتها. سنعمل من خلال مثال لبنية منشور مدونة لها حقل لتخزين حالتها، والتي ستكون كائن حالة من المجموعة "مسودة" أو "مراجعة" أو "منشورة".
 
-The state objects share functionality: In Rust, of course, we use structs and
-traits rather than objects and inheritance. Each state object is responsible
-for its own behavior and for governing when it should change into another
-state. The value that holds a state object knows nothing about the different
-behavior of the states or when to transition between states.
+كائنات الحالة تشترك في الوظائف: في Rust، بالطبع، نستخدم البُنى والسِمات بدلاً من الكائنات والوراثة. كل كائن حالة مسؤول عن سلوكه الخاص وعن التحكم في متى يجب أن يتغير إلى حالة أخرى. القيمة التي تحتوي على كائن حالة لا تعرف شيئًا عن السلوك المختلف للحالات أو متى يجب الانتقال بين الحالات.
 
-The advantage of using the state pattern is that, when the business
-requirements of the program change, we won’t need to change the code of the
-value holding the state or the code that uses the value. We’ll only need to
-update the code inside one of the state objects to change its rules or perhaps
-add more state objects.
+ميزة استخدام نمط الحالة هي أنه عندما تتغير متطلبات العمل للبرنامج، لن نحتاج إلى تغيير كود القيمة التي تحتوي على الحالة أو الكود الذي يستخدم القيمة. سنحتاج فقط إلى تحديث الكود داخل أحد كائنات الحالة لتغيير قواعدها أو ربما إضافة المزيد من كائنات الحالة.
 
-First, we’re going to implement the state pattern in a more traditional
-object-oriented way. Then, we’ll use an approach that’s a bit more natural in
-Rust. Let’s dig in to incrementally implement a blog post workflow using the
-state pattern.
+أولاً، سنقوم بتنفيذ نمط الحالة بطريقة كائنية التوجه أكثر تقليدية. بعد ذلك، سنستخدم نهجًا أكثر طبيعية قليلاً في Rust. دعونا نتعمق في تنفيذ سير عمل منشور مدونة تدريجيًا باستخدام نمط الحالة.
 
-The final functionality will look like this:
+ستبدو الوظيفة النهائية كما يلي:
 
-1. A blog post starts as an empty draft.
-1. When the draft is done, a review of the post is requested.
-1. When the post is approved, it gets published.
-1. Only published blog posts return content to print so that unapproved posts
-   can’t accidentally be published.
+1. يبدأ منشور المدونة كمسودة فارغة.
+1. عندما تكتمل المسودة، يُطلب مراجعة للمنشور.
+1. عندما تتم الموافقة على المنشور، يتم نشره.
+1. فقط منشورات المدونة المنشورة تُرجع محتوى للطباعة بحيث لا يمكن نشر المنشورات غير المعتمدة عن طريق الخطأ.
 
-Any other changes attempted on a post should have no effect. For example, if we
-try to approve a draft blog post before we’ve requested a review, the post
-should remain an unpublished draft.
+أي تغييرات أخرى يتم محاولتها على منشور يجب ألا يكون لها تأثير. على سبيل المثال، إذا حاولنا الموافقة على مسودة منشور مدونة قبل أن نطلب مراجعة، يجب أن يظل المنشور مسودة غير منشورة.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="a-traditional-object-oriented-attempt"></a>
 
-### Attempting Traditional Object-Oriented Style
+### محاولة الأسلوب الكائني التوجه التقليدي
 
-There are infinite ways to structure code to solve the same problem, each with
-different trade-offs. This section’s implementation is more of a traditional
-object-oriented style, which is possible to write in Rust, but doesn’t take
-advantage of some of Rust’s strengths. Later, we’ll demonstrate a different
-solution that still uses the object-oriented design pattern but is structured
-in a way that might look less familiar to programmers with object-oriented
-experience. We’ll compare the two solutions to experience the trade-offs of
-designing Rust code differently than code in other languages.
+هناك طرق لا نهائية لهيكلة الكود لحل نفس المشكلة، ولكل منها مفاضلات مختلفة. تنفيذ هذا القسم هو أكثر من نمط كائني التوجه تقليدي، والذي يمكن كتابته في Rust، لكنه لا يستفيد من بعض نقاط قوة Rust. في وقت لاحق، سنعرض حلاً مختلفًا لا يزال يستخدم نمط التصميم الكائني التوجه ولكنه منظم بطريقة قد تبدو أقل مألوفة للمبرمجين ذوي الخبرة الكائنية التوجه. سنقارن الحلين لتجربة المفاضلات في تصميم كود Rust بشكل مختلف عن الكود في اللغات الأخرى.
 
-Listing 18-11 shows this workflow in code form: This is an example usage of the
-API we’ll implement in a library crate named `blog`. This won’t compile yet
-because we haven’t implemented the `blog` crate.
+القائمة 18-11 توضح سير العمل هذا في شكل كود: هذا مثال على استخدام واجهة برمجة التطبيقات التي سننفذها في صندوق مكتبة باسم `blog`. لن يتم تصريف هذا بعد لأننا لم ننفذ صندوق `blog` بعد.
 
-<Listing number="18-11" file-name="src/main.rs" caption="Code that demonstrates the desired behavior we want our `blog` crate to have">
+<Listing number="18-11" file-name="src/main.rs" caption="الكود الذي يوضح السلوك المطلوب الذي نريد أن يكون لصندوق `blog` الخاص بنا">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
@@ -63,46 +35,23 @@ because we haven’t implemented the `blog` crate.
 
 </Listing>
 
-We want to allow the user to create a new draft blog post with `Post::new`. We
-want to allow text to be added to the blog post. If we try to get the post’s
-content immediately, before approval, we shouldn’t get any text because the
-post is still a draft. We’ve added `assert_eq!` in the code for demonstration
-purposes. An excellent unit test for this would be to assert that a draft blog
-post returns an empty string from the `content` method, but we’re not going to
-write tests for this example.
+نريد أن نسمح للمستخدم بإنشاء منشور مدونة مسودة جديد باستخدام `Post::new`. نريد السماح بإضافة نص إلى منشور المدونة. إذا حاولنا الحصول على محتوى المنشور فورًا، قبل الموافقة، يجب ألا نحصل على أي نص لأن المنشور لا يزال مسودة. لقد أضفنا `assert_eq!` في الكود لأغراض العرض. اختبار وحدة ممتاز لهذا سيكون التأكيد على أن منشور المدونة المسودة يُرجع سلسلة نصية فارغة من دالة `content`، لكننا لن نكتب اختبارات لهذا المثال.
 
-Next, we want to enable a request for a review of the post, and we want
-`content` to return an empty string while waiting for the review. When the post
-receives approval, it should get published, meaning the text of the post will
-be returned when `content` is called.
+بعد ذلك، نريد تمكين طلب مراجعة للمنشور، ونريد أن يُرجع `content` سلسلة نصية فارغة أثناء انتظار المراجعة. عندما يحصل المنشور على الموافقة، يجب نشره، مما يعني أن نص المنشور سيُرجع عند استدعاء `content`.
 
-Notice that the only type we’re interacting with from the crate is the `Post`
-type. This type will use the state pattern and will hold a value that will be
-one of three state objects representing the various states a post can be
-in—draft, review, or published. Changing from one state to another will be
-managed internally within the `Post` type. The states change in response to the
-methods called by our library’s users on the `Post` instance, but they don’t
-have to manage the state changes directly. Also, users can’t make a mistake
-with the states, such as publishing a post before it’s reviewed.
+لاحظ أن النوع الوحيد الذي نتفاعل معه من الصندوق هو نوع `Post`. سيستخدم هذا النوع نمط الحالة وسيحتوي على قيمة ستكون واحدة من ثلاثة كائنات حالة تمثل الحالات المختلفة التي يمكن أن يكون المنشور فيها—مسودة، مراجعة، أو منشورة. ستتم إدارة التغيير من حالة إلى أخرى داخليًا ضمن نوع `Post`. تتغير الحالات استجابة للدوال المستدعاة من قبل مستخدمي مكتبتنا على نسخة `Post`، لكن ليس عليهم إدارة تغييرات الحالة مباشرة. أيضًا، لا يمكن للمستخدمين ارتكاب خطأ في الحالات، مثل نشر منشور قبل مراجعته.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="defining-post-and-creating-a-new-instance-in-the-draft-state"></a>
 
-#### Defining `Post` and Creating a New Instance
+#### تعريف `Post` وإنشاء نسخة جديدة
 
-Let’s get started on the implementation of the library! We know we need a
-public `Post` struct that holds some content, so we’ll start with the
-definition of the struct and an associated public `new` function to create an
-instance of `Post`, as shown in Listing 18-12. We’ll also make a private
-`State` trait that will define the behavior that all state objects for a `Post`
-must have.
+لنبدأ في تنفيذ المكتبة! نعلم أننا بحاجة إلى بنية `Post` عامة تحتوي على بعض المحتوى، لذا سنبدأ بتعريف البنية ودالة `new` عامة مرتبطة لإنشاء نسخة من `Post`، كما هو موضح في القائمة 18-12. سنقوم أيضًا بإنشاء سِمة `State` خاصة ستعرّف السلوك الذي يجب أن تمتلكه جميع كائنات الحالة لـ `Post`.
 
-Then, `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
-in a private field named `state` to hold the state object. You’ll see why the
-`Option<T>` is necessary in a bit.
+بعد ذلك، ستحتوي `Post` على كائن سِمة من `Box<dyn State>` داخل `Option<T>` في حقل خاص باسم `state` لتخزين كائن الحالة. ستفهم سبب ضرورة `Option<T>` بعد قليل.
 
-<Listing number="18-12" file-name="src/lib.rs" caption="Definition of a `Post` struct and a `new` function that creates a new `Post` instance, a `State` trait, and a `Draft` struct">
+<Listing number="18-12" file-name="src/lib.rs" caption="تعريف بنية `Post` ودالة `new` التي تنشئ نسخة `Post` جديدة، وسِمة `State`، وبنية `Draft`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-12/src/lib.rs}}
@@ -110,30 +59,15 @@ in a private field named `state` to hold the state object. You’ll see why the
 
 </Listing>
 
-The `State` trait defines the behavior shared by different post states. The
-state objects are `Draft`, `PendingReview`, and `Published`, and they will all
-implement the `State` trait. For now, the trait doesn’t have any methods, and
-we’ll start by defining just the `Draft` state because that is the state we
-want a post to start in.
+السِمة `State` تعرّف السلوك المشترك بين حالات المنشورات المختلفة. كائنات الحالة هي `Draft` و`PendingReview` و`Published`, وسينفذون جميعًا السِمة `State`. في الوقت الحالي، لا تحتوي السِمة على أي دوال، وسنبدأ بتعريف حالة `Draft` فقط لأن هذه هي الحالة التي نريد أن يبدأ بها المنشور.
 
-When we create a new `Post`, we set its `state` field to a `Some` value that
-holds a `Box`. This `Box` points to a new instance of the `Draft` struct. This
-ensures that whenever we create a new instance of `Post`, it will start out as
-a draft. Because the `state` field of `Post` is private, there is no way to
-create a `Post` in any other state! In the `Post::new` function, we set the
-`content` field to a new, empty `String`.
+عندما نقوم بإنشاء `Post` جديد، نقوم بتعيين حقل `state` الخاص به إلى قيمة `Some` تحتوي على `Box`. يشير هذا `Box` إلى نسخة جديدة من بنية `Draft`. هذا يضمن أنه كلما أنشأنا نسخة جديدة من `Post`، ستبدأ كمسودة. نظرًا لأن حقل `state` لـ `Post` خاص، لا توجد طريقة لإنشاء `Post` في أي حالة أخرى! في دالة `Post::new`، نقوم بتعيين حقل `content` إلى `String` فارغ جديد.
 
-#### Storing the Text of the Post Content
+#### تخزين نص محتوى المنشور
 
-We saw in Listing 18-11 that we want to be able to call a method named
-`add_text` and pass it a `&str` that is then added as the text content of the
-blog post. We implement this as a method, rather than exposing the `content`
-field as `pub`, so that later we can implement a method that will control how
-the `content` field’s data is read. The `add_text` method is pretty
-straightforward, so let’s add the implementation in Listing 18-13 to the `impl
-Post` block.
+رأينا في القائمة 18-11 أننا نريد أن نتمكن من استدعاء دالة باسم `add_text` وتمريرها `&str` يتم إضافتها بعد ذلك كمحتوى نصي لمنشور المدونة. ننفذ هذا كدالة، بدلاً من الكشف عن حقل `content` كـ `pub`، بحيث يمكننا لاحقًا تنفيذ دالة ستتحكم في كيفية قراءة بيانات حقل `content`. دالة `add_text` بسيطة للغاية، لذا دعونا نضيف التنفيذ في القائمة 18-13 إلى كتلة `impl Post`.
 
-<Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
+<Listing number="18-13" file-name="src/lib.rs" caption="تنفيذ دالة `add_text` لإضافة نص إلى `content` المنشور">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
@@ -141,31 +75,17 @@ Post` block.
 
 </Listing>
 
-The `add_text` method takes a mutable reference to `self` because we’re
-changing the `Post` instance that we’re calling `add_text` on. We then call
-`push_str` on the `String` in `content` and pass the `text` argument to add to
-the saved `content`. This behavior doesn’t depend on the state the post is in,
-so it’s not part of the state pattern. The `add_text` method doesn’t interact
-with the `state` field at all, but it is part of the behavior we want to
-support.
+تأخذ دالة `add_text` مرجعًا قابلاً للتغيير لـ `self` لأننا نقوم بتغيير نسخة `Post` التي نستدعي عليها `add_text`. ثم نستدعي `push_str` على `String` في `content` ونمرر معامل `text` لإضافته إلى `content` المحفوظ. لا يعتمد هذا السلوك على الحالة التي يكون فيها المنشور، لذا فهو ليس جزءًا من نمط الحالة. لا تتفاعل دالة `add_text` مع حقل `state` على الإطلاق، لكنها جزء من السلوك الذي نريد دعمه.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="ensuring-the-content-of-a-draft-post-is-empty"></a>
 
-#### Ensuring That the Content of a Draft Post Is Empty
+#### التأكد من أن محتوى منشور المسودة فارغ
 
-Even after we’ve called `add_text` and added some content to our post, we still
-want the `content` method to return an empty string slice because the post is
-still in the draft state, as shown by the first `assert_eq!` in Listing 18-11.
-For now, let’s implement the `content` method with the simplest thing that will
-fulfill this requirement: always returning an empty string slice. We’ll change
-this later once we implement the ability to change a post’s state so that it
-can be published. So far, posts can only be in the draft state, so the post
-content should always be empty. Listing 18-14 shows this placeholder
-implementation.
+حتى بعد استدعاء `add_text` وإضافة بعض المحتوى إلى منشورنا، لا نزال نريد أن تُرجع دالة `content` شريحة سلسلة نصية فارغة لأن المنشور لا يزال في حالة المسودة، كما هو موضح في أول `assert_eq!` في القائمة 18-11. في الوقت الحالي، دعونا ننفذ دالة `content` بأبسط شيء سيفي بهذا المتطلب: إرجاع شريحة سلسلة نصية فارغة دائمًا. سنغير هذا لاحقًا بمجرد تنفيذ القدرة على تغيير حالة المنشور بحيث يمكن نشره. حتى الآن، يمكن للمنشورات أن تكون في حالة المسودة فقط، لذا يجب أن يكون محتوى المنشور فارغًا دائمًا. القائمة 18-14 توضح هذا التنفيذ المؤقت.
 
-<Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
+<Listing number="18-14" file-name="src/lib.rs" caption="إضافة تنفيذ مؤقت لدالة `content` على `Post` تُرجع دائمًا شريحة سلسلة نصية فارغة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
@@ -173,20 +93,18 @@ implementation.
 
 </Listing>
 
-With this added `content` method, everything in Listing 18-11 through the first
-`assert_eq!` works as intended.
+مع دالة `content` المضافة هذه، كل شيء في القائمة 18-11 حتى أول `assert_eq!` يعمل كما هو مقصود.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="requesting-a-review-of-the-post-changes-its-state"></a>
 <a id="requesting-a-review-changes-the-posts-state"></a>
 
-#### Requesting a Review, Which Changes the Post’s State
+#### طلب مراجعة، والذي يغير حالة المنشور
 
-Next, we need to add functionality to request a review of a post, which should
-change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
+بعد ذلك، نحتاج إلى إضافة وظيفة لطلب مراجعة لمنشور، والتي يجب أن تغير حالته من `Draft` إلى `PendingReview`. القائمة 18-15 توضح هذا الكود.
 
-<Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
+<Listing number="18-15" file-name="src/lib.rs" caption="تنفيذ دوال `request_review` على `Post` والسِمة `State`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-15/src/lib.rs:here}}
@@ -194,60 +112,30 @@ change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
 
 </Listing>
 
-We give `Post` a public method named `request_review` that will take a mutable
-reference to `self`. Then, we call an internal `request_review` method on the
-current state of `Post`, and this second `request_review` method consumes the
-current state and returns a new state.
+نعطي `Post` دالة عامة باسم `request_review` ستأخذ مرجعًا قابلاً للتغيير لـ `self`. ثم نستدعي دالة `request_review` داخلية على الحالة الحالية لـ `Post`، وهذه الدالة `request_review` الثانية تستهلك الحالة الحالية وتُرجع حالة جديدة.
 
-We add the `request_review` method to the `State` trait; all types that
-implement the trait will now need to implement the `request_review` method.
-Note that rather than having `self`, `&self`, or `&mut self` as the first
-parameter of the method, we have `self: Box<Self>`. This syntax means the
-method is only valid when called on a `Box` holding the type. This syntax takes
-ownership of `Box<Self>`, invalidating the old state so that the state value of
-the `Post` can transform into a new state.
+نضيف دالة `request_review` إلى السِمة `State`؛ جميع الأنواع التي تُنفذ السِمة ستحتاج الآن إلى تنفيذ دالة `request_review`. لاحظ أنه بدلاً من وجود `self` أو `&self` أو `&mut self` كمعامل أول للدالة، لدينا `self: Box<Self>`. تعني هذه الصياغة أن الدالة صالحة فقط عند استدعائها على `Box` يحتوي على النوع. تأخذ هذه الصياغة ملكية (ownership) `Box<Self>`، مما يُبطل الحالة القديمة بحيث يمكن أن تتحول قيمة الحالة لـ `Post` إلى حالة جديدة.
 
-To consume the old state, the `request_review` method needs to take ownership
-of the state value. This is where the `Option` in the `state` field of `Post`
-comes in: We call the `take` method to take the `Some` value out of the `state`
-field and leave a `None` in its place because Rust doesn’t let us have
-unpopulated fields in structs. This lets us move the `state` value out of
-`Post` rather than borrowing it. Then, we’ll set the post’s `state` value to
-the result of this operation.
+لاستهلاك الحالة القديمة، تحتاج دالة `request_review` إلى أخذ ملكية قيمة الحالة. هنا يأتي دور `Option` في حقل `state` لـ `Post`: نستدعي دالة `take` لأخذ قيمة `Some` من حقل `state` وترك `None` في مكانه لأن Rust لا يسمح لنا بوجود حقول غير مملوءة في البُنى. هذا يتيح لنا نقل قيمة `state` خارج `Post` بدلاً من استعارتها. بعد ذلك، سنقوم بتعيين قيمة `state` للمنشور إلى نتيجة هذه العملية.
 
-We need to set `state` to `None` temporarily rather than setting it directly
-with code like `self.state = self.state.request_review();` to get ownership of
-the `state` value. This ensures that `Post` can’t use the old `state` value
-after we’ve transformed it into a new state.
+نحتاج إلى تعيين `state` إلى `None` مؤقتًا بدلاً من تعيينه مباشرة بكود مثل `self.state = self.state.request_review();` للحصول على ملكية قيمة `state`. هذا يضمن أن `Post` لا يمكنها استخدام قيمة `state` القديمة بعد أن قمنا بتحويلها إلى حالة جديدة.
 
-The `request_review` method on `Draft` returns a new, boxed instance of a new
-`PendingReview` struct, which represents the state when a post is waiting for a
-review. The `PendingReview` struct also implements the `request_review` method
-but doesn’t do any transformations. Rather, it returns itself because when we
-request a review on a post already in the `PendingReview` state, it should stay
-in the `PendingReview` state.
+دالة `request_review` على `Draft` تُرجع نسخة جديدة ومُحزمة من بنية `PendingReview` جديدة، والتي تمثل الحالة عندما يكون المنشور في انتظار المراجعة. تُنفذ بنية `PendingReview` أيضًا دالة `request_review` لكنها لا تقوم بأي تحويلات. بدلاً من ذلك، تُرجع نفسها لأنه عندما نطلب مراجعة على منشور في حالة `PendingReview` بالفعل، يجب أن يبقى في حالة `PendingReview`.
 
-Now we can start seeing the advantages of the state pattern: The
-`request_review` method on `Post` is the same no matter its `state` value. Each
-state is responsible for its own rules.
+الآن يمكننا البدء في رؤية مزايا نمط الحالة: دالة `request_review` على `Post` هي نفسها بغض النظر عن قيمة `state` الخاصة بها. كل حالة مسؤولة عن قواعدها الخاصة.
 
-We’ll leave the `content` method on `Post` as is, returning an empty string
-slice. We can now have a `Post` in the `PendingReview` state as well as in the
-`Draft` state, but we want the same behavior in the `PendingReview` state.
-Listing 18-11 now works up to the second `assert_eq!` call!
+سنترك دالة `content` على `Post` كما هي، تُرجع شريحة سلسلة نصية فارغة. يمكن أن يكون لدينا الآن `Post` في حالة `PendingReview` وكذلك في حالة `Draft`، لكننا نريد نفس السلوك في حالة `PendingReview`. القائمة 18-11 الآن تعمل حتى ثاني `assert_eq!`!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
 <a id="adding-approve-to-change-the-behavior-of-content"></a>
 
-#### Adding `approve` to Change `content`'s Behavior
+#### إضافة `approve` لتغيير سلوك `content`
 
-The `approve` method will be similar to the `request_review` method: It will
-set `state` to the value that the current state says it should have when that
-state is approved, as shown in Listing 18-16.
+ستكون دالة `approve` مشابهة لدالة `request_review`: ستقوم بتعيين `state` إلى القيمة التي تقول الحالة الحالية أنها يجب أن تكون عليها عند الموافقة على تلك الحالة، كما هو موضح في القائمة 18-16.
 
-<Listing number="18-16" file-name="src/lib.rs" caption="Implementing the `approve` method on `Post` and the `State` trait">
+<Listing number="18-16" file-name="src/lib.rs" caption="تنفيذ دالة `approve` على `Post` والسِمة `State`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-16/src/lib.rs:here}}
@@ -255,23 +143,13 @@ state is approved, as shown in Listing 18-16.
 
 </Listing>
 
-We add the `approve` method to the `State` trait and add a new struct that
-implements `State`, the `Published` state.
+نضيف دالة `approve` إلى السِمة `State` ونضيف بنية جديدة تُنفذ `State`، وهي حالة `Published`.
 
-Similar to the way `request_review` on `PendingReview` works, if we call the
-`approve` method on a `Draft`, it will have no effect because `approve` will
-return `self`. When we call `approve` on `PendingReview`, it returns a new,
-boxed instance of the `Published` struct. The `Published` struct implements the
-`State` trait, and for both the `request_review` method and the `approve`
-method, it returns itself because the post should stay in the `Published` state
-in those cases.
+على غرار طريقة عمل `request_review` على `PendingReview`، إذا استدعينا دالة `approve` على `Draft`، لن يكون لها أي تأثير لأن `approve` ستُرجع `self`. عندما نستدعي `approve` على `PendingReview`، تُرجع نسخة جديدة ومُحزمة من بنية `Published`. تُنفذ بنية `Published` السِمة `State`، ولكل من دالة `request_review` ودالة `approve`، تُرجع نفسها لأن المنشور يجب أن يبقى في حالة `Published` في تلك الحالات.
 
-Now we need to update the `content` method on `Post`. We want the value
-returned from `content` to depend on the current state of the `Post`, so we’re
-going to have the `Post` delegate to a `content` method defined on its `state`,
-as shown in Listing 18-17.
+الآن نحتاج إلى تحديث دالة `content` على `Post`. نريد أن تعتمد القيمة المُرجعة من `content` على الحالة الحالية لـ `Post`، لذا سنجعل `Post` تُفوّض إلى دالة `content` معرّفة على `state` الخاصة بها، كما هو موضح في القائمة 18-17.
 
-<Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
+<Listing number="18-17" file-name="src/lib.rs" caption="تحديث دالة `content` على `Post` للتفويض إلى دالة `content` على `State`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
@@ -279,33 +157,15 @@ as shown in Listing 18-17.
 
 </Listing>
 
-Because the goal is to keep all of these rules inside the structs that
-implement `State`, we call a `content` method on the value in `state` and pass
-the post instance (that is, `self`) as an argument. Then, we return the value
-that’s returned from using the `content` method on the `state` value.
+نظرًا لأن الهدف هو الحفاظ على جميع هذه القواعد داخل البُنى التي تُنفذ `State`، نستدعي دالة `content` على القيمة في `state` ونمرر نسخة المنشور (أي `self`) كمعامل. بعد ذلك، نُرجع القيمة التي يتم إرجاعها من استخدام دالة `content` على قيمة `state`.
 
-We call the `as_ref` method on the `Option` because we want a reference to the
-value inside the `Option` rather than ownership of the value. Because `state` is
-an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn
-State>>` is returned. If we didn’t call `as_ref`, we would get an error because
-we can’t move `state` out of the borrowed `&self` of the function parameter.
+نستدعي دالة `as_ref` على `Option` لأننا نريد مرجعًا إلى القيمة داخل `Option` بدلاً من ملكية القيمة. نظرًا لأن `state` هو `Option<Box<dyn State>>`، عندما نستدعي `as_ref`، يتم إرجاع `Option<&Box<dyn State>>`. إذا لم نستدعِ `as_ref`، فسنحصل على خطأ لأننا لا نستطيع نقل `state` خارج `&self` المُستعارة لمعامل الدالة.
 
-We then call the `unwrap` method, which we know will never panic because we
-know the methods on `Post` ensure that `state` will always contain a `Some`
-value when those methods are done. This is one of the cases we talked about in
-the [“When You Have More Information Than the
-Compiler”][more-info-than-rustc]<!-- ignore --> section of Chapter 9 when we
-know that a `None` value is never possible, even though the compiler isn’t able
-to understand that.
+ثم نستدعي دالة `unwrap`، والتي نعلم أنها لن تُسبب ذعرًا (panic) أبدًا لأننا نعلم أن الدوال على `Post` تضمن أن `state` ستحتوي دائمًا على قيمة `Some` عندما تنتهي تلك الدوال. هذه إحدى الحالات التي تحدثنا عنها في قسم ["عندما يكون لديك معلومات أكثر من المُصرف"][more-info-than-rustc]<!-- ignore --> في الفصل 9 عندما نعلم أن قيمة `None` غير ممكنة أبدًا، على الرغم من أن المُصرف غير قادر على فهم ذلك.
 
-At this point, when we call `content` on the `&Box<dyn State>`, deref coercion
-will take effect on the `&` and the `Box` so that the `content` method will
-ultimately be called on the type that implements the `State` trait. That means
-we need to add `content` to the `State` trait definition, and that is where
-we’ll put the logic for what content to return depending on which state we
-have, as shown in Listing 18-18.
+في هذه المرحلة، عندما نستدعي `content` على `&Box<dyn State>`، ستحدث إكراه فك المرجع (deref coercion) على `&` و`Box` بحيث ستُستدعى دالة `content` في النهاية على النوع الذي يُنفذ السِمة `State`. وهذا يعني أننا بحاجة إلى إضافة `content` إلى تعريف السِمة `State`، وهنا سنضع المنطق للمحتوى الذي يجب إرجاعه اعتمادًا على الحالة التي لدينا، كما هو موضح في القائمة 18-18.
 
-<Listing number="18-18" file-name="src/lib.rs" caption="Adding the `content` method to the `State` trait">
+<Listing number="18-18" file-name="src/lib.rs" caption="إضافة دالة `content` إلى السِمة `State`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-18/src/lib.rs:here}}
@@ -313,105 +173,47 @@ have, as shown in Listing 18-18.
 
 </Listing>
 
-We add a default implementation for the `content` method that returns an empty
-string slice. That means we don’t need to implement `content` on the `Draft`
-and `PendingReview` structs. The `Published` struct will override the `content`
-method and return the value in `post.content`. While convenient, having the
-`content` method on `State` determine the content of the `Post` is blurring
-the lines between the responsibility of `State` and the responsibility of
-`Post`.
+نضيف تنفيذًا افتراضيًا لدالة `content` التي تُرجع شريحة سلسلة نصية فارغة. وهذا يعني أننا لا نحتاج إلى تنفيذ `content` على بنيتي `Draft` و`PendingReview`. ستتجاوز بنية `Published` دالة `content` وتُرجع القيمة في `post.content`. بينما يكون هذا مريحًا، فإن وجود دالة `content` على `State` لتحديد محتوى `Post` يُطمس الخطوط بين مسؤولية `State` ومسؤولية `Post`.
 
-Note that we need lifetime annotations on this method, as we discussed in
-Chapter 10. We’re taking a reference to a `post` as an argument and returning a
-reference to part of that `post`, so the lifetime of the returned reference is
-related to the lifetime of the `post` argument.
+لاحظ أننا بحاجة إلى تعليقات توضيحية لمدة الحياة (lifetime annotations) على هذه الدالة، كما ناقشنا في الفصل 10. نأخذ مرجعًا إلى `post` كمعامل ونُرجع مرجعًا إلى جزء من ذلك `post`، لذا فإن مدة حياة المرجع المُرجع مرتبطة بمدة حياة معامل `post`.
 
-And we’re done—all of Listing 18-11 now works! We’ve implemented the state
-pattern with the rules of the blog post workflow. The logic related to the
-rules lives in the state objects rather than being scattered throughout `Post`.
+وقد انتهينا—كل القائمة 18-11 الآن تعمل! لقد نفذنا نمط الحالة مع قواعد سير عمل منشور المدونة. المنطق المتعلق بالقواعد يعيش في كائنات الحالة بدلاً من أن يكون مبعثرًا في جميع أنحاء `Post`.
 
-> ### Why Not An Enum?
+> ### لماذا لا تعداد؟
 >
-> You may have been wondering why we didn’t use an enum with the different
-> possible post states as variants. That’s certainly a possible solution; try it
-> and compare the end results to see which you prefer! One disadvantage of using
-> an enum is that every place that checks the value of the enum will need a
-> `match` expression or similar to handle every possible variant. This could get
-> more repetitive than this trait object solution.
+> ربما كنت تتساءل لماذا لم نستخدم تعدادًا مع حالات المنشور المختلفة المحتملة كمتغيرات. هذا بالتأكيد حل محتمل؛ جربه وقارن النتائج النهائية لترى أيهما تفضل! أحد عيوب استخدام تعداد هو أن كل مكان يتحقق من قيمة التعداد سيحتاج إلى تعبير `match` أو ما شابه للتعامل مع كل متغير محتمل. قد يصبح هذا أكثر تكرارًا من حل كائن السِمة هذا.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="trade-offs-of-the-state-pattern"></a>
 
-#### Evaluating the State Pattern
+#### تقييم نمط الحالة
 
-We’ve shown that Rust is capable of implementing the object-oriented state
-pattern to encapsulate the different kinds of behavior a post should have in
-each state. The methods on `Post` know nothing about the various behaviors.
-Because of the way we organized the code, we have to look in only one place to
-know the different ways a published post can behave: the implementation of the
-`State` trait on the `Published` struct.
+لقد أظهرنا أن Rust قادرة على تنفيذ نمط الحالة الكائني التوجه لتغليف الأنواع المختلفة من السلوك التي يجب أن يمتلكها المنشور في كل حالة. الدوال على `Post` لا تعرف شيئًا عن السلوكيات المختلفة. بسبب الطريقة التي نظمنا بها الكود، يتعين علينا النظر في مكان واحد فقط لمعرفة الطرق المختلفة التي يمكن أن يتصرف بها منشور منشور: تنفيذ السِمة `State` على بنية `Published`.
 
-If we were to create an alternative implementation that didn’t use the state
-pattern, we might instead use `match` expressions in the methods on `Post` or
-even in the `main` code that checks the state of the post and changes behavior
-in those places. That would mean we would have to look in several places to
-understand all the implications of a post being in the published state.
+إذا كنا سننشئ تنفيذًا بديلاً لا يستخدم نمط الحالة، فقد نستخدم بدلاً من ذلك تعبيرات `match` في الدوال على `Post` أو حتى في كود `main` الذي يتحقق من حالة المنشور ويغير السلوك في تلك الأماكن. وهذا يعني أننا سنضطر إلى النظر في عدة أماكن لفهم جميع آثار كون المنشور في حالة النشر.
 
-With the state pattern, the `Post` methods and the places we use `Post` don’t
-need `match` expressions, and to add a new state, we would only need to add a
-new struct and implement the trait methods on that one struct in one location.
+مع نمط الحالة، لا تحتاج دوال `Post` والأماكن التي نستخدم فيها `Post` إلى تعبيرات `match`، ولإضافة حالة جديدة، سنحتاج فقط إلى إضافة بنية جديدة وتنفيذ دوال السِمة على تلك البنية في مكان واحد.
 
-The implementation using the state pattern is easy to extend to add more
-functionality. To see the simplicity of maintaining code that uses the state
-pattern, try a few of these suggestions:
+التنفيذ باستخدام نمط الحالة سهل التوسيع لإضافة المزيد من الوظائف. لرؤية بساطة صيانة الكود الذي يستخدم نمط الحالة، جرب بعض هذه الاقتراحات:
 
-- Add a `reject` method that changes the post’s state from `PendingReview` back
-  to `Draft`.
-- Require two calls to `approve` before the state can be changed to `Published`.
-- Allow users to add text content only when a post is in the `Draft` state.
-  Hint: have the state object responsible for what might change about the
-  content but not responsible for modifying the `Post`.
+- أضف دالة `reject` تغير حالة المنشور من `PendingReview` مرة أخرى إلى `Draft`.
+- تتطلب استدعائين لـ `approve` قبل أن يمكن تغيير الحالة إلى `Published`.
+- السماح للمستخدمين بإضافة محتوى نصي فقط عندما يكون المنشور في حالة `Draft`. تلميح: اجعل كائن الحالة مسؤولاً عما قد يتغير بشأن المحتوى ولكن ليس مسؤولاً عن تعديل `Post`.
 
-One downside of the state pattern is that, because the states implement the
-transitions between states, some of the states are coupled to each other. If we
-add another state between `PendingReview` and `Published`, such as `Scheduled`,
-we would have to change the code in `PendingReview` to transition to
-`Scheduled` instead. It would be less work if `PendingReview` didn’t need to
-change with the addition of a new state, but that would mean switching to
-another design pattern.
+أحد عيوب نمط الحالة هو أنه نظرًا لأن الحالات تُنفذ الانتقالات بين الحالات، فإن بعض الحالات مقترنة ببعضها البعض. إذا أضفنا حالة أخرى بين `PendingReview` و`Published`، مثل `Scheduled`، فسيتعين علينا تغيير الكود في `PendingReview` للانتقال إلى `Scheduled` بدلاً من ذلك. سيكون العمل أقل إذا لم تكن `PendingReview` بحاجة إلى التغيير مع إضافة حالة جديدة، لكن ذلك سيعني التبديل إلى نمط تصميم آخر.
 
-Another downside is that we’ve duplicated some logic. To eliminate some of the
-duplication, we might try to make default implementations for the
-`request_review` and `approve` methods on the `State` trait that return `self`.
-However, this wouldn’t work: When using `State` as a trait object, the trait
-doesn’t know what the concrete `self` will be exactly, so the return type isn’t
-known at compile time. (This is one of the dyn compatibility rules mentioned
-earlier.)
+عيب آخر هو أننا كررنا بعض المنطق. للقضاء على بعض التكرار، قد نحاول إنشاء تنفيذات افتراضية لدوال `request_review` و`approve` على السِمة `State` التي تُرجع `self`. ومع ذلك، لن ينجح هذا: عند استخدام `State` ككائن سِمة، لا تعرف السِمة ما سيكون `self` المحدد بالضبط، لذا فإن نوع الإرجاع غير معروف في وقت التصريف. (هذه إحدى قواعد توافق dyn المذكورة سابقًا.)
 
-Other duplication includes the similar implementations of the `request_review`
-and `approve` methods on `Post`. Both methods use `Option::take` with the
-`state` field of `Post`, and if `state` is `Some`, they delegate to the wrapped
-value’s implementation of the same method and set the new value of the `state`
-field to the result. If we had a lot of methods on `Post` that followed this
-pattern, we might consider defining a macro to eliminate the repetition (see
-the [“Macros”][macros]<!-- ignore --> section in Chapter 20).
+التكرار الآخر يتضمن التنفيذات المتشابهة لدوال `request_review` و`approve` على `Post`. كلتا الدالتين تستخدمان `Option::take` مع حقل `state` لـ `Post`، وإذا كان `state` هو `Some`، تُفوّضان إلى تنفيذ القيمة المُغلفة لنفس الدالة وتُعيّنان القيمة الجديدة لحقل `state` إلى النتيجة. إذا كان لدينا الكثير من الدوال على `Post` التي تتبع هذا النمط، فقد نفكر في تعريف ماكرو للقضاء على التكرار (انظر قسم ["الماكروهات"][macros]<!-- ignore --> في الفصل 20).
 
-By implementing the state pattern exactly as it’s defined for object-oriented
-languages, we’re not taking as full advantage of Rust’s strengths as we could.
-Let’s look at some changes we can make to the `blog` crate that can make
-invalid states and transitions into compile-time errors.
+من خلال تنفيذ نمط الحالة بالضبط كما هو معرف للغات الكائنية التوجه، لا نستفيد من نقاط قوة Rust بشكل كامل كما يمكننا. دعونا ننظر إلى بعض التغييرات التي يمكننا إجراؤها على صندوق `blog` والتي يمكن أن تجعل الحالات والانتقالات غير الصالحة أخطاء في وقت التصريف.
 
-### Encoding States and Behavior as Types
+### ترميز الحالات والسلوك كأنواع
 
-We’ll show you how to rethink the state pattern to get a different set of
-trade-offs. Rather than encapsulating the states and transitions completely so
-that outside code has no knowledge of them, we’ll encode the states into
-different types. Consequently, Rust’s type-checking system will prevent
-attempts to use draft posts where only published posts are allowed by issuing a
-compiler error.
+سنوضح لك كيفية إعادة التفكير في نمط الحالة للحصول على مجموعة مختلفة من المفاضلات. بدلاً من تغليف الحالات والانتقالات تمامًا بحيث لا يكون للكود الخارجي معرفة بها، سنقوم بترميز الحالات في أنواع مختلفة. وبالتالي، سيمنع نظام التحقق من النوع في Rust محاولات استخدام منشورات المسودة حيث يُسمح فقط بالمنشورات المنشورة من خلال إصدار خطأ مُصرف.
 
-Let’s consider the first part of `main` in Listing 18-11:
+دعونا ننظر في الجزء الأول من `main` في القائمة 18-11:
 
 <Listing file-name="src/main.rs">
 
@@ -421,17 +223,9 @@ Let’s consider the first part of `main` in Listing 18-11:
 
 </Listing>
 
-We still enable the creation of new posts in the draft state using `Post::new`
-and the ability to add text to the post’s content. But instead of having a
-`content` method on a draft post that returns an empty string, we’ll make it so
-that draft posts don’t have the `content` method at all. That way, if we try to
-get a draft post’s content, we’ll get a compiler error telling us the method
-doesn’t exist. As a result, it will be impossible for us to accidentally
-display draft post content in production because that code won’t even compile.
-Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
-as well as methods on each.
+لا نزال نُمكّن إنشاء منشورات جديدة في حالة المسودة باستخدام `Post::new` والقدرة على إضافة نص إلى محتوى المنشور. لكن بدلاً من وجود دالة `content` على منشور المسودة تُرجع سلسلة نصية فارغة، سنجعل منشورات المسودة لا تحتوي على دالة `content` على الإطلاق. بهذه الطريقة، إذا حاولنا الحصول على محتوى منشور المسودة، فسنحصل على خطأ مُصرف يخبرنا أن الدالة غير موجودة. نتيجة لذلك، سيكون من المستحيل لنا أن نعرض عن طريق الخطأ محتوى منشور المسودة في الإنتاج لأن هذا الكود لن يُصرّف حتى. القائمة 18-19 توضح تعريف بنية `Post` وبنية `DraftPost`، وكذلك الدوال على كل منهما.
 
-<Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and a `DraftPost` without a `content` method">
+<Listing number="18-19" file-name="src/lib.rs" caption="`Post` مع دالة `content` و`DraftPost` بدون دالة `content`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-19/src/lib.rs}}
@@ -439,36 +233,19 @@ as well as methods on each.
 
 </Listing>
 
-Both the `Post` and `DraftPost` structs have a private `content` field that
-stores the blog post text. The structs no longer have the `state` field because
-we’re moving the encoding of the state to the types of the structs. The `Post`
-struct will represent a published post, and it has a `content` method that
-returns the `content`.
+كلتا بنيتي `Post` و`DraftPost` لديهما حقل `content` خاص يخزن نص منشور المدونة. لم تعد البُنى تحتوي على حقل `state` لأننا ننقل ترميز الحالة إلى أنواع البُنى. ستمثل بنية `Post` منشورًا منشورًا، ولديها دالة `content` تُرجع `content`.
 
-We still have a `Post::new` function, but instead of returning an instance of
-`Post`, it returns an instance of `DraftPost`. Because `content` is private and
-there aren’t any functions that return `Post`, it’s not possible to create an
-instance of `Post` right now.
+لا يزال لدينا دالة `Post::new`، لكن بدلاً من إرجاع نسخة من `Post`، تُرجع نسخة من `DraftPost`. نظرًا لأن `content` خاص ولا توجد دوال تُرجع `Post`، فليس من الممكن إنشاء نسخة من `Post` الآن.
 
-The `DraftPost` struct has an `add_text` method, so we can add text to
-`content` as before, but note that `DraftPost` does not have a `content` method
-defined! So now the program ensures that all posts start as draft posts, and
-draft posts don’t have their content available for display. Any attempt to get
-around these constraints will result in a compiler error.
+بنية `DraftPost` لديها دالة `add_text`، لذا يمكننا إضافة نص إلى `content` كما كان من قبل، لكن لاحظ أن `DraftPost` لا تحتوي على دالة `content` معرّفة! لذا الآن يضمن البرنامج أن جميع المنشورات تبدأ كمنشورات مسودة، ولا يوجد محتوى متاح لمنشورات المسودة للعرض. أي محاولة للتحايل على هذه القيود ستؤدي إلى خطأ مُصرف.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="implementing-transitions-as-transformations-into-different-types"></a>
 
-So, how do we get a published post? We want to enforce the rule that a draft
-post has to be reviewed and approved before it can be published. A post in the
-pending review state should still not display any content. Let’s implement
-these constraints by adding another struct, `PendingReviewPost`, defining the
-`request_review` method on `DraftPost` to return a `PendingReviewPost` and
-defining an `approve` method on `PendingReviewPost` to return a `Post`, as
-shown in Listing 18-20.
+إذن، كيف نحصل على منشور منشور؟ نريد فرض القاعدة بأن منشور المسودة يجب أن يتم مراجعته والموافقة عليه قبل أن يمكن نشره. منشور في حالة المراجعة المعلقة يجب ألا يعرض أي محتوى. دعونا ننفذ هذه القيود عن طريق إضافة بنية أخرى، `PendingReviewPost`، وتعريف دالة `request_review` على `DraftPost` لإرجاع `PendingReviewPost` وتعريف دالة `approve` على `PendingReviewPost` لإرجاع `Post`، كما هو موضح في القائمة 18-20.
 
-<Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
+<Listing number="18-20" file-name="src/lib.rs" caption="`PendingReviewPost` الذي يتم إنشاؤه باستدعاء `request_review` على `DraftPost` ودالة `approve` التي تُحوّل `PendingReviewPost` إلى `Post` منشور">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-20/src/lib.rs:here}}
@@ -476,27 +253,11 @@ shown in Listing 18-20.
 
 </Listing>
 
-The `request_review` and `approve` methods take ownership of `self`, thus
-consuming the `DraftPost` and `PendingReviewPost` instances and transforming
-them into a `PendingReviewPost` and a published `Post`, respectively. This way,
-we won’t have any lingering `DraftPost` instances after we’ve called
-`request_review` on them, and so forth. The `PendingReviewPost` struct doesn’t
-have a `content` method defined on it, so attempting to read its content
-results in a compiler error, as with `DraftPost`. Because the only way to get a
-published `Post` instance that does have a `content` method defined is to call
-the `approve` method on a `PendingReviewPost`, and the only way to get a
-`PendingReviewPost` is to call the `request_review` method on a `DraftPost`,
-we’ve now encoded the blog post workflow into the type system.
+دالتا `request_review` و`approve` تأخذان ملكية `self`، وبالتالي تستهلكان نسخ `DraftPost` و`PendingReviewPost` وتُحوّلانهما إلى `PendingReviewPost` و`Post` منشور، على التوالي. بهذه الطريقة، لن يكون لدينا أي نسخ `DraftPost` باقية بعد أن نستدعي `request_review` عليها، وهكذا. لا تحتوي بنية `PendingReviewPost` على دالة `content` معرّفة عليها، لذا فإن محاولة قراءة محتواها تؤدي إلى خطأ مُصرف، كما هو الحال مع `DraftPost`. نظرًا لأن الطريقة الوحيدة للحصول على نسخة `Post` منشورة لها دالة `content` معرّفة هي استدعاء دالة `approve` على `PendingReviewPost`، والطريقة الوحيدة للحصول على `PendingReviewPost` هي استدعاء دالة `request_review` على `DraftPost`، فقد قمنا الآن بترميز سير عمل منشور المدونة في نظام الأنواع.
 
-But we also have to make some small changes to `main`. The `request_review` and
-`approve` methods return new instances rather than modifying the struct they’re
-called on, so we need to add more `let post =` shadowing assignments to save
-the returned instances. We also can’t have the assertions about the draft and
-pending review posts’ contents be empty strings, nor do we need them: We can’t
-compile code that tries to use the content of posts in those states any longer.
-The updated code in `main` is shown in Listing 18-21.
+لكن يتعين علينا أيضًا إجراء بعض التغييرات الصغيرة على `main`. دالتا `request_review` و`approve` تُرجعان نسخًا جديدة بدلاً من تعديل البنية التي يتم استدعاؤهما عليها، لذا نحتاج إلى إضافة المزيد من تعيينات إخفاء `let post =` (shadowing) لحفظ النسخ المُرجعة. كما لا يمكننا أن نمتلك التأكيدات حول محتويات منشورات المسودة والمراجعة المعلقة كونها سلاسل نصية فارغة، ولا نحتاج إليها: لا يمكننا تصريف كود يحاول استخدام محتوى المنشورات في تلك الحالات بعد الآن. الكود المُحدّث في `main` موضح في القائمة 18-21.
 
-<Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
+<Listing number="18-21" file-name="src/main.rs" caption="التعديلات على `main` لاستخدام التنفيذ الجديد لسير عمل منشور المدونة">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/main.rs}}
@@ -504,43 +265,17 @@ The updated code in `main` is shown in Listing 18-21.
 
 </Listing>
 
-The changes we needed to make to `main` to reassign `post` mean that this
-implementation doesn’t quite follow the object-oriented state pattern anymore:
-The transformations between the states are no longer encapsulated entirely
-within the `Post` implementation. However, our gain is that invalid states are
-now impossible because of the type system and the type checking that happens at
-compile time! This ensures that certain bugs, such as display of the content of
-an unpublished post, will be discovered before they make it to production.
+التغييرات التي كان علينا إجراؤها على `main` لإعادة تعيين `post` تعني أن هذا التنفيذ لا يتبع نمط الحالة الكائني التوجه بالضبط بعد الآن: لم تعد التحويلات بين الحالات مُغلّفة بالكامل داخل تنفيذ `Post`. ومع ذلك، فإن مكسبنا هو أن الحالات غير الصالحة الآن مستحيلة بسبب نظام الأنواع والتحقق من النوع الذي يحدث في وقت التصريف! هذا يضمن اكتشاف أخطاء معينة، مثل عرض محتوى منشور غير منشور، قبل وصولها إلى الإنتاج.
 
-Try the tasks suggested at the start of this section on the `blog` crate as it
-is after Listing 18-21 to see what you think about the design of this version
-of the code. Note that some of the tasks might be completed already in this
-design.
+جرب المهام المقترحة في بداية هذا القسم على صندوق `blog` كما هو بعد القائمة 18-21 لترى ما تعتقده حول تصميم هذا الإصدار من الكود. لاحظ أن بعض المهام قد تكون قد اكتملت بالفعل في هذا التصميم.
 
-We’ve seen that even though Rust is capable of implementing object-oriented
-design patterns, other patterns, such as encoding state into the type system,
-are also available in Rust. These patterns have different trade-offs. Although
-you might be very familiar with object-oriented patterns, rethinking the
-problem to take advantage of Rust’s features can provide benefits, such as
-preventing some bugs at compile time. Object-oriented patterns won’t always be
-the best solution in Rust due to certain features, like ownership, that
-object-oriented languages don’t have.
+لقد رأينا أنه على الرغم من أن Rust قادرة على تنفيذ أنماط التصميم الكائنية التوجه، فإن أنماطًا أخرى، مثل ترميز الحالة في نظام الأنواع، متاحة أيضًا في Rust. هذه الأنماط لها مفاضلات مختلفة. على الرغم من أنك قد تكون على دراية كبيرة بالأنماط الكائنية التوجه، فإن إعادة التفكير في المشكلة للاستفادة من ميزات Rust يمكن أن توفر فوائد، مثل منع بعض الأخطاء في وقت التصريف. لن تكون الأنماط الكائنية التوجه دائمًا أفضل حل في Rust بسبب ميزات معينة، مثل الملكية (ownership)، التي لا تمتلكها اللغات الكائنية التوجه.
 
-## Summary
+## الخلاصة
 
-Regardless of whether you think Rust is an object-oriented language after
-reading this chapter, you now know that you can use trait objects to get some
-object-oriented features in Rust. Dynamic dispatch can give your code some
-flexibility in exchange for a bit of runtime performance. You can use this
-flexibility to implement object-oriented patterns that can help your code’s
-maintainability. Rust also has other features, like ownership, that
-object-oriented languages don’t have. An object-oriented pattern won’t always
-be the best way to take advantage of Rust’s strengths, but it is an available
-option.
+بغض النظر عما إذا كنت تعتقد أن Rust هي لغة كائنية التوجه بعد قراءة هذا الفصل، فأنت تعلم الآن أنه يمكنك استخدام كائنات السِمة للحصول على بعض ميزات البرمجة الكائنية التوجه في Rust. يمكن أن يمنح الإرسال الديناميكي كودك بعض المرونة مقابل القليل من أداء وقت التشغيل. يمكنك استخدام هذه المرونة لتنفيذ أنماط كائنية التوجه يمكن أن تساعد في قابلية صيانة كودك. لدى Rust أيضًا ميزات أخرى، مثل الملكية، التي لا تمتلكها اللغات الكائنية التوجه. لن يكون النمط الكائني التوجه دائمًا أفضل طريقة للاستفادة من نقاط قوة Rust، لكنه خيار متاح.
 
-Next, we’ll look at patterns, which are another of Rust’s features that enable
-lots of flexibility. We’ve looked at them briefly throughout the book but
-haven’t seen their full capability yet. Let’s go!
+بعد ذلك، سننظر إلى الأنماط (patterns)، وهي ميزة أخرى من ميزات Rust التي تُمكّن الكثير من المرونة. لقد نظرنا إليها بإيجاز في جميع أنحاء الكتاب لكننا لم نرَ قدرتها الكاملة بعد. لنذهب!
 
 [more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
 [macros]: ch20-05-macros.html#macros

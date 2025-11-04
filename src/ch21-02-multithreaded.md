@@ -3,28 +3,19 @@
 <a id="turning-our-single-threaded-server-into-a-multithreaded-server"></a>
 <a id="from-single-threaded-to-multithreaded-server"></a>
 
-## From a Single-Threaded to a Multithreaded Server
+## من خادوم أحادي الخيط إلى خادوم متعدد الخيوط
 
-Right now, the server will process each request in turn, meaning it won’t
-process a second connection until the first connection is finished processing.
-If the server received more and more requests, this serial execution would be
-less and less optimal. If the server receives a request that takes a long time
-to process, subsequent requests will have to wait until the long request is
-finished, even if the new requests can be processed quickly. We’ll need to fix
-this, but first we’ll look at the problem in action.
+الآن، سيعالج الخادوم server كل طلب request بدوره in turn، مما يعني أنه لن يعالج اتصالاً connection ثانيًا حتى ينتهي معالجة الاتصال connection الأول. إذا تلقى الخادوم server المزيد والمزيد من الطلبات requests، فإن هذا التنفيذ التسلسلي serial execution سيكون أقل وأقل مثاليةً. إذا تلقى الخادوم server طلبًا request يستغرق وقتًا طويلاً لمعالجته، فسيتعين على الطلبات requests اللاحقة الانتظار حتى ينتهي الطلب request الطويل، حتى لو كان من الممكن معالجة الطلبات requests الجديدة بسرعة. سنحتاج إلى إصلاح هذا، ولكن أولاً سننظر في المشكلة أثناء العمل.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="simulating-a-slow-request-in-the-current-server-implementation"></a>
 
-### Simulating a Slow Request
+### محاكاة طلب بطيء
 
-We’ll look at how a slowly processing request can affect other requests made to
-our current server implementation. Listing 21-10 implements handling a request
-to _/sleep_ with a simulated slow response that will cause the server to sleep
-for five seconds before responding.
+سننظر في كيف يمكن لطلب request يتم معالجته ببطء أن يؤثر على الطلبات requests الأخرى المقدمة إلى تطبيق خادومنا server implementation الحالي. تطبق القائمة 21-10 معالجة طلب request إلى _/sleep_ مع استجابة response بطيئة محاكاة simulated ستتسبب في نوم sleeping الخادوم server لمدة خمس ثوانٍ قبل الاستجابة responding.
 
-<Listing number="21-10" file-name="src/main.rs" caption="Simulating a slow request by sleeping for five seconds">
+<Listing number="21-10" file-name="src/main.rs" caption="محاكاة طلب بطيء عن طريق النوم لمدة خمس ثوانٍ">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-10/src/main.rs:here}}
@@ -32,92 +23,41 @@ for five seconds before responding.
 
 </Listing>
 
-We switched from `if` to `match` now that we have three cases. We need to
-explicitly match on a slice of `request_line` to pattern-match against the
-string literal values; `match` doesn’t do automatic referencing and
-dereferencing, like the equality method does.
+انتقلنا من `if` إلى `match` الآن بعد أن أصبح لدينا ثلاث حالات three cases. نحتاج إلى مطابقة pattern-match صريحة explicitly على شريحة slice من `request_line` للمطابقة مع القيم الحرفية string literal values؛ لا يقوم `match` بالإشارة المرجعية referencing والإلغاء المرجعية dereferencing التلقائية، مثل طريقة method المساواة equality.
 
-The first arm is the same as the `if` block from Listing 21-9. The second arm
-matches a request to _/sleep_. When that request is received, the server will
-sleep for five seconds before rendering the successful HTML page. The third arm
-is the same as the `else` block from Listing 21-9.
+الذراع الأولى first arm هي نفسها كتلة `if` block من القائمة 21-9. تطابق الذراع الثانية second arm طلبًا request إلى _/sleep_. عند استقبال هذا الطلب request، سينام الخادوم server لمدة خمس ثوانٍ قبل عرض صفحة HTML الناجحة. الذراع الثالثة third arm هي نفسها كتلة `else` block من القائمة 21-9.
 
-You can see how primitive our server is: Real libraries would handle the
-recognition of multiple requests in a much less verbose way!
+يمكنك أن ترى كم هو بدائي primitive خادومنا server: المكتبات الحقيقية Real libraries ستتعامل مع التعرف recognition على طلبات متعددة multiple requests بطريقة أقل إسهابًا verbose بكثير!
 
-Start the server using `cargo run`. Then, open two browser windows: one for
-_http://127.0.0.1:7878_ and the other for _http://127.0.0.1:7878/sleep_. If you
-enter the _/_ URI a few times, as before, you’ll see it respond quickly. But if
-you enter _/sleep_ and then load _/_, you’ll see that _/_ waits until `sleep`
-has slept for its full five seconds before loading.
+ابدأ الخادوم server باستخدام `cargo run`. ثم افتح نافذتي متصفح two browser windows: واحدة لـ _http://127.0.0.1:7878_ والأخرى لـ _http://127.0.0.1:7878/sleep_. إذا أدخلت URI _/_ عدة مرات، كما كان من قبل، فسترى أنه يستجيب بسرعة. ولكن إذا أدخلت _/sleep_ ثم حمّلت _/_، فسترى أن _/_ ينتظر حتى ينام `sleep` لمدة خمس ثوانٍ كاملة قبل التحميل loading.
 
-There are multiple techniques we could use to avoid requests backing up behind
-a slow request, including using async as we did Chapter 17; the one we’ll
-implement is a thread pool.
+هناك تقنيات techniques متعددة يمكننا استخدامها لتجنب تراكم backing up الطلبات requests خلف طلب request بطيء slow request، بما في ذلك استخدام async كما فعلنا في الفصل 17؛ التقنية التي سننفذها هي مجمع خيوط thread pool.
 
-### Improving Throughput with a Thread Pool
+### تحسين الإنتاجية باستخدام مجمع خيوط
 
-A _thread pool_ is a group of spawned threads that are ready and waiting to
-handle a task. When the program receives a new task, it assigns one of the
-threads in the pool to the task, and that thread will process the task. The
-remaining threads in the pool are available to handle any other tasks that come
-in while the first thread is processing. When the first thread is done
-processing its task, it’s returned to the pool of idle threads, ready to handle
-a new task. A thread pool allows you to process connections concurrently,
-increasing the throughput of your server.
+_thread pool_ (مجمع خيوط) هو مجموعة من الخيوط threads المولدة spawned التي هي جاهزة وتنتظر معالجة مهمة task. عندما يتلقى البرنامج مهمة جديدة new task، فإنه يعيّن assign أحد الخيوط threads في المجمع pool إلى المهمة task، وسيعالج هذا الخيط thread المهمة task. ستكون الخيوط threads المتبقية في المجمع pool متاحة لمعالجة أي مهام أخرى tasks تأتي بينما يعالج الخيط thread الأول. عندما ينتهي الخيط thread الأول من معالجة مهمته task، يتم إرجاعه إلى مجمع pool الخيوط threads الخاملة idle threads، جاهزًا لمعالجة مهمة جديدة new task. يتيح لك مجمع خيوط thread pool معالجة الاتصالات connections بشكل متزامن concurrently، مما يزيد من إنتاجية throughput خادومك server.
 
-We’ll limit the number of threads in the pool to a small number to protect us
-from DoS attacks; if we had our program create a new thread for each request as
-it came in, someone making 10 million requests to our server could wreak havoc
-by using up all our server’s resources and grinding the processing of requests
-to a halt.
+سنحد من عدد الخيوط threads في المجمع pool إلى عدد صغير small number لحمايتنا من هجمات DoS attacks؛ إذا كان برنامجنا ينشئ خيطًا thread جديدًا لكل طلب request عند وصوله، فإن شخصًا يقدم 10 ملايين طلب request إلى خادومنا server يمكن أن يحدث فوضى havoc عن طريق استنفاد using up جميع موارد resources خادومنا server ووقف grinding معالجة الطلبات requests إلى حد halt.
 
-Rather than spawning unlimited threads, then, we’ll have a fixed number of
-threads waiting in the pool. Requests that come in are sent to the pool for
-processing. The pool will maintain a queue of incoming requests. Each of the
-threads in the pool will pop off a request from this queue, handle the request,
-and then ask the queue for another request. With this design, we can process up
-to _`N`_ requests concurrently, where _`N`_ is the number of threads. If each
-thread is responding to a long-running request, subsequent requests can still
-back up in the queue, but we’ve increased the number of long-running requests
-we can handle before reaching that point.
+بدلاً من توليد spawning خيوط threads غير محدودة unlimited، إذن، سيكون لدينا عدد ثابت fixed number من الخيوط threads في انتظار waiting في المجمع pool. يتم إرسال الطلبات Requests التي تأتي إلى المجمع pool للمعالجة processing. سيحتفظ المجمع pool بطابور queue من الطلبات requests الواردة incoming. سيستخرج pop off كل من الخيوط threads في المجمع pool طلبًا request من هذا الطابور queue، ويعالج handle الطلب request، ثم يطلب من الطابور queue طلبًا request آخر. مع هذا التصميم design، يمكننا معالجة process ما يصل إلى _`N`_ طلبًا request بشكل متزامن concurrently، حيث _`N`_ هو عدد الخيوط threads. إذا كان كل خيط thread يستجيب responding لطلب request طويل التشغيل long-running، فلا يزال بإمكان الطلبات requests اللاحقة subsequent أن تتراكم back up في الطابور queue، لكننا زدنا عدد الطلبات requests طويلة التشغيل long-running التي يمكننا معالجتها handle قبل الوصول إلى تلك النقطة that point.
 
-This technique is just one of many ways to improve the throughput of a web
-server. Other options you might explore are the fork/join model, the
-single-threaded async I/O model, and the multithreaded async I/O model. If
-you’re interested in this topic, you can read more about other solutions and
-try to implement them; with a low-level language like Rust, all of these
-options are possible.
+هذه التقنية technique هي واحدة فقط من طرق عديدة many ways لتحسين إنتاجية throughput خادوم ويب web server. الخيارات الأخرى Other options التي قد تستكشفها هي نموذج fork/join model، ونموذج async I/O أحادي الخيط single-threaded، ونموذج async I/O متعدد الخيوط multithreaded. إذا كنت مهتمًا interested بهذا الموضوع topic، يمكنك قراءة المزيد عن الحلول solutions الأخرى ومحاولة تنفيذها implement؛ مع لغة language منخفضة المستوى low-level مثل Rust، كل هذه الخيارات options ممكنة possible.
 
-Before we begin implementing a thread pool, let’s talk about what using the
-pool should look like. When you’re trying to design code, writing the client
-interface first can help guide your design. Write the API of the code so that
-it’s structured in the way you want to call it; then, implement the
-functionality within that structure rather than implementing the functionality
-and then designing the public API.
+قبل أن نبدأ في تنفيذ implementing مجمع خيوط thread pool، دعونا نتحدث عن ما يجب أن يبدو عليه استخدام using المجمع pool. عندما تحاول تصميم design الكود code، يمكن أن تساعد كتابة واجهة العميل client interface أولاً في توجيه guide تصميمك design. اكتب API للكود code بحيث يكون منظمًا structured بالطريقة التي تريد استدعاءه call بها؛ ثم نفذ implement الوظيفة functionality ضمن within تلك البنية structure بدلاً من تنفيذ implementing الوظيفة functionality ثم تصميم designing واجهة API العامة public.
 
-Similar to how we used test-driven development in the project in Chapter 12,
-we’ll use compiler-driven development here. We’ll write the code that calls the
-functions we want, and then we’ll look at errors from the compiler to determine
-what we should change next to get the code to work. Before we do that, however,
-we’ll explore the technique we’re not going to use as a starting point.
+مشابهًا لكيفية استخدامنا للتطوير المُوجَّه بالاختبار test-driven development في المشروع project في الفصل 12، سنستخدم التطوير المُوجَّه بالمترجم compiler-driven development هنا. سنكتب الكود code الذي يستدعي calls الدوال functions التي نريدها، ثم سننظر look في الأخطاء errors من المترجم compiler لنحدد determine ما يجب أن نغيره change بعد ذلك next للحصول على الكود code ليعمل to work. قبل أن نفعل ذلك do that، سنستكشف explore التقنية technique التي لن نستخدمها we're not going to use كنقطة بداية starting point.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="code-structure-if-we-could-spawn-a-thread-for-each-request"></a>
 
-#### Spawning a Thread for Each Request
+#### توليد خيط لكل طلب
 
-First, let’s explore how our code might look if it did create a new thread for
-every connection. As mentioned earlier, this isn’t our final plan due to the
-problems with potentially spawning an unlimited number of threads, but it is a
-starting point to get a working multithreaded server first. Then, we’ll add the
-thread pool as an improvement, and contrasting the two solutions will be easier.
+أولاً، لنستكشف explore كيف قد يبدو كودنا code إذا أنشأ created خيطًا thread جديدًا new لكل اتصال connection. كما ذُكر mentioned سابقًا earlier، هذه ليست خطتنا النهائية final plan بسبب المشاكل problems مع إمكانية potentially توليد spawning عدد غير محدود unlimited number من الخيوط threads، لكنها نقطة بداية starting point للحصول على خادوم server متعدد الخيوط multithreaded يعمل working أولاً first. ثم سنضيف add مجمع الخيوط thread pool كتحسين improvement، وسيكون التباين contrasting بين الحلين two solutions أسهل easier.
 
-Listing 21-11 shows the changes to make to `main` to spawn a new thread to
-handle each stream within the `for` loop.
+تُظهر القائمة 21-11 التغييرات changes لعملها make على `main` لتوليد spawn خيط thread جديد new لمعالجة handle كل تدفق stream ضمن within حلقة `for` loop.
 
-<Listing number="21-11" file-name="src/main.rs" caption="Spawning a new thread for each stream">
+<Listing number="21-11" file-name="src/main.rs" caption="توليد خيط جديد لكل تدفق">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-11/src/main.rs:here}}
@@ -125,29 +65,19 @@ handle each stream within the `for` loop.
 
 </Listing>
 
-As you learned in Chapter 16, `thread::spawn` will create a new thread and then
-run the code in the closure in the new thread. If you run this code and load
-_/sleep_ in your browser, then _/_ in two more browser tabs, you’ll indeed see
-that the requests to _/_ don’t have to wait for _/sleep_ to finish. However, as
-we mentioned, this will eventually overwhelm the system because you’d be making
-new threads without any limit.
+كما تعلمت learned في الفصل 16، سينشئ `thread::spawn` خيطًا thread جديدًا new ثم يشغّل run الكود code في الإغلاق closure في الخيط thread الجديد new. إذا شغّلت ran هذا الكود code وحمّلت loaded _/sleep_ في متصفحك browser، ثم _/_ في علامتي two تبويب browser tabs أخريين more، فستجد indeed بالفعل أن الطلبات requests إلى _/_ لا يتعين عليها أن have to تنتظر wait حتى ينتهي _/sleep_ من finish. ومع ذلك However، كما ذكرنا mentioned، سيُغرق overwhelm هذا في النهاية eventually النظام system لأنك ستصنع making خيوطًا threads جديدة new بدون any حد limit.
 
-You may also recall from Chapter 17 that this is exactly the kind of situation
-where async and await really shine! Keep that in mind as we build the thread
-pool and think about how things would look different or the same with async.
+قد تتذكر recall أيضًا also من الفصل 17 أن هذا exactly بالضبط هو نوع the kind الحالة situation التي تتألق shine فيها async و await حقًا really! احتفظ Keep بذلك في ذهنك mind بينما نبني build مجمع الخيوط thread pool وفكّر think في كيف how ستبدو would look الأشياء things مختلفة different أو نفسها same مع async.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-a-similar-interface-for-a-finite-number-of-threads"></a>
 
-#### Creating a Finite Number of Threads
+#### إنشاء عدد محدود من الخيوط
 
-We want our thread pool to work in a similar, familiar way so that switching
-from threads to a thread pool doesn’t require large changes to the code that
-uses our API. Listing 21-12 shows the hypothetical interface for a `ThreadPool`
-struct we want to use instead of `thread::spawn`.
+نريد want أن يعمل works مجمع خيوطنا thread pool بطريقة way مماثلة similar ومألوفة familiar بحيث لا يتطلب switching الانتقال من الخيوط threads إلى مجمع خيوط thread pool تغييرات changes كبيرة large في الكود code الذي يستخدم uses واجهة API الخاصة بنا. تُظهر القائمة 21-12 الواجهة interface الافتراضية hypothetical لبنية `ThreadPool` struct التي نريد want استخدامها use بدلاً من instead of `thread::spawn`.
 
-<Listing number="21-12" file-name="src/main.rs" caption="Our ideal `ThreadPool` interface">
+<Listing number="21-12" file-name="src/main.rs" caption="واجهة `ThreadPool` المثالية الخاصة بنا">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-12/src/main.rs:here}}
@@ -155,37 +85,23 @@ struct we want to use instead of `thread::spawn`.
 
 </Listing>
 
-We use `ThreadPool::new` to create a new thread pool with a configurable number
-of threads, in this case four. Then, in the `for` loop, `pool.execute` has a
-similar interface as `thread::spawn` in that it takes a closure that the pool
-should run for each stream. We need to implement `pool.execute` so that it
-takes the closure and gives it to a thread in the pool to run. This code won’t
-yet compile, but we’ll try so that the compiler can guide us in how to fix it.
+نستخدم use `ThreadPool::new` لإنشاء create مجمع خيوط thread pool جديد new بعدد configurable من الخيوط threads قابل للتكوين، في هذه الحالة case أربعة four. ثم Then، في حلقة `for` loop، لدى `pool.execute` واجهة interface مماثلة similar لـ `thread::spawn` من حيث أنه يأخذ takes إغلاقًا closure يجب should أن يشغّله run المجمع pool لكل تدفق stream. نحتاج need إلى تنفيذ implement `pool.execute` بحيث so it يأخذ takes الإغلاق closure ويعطيه gives it إلى خيط thread في المجمع pool ليشغّله run. لن يُترجم compile هذا الكود code بعد yet، لكن سنحاول try حتى so that يتمكن can المترجم compiler من توجيهنا guide في كيفية how to إصلاحه fix it.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="building-the-threadpool-struct-using-compiler-driven-development"></a>
 
-#### Building `ThreadPool` Using Compiler-Driven Development
+#### بناء `ThreadPool` باستخدام التطوير المُوجَّه بالمترجم
 
-Make the changes in Listing 21-12 to _src/main.rs_, and then let’s use the
-compiler errors from `cargo check` to drive our development. Here is the first
-error we get:
+قم بعمل Make التغييرات changes في القائمة 21-12 إلى _src/main.rs_، ثم لنستخدم let's use أخطاء errors المترجم compiler من `cargo check` لقيادة drive تطويرنا development. فيما يلي Here is الخطأ الأول first error الذي نحصل get عليه:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-12/output.txt}}
 ```
 
-Great! This error tells us we need a `ThreadPool` type or module, so we’ll
-build one now. Our `ThreadPool` implementation will be independent of the kind
-of work our web server is doing. So, let’s switch the `hello` crate from a
-binary crate to a library crate to hold our `ThreadPool` implementation. After
-we change to a library crate, we could also use the separate thread pool
-library for any work we want to do using a thread pool, not just for serving
-web requests.
+عظيم Great! يخبرنا tells هذا الخطأ error أننا نحتاج need إلى نوع type أو وحدة module `ThreadPool`، لذا so سنبني build واحدًا one الآن now. سيكون will be تطبيق implementation `ThreadPool` الخاص بنا مستقلاً independent عن نوع kind العمل work الذي يقوم به does خادوم الويب web server الخاص بنا. لذا So، لنحوّل switch حزمة crate `hello` من حزمة crate ثنائية binary crate إلى حزمة crate مكتبة library crate لحمل hold تطبيق implementation `ThreadPool` الخاص بنا. بعد After أن نغيّر change إلى حزمة crate مكتبة library crate، يمكننا also أيضًا استخدام use مكتبة library مجمع الخيوط thread pool المنفصلة separate لأي عمل work نريد want القيام به do باستخدام using مجمع خيوط thread pool، وليس not just فقط لخدمة serving طلبات requests الويب web.
 
-Create a _src/lib.rs_ file that contains the following, which is the simplest
-definition of a `ThreadPool` struct that we can have for now:
+أنشئ Create ملفًا file _src/lib.rs_ يحتوي contains على الآتي following، وهو أبسط simplest تعريف definition لبنية `ThreadPool` struct يمكننا can have أن نمتلكه الآن for now:
 
 <Listing file-name="src/lib.rs">
 
@@ -196,8 +112,7 @@ definition of a `ThreadPool` struct that we can have for now:
 </Listing>
 
 
-Then, edit the _main.rs_ file to bring `ThreadPool` into scope from the library
-crate by adding the following code to the top of _src/main.rs_:
+ثم Then، حرّر edit ملف _main.rs_ لجلب bring `ThreadPool` إلى النطاق scope من حزمة crate المكتبة library crate بإضافة adding الكود code التالي following إلى أعلى top of _src/main.rs_:
 
 <Listing file-name="src/main.rs">
 
@@ -207,18 +122,13 @@ crate by adding the following code to the top of _src/main.rs_:
 
 </Listing>
 
-This code still won’t work, but let’s check it again to get the next error that
-we need to address:
+لن يعمل work هذا الكود code still بعد، لكن but لنتحقق check منه it مرة أخرى again للحصول get على الخطأ error التالي next الذي نحتاج need إلى معالجته address:
 
 ```console
 {{#include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/output.txt}}
 ```
 
-This error indicates that next we need to create an associated function named
-`new` for `ThreadPool`. We also know that `new` needs to have one parameter
-that can accept `4` as an argument and should return a `ThreadPool` instance.
-Let’s implement the simplest `new` function that will have those
-characteristics:
+يشير indicates هذا الخطأ error أننا نحتاج need بعد ذلك next إلى إنشاء create دالة function مرتبطة associated باسم named `new` لـ `ThreadPool`. نعلم know أيضًا also أن `new` يجب needs أن يكون لها have معامل parameter واحد one يمكن can accept أن يقبل `4` كوسيطة argument argument ويجب should أن تُرجع return نسخة instance من `ThreadPool`. لنطبق implement أبسط simplest دالة function `new` ستكون will have لها تلك those الخصائص characteristics:
 
 <Listing file-name="src/lib.rs">
 
@@ -228,33 +138,20 @@ characteristics:
 
 </Listing>
 
-We chose `usize` as the type of the `size` parameter because we know that a
-negative number of threads doesn’t make any sense. We also know we’ll use this
-`4` as the number of elements in a collection of threads, which is what the
-`usize` type is for, as discussed in the [“Integer Types”][integer-types]<!--
-ignore --> section in Chapter 3.
+اخترنا chose `usize` كنوع type لمعامل parameter `size` لأننا because نعلم know أن عددًا number سالبًا negative من الخيوط threads لا يكون makes لا معنى any sense له. نعلم know أيضًا also أننا سنستخدم use هذا this `4` كعدد number of من العناصر elements في مجموعة collection من الخيوط threads، وهو what ما الذي for يُستخدم له نوع type `usize`، كما as تمت مناقشته discussed في قسم section ["Integer Types"][integer-types]<!--
+ignore --> في الفصل 3.
 
-Let’s check the code again:
+لنتحقق check من الكود code مرة أخرى again:
 
 ```console
 {{#include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-Now the error occurs because we don’t have an `execute` method on `ThreadPool`.
-Recall from the [“Creating a Finite Number of
-Threads”](#creating-a-finite-number-of-threads)<!-- ignore --> section that we
-decided our thread pool should have an interface similar to `thread::spawn`. In
-addition, we’ll implement the `execute` function so that it takes the closure
-it’s given and gives it to an idle thread in the pool to run.
+الآن Now يحدث occurs الخطأ error لأننا because ليس لدينا طريقة method `execute` على `ThreadPool`. تذكّر Recall من قسم section ["Creating a Finite Number of
+Threads"](#creating-a-finite-number-of-threads)<!-- ignore --> أننا قررنا decided أن مجمع خيوطنا thread pool يجب should أن يكون have له واجهة interface مماثلة similar لـ `thread::spawn`. بالإضافة addition، سننفذ implement دالة function `execute` بحيث so it تأخذ take الإغلاق closure الذي أُعطيت it's given وتعطيه gives it إلى خيط thread خامل idle في المجمع pool ليشغّله run.
 
-We’ll define the `execute` method on `ThreadPool` to take a closure as a
-parameter. Recall from the [“Moving Captured Values Out of
-Closures”][moving-out-of-closures]<!-- ignore --> in Chapter 13 that we can
-take closures as parameters with three different traits: `Fn`, `FnMut`, and
-`FnOnce`. We need to decide which kind of closure to use here. We know we’ll
-end up doing something similar to the standard library `thread::spawn`
-implementation, so we can look at what bounds the signature of `thread::spawn`
-has on its parameter. The documentation shows us the following:
+سنحدّد define طريقة method `execute` على `ThreadPool` لتأخذ take إغلاقًا closure كمعامل parameter. تذكّر Recall من قسم section ["Moving Captured Values Out of
+Closures"][moving-out-of-closures]<!-- ignore --> في الفصل 13 أننا يمكننا can take أخذ إغلاقات closures كمعاملات parameters باستخدام with ثلاث three سمات traits مختلفة different: `Fn`، `FnMut`، و `FnOnce`. نحتاج need إلى تحديد decide أي which kind نوع من الإغلاق closure نستخدمه use هنا here. نعلم know أننا سننتهي end up بفعل doing شيء something مماثل similar للتطبيق implementation `thread::spawn` للمكتبة القياسية standard library، لذا so يمكننا can look أن ننظر في ما what bounds القيود التي تمتلكها has توقيع signature `thread::spawn` على معامله parameter. يُظهر shows لنا التوثيق documentation الآتي following:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -264,19 +161,9 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         T: Send + 'static,
 ```
 
-The `F` type parameter is the one we’re concerned with here; the `T` type
-parameter is related to the return value, and we’re not concerned with that. We
-can see that `spawn` uses `FnOnce` as the trait bound on `F`. This is probably
-what we want as well, because we’ll eventually pass the argument we get in
-`execute` to `spawn`. We can be further confident that `FnOnce` is the trait we
-want to use because the thread for running a request will only execute that
-request’s closure one time, which matches the `Once` in `FnOnce`.
+معامل parameter النوع type `F` هو what الذي نهتم concerned به هنا here؛ معامل parameter النوع type `T` متعلق related بالقيمة value المُرجعة return، ولسنا we're not مهتمين concerned بذلك that. يمكننا can see أن نرى أن `spawn` يستخدم uses `FnOnce` كقيد bound السمة trait على `F`. هذا This is probably ربما what ما نريده want أيضًا as well، لأننا because سنمرر eventually pass في النهاية الوسيطة argument التي نحصل get عليها في `execute` إلى `spawn`. يمكننا can be أن نكون واثقين further confident أكثر أن `FnOnce` هي السمة trait التي نريد want استخدامها use لأن because الخيط thread لتشغيل running طلب request سيُنفّذ execute فقط only إغلاق closure ذلك الطلب request مرة واحدة one time، وهو which matches ما يطابق `Once` في `FnOnce`.
 
-The `F` type parameter also has the trait bound `Send` and the lifetime bound
-`'static`, which are useful in our situation: We need `Send` to transfer the
-closure from one thread to another and `'static` because we don’t know how long
-the thread will take to execute. Let’s create an `execute` method on
-`ThreadPool` that will take a generic parameter of type `F` with these bounds:
+معامل parameter النوع type `F` لديه has أيضًا also قيد bound السمة trait `Send` وقيد bound العمر lifetime `'static`، والتي which are مفيدة useful في موقفنا situation: نحتاج need `Send` لنقل transfer الإغلاق closure من خيط thread واحد one إلى آخر another و `'static` لأننا because لا don't know نعرف كم how long سيستغرق take الخيط thread للتنفيذ execute. لننشئ create طريقة method `execute` على `ThreadPool` ستأخذ take معاملاً parameter عامًا generic من نوع type `F` مع with هذه these القيود bounds:
 
 <Listing file-name="src/lib.rs">
 
@@ -286,45 +173,25 @@ the thread will take to execute. Let’s create an `execute` method on
 
 </Listing>
 
-We still use the `()` after `FnOnce` because this `FnOnce` represents a closure
-that takes no parameters and returns the unit type `()`. Just like function
-definitions, the return type can be omitted from the signature, but even if we
-have no parameters, we still need the parentheses.
+ما زلنا still use نستخدم `()` بعد after `FnOnce` لأن because هذا this `FnOnce` يمثل represents إغلاقًا closure لا يأخذ takes no معاملات parameters ويُرجع returns نوع type الوحدة unit type `()`. مثل Just like تعريفات definitions الدوال functions، يمكن can be omitted حذف نوع type الإرجاع return من التوقيع signature، لكن but حتى even if لو لم يكن have لدينا معاملات parameters، ما زلنا still need نحتاج إلى الأقواس parentheses.
 
-Again, this is the simplest implementation of the `execute` method: It does
-nothing, but we’re only trying to make our code compile. Let’s check it again:
+مرة أخرى Again، هذا this is أبسط simplest تطبيق implementation لطريقة method `execute`: لا تفعل does nothing شيئًا، لكن but نحن we're only trying فقط نحاول جعل making كودنا code يُترجم compile. لنتحقق check منه it مرة أخرى again:
 
 ```console
 {{#include ../listings/ch21-web-server/no-listing-03-define-execute/output.txt}}
 ```
 
-It compiles! But note that if you try `cargo run` and make a request in the
-browser, you’ll see the errors in the browser that we saw at the beginning of
-the chapter. Our library isn’t actually calling the closure passed to `execute`
-yet!
+يُترجم compiles! ولكن But لاحظ note أنه if إذا حاولت tried `cargo run` وقدّمت make طلبًا request في المتصفح browser، فسترى see الأخطاء errors في المتصفح browser التي رأيناها saw في بداية beginning of الفصل chapter. مكتبتنا library لا ليست actually calling تستدعي فعلاً الإغلاق closure الممرر passed إلى `execute` بعد yet!
 
-> Note: A saying you might hear about languages with strict compilers, such as
-> Haskell and Rust, is “If the code compiles, it works.” But this saying is not
-> universally true. Our project compiles, but it does absolutely nothing! If we
-> were building a real, complete project, this would be a good time to start
-> writing unit tests to check that the code compiles _and_ has the behavior we
-> want.
+> ملاحظة Note: قول saying قد قد might hear تسمعه about عن اللغات languages ذات with المترجمات compilers الصارمة strict، مثل such as Haskell و Rust، هو "If the code compiles, it works." لكن but هذا القول saying ليس not universally true صحيحًا عالميًا. مشروعنا project يُترجع compiles، لكن but لا it does absolutely nothing يفعل شيئًا على الإطلاق! إذا If كنا were building نبني مشروعًا project حقيقيًا real، كاملاً complete، فهذا this would be سيكون وقتًا good time جيدًا لبدء start كتابة writing اختبارات tests الوحدة unit لللتحقق check من أن that الكود code يُترجع compiles _and_ ولديه has السلوك behavior الذي نريده want.
 
-Consider: What would be different here if we were going to execute a future
-instead of a closure?
+فكّر Consider: ما What would be سيكون مختلفًا different هنا here إذا if كنا going to were سنُنفّذ execute مستقبلاً future بدلاً instead of من إغلاق closure؟
 
-#### Validating the Number of Threads in `new`
+#### التحقق من عدد الخيوط في `new`
 
-We aren’t doing anything with the parameters to `new` and `execute`. Let’s
-implement the bodies of these functions with the behavior we want. To start,
-let’s think about `new`. Earlier we chose an unsigned type for the `size`
-parameter because a pool with a negative number of threads makes no sense.
-However, a pool with zero threads also makes no sense, yet zero is a perfectly
-valid `usize`. We’ll add code to check that `size` is greater than zero before
-we return a `ThreadPool` instance, and we’ll have the program panic if it
-receives a zero by using the `assert!` macro, as shown in Listing 21-13.
+نحن we aren't doing لا نفعل أي anything شيء بالمعاملات parameters لـ `new` و `execute`. لننفّذ implement أجسام bodies هذه these الدوال functions بالسلوك behavior الذي نريده want. للبدء start، لنفكّر think في `new`. اخترنا chose سابقًا earlier نوعًا type غير موقّع unsigned لمعامل parameter `size` لأن because مجمعًا pool بعدد number سالب negative من الخيوط threads لا makes no sense يكون منطقيًا. ومع ذلك However، مجمع pool بصفر zero خيوط threads أيضًا also لا makes no sense يكون منطقيًا، ومع ذلك yet الصفر zero هو `usize` صالح perfectly valid تمامًا. سنضيف add كودًا code للتحقق check من أن that `size` أكبر greater من صفر zero قبل before أن نُرجع return نسخة instance `ThreadPool`، وسنجعل have البرنامج program يصاب panic بالذعر إذا if تلقى receives صفرًا zero باستخدام using ماكرو macro `assert!`، كما as موضح shown في القائمة 21-13.
 
-<Listing number="21-13" file-name="src/lib.rs" caption="Implementing `ThreadPool::new` to panic if `size` is zero">
+<Listing number="21-13" file-name="src/lib.rs" caption="تطبيق `ThreadPool::new` للذعر إذا كان `size` صفرًا">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-13/src/lib.rs:here}}
@@ -332,29 +199,17 @@ receives a zero by using the `assert!` macro, as shown in Listing 21-13.
 
 </Listing>
 
-We’ve also added some documentation for our `ThreadPool` with doc comments.
-Note that we followed good documentation practices by adding a section that
-calls out the situations in which our function can panic, as discussed in
-Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
-to see what the generated docs for `new` look like!
+أضفنا added أيضًا also بعض some التوثيق documentation لـ `ThreadPool` مع with تعليقات comments التوثيق doc. لاحظ Note أننا اتبعنا followed ممارسات practices التوثيق documentation الجيدة good بإضافة adding قسم section يستدعي calls out المواقف situations التي which يمكن can أن تصاب panic فيها دالتنا function بالذعر، كما as تمت مناقشته discussed في الفصل 14. حاول Try تشغيل running `cargo doc --open` والنقر clicking على بنية `ThreadPool` struct لترى see ما what يبدو look like التوثيق docs المُنشأ generated لـ `new`!
 
-Instead of adding the `assert!` macro as we’ve done here, we could change `new`
-into `build` and return a `Result` like we did with `Config::build` in the I/O
-project in Listing 12-9. But we’ve decided in this case that trying to create a
-thread pool without any threads should be an unrecoverable error. If you’re
-feeling ambitious, try to write a function named `build` with the following
-signature to compare with the `new` function:
+بدلاً Instead من adding إضافة ماكرو macro `assert!` كما as فعلنا done هنا here، يمكننا could change تغيير `new` إلى `build` وإرجاع return `Result` كما as فعلنا did مع with `Config::build` في مشروع project I/O في القائمة 12-9. لكن But قررنا decided في هذه this الحالة case أن that محاولة trying to create إنشاء مجمع خيوط thread pool بدون without أي any خيوط threads يجب should be أن يكون خطأً error غير قابل للاسترداد unrecoverable. إذا If كنت you're feeling طموحًا ambitious، حاول try to write كتابة دالة function باسم named `build` مع with التوقيع signature التالي following للمقارنة compare مع with دالة function `new`:
 
 ```rust,ignore
 pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
 ```
 
-#### Creating Space to Store the Threads
+#### إنشاء مساحة لتخزين الخيوط
 
-Now that we have a way to know we have a valid number of threads to store in
-the pool, we can create those threads and store them in the `ThreadPool` struct
-before returning the struct. But how do we “store” a thread? Let’s take another
-look at the `thread::spawn` signature:
+الآن Now بعد that أن لدينا have طريقة way لنعرف know that لدينا have عددًا number صالحًا valid من الخيوط threads للتخزين store في المجمع pool، يمكننا can create إنشاء تلك those الخيوط threads وتخزينها store them في بنية `ThreadPool` struct قبل before إرجاع returning البنية struct. لكن But كيف how do نُخزّن store خيطًا thread؟ لنلقِ take نظرة another look أخرى على توقيع signature `thread::spawn`:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -364,18 +219,11 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         T: Send + 'static,
 ```
 
-The `spawn` function returns a `JoinHandle<T>`, where `T` is the type that the
-closure returns. Let’s try using `JoinHandle` too and see what happens. In our
-case, the closures we’re passing to the thread pool will handle the connection
-and not return anything, so `T` will be the unit type `()`.
+تُرجع returns دالة function `spawn` `JoinHandle<T>`، حيث where `T` هو النوع type الذي that يُرجعه returns الإغلاق closure. لنحاول try استخدام using `JoinHandle` أيضًا too ونرى see ما what يحدث happens. في حالتنا case، الإغلاقات closures التي we're passing نمررها إلى مجمع الخيوط thread pool ستعالج handle الاتصال connection ولن won't return تُرجع أي anything شيء، لذا so `T` سيكون will be نوع type الوحدة unit type `()`.
 
-The code in Listing 21-14 will compile, but it doesn’t create any threads yet.
-We’ve changed the definition of `ThreadPool` to hold a vector of
-`thread::JoinHandle<()>` instances, initialized the vector with a capacity of
-`size`, set up a `for` loop that will run some code to create the threads, and
-returned a `ThreadPool` instance containing them.
+سيُترجع compile الكود code في القائمة 21-14، لكن but لا doesn't create ينشئ أي any خيوط threads بعد yet. غيّرنا changed تعريف definition `ThreadPool` ليحمل hold متجهًا vector من نسخ instances `thread::JoinHandle<()>`، وعيّنّا initialized المتجه vector بسعة capacity قدرها of `size`، وأعددنا set up حلقة `for` loop ستُشغّل run بعض some الكود code لإنشاء create الخيوط threads، وأرجعنا returned نسخة instance `ThreadPool` تحتويها containing them.
 
-<Listing number="21-14" file-name="src/lib.rs" caption="Creating a vector for `ThreadPool` to hold the threads">
+<Listing number="21-14" file-name="src/lib.rs" caption="إنشاء متجه لـ `ThreadPool` لحمل الخيوط">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-14/src/lib.rs:here}}
@@ -383,69 +231,37 @@ returned a `ThreadPool` instance containing them.
 
 </Listing>
 
-We’ve brought `std::thread` into scope in the library crate because we’re
-using `thread::JoinHandle` as the type of the items in the vector in
-`ThreadPool`.
+جلبنا brought `std::thread` إلى النطاق scope في حزمة crate المكتبة library لأننا because نستخدم using `thread::JoinHandle` كنوع type العناصر items في المتجه vector في `ThreadPool`.
 
-Once a valid size is received, our `ThreadPool` creates a new vector that can
-hold `size` items. The `with_capacity` function performs the same task as
-`Vec::new` but with an important difference: It pre-allocates space in the
-vector. Because we know we need to store `size` elements in the vector, doing
-this allocation up front is slightly more efficient than using `Vec::new`,
-which resizes itself as elements are inserted.
+بمجرد Once استقبال receiving حجم size صالح valid، ينشئ creates `ThreadPool` الخاص بنا متجهًا vector جديدًا new يمكن can hold أن يحمل عناصر `size` items. تؤدي performs دالة function `with_capacity` نفس same المهمة task مثل as `Vec::new` لكن but مع with فرق difference مهم important: تُخصّص pre-allocates مسبقًا مساحة space في المتجه vector. لأننا Because نعلم know أننا نحتاج need إلى تخزين store عناصر `size` elements في المتجه vector، فإن القيام doing بهذا this التخصيص allocation مقدمًا up front أكثر more كفاءة efficient قليلاً slightly من استخدام using `Vec::new`، الذي which يغيّر resizes نفسه itself بينما as يتم are إدراج inserted العناصر elements.
 
-When you run `cargo check` again, it should succeed.
+عندما When تُشغّل run `cargo check` مرة أخرى again، يجب should أن ينجح succeed.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id ="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"></a>
 
-#### Sending Code from the `ThreadPool` to a Thread
+#### إرسال الكود من `ThreadPool` إلى خيط
 
-We left a comment in the `for` loop in Listing 21-14 regarding the creation of
-threads. Here, we’ll look at how we actually create threads. The standard
-library provides `thread::spawn` as a way to create threads, and
-`thread::spawn` expects to get some code the thread should run as soon as the
-thread is created. However, in our case, we want to create the threads and have
-them _wait_ for code that we’ll send later. The standard library’s
-implementation of threads doesn’t include any way to do that; we have to
-implement it manually.
+تركنا left تعليقًا comment في حلقة `for` loop في القائمة 21-14 بخصوص regarding إنشاء creation الخيوط threads. هنا Here، سننظر look في كيفية how نُنشئ actually create فعلاً الخيوط threads. توفر provides المكتبة القياسية standard library `thread::spawn` كطريقة way لإنشاء create خيوط threads، و`thread::spawn` تتوقع expects to get أن تحصل على بعض some الكود code الذي يجب should أن يُشغّله run الخيط thread بمجرد as soon as إنشاء creating الخيط thread. ومع ذلك However، في حالتنا case، نريد want إنشاء create الخيوط threads وجعلها have them تنتظر _wait_ للكود code الذي سنرسله we'll send لاحقًا later. لا doesn't include تتضمن تطبيق implementation المكتبة القياسية standard library للخيوط threads أي any طريقة way للقيام do بذلك that؛ علينا have to أن ننفّذه implement يدويًا manually.
 
-We’ll implement this behavior by introducing a new data structure between the
-`ThreadPool` and the threads that will manage this new behavior. We’ll call
-this data structure _Worker_, which is a common term in pooling
-implementations. The `Worker` picks up code that needs to be run and runs the
-code in its thread.
+سننفّذ implement هذا this السلوك behavior بإدخال introducing بنية data structure بيانات جديدة new بين between `ThreadPool` والخيوط threads التي ستدير manage هذا this السلوك behavior الجديد new. سنسمّي call بنية data structure البيانات هذه _Worker_، وهو مصطلح term شائع common في تطبيقات implementations التجميع pooling. يلتقط picks up `Worker` الكود code الذي يحتاج needs to be run إلى التشغيل ويُشغّل runs الكود code في خيطه thread.
 
-Think of people working in the kitchen at a restaurant: The workers wait until
-orders come in from customers, and then they’re responsible for taking those
-orders and filling them.
+فكّر Think of في الناس people العاملين working في المطبخ kitchen في مطعم restaurant: ينتظر waits العمّال workers حتى until تأتي come in الطلبات orders من العملاء customers، ثم and then هم they're responsible مسؤولون عن taking أخذ تلك those الطلبات orders وملئها filling them.
 
-Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
-we’ll store instances of the `Worker` struct. Each `Worker` will store a single
-`JoinHandle<()>` instance. Then, we’ll implement a method on `Worker` that will
-take a closure of code to run and send it to the already running thread for
-execution. We’ll also give each `Worker` an `id` so that we can distinguish
-between the different instances of `Worker` in the pool when logging or
-debugging.
+بدلاً Instead of من تخزين storing متجه vector من نسخ instances `JoinHandle<()>` في مجمع الخيوط thread pool، سنُخزّن store نسخ instances من بنية `Worker` struct. سيُخزّن store كل every `Worker` نسخة instance واحدة single `JoinHandle<()>`. ثم Then، سننفّذ implement طريقة method على `Worker` ستأخذ take إغلاقًا closure من الكود code ليُشغّل run وترسله send it إلى الخيط thread الذي يعمل already running بالفعل للتنفيذ execution. سنعطي give أيضًا also كل every `Worker` معرّفًا `id` بحيث so that نتمكن can distinguish من التمييز بين نسخ instances `Worker` المختلفة different في المجمع pool عند when التسجيل logging أو التصحيح debugging.
 
-Here is the new process that will happen when we create a `ThreadPool`. We’ll
-implement the code that sends the closure to the thread after we have `Worker`
-set up in this way:
+فيما يلي Here is العملية process الجديدة new التي ستحدث happen عندما when ننشئ create `ThreadPool`. سننفّذ implement الكود code الذي يُرسل sends الإغلاق closure إلى الخيط thread بعد after أن يكون have `Worker` مُعدًّا set up بهذه this الطريقة way:
 
-1. Define a `Worker` struct that holds an `id` and a `JoinHandle<()>`.
-2. Change `ThreadPool` to hold a vector of `Worker` instances.
-3. Define a `Worker::new` function that takes an `id` number and returns a
-   `Worker` instance that holds the `id` and a thread spawned with an empty
-   closure.
-4. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
-   a new `Worker` with that `id`, and store the `Worker` in the vector.
+1. حدّد Define بنية `Worker` struct تحمل holds معرّفًا `id` و `JoinHandle<()>`.
+2. غيّر Change `ThreadPool` ليحمل hold متجهًا vector من نسخ instances `Worker`.
+3. حدّد Define دالة function `Worker::new` تأخذ takes رقم number معرّف `id` وتُرجع return نسخة instance `Worker` تحمل holds المعرّف `id` وخيطًا thread مُولّدًا spawned مع with إغلاق closure فارغ empty.
+4. في `ThreadPool::new`، استخدم use عداد counter حلقة `for` loop لتوليد generate معرّف `id`، وأنشئ create `Worker` جديدًا new بذلك that المعرّف `id`، وخزّن store `Worker` في المتجه vector.
 
-If you’re up for a challenge, try implementing these changes on your own before
-looking at the code in Listing 21-15.
+إذا If كنت you're up لتحدٍ challenge، حاول try تطبيق implementing هذه these التغييرات changes بنفسك on your own قبل before النظر looking في الكود code في القائمة 21-15.
 
-Ready? Here is Listing 21-15 with one way to make the preceding modifications.
+مستعد Ready؟ فيما يلي Here is القائمة 21-15 مع with إحدى one الطرق ways لعمل make التعديلات modifications المذكورة preceding.
 
-<Listing number="21-15" file-name="src/lib.rs" caption="Modifying `ThreadPool` to hold `Worker` instances instead of holding threads directly">
+<Listing number="21-15" file-name="src/lib.rs" caption="تعديل `ThreadPool` لحمل نسخ `Worker` بدلاً من حمل الخيوط مباشرة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-15/src/lib.rs:here}}
@@ -453,59 +269,33 @@ Ready? Here is Listing 21-15 with one way to make the preceding modifications.
 
 </Listing>
 
-We’ve changed the name of the field on `ThreadPool` from `threads` to `workers`
-because it’s now holding `Worker` instances instead of `JoinHandle<()>`
-instances. We use the counter in the `for` loop as an argument to
-`Worker::new`, and we store each new `Worker` in the vector named `workers`.
+غيّرنا changed اسم name الحقل field على `ThreadPool` من `threads` إلى `workers` لأنه because الآن now يحمل holding نسخ instances `Worker` بدلاً instead of من نسخ instances `JoinHandle<()>`. نستخدم use العداد counter في حلقة `for` loop كوسيطة argument لـ `Worker::new`، ونُخزّن store كل every `Worker` جديد new في المتجه vector المسمّى named `workers`.
 
-External code (like our server in _src/main.rs_) doesn’t need to know the
-implementation details regarding using a `Worker` struct within `ThreadPool`,
-so we make the `Worker` struct and its `new` function private. The
-`Worker::new` function uses the `id` we give it and stores a `JoinHandle<()>`
-instance that is created by spawning a new thread using an empty closure.
+لا doesn't need الكود code الخارجي External (مثل like خادومنا server في _src/main.rs_) أن يعرف know تفاصيل details التطبيق implementation المتعلقة regarding باستخدام using بنية `Worker` struct ضمن within `ThreadPool`، لذا so نجعل make بنية `Worker` struct ودالتها function `new` خاصة private. تستخدم uses دالة function `Worker::new` المعرّف `id` الذي نعطيه give it وتُخزّن stores نسخة instance `JoinHandle<()>` التي يتم are إنشاؤها created بتوليد spawning خيط thread جديد new باستخدام using إغلاق closure فارغ empty.
 
-> Note: If the operating system can’t create a thread because there aren’t
-> enough system resources, `thread::spawn` will panic. That will cause our
-> whole server to panic, even though the creation of some threads might
-> succeed. For simplicity’s sake, this behavior is fine, but in a production
-> thread pool implementation, you’d likely want to use
-> [`std::thread::Builder`][builder]<!-- ignore --> and its
-> [`spawn`][builder-spawn]<!-- ignore --> method that returns `Result` instead.
+> ملاحظة Note: إذا If لم can't create يتمكن نظام التشغيل operating system من إنشاء خيط thread لأنه because ليست there aren't enough هناك موارد resources نظام system كافية enough، فسيصاب `thread::spawn` will panic بالذعر. هذا That will cause سيتسبب في إصابة panic خادومنا server بالكامل whole بالذعر، حتى even though على الرغم من أن إنشاء creation بعض some الخيوط threads قد might succeed ينجح. من For أجل simplicity's sake بساطة الأمر، هذا this السلوك behavior جيد fine، لكن but في تطبيق implementation مجمع خيوط thread pool إنتاجي production، من المحتمل you'd likely want أن ترغب في استخدام use
+> [`std::thread::Builder`][builder]<!-- ignore --> وطريقته method
+> [`spawn`][builder-spawn]<!-- ignore --> التي تُرجع return `Result` بدلاً instead.
 
-This code will compile and will store the number of `Worker` instances we
-specified as an argument to `ThreadPool::new`. But we’re _still_ not processing
-the closure that we get in `execute`. Let’s look at how to do that next.
+سيُترجم compile هذا الكود code ويُخزّن store عدد number نسخ instances `Worker` الذي حددناه specified كوسيطة argument لـ `ThreadPool::new`. لكن but ما زلنا we're _still_ not processing لا نعالج الإغلاق closure الذي نحصل get عليه في `execute`. لننظر look في كيفية how to do ذلك that بعد ذلك next.
 
-#### Sending Requests to Threads via Channels
+#### إرسال الطلبات إلى الخيوط عبر القنوات
 
-The next problem we’ll tackle is that the closures given to `thread::spawn` do
-absolutely nothing. Currently, we get the closure we want to execute in the
-`execute` method. But we need to give `thread::spawn` a closure to run when we
-create each `Worker` during the creation of the `ThreadPool`.
+المشكلة problem التالية next التي سنتعامل tackle معها هي that أن الإغلاقات closures المُعطاة given لـ `thread::spawn` لا do absolutely nothing تفعل شيئًا على الإطلاق. حاليًا Currently، نحصل get على الإغلاق closure الذي نريد want تنفيذه execute في طريقة method `execute`. لكن But نحتاج need إلى إعطاء give `thread::spawn` إغلاقًا closure ليُشغّله run عندما when ننشئ create كل every `Worker` أثناء during إنشاء creation `ThreadPool`.
 
-We want the `Worker` structs that we just created to fetch the code to run from
-a queue held in the `ThreadPool` and send that code to its thread to run.
+نريد want بنيات `Worker` structs التي أنشأناها just created أن تجلب fetch الكود code ليُشغّل run من طابور queue محفوظ held في `ThreadPool` وترسل send ذلك that الكود code إلى خيطه thread ليُشغّله run.
 
-The channels we learned about in Chapter 16—a simple way to communicate between
-two threads—would be perfect for this use case. We’ll use a channel to function
-as the queue of jobs, and `execute` will send a job from the `ThreadPool` to
-the `Worker` instances, which will send the job to its thread. Here is the plan:
+القنوات channels التي تعلّمناها learned about في الفصل 16—طريقة way بسيطة simple للتواصل communicate بين خيطين threads اثنين two—ستكون would be مثالية perfect لحالة case الاستخدام use هذه this. سنستخدم use قناة channel لتعمل function كطابور queue للوظائف jobs، وسيُرسل send `execute` وظيفة job من `ThreadPool` إلى نسخ instances `Worker`، التي ستُرسل send الوظيفة job إلى خيطها thread. فيما يلي Here is الخطة plan:
 
-1. The `ThreadPool` will create a channel and hold on to the sender.
-2. Each `Worker` will hold on to the receiver.
-3. We’ll create a new `Job` struct that will hold the closures we want to send
-   down the channel.
-4. The `execute` method will send the job it wants to execute through the
-   sender.
-5. In its thread, the `Worker` will loop over its receiver and execute the
-   closures of any jobs it receives.
+1. سينشئ create `ThreadPool` قناة channel ويحتفظ hold on بالمُرسِل sender.
+2. سيحتفظ hold on كل every `Worker` بالمُستقبِل receiver.
+3. سننشئ create بنية `Job` struct جديدة new ستحمل hold الإغلاقات closures التي نريد want إرسالها send أسفل down القناة channel.
+4. ستُرسل send طريقة method `execute` الوظيفة job التي تريد want تنفيذها execute عبر through المُرسِل sender.
+5. في خيطه thread، سيُكرّر loop `Worker` على مُستقبِله receiver ويُنفّذ execute إغلاقات closures أي any وظائف jobs يتلقّاها receives.
 
-Let’s start by creating a channel in `ThreadPool::new` and holding the sender
-in the `ThreadPool` instance, as shown in Listing 21-16. The `Job` struct
-doesn’t hold anything for now but will be the type of item we’re sending down
-the channel.
+لنبدأ start بإنشاء creating قناة channel في `ThreadPool::new` والاحتفاظ holding بالمُرسِل sender في نسخة instance `ThreadPool`، كما as موضح shown في القائمة 21-16. لا تحمل hold بنية `Job` struct أي anything شيء الآن for now لكن but ستكون will be نوع type العنصر item الذي we're sending نرسله أسفل down القناة channel.
 
-<Listing number="21-16" file-name="src/lib.rs" caption="Modifying `ThreadPool` to store the sender of a channel that transmits `Job` instances">
+<Listing number="21-16" file-name="src/lib.rs" caption="تعديل `ThreadPool` لتخزين مُرسِل قناة تُرسل نسخ `Job`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-16/src/lib.rs:here}}
@@ -513,15 +303,11 @@ the channel.
 
 </Listing>
 
-In `ThreadPool::new`, we create our new channel and have the pool hold the
-sender. This will successfully compile.
+في `ThreadPool::new`، ننشئ create قناتنا channel الجديدة new ونجعل have المجمع pool يحتفظ hold بالمُرسِل sender. سيُترجم compile هذا بنجاح successfully.
 
-Let’s try passing a receiver of the channel into each `Worker` as the thread
-pool creates the channel. We know we want to use the receiver in the thread that
-the `Worker` instances spawn, so we’ll reference the `receiver` parameter in the
-closure. The code in Listing 21-17 won’t quite compile yet.
+لنحاول try تمرير passing مُستقبِل receiver القناة channel إلى كل every `Worker` بينما as ينشئ creates مجمع الخيوط thread pool القناة channel. نعلم know أننا نريد want استخدام use المُستقبِل receiver في الخيط thread الذي that تولّده spawn نسخ instances `Worker`، لذا so سنُشير reference إلى معامل parameter `receiver` في الإغلاق closure. لن won't quite compile يُترجم الكود code في القائمة 21-17 تمامًا بعد yet.
 
-<Listing number="21-17" file-name="src/lib.rs" caption="Passing the receiver to each `Worker`">
+<Listing number="21-17" file-name="src/lib.rs" caption="تمرير مُستقبِل القناة إلى العمّال">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-17/src/lib.rs:here}}
@@ -529,34 +315,21 @@ closure. The code in Listing 21-17 won’t quite compile yet.
 
 </Listing>
 
-We’ve made some small and straightforward changes: We pass the receiver into
-`Worker::new`, and then we use it inside the closure.
+أجرينا made بعض some التغييرات changes الصغيرة small والمباشرة straightforward: مررنا pass المُستقبِل receiver إلى `Worker::new`، ثم then نستخدمه use داخل inside الإغلاق closure.
 
-When we try to check this code, we get this error:
+عندما When نحاول try to check فحص هذا this الكود code، نحصل get على هذا this الخطأ error:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-17/output.txt}}
 ```
 
-The code is trying to pass `receiver` to multiple `Worker` instances. This
-won’t work, as you’ll recall from Chapter 16: The channel implementation that
-Rust provides is multiple _producer_, single _consumer_. This means we can’t
-just clone the consuming end of the channel to fix this code. We also don’t
-want to send a message multiple times to multiple consumers; we want one list
-of messages with multiple `Worker` instances such that each message gets
-processed once.
+يحاول trying الكود code تمرير pass `receiver` إلى نسخ instances `Worker` متعددة multiple. لن won't work يعمل هذا this، كما as ستتذكّر recall من الفصل 16: تطبيق implementation القناة channel الذي that توفّره provides Rust هو مُنتِج _producer_ متعدد multiple، مُستهلِك _consumer_ واحد single. هذا This means يعني أننا لا can't يمكن فقط just clone استنساخ النهاية end الاستهلاكية consuming من القناة channel لإصلاح fix هذا this الكود code. نحن أيضًا also لا don't want نريد إرسال send رسالة message عدة multiple مرات times إلى مُستهلكين consumers متعددين multiple؛ نريد want قائمة list واحدة one من الرسائل messages مع with نسخ instances `Worker` متعددة multiple بحيث such that تتم is processed تُعالج كل every رسالة message مرة one واحدة time.
 
-Additionally, taking a job off the channel queue involves mutating the
-`receiver`, so the threads need a safe way to share and modify `receiver`;
-otherwise, we might get race conditions (as covered in Chapter 16).
+بالإضافة Additionally، فإن taking أخذ وظيفة job من طابور queue القناة channel يتضمن involves تعديل mutating `receiver`، لذا so تحتاج need الخيوط threads إلى طريقة way آمنة safe لمشاركة share وتعديل modify `receiver`؛ وإلا otherwise، قد might get نحصل على شروط conditions سباق race (كما as تمت تغطيته covered في الفصل 16).
 
-Recall the thread-safe smart pointers discussed in Chapter 16: To share
-ownership across multiple threads and allow the threads to mutate the value, we
-need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple `Worker` instances
-own the receiver, and `Mutex` will ensure that only one `Worker` gets a job from
-the receiver at a time. Listing 21-18 shows the changes we need to make.
+تذكّر Recall المؤشرات pointers الذكية smart الآمنة safe للخيط thread التي تمت مناقشتها discussed في الفصل 16: لمشاركة share الملكية ownership عبر across خيوط threads متعددة multiple والسماح allow للخيوط threads بتعديل mutate القيمة value، نحتاج need إلى استخدام use `Arc<Mutex<T>>`. سيسمح let النوع type `Arc` لنسخ instances `Worker` متعددة multiple بامتلاك own المُستقبِل receiver، وسيضمن ensure `Mutex` أن `Worker` واحدًا only one فقط يحصل gets على وظيفة job من المُستقبِل receiver في كل at a مرة time. تُظهر show القائمة 21-18 التغييرات changes التي نحتاج need إلى عملها make.
 
-<Listing number="21-18" file-name="src/lib.rs" caption="Sharing the receiver among the `Worker` instances using `Arc` and `Mutex`">
+<Listing number="21-18" file-name="src/lib.rs" caption="مشاركة المُستقبِل بين نسخ `Worker` باستخدام `Arc` و `Mutex`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-18/src/lib.rs:here}}
@@ -564,21 +337,16 @@ the receiver at a time. Listing 21-18 shows the changes we need to make.
 
 </Listing>
 
-In `ThreadPool::new`, we put the receiver in an `Arc` and a `Mutex`. For each
-new `Worker`, we clone the `Arc` to bump the reference count so that the
-`Worker` instances can share ownership of the receiver.
+في `ThreadPool::new`، نضع put المُستقبِل receiver في `Arc` و `Mutex`. لكل for each `Worker` جديد new، نستنسخ clone `Arc` لزيادة bump عداد count المراجع reference بحيث so that تتمكن can share نسخ instances `Worker` من مشاركة ملكية ownership المُستقبِل receiver.
 
-With these changes, the code compiles! We’re getting there!
+مع with هذه these التغييرات changes، يُترجم compiles الكود code! نحن We're getting هناك there!
 
-#### Implementing the `execute` Method
+#### تطبيق طريقة `execute`
 
-Let’s finally implement the `execute` method on `ThreadPool`. We’ll also change
-`Job` from a struct to a type alias for a trait object that holds the type of
-closure that `execute` receives. As discussed in the [“Type Synonyms and Type
-Aliases”][type-aliases]<!-- ignore --> section in Chapter 20, type aliases
-allow us to make long types shorter for ease of use. Look at Listing 21-19.
+لننفّذ implement أخيرًا finally طريقة method `execute` على `ThreadPool`. سنغيّر change أيضًا also `Job` من بنية struct إلى اسم name مستعار alias للنوع type لكائن object سمة trait يحمل hold نوع type الإغلاق closure الذي that يتلقّاه receives `execute`. كما as تمت مناقشته discussed في قسم section ["Type Synonyms and Type
+Aliases"][type-aliases]<!-- ignore --> في الفصل 20، تسمح allow لنا أسماء type aliases الأنواع المستعارة بجعل making الأنواع types الطويلة long أقصر shorter من for أجل ease of سهولة الاستخدام use. انظر Look إلى القائمة 21-19.
 
-<Listing number="21-19" file-name="src/lib.rs" caption="Creating a `Job` type alias for a `Box` that holds each closure and then sending the job down the channel">
+<Listing number="21-19" file-name="src/lib.rs" caption="إنشاء اسم مستعار `Job` للنوع لـ `Box` يحمل كل إغلاق ثم إرسال الوظيفة أسفل القناة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-19/src/lib.rs:here}}
@@ -586,22 +354,11 @@ allow us to make long types shorter for ease of use. Look at Listing 21-19.
 
 </Listing>
 
-After creating a new `Job` instance using the closure we get in `execute`, we
-send that job down the sending end of the channel. We’re calling `unwrap` on
-`send` for the case that sending fails. This might happen if, for example, we
-stop all our threads from executing, meaning the receiving end has stopped
-receiving new messages. At the moment, we can’t stop our threads from
-executing: Our threads continue executing as long as the pool exists. The
-reason we use `unwrap` is that we know the failure case won’t happen, but the
-compiler doesn’t know that.
+بعد After إنشاء creating نسخة instance `Job` جديدة new باستخدام using الإغلاق closure الذي that نحصل get عليه في `execute`، نُرسل send تلك that الوظيفة job أسفل down نهاية end الإرسال sending من القناة channel. نستدعي calling `unwrap` على `send` لحالة case فشل fail الإرسال sending. قد might happen يحدث هذا this إذا if، على for سبيل example المثال، أوقفنا stop جميع all خيوطنا threads من التنفيذ executing، مما meaning يعني أن النهاية end المُستقبِلة receiving توقّفت stopped عن استقبال receiving رسائل messages جديدة new. في الوقت At the moment الحالي، لا can't stop يمكننا إيقاف خيوطنا threads من التنفيذ executing: تستمر continue خيوطنا threads في التنفيذ executing طالما as long as يوجد exists المجمع pool. السبب reason الذي we use نستخدم فيه `unwrap` هو أننا because نعلم know أن حالة case الفشل failure لن won't happen تحدث، لكن but المترجم compiler لا doesn't know يعرف ذلك that.
 
-But we’re not quite done yet! In the `Worker`, our closure being passed to
-`thread::spawn` still only _references_ the receiving end of the channel.
-Instead, we need the closure to loop forever, asking the receiving end of the
-channel for a job and running the job when it gets one. Let’s make the change
-shown in Listing 21-20 to `Worker::new`.
+لكن But لسنا we're not quite done بعد yet! في `Worker`، إغلاقنا closure المُمرّر being passed إلى `thread::spawn` ما زال still فقط only _references_ يشير إلى النهاية end المُستقبِلة receiving من القناة channel. بدلاً Instead، نحتاج need الإغلاق closure ليُكرّر loop للأبد forever، يسأل asking النهاية end المُستقبِلة receiving من القناة channel عن وظيفة job ويُشغّل running الوظيفة job عندما when يحصل gets على واحدة one. لنعمل make التغيير change الموضّح shown في القائمة 21-20 إلى `Worker::new`.
 
-<Listing number="21-20" file-name="src/lib.rs" caption="Receiving and executing the jobs in the `Worker` instance’s thread">
+<Listing number="21-20" file-name="src/lib.rs" caption="استقبال وتنفيذ الوظائف في خيط نسخة `Worker`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-20/src/lib.rs:here}}
@@ -609,25 +366,13 @@ shown in Listing 21-20 to `Worker::new`.
 
 </Listing>
 
-Here, we first call `lock` on the `receiver` to acquire the mutex, and then we
-call `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex
-is in a _poisoned_ state, which can happen if some other thread panicked while
-holding the lock rather than releasing the lock. In this situation, calling
-`unwrap` to have this thread panic is the correct action to take. Feel free to
-change this `unwrap` to an `expect` with an error message that is meaningful to
-you.
+هنا Here، نستدعي call أولاً first `lock` على `receiver` للحصول acquire على القفل mutex، ثم then نستدعي call `unwrap` للذعر panic على any أي أخطاء errors. قد might fail يفشل الحصول Acquiring على القفل lock إذا if كان المقفل mutex في حالة state مُسمّمة _poisoned_، والتي which يمكن can happen أن تحدث إذا if أصاب panicked خيط thread آخر some other بالذعر أثناء while حمل holding القفل lock بدلاً rather من releasing إطلاق القفل lock. في هذه this الحالة situation، فإن استدعاء calling `unwrap` لجعل having هذا this الخيط thread يصاب panic بالذعر هو الإجراء action الصحيح correct ليُتّخذ to take. لا Feel free تتردد في تغيير change هذا this `unwrap` إلى `expect` مع with رسالة message خطأ error ذات معنى meaningful لك to you.
 
-If we get the lock on the mutex, we call `recv` to receive a `Job` from the
-channel. A final `unwrap` moves past any errors here as well, which might occur
-if the thread holding the sender has shut down, similar to how the `send`
-method returns `Err` if the receiver shuts down.
+إذا If حصلنا got على القفل lock على المقفل mutex، نستدعي call `recv` لاستقبال receive `Job` من القناة channel. يتحرّك moves `unwrap` نهائي final عبر past أي any أخطاء errors هنا here أيضًا as well، والتي which قد might occur تحدث إذا if أوقف shut down الخيط thread الذي holding يحمل المُرسِل sender، مشابهًا similar لكيفية how إرجاع returns طريقة method `send` `Err` إذا if أوقف shuts down المُستقبِل receiver.
 
-The call to `recv` blocks, so if there is no job yet, the current thread will
-wait until a job becomes available. The `Mutex<T>` ensures that only one
-`Worker` thread at a time is trying to request a job.
+يحجب blocks استدعاء call `recv`، لذا so إذا if لم يكن there is هناك وظيفة job بعد yet، فسينتظر wait الخيط thread الحالي current حتى until تصبح becomes وظيفة job متاحة available. يضمن ensures `Mutex<T>` أن خيط thread `Worker` واحدًا only one فقط في كل at a مرة time يحاول trying to request طلب وظيفة job.
 
-Our thread pool is now in a working state! Give it a `cargo run` and make some
-requests:
+مجمع خيوطنا thread pool الآن now في حالة state عمل working! أعطه Give it `cargo run` واعمل make بعض some الطلبات requests:
 
 <!-- manual-regeneration
 cd listings/ch21-web-server/listing-21-20
@@ -674,27 +419,15 @@ Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 ```
 
-Success! We now have a thread pool that executes connections asynchronously.
-There are never more than four threads created, so our system won’t get
-overloaded if the server receives a lot of requests. If we make a request to
-_/sleep_, the server will be able to serve other requests by having another
-thread run them.
+نجاح Success! الآن لدينا now have مجمع خيوط thread pool ينفّذ executes الاتصالات connections بشكل asynchronously غير متزامن. لا يتم are never أبدًا إنشاء created أكثر more من أربعة four خيوط threads، لذا so لن won't get يحصل نظامنا system على حمل overloaded زائد إذا if تلقّى received الخادوم server الكثير a lot of من الطلبات requests. إذا If قدّمنا make طلبًا request إلى _/sleep_، فسيتمكّن be able الخادوم server من خدمة serve طلبات requests أخرى other عن طريق having جعل خيط thread آخر another يُشغّلها run them.
 
-> Note: If you open _/sleep_ in multiple browser windows simultaneously, they
-> might load one at a time in five-second intervals. Some web browsers execute
-> multiple instances of the same request sequentially for caching reasons. This
-> limitation is not caused by our web server.
+> ملاحظة Note: إذا If فتحت open _/sleep_ في نوافذ windows متصفح browser متعددة multiple في وقت واحد simultaneously، فقد might load يُحمّلون واحدًا one تلو at a الآخر time في فترات intervals من خمس five ثوانٍ seconds. تُنفّذ execute بعض some متصفحات browsers الويب web نسخًا instances متعددة multiple من نفس same الطلب request بشكل sequentially تسلسلي لأسباب reasons التخزين المؤقت caching. هذا This القيد limitation ليس not caused by تسببه خادوم الويب web server الخاص بنا.
 
-This is a good time to pause and consider how the code in Listings 21-18, 21-19,
-and 21-20 would be different if we were using futures instead of a closure for
-the work to be done. What types would change? How would the method signatures be
-different, if at all? What parts of the code would stay the same?
+هذا This is وقت time جيد good للتوقّف pause والنظر consider في كيف how سيكون would be الكود code في القوائم Listings 21-18، 21-19، و 21-20 مختلفًا different إذا if كنا using نستخدم مستقبلات futures بدلاً instead of من إغلاق closure للعمل work المُراد to be done ليُنجز. ما What الأنواع types التي ستتغيّر would change؟ كيف How سيكون would توقيعات signatures الطرق methods مختلفة different، إن if كانت at all؟ ما what أجزاء parts الكود code التي ستبقى would stay نفسها same؟
 
-After learning about the `while let` loop in Chapter 17 and Chapter 19, you
-might be wondering why we didn’t write the `Worker` thread code as shown in
-Listing 21-21.
+بعد After التعلّم learning عن حلقة `while let` loop في الفصل 17 والفصل 19، قد might be wondering تتساءل لماذا why لم didn't write نكتب كود code خيط thread `Worker` كما as موضح shown في القائمة 21-21.
 
-<Listing number="21-21" file-name="src/lib.rs" caption="An alternative implementation of `Worker::new` using `while let`">
+<Listing number="21-21" file-name="src/lib.rs" caption="تطبيق بديل لـ `Worker::new` باستخدام `while let`">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-21/src/lib.rs:here}}
@@ -702,24 +435,11 @@ Listing 21-21.
 
 </Listing>
 
-This code compiles and runs but doesn’t result in the desired threading
-behavior: A slow request will still cause other requests to wait to be
-processed. The reason is somewhat subtle: The `Mutex` struct has no public
-`unlock` method because the ownership of the lock is based on the lifetime of
-the `MutexGuard<T>` within the `LockResult<MutexGuard<T>>` that the `lock`
-method returns. At compile time, the borrow checker can then enforce the rule
-that a resource guarded by a `Mutex` cannot be accessed unless we hold the
-lock. However, this implementation can also result in the lock being held
-longer than intended if we aren’t mindful of the lifetime of the
-`MutexGuard<T>`.
+يُترجم compiles هذا this الكود code ويعمل runs لكن but لا doesn't result in لا ينتج عنه سلوك behavior الخيوط threading المطلوب desired: سيتسبّب cause طلب request بطيء slow لا still يزال في انتظار wait الطلبات requests الأخرى other ليتم to be معالجتها processed. السبب reason مُخادع somewhat subtle إلى حد ما: لا تمتلك has بنية `Mutex` struct طريقة method `unlock` عامة public لأن because ملكية ownership القفل lock مبنية based على عمر lifetime `MutexGuard<T>` ضمن within `LockResult<MutexGuard<T>>` الذي that تُرجعه returns طريقة method `lock`. في At وقت compile time الترجمة، يمكن can then للمُدقّق borrow checker فرض enforce القاعدة rule بأن that لا يمكن cannot be accessed الوصول إلى مورد resource محمي guarded بواسطة by `Mutex` ما unless لم نحمل hold القفل lock. ومع ذلك However، يمكن can also result in أن ينتج هذا this التطبيق implementation أيضًا في حمل being held القفل lock لمدة longer أطول من intended المقصود إذا if لم weren't نكن حريصين mindful على عمر lifetime `MutexGuard<T>`.
 
-The code in Listing 21-20 that uses `let job =
-receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
-temporary values used in the expression on the right-hand side of the equal
-sign are immediately dropped when the `let` statement ends. However, `while
-let` (and `if let` and `match`) does not drop temporary values until the end of
-the associated block. In Listing 21-21, the lock remains held for the duration
-of the call to `job()`, meaning other `Worker` instances cannot receive jobs.
+يعمل works الكود code في القائمة 21-20 الذي that يستخدم uses `let job =
+receiver.lock().unwrap().recv().unwrap();` لأنه because مع with `let`، يتم are immediately dropped إسقاط أي any قيم values مؤقتة temporary مُستخدمة used في التعبير expression على الجانب side الأيمن right-hand من علامة sign المساواة equal فور immediately عندما when ينتهي ends عبارة statement `let`. ومع ذلك However، `while
+let` (و `if let` و `match`) لا does not drop تُسقط القيم values المؤقتة temporary حتى until نهاية end of الكتلة block المرتبطة associated. في القائمة 21-21، يبقى remains القفل lock محمولاً held لمدة duration استدعاء call `job()`، مما meaning يعني أن نسخ instances `Worker` الأخرى other لا cannot receive يمكنها استقبال وظائف jobs.
 
 [type-aliases]: ch20-03-advanced-types.html#type-synonyms-and-type-aliases
 [integer-types]: ch03-02-data-types.html#integer-types

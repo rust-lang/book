@@ -2,28 +2,28 @@
 
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
-## Installing Binaries with `cargo install`
+## تثبيت الملفات الثنائية باستخدام `cargo install`
 
-The `cargo install` command allows you to install and use binary crates
-locally. This isn’t intended to replace system packages; it’s meant to be a
-convenient way for Rust developers to install tools that others have shared on
-[crates.io](https://crates.io/)<!-- ignore -->. Note that you can only install
-packages that have binary targets. A _binary target_ is the runnable program
-that is created if the crate has a _src/main.rs_ file or another file specified
-as a binary, as opposed to a library target that isn’t runnable on its own but
-is suitable for including within other programs. Usually, crates have
-information in the README file about whether a crate is a library, has a
-binary target, or both.
+يسمح لك أمر `cargo install` بتثبيت واستخدام الصناديق الثنائية
+محليًا. هذا ليس مخصصًا لاستبدال حزم النظام؛ بل هو مخصص ليكون
+طريقة ملائمة لمطوري Rust لتثبيت الأدوات التي شاركها الآخرون على
+[crates.io](https://crates.io/)<!-- ignore -->. لاحظ أنه يمكنك فقط تثبيت
+الحزم التي لديها أهداف ثنائية. _الهدف الثنائي_ (binary target) هو البرنامج القابل للتشغيل
+الذي يتم إنشاؤه إذا كان لدى الصندوق ملف _src/main.rs_ أو ملف آخر محدد
+كملف ثنائي، على عكس هدف المكتبة الذي لا يمكن تشغيله بمفرده ولكن
+مناسب للتضمين داخل برامج أخرى. عادةً، تحتوي الصناديق على
+معلومات في ملف README حول ما إذا كان الصندوق مكتبة، أم لديه
+هدف ثنائي، أم كلاهما.
 
-All binaries installed with `cargo install` are stored in the installation
-root’s _bin_ folder. If you installed Rust using _rustup.rs_ and don’t have any
-custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that
-this directory is in your `$PATH` to be able to run programs you’ve installed
-with `cargo install`.
+جميع الملفات الثنائية المثبتة باستخدام `cargo install` يتم تخزينها في مجلد _bin_
+الخاص بجذر التثبيت. إذا قمت بتثبيت Rust باستخدام _rustup.rs_ ولا يوجد لديك أي
+إعدادات مخصصة، فسيكون هذا الدليل هو *$HOME/.cargo/bin*. تأكد من أن
+هذا الدليل موجود في `$PATH` الخاص بك لتتمكن من تشغيل البرامج التي قمت بتثبيتها
+باستخدام `cargo install`.
 
-For example, in Chapter 12 we mentioned that there’s a Rust implementation of
-the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we
-can run the following:
+على سبيل المثال، في الفصل 12 ذكرنا أن هناك تطبيق Rust لأداة
+`grep` يسمى `ripgrep` للبحث في الملفات. لتثبيت `ripgrep`، يمكننا
+تشغيل التالي:
 
 <!-- manual-regeneration
 cargo install something you don't have, copy relevant output below
@@ -42,7 +42,7 @@ $ cargo install ripgrep
    Installed package `ripgrep v14.1.1` (executable `rg`)
 ```
 
-The second-to-last line of the output shows the location and the name of the
-installed binary, which in the case of `ripgrep` is `rg`. As long as the
-installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, Rustier tool for searching files!
+السطر قبل الأخير من المخرجات يُظهر موقع واسم
+الملف الثنائي المثبت، والذي في حالة `ripgrep` هو `rg`. طالما أن
+دليل التثبيت موجود في `$PATH` الخاص بك، كما ذُكر سابقًا، يمكنك
+بعد ذلك تشغيل `rg --help` والبدء في استخدام أداة أسرع وأكثر Rustية للبحث في الملفات!

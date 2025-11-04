@@ -1,17 +1,10 @@
-## Processing a Series of Items with Iterators
+## معالجة سلسلة من العناصر باستخدام المُكرِّرات
 
-The iterator pattern allows you to perform some task on a sequence of items in
-turn. An iterator is responsible for the logic of iterating over each item and
-determining when the sequence has finished. When you use iterators, you don’t
-have to reimplement that logic yourself.
+يسمح لك نمط المُكرِّر (Iterator pattern) بأداء مهمة ما على سلسلة من العناصر بدورها. المُكرِّر مسؤول عن منطق التكرار على كل عنصر وتحديد متى انتهت السلسلة. عند استخدام المُكرِّرات، لا يتعين عليك إعادة تنفيذ هذا المنطق بنفسك.
 
-In Rust, iterators are _lazy_, meaning they have no effect until you call
-methods that consume the iterator to use it up. For example, the code in
-Listing 13-10 creates an iterator over the items in the vector `v1` by calling
-the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
-useful.
+في Rust، المُكرِّرات _كسولة_ (lazy)، مما يعني أنها لا يكون لها تأثير حتى تستدعي الدوال التي تستهلك المُكرِّر لاستخدامه. على سبيل المثال، الكود في القائمة 13-10 ينشئ مُكرِّرًا على العناصر في المتجه `v1` عن طريق استدعاء دالة `iter` المعرفة على `Vec<T>`. هذا الكود بحد ذاته لا يفعل أي شيء مفيد.
 
-<Listing number="13-10" file-name="src/main.rs" caption="Creating an iterator">
+<Listing number="13-10" file-name="src/main.rs" caption="إنشاء مُكرِّر">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
@@ -19,18 +12,11 @@ useful.
 
 </Listing>
 
-The iterator is stored in the `v1_iter` variable. Once we’ve created an
-iterator, we can use it in a variety of ways. In Listing 3-5, we iterated over
-an array using a `for` loop to execute some code on each of its items. Under
-the hood, this implicitly created and then consumed an iterator, but we glossed
-over how exactly that works until now.
+يتم تخزين المُكرِّر في المتغيّر `v1_iter`. بمجرد إنشاء مُكرِّر، يمكننا استخدامه بطرق متنوعة. في القائمة 3-5، قمنا بالتكرار على مصفوفة باستخدام حلقة `for` لتنفيذ بعض الكود على كل من عناصرها. تحت الغطاء، أنشأ هذا ضمنيًا ثم استهلك مُكرِّرًا، لكننا تجاهلنا كيفية عمل ذلك بالضبط حتى الآن.
 
-In the example in Listing 13-11, we separate the creation of the iterator from
-the use of the iterator in the `for` loop. When the `for` loop is called using
-the iterator in `v1_iter`, each element in the iterator is used in one
-iteration of the loop, which prints out each value.
+في المثال في القائمة 13-11، نفصل إنشاء المُكرِّر عن استخدام المُكرِّر في حلقة `for`. عندما يتم استدعاء حلقة `for` باستخدام المُكرِّر في `v1_iter`، يتم استخدام كل عنصر في المُكرِّر في تكرار واحد من الحلقة، مما يطبع كل قيمة.
 
-<Listing number="13-11" file-name="src/main.rs" caption="Using an iterator in a `for` loop">
+<Listing number="13-11" file-name="src/main.rs" caption="استخدام مُكرِّر في حلقة `for`">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
@@ -38,21 +24,13 @@ iteration of the loop, which prints out each value.
 
 </Listing>
 
-In languages that don’t have iterators provided by their standard libraries,
-you would likely write this same functionality by starting a variable at index
-0, using that variable to index into the vector to get a value, and
-incrementing the variable value in a loop until it reached the total number of
-items in the vector.
+في اللغات التي لا توفر مُكرِّرات من مكتباتها القياسية، من المحتمل أن تكتب نفس الوظيفة ببدء متغيّر عند المؤشر 0، واستخدام هذا المتغيّر للفهرسة في المتجه للحصول على قيمة، وزيادة قيمة المتغيّر في حلقة حتى تصل إلى العدد الإجمالي للعناصر في المتجه.
 
-Iterators handle all of that logic for you, cutting down on repetitive code you
-could potentially mess up. Iterators give you more flexibility to use the same
-logic with many different kinds of sequences, not just data structures you can
-index into, like vectors. Let’s examine how iterators do that.
+تتعامل المُكرِّرات مع كل هذا المنطق نيابة عنك، مما يقلل من الكود المتكرر الذي قد تخطئ فيه. تمنحك المُكرِّرات مزيدًا من المرونة لاستخدام نفس المنطق مع العديد من أنواع التسلسلات المختلفة، وليس فقط هياكل البيانات التي يمكنك الفهرسة فيها، مثل المتجهات. دعنا نفحص كيف تفعل المُكرِّرات ذلك.
 
-### The `Iterator` Trait and the `next` Method
+### سِمَة `Iterator` ودالة `next`
 
-All iterators implement a trait named `Iterator` that is defined in the
-standard library. The definition of the trait looks like this:
+تنفذ جميع المُكرِّرات سِمَة تسمى `Iterator` معرفة في المكتبة القياسية. يبدو تعريف السِمَة كالتالي:
 
 ```rust
 pub trait Iterator {
@@ -64,23 +42,13 @@ pub trait Iterator {
 }
 ```
 
-Notice that this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an associated type with this trait. We’ll talk about
-associated types in depth in Chapter 20. For now, all you need to know is that
-this code says implementing the `Iterator` trait requires that you also define
-an `Item` type, and this `Item` type is used in the return type of the `next`
-method. In other words, the `Item` type will be the type returned from the
-iterator.
+لاحظ أن هذا التعريف يستخدم بعض الصيغة الجديدة: `type Item` و `Self::Item`، والتي تعرف نوعًا مرتبطًا (associated type) بهذه السِمَة. سنتحدث عن الأنواع المرتبطة بعمق في الفصل 20. في الوقت الحالي، كل ما تحتاج إلى معرفته هو أن هذا الكود يقول إن تنفيذ سِمَة `Iterator` يتطلب منك أيضًا تعريف نوع `Item`، ويتم استخدام هذا النوع `Item` في نوع الإرجاع لدالة `next`. بعبارة أخرى، سيكون نوع `Item` هو النوع المعاد من المُكرِّر.
 
-The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time, wrapped in
-`Some`, and, when iteration is over, returns `None`.
+تتطلب سِمَة `Iterator` فقط من المنفذين تعريف دالة واحدة: دالة `next`، التي تعيد عنصرًا واحدًا من المُكرِّر في كل مرة، ملفوفًا في `Some`، وعندما ينتهي التكرار، تعيد `None`.
 
-We can call the `next` method on iterators directly; Listing 13-12 demonstrates
-what values are returned from repeated calls to `next` on the iterator created
-from the vector.
+يمكننا استدعاء دالة `next` على المُكرِّرات مباشرة؛ توضح القائمة 13-12 القيم التي يتم إرجاعها من استدعاءات متكررة لـ `next` على المُكرِّر الذي تم إنشاؤه من المتجه.
 
-<Listing number="13-12" file-name="src/lib.rs" caption="Calling the `next` method on an iterator">
+<Listing number="13-12" file-name="src/lib.rs" caption="استدعاء دالة `next` على مُكرِّر">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/lib.rs:here}}
@@ -88,37 +56,17 @@ from the vector.
 
 </Listing>
 
-Note that we needed to make `v1_iter` mutable: Calling the `next` method on an
-iterator changes internal state that the iterator uses to keep track of where
-it is in the sequence. In other words, this code _consumes_, or uses up, the
-iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop, because the loop took
-ownership of `v1_iter` and made it mutable behind the scenes.
+لاحظ أننا احتجنا إلى جعل `v1_iter` قابلاً للتغيير: استدعاء دالة `next` على مُكرِّر يغير الحالة الداخلية التي يستخدمها المُكرِّر لتتبع مكانه في السلسلة. بعبارة أخرى، هذا الكود _يستهلك_، أو يستخدم، المُكرِّر. كل استدعاء لـ `next` يستهلك عنصرًا من المُكرِّر. لم نكن بحاجة إلى جعل `v1_iter` قابلاً للتغيير عندما استخدمنا حلقة `for`، لأن الحلقة تولت ملكية `v1_iter` وجعلته قابلاً للتغيير خلف الكواليس.
 
-Also note that the values we get from the calls to `next` are immutable
-references to the values in the vector. The `iter` method produces an iterator
-over immutable references. If we want to create an iterator that takes
-ownership of `v1` and returns owned values, we can call `into_iter` instead of
-`iter`. Similarly, if we want to iterate over mutable references, we can call
-`iter_mut` instead of `iter`.
+لاحظ أيضًا أن القيم التي نحصل عليها من الاستدعاءات لـ `next` هي مَراجِع غير قابلة للتغيير إلى القيم في المتجه. تنتج دالة `iter` مُكرِّرًا على مَراجِع غير قابلة للتغيير. إذا أردنا إنشاء مُكرِّر يأخذ ملكية `v1` ويعيد قيمًا مملوكة، يمكننا استدعاء `into_iter` بدلاً من `iter`. وبالمثل، إذا أردنا التكرار على مَراجِع قابلة للتغيير، يمكننا استدعاء `iter_mut` بدلاً من `iter`.
 
-### Methods That Consume the Iterator
+### الدوال التي تستهلك المُكرِّر
 
-The `Iterator` trait has a number of different methods with default
-implementations provided by the standard library; you can find out about these
-methods by looking in the standard library API documentation for the `Iterator`
-trait. Some of these methods call the `next` method in their definition, which
-is why you’re required to implement the `next` method when implementing the
-`Iterator` trait.
+سِمَة `Iterator` لديها عدد من الدوال المختلفة مع تنفيذات افتراضية توفرها المكتبة القياسية؛ يمكنك معرفة المزيد عن هذه الدوال من خلال النظر في توثيق API المكتبة القياسية لسِمَة `Iterator`. بعض هذه الدوال تستدعي دالة `next` في تعريفها، وهذا هو السبب في أنك مطالب بتنفيذ دالة `next` عند تنفيذ سِمَة `Iterator`.
 
-Methods that call `next` are called _consuming adapters_ because calling them
-uses up the iterator. One example is the `sum` method, which takes ownership of
-the iterator and iterates through the items by repeatedly calling `next`, thus
-consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-13 has a
-test illustrating a use of the `sum` method.
+الدوال التي تستدعي `next` تسمى _محولات مستهلكة_ (consuming adapters) لأن استدعاءها يستخدم المُكرِّر. أحد الأمثلة هو دالة `sum`، التي تأخذ ملكية المُكرِّر وتكرر عبر العناصر عن طريق الاستدعاء المتكرر لـ `next`، وبالتالي تستهلك المُكرِّر. أثناء التكرار، تضيف كل عنصر إلى إجمالي تراكمي وتعيد الإجمالي عند اكتمال التكرار. تحتوي القائمة 13-13 على اختبار يوضح استخدام دالة `sum`.
 
-<Listing number="13-13" file-name="src/lib.rs" caption="Calling the `sum` method to get the total of all items in the iterator">
+<Listing number="13-13" file-name="src/lib.rs" caption="استدعاء دالة `sum` للحصول على المجموع الإجمالي لجميع العناصر في المُكرِّر">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/lib.rs:here}}
@@ -126,22 +74,15 @@ test illustrating a use of the `sum` method.
 
 </Listing>
 
-We aren’t allowed to use `v1_iter` after the call to `sum`, because `sum` takes
-ownership of the iterator we call it on.
+لا يُسمح لنا باستخدام `v1_iter` بعد الاستدعاء إلى `sum`، لأن `sum` تأخذ ملكية المُكرِّر الذي نستدعيه عليه.
 
-### Methods That Produce Other Iterators
+### الدوال التي تنتج مُكرِّرات أخرى
 
-_Iterator adapters_ are methods defined on the `Iterator` trait that don’t
-consume the iterator. Instead, they produce different iterators by changing
-some aspect of the original iterator.
+_محولات المُكرِّرات_ (Iterator adapters) هي دوال معرفة على سِمَة `Iterator` التي لا تستهلك المُكرِّر. بدلاً من ذلك، تنتج مُكرِّرات مختلفة عن طريق تغيير بعض جوانب المُكرِّر الأصلي.
 
-Listing 13-14 shows an example of calling the iterator adapter method `map`,
-which takes a closure to call on each item as the items are iterated through.
-The `map` method returns a new iterator that produces the modified items. The
-closure here creates a new iterator in which each item from the vector will be
-incremented by 1.
+تُظهر القائمة 13-14 مثالاً على استدعاء دالة محول المُكرِّر `map`، والتي تأخذ إغلاقًا للاستدعاء على كل عنصر أثناء التكرار عبر العناصر. تُعيد دالة `map` مُكرِّرًا جديدًا ينتج العناصر المعدلة. يُنشئ الإغلاق هنا مُكرِّرًا جديدًا يتم فيه زيادة كل عنصر من المتجه بمقدار 1.
 
-<Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adapter `map` to create a new iterator">
+<Listing number="13-14" file-name="src/main.rs" caption="استدعاء محول المُكرِّر `map` لإنشاء مُكرِّر جديد">
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
@@ -149,25 +90,19 @@ incremented by 1.
 
 </Listing>
 
-However, this code produces a warning:
+ومع ذلك، ينتج هذا الكود تحذيرًا:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: Iterator adapters are lazy, and
-we need to consume the iterator here.
+الكود في القائمة 13-14 لا يفعل أي شيء؛ الإغلاق الذي حددناه لا يتم استدعاؤه أبدًا. يذكرنا التحذير بالسبب: محولات المُكرِّرات كسولة، ونحتاج إلى استهلاك المُكرِّر هنا.
 
-To fix this warning and consume the iterator, we’ll use the `collect` method,
-which we used with `env::args` in Listing 12-1. This method consumes the
-iterator and collects the resultant values into a collection data type.
+لإصلاح هذا التحذير واستهلاك المُكرِّر، سنستخدم دالة `collect`، التي استخدمناها مع `env::args` في القائمة 12-1. تستهلك هذه الدالة المُكرِّر وتجمع القيم الناتجة في نوع بيانات مجموعة.
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s
-returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector, incremented by 1.
+في القائمة 13-15، نجمع نتائج التكرار على المُكرِّر المعاد من الاستدعاء إلى `map` في متجه. سينتهي هذا المتجه بحمل كل عنصر من المتجه الأصلي، مزيدًا بمقدار 1.
 
-<Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator, and then calling the `collect` method to consume the new iterator and create a vector">
+<Listing number="13-15" file-name="src/main.rs" caption="استدعاء دالة `map` لإنشاء مُكرِّر جديد، ثم استدعاء دالة `collect` لاستهلاك المُكرِّر الجديد وإنشاء متجه">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
@@ -175,35 +110,23 @@ containing each item from the original vector, incremented by 1.
 
 </Listing>
 
-Because `map` takes a closure, we can specify any operation we want to perform
-on each item. This is a great example of how closures let you customize some
-behavior while reusing the iteration behavior that the `Iterator` trait
-provides.
+نظرًا لأن `map` تأخذ إغلاقًا، يمكننا تحديد أي عملية نريد تنفيذها على كل عنصر. هذا مثال رائع على كيفية السماح للإغلاقات بتخصيص بعض السلوك مع إعادة استخدام سلوك التكرار الذي توفره سِمَة `Iterator`.
 
-You can chain multiple calls to iterator adapters to perform complex actions in
-a readable way. But because all iterators are lazy, you have to call one of the
-consuming adapter methods to get results from calls to iterator adapters.
+يمكنك ربط استدعاءات متعددة لمحولات المُكرِّرات لأداء إجراءات معقدة بطريقة قابلة للقراءة. ولكن نظرًا لأن جميع المُكرِّرات كسولة، فيجب عليك استدعاء إحدى دوال المحول المستهلك للحصول على نتائج من استدعاءات محولات المُكرِّرات.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-closures-that-capture-their-environment"></a>
 
-### Closures That Capture Their Environment
+### الإغلاقات التي تلتقط بيئتها
 
-Many iterator adapters take closures as arguments, and commonly the closures
-we’ll specify as arguments to iterator adapters will be closures that capture
-their environment.
+تأخذ العديد من محولات المُكرِّرات إغلاقات كوسائط، وعادةً ما تكون الإغلاقات التي سنحددها كوسائط لمحولات المُكرِّرات إغلاقات تلتقط بيئتها.
 
-For this example, we’ll use the `filter` method that takes a closure. The
-closure gets an item from the iterator and returns a `bool`. If the closure
-returns `true`, the value will be included in the iteration produced by
-`filter`. If the closure returns `false`, the value won’t be included.
+في هذا المثال، سنستخدم دالة `filter` التي تأخذ إغلاقًا. يحصل الإغلاق على عنصر من المُكرِّر ويعيد `bool`. إذا أعاد الإغلاق `true`، فسيتم تضمين القيمة في التكرار الذي ينتجه `filter`. إذا أعاد الإغلاق `false`، فلن يتم تضمين القيمة.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
-variable from its environment to iterate over a collection of `Shoe` struct
-instances. It will return only shoes that are the specified size.
+في القائمة 13-16، نستخدم `filter` مع إغلاق يلتقط المتغيّر `shoe_size` من بيئته للتكرار على مجموعة من نُسخ بنية `Shoe`. سيعيد فقط الأحذية التي هي بالحجم المحدد.
 
-<Listing number="13-16" file-name="src/lib.rs" caption="Using the `filter` method with a closure that captures `shoe_size`">
+<Listing number="13-16" file-name="src/lib.rs" caption="استخدام دالة `filter` مع إغلاق يلتقط `shoe_size`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs}}
@@ -211,19 +134,10 @@ instances. It will return only shoes that are the specified size.
 
 </Listing>
 
-The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
-size as parameters. It returns a vector containing only shoes of the specified
-size.
+تأخذ دالة `shoes_in_size` ملكية متجه من الأحذية وحجم الحذاء كمعاملات. تعيد متجهًا يحتوي فقط على الأحذية ذات الحجم المحدد.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator that
-takes ownership of the vector. Then, we call `filter` to adapt that iterator
-into a new iterator that only contains elements for which the closure returns
-`true`.
+في جسم `shoes_in_size`، نستدعي `into_iter` لإنشاء مُكرِّر يأخذ ملكية المتجه. ثم نستدعي `filter` لتكييف هذا المُكرِّر إلى مُكرِّر جديد يحتوي فقط على العناصر التي يعيد لها الإغلاق `true`.
 
-The closure captures the `shoe_size` parameter from the environment and
-compares the value with each shoe’s size, keeping only shoes of the size
-specified. Finally, calling `collect` gathers the values returned by the
-adapted iterator into a vector that’s returned by the function.
+يلتقط الإغلاق معامل `shoe_size` من البيئة ويقارن القيمة مع حجم كل حذاء، محتفظًا فقط بالأحذية ذات الحجم المحدد. أخيرًا، استدعاء `collect` يجمع القيم المعادة من المُكرِّر المكيّف في متجه يتم إرجاعه بواسطة الدالة.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes that
-have the same size as the value we specified.
+يُظهر الاختبار أنه عندما نستدعي `shoes_in_size`، نحصل فقط على الأحذية التي لها نفس الحجم الذي حددناه.

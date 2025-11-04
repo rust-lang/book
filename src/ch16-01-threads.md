@@ -1,46 +1,22 @@
-## Using Threads to Run Code Simultaneously
+## استخدام الخيوط لتشغيل الكود بشكل متزامن
 
-In most current operating systems, an executed program’s code is run in a
-_process_, and the operating system will manage multiple processes at once.
-Within a program, you can also have independent parts that run simultaneously.
-The features that run these independent parts are called _threads_. For
-example, a web server could have multiple threads so that it can respond to
-more than one request at the same time.
+في معظم أنظمة التشغيل الحالية، يتم تشغيل كود البرنامج المنفذ في عملية (Process)، وسيدير نظام التشغيل عمليات متعددة في وقت واحد. داخل البرنامج، يمكنك أيضاً أن يكون لديك أجزاء مستقلة تعمل بشكل متزامن. الميزات التي تشغل هذه الأجزاء المستقلة تسمى الخيوط (Threads). على سبيل المثال، يمكن أن يكون لخادم الويب خيوط متعددة بحيث يمكنه الاستجابة لأكثر من طلب واحد في نفس الوقت.
 
-Splitting the computation in your program into multiple threads to run multiple
-tasks at the same time can improve performance, but it also adds complexity.
-Because threads can run simultaneously, there’s no inherent guarantee about the
-order in which parts of your code on different threads will run. This can lead
-to problems, such as:
+تقسيم الحساب في برنامجك إلى خيوط متعددة لتشغيل مهام متعددة في نفس الوقت يمكن أن يحسن الأداء، لكنه يضيف أيضاً تعقيداً. نظراً لأن الخيوط يمكن أن تعمل بشكل متزامن، لا يوجد ضمان متأصل حول الترتيب الذي ستعمل به أجزاء من كودك على خيوط مختلفة. هذا يمكن أن يؤدي إلى مشاكل، مثل:
 
-- Race conditions, in which threads are accessing data or resources in an
-  inconsistent order
-- Deadlocks, in which two threads are waiting for each other, preventing both
-  threads from continuing
-- Bugs that only happen in certain situations and are hard to reproduce and fix
-  reliably
+- حالات التسابق (Race conditions)، حيث تصل الخيوط إلى البيانات أو الموارد بترتيب غير متسق
+- الجمود (Deadlocks)، حيث ينتظر خيطان بعضهما البعض، مما يمنع كلا الخيطين من المتابعة
+- أخطاء تحدث فقط في مواقف معينة ويصعب إعادة إنتاجها وإصلاحها بشكل موثوق
 
-Rust attempts to mitigate the negative effects of using threads, but
-programming in a multithreaded context still takes careful thought and requires
-a code structure that is different from that in programs running in a single
-thread.
+تحاول Rust التخفيف من الآثار السلبية لاستخدام الخيوط، لكن البرمجة في سياق متعدد الخيوط لا يزال يتطلب تفكيراً دقيقاً ويتطلب بنية كود مختلفة عن تلك الموجودة في البرامج التي تعمل في خيط واحد.
 
-Programming languages implement threads in a few different ways, and many
-operating systems provide an API the programming language can call for creating
-new threads. The Rust standard library uses a _1:1_ model of thread
-implementation, whereby a program uses one operating system thread per one
-language thread. There are crates that implement other models of threading that
-make different trade-offs to the 1:1 model. (Rust’s async system, which we will
-see in the next chapter, provides another approach to concurrency as well.)
+تنفذ لغات البرمجة الخيوط بطرق مختلفة قليلاً، وتوفر العديد من أنظمة التشغيل واجهة برمجة تطبيقات (API) يمكن للغة البرمجة استدعاؤها لإنشاء خيوط جديدة. تستخدم المكتبة القياسية لـ Rust نموذج 1:1 لتنفيذ الخيوط، حيث يستخدم البرنامج خيط واحد من نظام التشغيل لكل خيط لغة واحد. هناك صناديق (Crates) تنفذ نماذج أخرى للخيوط تقدم مقايضات مختلفة لنموذج 1:1. (نظام async في Rust، الذي سنراه في الفصل التالي، يوفر نهجاً آخر للتزامن أيضاً.)
 
-### Creating a New Thread with `spawn`
+### إنشاء خيط جديد باستخدام `spawn`
 
-To create a new thread, we call the `thread::spawn` function and pass it a
-closure (we talked about closures in Chapter 13) containing the code we want to
-run in the new thread. The example in Listing 16-1 prints some text from a main
-thread and other text from a new thread.
+لإنشاء خيط جديد، نستدعي دالة `thread::spawn` ونمررها إغلاقاً (Closure) (تحدثنا عن الإغلاقات في الفصل 13) يحتوي على الكود الذي نريد تشغيله في الخيط الجديد. يطبع المثال في القائمة 16-1 بعض النص من خيط رئيسي ونص آخر من خيط جديد.
 
-<Listing number="16-1" file-name="src/main.rs" caption="Creating a new thread to print one thing while the main thread prints something else">
+<Listing number="16-1" file-name="src/main.rs" caption="إنشاء خيط جديد لطباعة شيء واحد بينما يطبع الخيط الرئيسي شيئاً آخر">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
@@ -48,10 +24,7 @@ thread and other text from a new thread.
 
 </Listing>
 
-Note that when the main thread of a Rust program completes, all spawned threads
-are shut down, whether or not they have finished running. The output from this
-program might be a little different every time, but it will look similar to the
-following:
+لاحظ أنه عندما يكتمل الخيط الرئيسي لبرنامج Rust، يتم إيقاف جميع الخيوط المُطلقة، سواء انتهت من التشغيل أم لا. قد يكون الناتج من هذا البرنامج مختلفاً قليلاً في كل مرة، لكنه سيبدو مشابهاً لما يلي:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -69,38 +42,21 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The calls to `thread::sleep` force a thread to stop its execution for a short
-duration, allowing a different thread to run. The threads will probably take
-turns, but that isn’t guaranteed: It depends on how your operating system
-schedules the threads. In this run, the main thread printed first, even though
-the print statement from the spawned thread appears first in the code. And even
-though we told the spawned thread to print until `i` is `9`, it only got to `5`
-before the main thread shut down.
+تُجبر استدعاءات `thread::sleep` خيطاً على إيقاف تنفيذه لفترة قصيرة، مما يسمح لخيط مختلف بالعمل. من المحتمل أن تتناوب الخيوط، لكن هذا غير مضمون: يعتمد على كيفية جدولة نظام التشغيل للخيوط. في هذا التشغيل، طُبع الخيط الرئيسي أولاً، على الرغم من ظهور بيان الطباعة من الخيط المُطلق أولاً في الكود. وحتى رغم أننا أخبرنا الخيط المُطلق بالطباعة حتى يصل `i` إلى `9`، فقد وصل فقط إلى `5` قبل إيقاف الخيط الرئيسي.
 
-If you run this code and only see output from the main thread, or don’t see any
-overlap, try increasing the numbers in the ranges to create more opportunities
-for the operating system to switch between the threads.
+إذا قمت بتشغيل هذا الكود ورأيت فقط ناتجاً من الخيط الرئيسي، أو لم تر أي تداخل، حاول زيادة الأرقام في النطاقات لإنشاء المزيد من الفرص لنظام التشغيل للتبديل بين الخيوط.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="waiting-for-all-threads-to-finish-using-join-handles"></a>
 
-### Waiting for All Threads to Finish
+### انتظار جميع الخيوط حتى تنتهي
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but because there is no guarantee on
-the order in which threads run, we also can’t guarantee that the spawned thread
-will get to run at all!
+لا يوقف الكود في القائمة 16-1 الخيط المُطلق قبل الأوان في معظم الأحيان بسبب انتهاء الخيط الرئيسي فحسب، ولكن نظراً لعدم وجود ضمان على الترتيب الذي تعمل به الخيوط، لا يمكننا أيضاً ضمان تشغيل الخيط المُطلق على الإطلاق!
 
-We can fix the problem of the spawned thread not running or of it ending
-prematurely by saving the return value of `thread::spawn` in a variable. The
-return type of `thread::spawn` is `JoinHandle<T>`. A `JoinHandle<T>` is an
-owned value that, when we call the `join` method on it, will wait for its
-thread to finish. Listing 16-2 shows how to use the `JoinHandle<T>` of the
-thread we created in Listing 16-1 and how to call `join` to make sure the
-spawned thread finishes before `main` exits.
+يمكننا إصلاح مشكلة عدم تشغيل الخيط المُطلق أو انتهائه قبل الأوان عن طريق حفظ قيمة الإرجاع من `thread::spawn` في متغير. نوع الإرجاع من `thread::spawn` هو `JoinHandle<T>`. `JoinHandle<T>` هي قيمة مملوكة عندما نستدعي الدالة `join` عليها، ستنتظر انتهاء خيطها. تُظهر القائمة 16-2 كيفية استخدام `JoinHandle<T>` من الخيط الذي أنشأناه في القائمة 16-1 وكيفية استدعاء `join` للتأكد من أن الخيط المُطلق ينتهي قبل خروج `main`.
 
-<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle<T>` from `thread::spawn` to guarantee the thread is run to completion">
+<Listing number="16-2" file-name="src/main.rs" caption="حفظ `JoinHandle<T>` من `thread::spawn` لضمان تشغيل الخيط حتى الاكتمال">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
@@ -108,11 +64,7 @@ spawned thread finishes before `main` exits.
 
 </Listing>
 
-Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. _Blocking_ a thread means that
-thread is prevented from performing work or exiting. Because we’ve put the call
-to `join` after the main thread’s `for` loop, running Listing 16-2 should
-produce output similar to this:
+يحجب استدعاء `join` على المعالج الخيط الذي يعمل حالياً حتى ينتهي الخيط الممثل بالمعالج. الحجب (Blocking) لخيط يعني منع هذا الخيط من أداء العمل أو الخروج. نظراً لأننا وضعنا استدعاء `join` بعد حلقة `for` للخيط الرئيسي، فإن تشغيل القائمة 16-2 يجب أن ينتج ناتجاً مشابهاً لهذا:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -134,11 +86,9 @@ hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
 
-The two threads continue alternating, but the main thread waits because of the
-call to `handle.join()` and does not end until the spawned thread is finished.
+يستمر الخيطان في التناوب، لكن الخيط الرئيسي ينتظر بسبب استدعاء `handle.join()` ولا ينتهي حتى ينتهي الخيط المُطلق.
 
-But let’s see what happens when we instead move `handle.join()` before the
-`for` loop in `main`, like this:
+لكن دعونا نرى ما يحدث عندما ننقل `handle.join()` بدلاً من ذلك قبل حلقة `for` في `main`، كهذا:
 
 <Listing file-name="src/main.rs">
 
@@ -148,8 +98,7 @@ But let’s see what happens when we instead move `handle.join()` before the
 
 </Listing>
 
-The main thread will wait for the spawned thread to finish and then run its
-`for` loop, so the output won’t be interleaved anymore, as shown here:
+سينتظر الخيط الرئيسي انتهاء الخيط المُطلق ثم يقوم بتشغيل حلقة `for` الخاصة به، لذلك لن يتم تداخل الناتج بعد الآن، كما هو موضح هنا:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -171,26 +120,15 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your
-threads run at the same time.
+التفاصيل الصغيرة، مثل مكان استدعاء `join`، يمكن أن تؤثر على ما إذا كانت خيوطك تعمل في نفس الوقت أم لا.
 
-### Using `move` Closures with Threads
+### استخدام إغلاقات `move` مع الخيوط
 
-We’ll often use the `move` keyword with closures passed to `thread::spawn`
-because the closure will then take ownership of the values it uses from the
-environment, thus transferring ownership of those values from one thread to
-another. In [“Capturing References or Moving Ownership”][capture]<!-- ignore
---> in Chapter 13, we discussed `move` in the context of closures. Now we’ll
-concentrate more on the interaction between `move` and `thread::spawn`.
+غالباً ما سنستخدم الكلمة المفتاحية `move` مع الإغلاقات الممررة إلى `thread::spawn` لأن الإغلاق سيأخذ بعد ذلك ملكية القيم التي يستخدمها من البيئة، وبالتالي ينقل ملكية تلك القيم من خيط إلى آخر. في ["التقاط المراجع أو نقل الملكية"][capture]<!-- ignore --> في الفصل 13، ناقشنا `move` في سياق الإغلاقات. الآن سنركز أكثر على التفاعل بين `move` و `thread::spawn`.
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
-arguments: We’re not using any data from the main thread in the spawned
-thread’s code. To use data from the main thread in the spawned thread, the
-spawned thread’s closure must capture the values it needs. Listing 16-3 shows
-an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t work yet, as you’ll see in a moment.
+لاحظ في القائمة 16-1 أن الإغلاق الذي نمرره إلى `thread::spawn` لا يأخذ أي معطيات: نحن لا نستخدم أي بيانات من الخيط الرئيسي في كود الخيط المُطلق. لاستخدام البيانات من الخيط الرئيسي في الخيط المُطلق، يجب على إغلاق الخيط المُطلق التقاط القيم التي يحتاجها. تُظهر القائمة 16-3 محاولة لإنشاء متجه في الخيط الرئيسي واستخدامه في الخيط المُطلق. ومع ذلك، لن يعمل هذا بعد، كما سترى بعد قليل.
 
-<Listing number="16-3" file-name="src/main.rs" caption="Attempting to use a vector created by the main thread in another thread">
+<Listing number="16-3" file-name="src/main.rs" caption="محاولة استخدام متجه تم إنشاؤه بواسطة الخيط الرئيسي في خيط آخر">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
@@ -198,24 +136,17 @@ thread. However, this won’t work yet, as you’ll see in a moment.
 
 </Listing>
 
-The closure uses `v`, so it will capture `v` and make it part of the closure’s
-environment. Because `thread::spawn` runs this closure in a new thread, we
-should be able to access `v` inside that new thread. But when we compile this
-example, we get the following error:
+يستخدم الإغلاق `v`، لذلك سيلتقط `v` ويجعله جزءاً من بيئة الإغلاق. نظراً لأن `thread::spawn` يشغل هذا الإغلاق في خيط جديد، يجب أن نكون قادرين على الوصول إلى `v` داخل هذا الخيط الجديد. لكن عندما نترجم هذا المثال، نحصل على الخطأ التالي:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust _infers_ how to capture `v`, and because `println!` only needs a reference
-to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know whether the
-reference to `v` will always be valid.
+تستنتج Rust كيفية التقاط `v`، ونظراً لأن `println!` يحتاج فقط إلى مرجع إلى `v`، يحاول الإغلاق استعارة `v`. ومع ذلك، هناك مشكلة: لا تستطيع Rust معرفة المدة التي سيعمل فيها الخيط المُطلق، لذلك لا تعرف ما إذا كان المرجع إلى `v` سيكون صالحاً دائماً.
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid.
+توفر القائمة 16-4 سيناريو أكثر احتمالاً لوجود مرجع إلى `v` لن يكون صالحاً.
 
-<Listing number="16-4" file-name="src/main.rs" caption="A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`">
+<Listing number="16-4" file-name="src/main.rs" caption="خيط به إغلاق يحاول التقاط مرجع إلى `v` من خيط رئيسي يُسقط `v`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
@@ -223,15 +154,9 @@ that won’t be valid.
 
 </Listing>
 
-If Rust allowed us to run this code, there’s a possibility that the spawned
-thread would be immediately put in the background without running at all. The
-spawned thread has a reference to `v` inside, but the main thread immediately
-drops `v`, using the `drop` function we discussed in Chapter 15. Then, when the
-spawned thread starts to execute, `v` is no longer valid, so a reference to it
-is also invalid. Oh no!
+إذا سمحت لنا Rust بتشغيل هذا الكود، فهناك احتمال أن يتم وضع الخيط المُطلق على الفور في الخلفية دون التشغيل على الإطلاق. لدى الخيط المُطلق مرجع إلى `v` بداخله، لكن الخيط الرئيسي يُسقط `v` على الفور، باستخدام دالة `drop` التي ناقشناها في الفصل 15. ثم، عندما يبدأ الخيط المُطلق في التنفيذ، لم يعد `v` صالحاً، لذلك المرجع إليه غير صالح أيضاً. يا للهول!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s
-advice:
+لإصلاح خطأ المترجم في القائمة 16-3، يمكننا استخدام نصيحة رسالة الخطأ:
 
 <!-- manual-regeneration
 after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
@@ -244,12 +169,9 @@ help: to force the closure to take ownership of `v` (and any other referenced va
   |                                ++++
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it’s using rather than allowing Rust to infer that it
-should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend.
+بإضافة الكلمة المفتاحية `move` قبل الإغلاق، نجبر الإغلاق على أخذ ملكية القيم التي يستخدمها بدلاً من السماح لـ Rust بالاستنتاج بأنه يجب استعارة القيم. يوضح التعديل على القائمة 16-3 الموضح في القائمة 16-5 سيترجم ويعمل كما نقصد.
 
-<Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
+<Listing number="16-5" file-name="src/main.rs" caption="استخدام الكلمة المفتاحية `move` لإجبار الإغلاق على أخذ ملكية القيم التي يستخدمها">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
@@ -257,28 +179,14 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 
 </Listing>
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 where
-the main thread called `drop` by using a `move` closure. However, this fix will
-not work because what Listing 16-4 is trying to do is disallowed for a
-different reason. If we added `move` to the closure, we would move `v` into the
-closure’s environment, and we could no longer call `drop` on it in the main
-thread. We would get this compiler error instead:
+قد نميل إلى محاولة فعل نفس الشيء لإصلاح الكود في القائمة 16-4 حيث استدعى الخيط الرئيسي `drop` باستخدام إغلاق `move`. ومع ذلك، فإن هذا الإصلاح لن يعمل لأن ما تحاول القائمة 16-4 فعله غير مسموح به لسبب مختلف. إذا أضفنا `move` إلى الإغلاق، فسننقل `v` إلى بيئة الإغلاق، ولن نتمكن بعد ذلك من استدعاء `drop` عليه في الخيط الرئيسي. سنحصل على خطأ المترجم هذا بدلاً من ذلك:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
-thread, which meant the main thread could theoretically invalidate the spawned
-thread’s reference. By telling Rust to move ownership of `v` to the spawned
-thread, we’re guaranteeing to Rust that the main thread won’t use `v` anymore.
-If we change Listing 16-4 in the same way, we’re then violating the ownership
-rules when we try to use `v` in the main thread. The `move` keyword overrides
-Rust’s conservative default of borrowing; it doesn’t let us violate the
-ownership rules.
+أنقذتنا قواعد الملكية في Rust مرة أخرى! حصلنا على خطأ من الكود في القائمة 16-3 لأن Rust كانت محافظة وتستعير `v` فقط للخيط، مما يعني أن الخيط الرئيسي يمكنه نظرياً إبطال مرجع الخيط المُطلق. بإخبار Rust بنقل ملكية `v` إلى الخيط المُطلق، نضمن لـ Rust أن الخيط الرئيسي لن يستخدم `v` بعد الآن. إذا غيرنا القائمة 16-4 بنفس الطريقة، فإننا ننتهك قواعد الملكية عندما نحاول استخدام `v` في الخيط الرئيسي. تتجاوز الكلمة المفتاحية `move` الإعداد الافتراضي المحافظ لـ Rust للاستعارة؛ فهي لا تسمح لنا بانتهاك قواعد الملكية.
 
-Now that we’ve covered what threads are and the methods supplied by the thread
-API, let’s look at some situations in which we can use threads.
+الآن بعد أن غطينا ما هي الخيوط والدوال التي توفرها واجهة برمجة تطبيقات الخيوط، دعونا ننظر إلى بعض المواقف التي يمكننا فيها استخدام الخيوط.
 
 [capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

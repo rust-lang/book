@@ -1,36 +1,21 @@
-## Advanced Traits
+## السِمَات المتقدمة
 
-We first covered traits in the [“Defining Shared Behavior with
-Traits”][traits]<!-- ignore --> section in Chapter 10, but we didn’t discuss
-the more advanced details. Now that you know more about Rust, we can get into
-the nitty-gritty.
+تناولنا السِمَات أولاً في قسم ["تعريف السلوك المشترك مع السِمَات"][traits]<!-- ignore --> في الفصل 10، لكننا لم نناقش التفاصيل الأكثر تقدمًا. الآن بعد أن عرفت المزيد عن Rust، يمكننا الدخول في التفاصيل الدقيقة.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
 <a id="associated-types"></a>
 
-### Defining Traits with Associated Types
+### تعريف السِمَات مع الأنواع المرتبطة
 
-_Associated types_ connect a type placeholder with a trait such that the trait
-method definitions can use these placeholder types in their signatures. The
-implementor of a trait will specify the concrete type to be used instead of the
-placeholder type for the particular implementation. That way, we can define a
-trait that uses some types without needing to know exactly what those types are
-until the trait is implemented.
+_الأنواع المرتبطة_ (Associated types) تربط نائب نوع (type placeholder) مع سِمَة بحيث يمكن لتعريفات طرق السِمَة استخدام هذه الأنواع النائبة في توقيعاتها. سيحدد منفذ السِمَة النوع الملموس الذي سيُستخدم بدلاً من النوع النائب للتطبيق المعين. بهذه الطريقة، يمكننا تعريف سِمَة تستخدم بعض الأنواع دون الحاجة إلى معرفة ما هي تلك الأنواع بالضبط حتى يتم تطبيق السِمَة.
 
-We’ve described most of the advanced features in this chapter as being rarely
-needed. Associated types are somewhere in the middle: They’re used more rarely
-than features explained in the rest of the book but more commonly than many of
-the other features discussed in this chapter.
+لقد وصفنا معظم الميزات المتقدمة في هذا الفصل على أنها نادرة الاستخدام. الأنواع المرتبطة في مكان ما في المنتصف: يتم استخدامها بشكل أقل من الميزات الموضحة في بقية الكتاب ولكن بشكل أكثر شيوعًا من العديد من الميزات الأخرى التي تمت مناقشتها في هذا الفصل.
 
-One example of a trait with an associated type is the `Iterator` trait that the
-standard library provides. The associated type is named `Item` and stands in
-for the type of the values the type implementing the `Iterator` trait is
-iterating over. The definition of the `Iterator` trait is as shown in Listing
-20-13.
+مثال واحد على سِمَة مع نوع مرتبط هو سِمَة `Iterator` التي توفرها المكتبة القياسية. النوع المرتبط يُسمى `Item` ويحل محل نوع القيم التي يتكرر عليها النوع المطبق لسِمَة `Iterator`. تعريف سِمَة `Iterator` كما هو موضح في القائمة 20-13.
 
-<Listing number="20-13" caption="The definition of the `Iterator` trait that has an associated type `Item`">
+<Listing number="20-13" caption="تعريف سِمَة `Iterator` التي لها نوع مرتبط `Item`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-13/src/lib.rs}}
@@ -38,16 +23,9 @@ iterating over. The definition of the `Iterator` trait is as shown in Listing
 
 </Listing>
 
-The type `Item` is a placeholder, and the `next` method’s definition shows that
-it will return values of type `Option<Self::Item>`. Implementors of the
-`Iterator` trait will specify the concrete type for `Item`, and the `next`
-method will return an `Option` containing a value of that concrete type.
+النوع `Item` هو نائب، وتعريف طريقة `next` يُظهر أنها ستعيد قيمًا من النوع `Option<Self::Item>`. منفذو سِمَة `Iterator` سيحددون النوع الملموس لـ `Item`، وطريقة `next` ستعيد `Option` يحتوي على قيمة من ذلك النوع الملموس.
 
-Associated types might seem like a similar concept to generics, in that the
-latter allow us to define a function without specifying what types it can
-handle. To examine the difference between the two concepts, we’ll look at an
-implementation of the `Iterator` trait on a type named `Counter` that specifies
-the `Item` type is `u32`:
+قد تبدو الأنواع المرتبطة مفهومًا مشابهًا للأنواع العامة (generics)، حيث أن الأخيرة تسمح لنا بتعريف دالة دون تحديد الأنواع التي يمكنها التعامل معها. لفحص الفرق بين المفهومين، سننظر إلى تطبيق لسِمَة `Iterator` على نوع يُسمى `Counter` يحدد أن نوع `Item` هو `u32`:
 
 <Listing file-name="src/lib.rs">
 
@@ -57,10 +35,9 @@ the `Item` type is `u32`:
 
 </Listing>
 
-This syntax seems comparable to that of generics. So, why not just define the
-`Iterator` trait with generics, as shown in Listing 20-14?
+يبدو هذا البناء قابلاً للمقارنة مع بناء الأنواع العامة. فلماذا لا نعرف سِمَة `Iterator` فقط بالأنواع العامة، كما هو موضح في القائمة 20-14؟
 
-<Listing number="20-14" caption="A hypothetical definition of the `Iterator` trait using generics">
+<Listing number="20-14" caption="تعريف افتراضي لسِمَة `Iterator` باستخدام الأنواع العامة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-14/src/lib.rs}}
@@ -68,50 +45,25 @@ This syntax seems comparable to that of generics. So, why not just define the
 
 </Listing>
 
-The difference is that when using generics, as in Listing 20-14, we must
-annotate the types in each implementation; because we can also implement
-`Iterator<String> for Counter` or any other type, we could have multiple
-implementations of `Iterator` for `Counter`. In other words, when a trait has a
-generic parameter, it can be implemented for a type multiple times, changing
-the concrete types of the generic type parameters each time. When we use the
-`next` method on `Counter`, we would have to provide type annotations to
-indicate which implementation of `Iterator` we want to use.
+الفرق هو أنه عند استخدام الأنواع العامة، كما في القائمة 20-14، يجب علينا التعليق على الأنواع في كل تطبيق؛ لأننا يمكننا أيضًا تطبيق `Iterator<String> for Counter` أو أي نوع آخر، يمكن أن يكون لدينا تطبيقات متعددة لـ `Iterator` لـ `Counter`. بمعنى آخر، عندما تحتوي سِمَة على معامل عام، يمكن تطبيقها لنوع عدة مرات، بتغيير الأنواع الملموسة لمعاملات النوع العام في كل مرة. عندما نستخدم طريقة `next` على `Counter`، سيتعين علينا توفير تعليقات النوع للإشارة إلى أي تطبيق لـ `Iterator` نريد استخدامه.
 
-With associated types, we don’t need to annotate types, because we can’t
-implement a trait on a type multiple times. In Listing 20-13 with the
-definition that uses associated types, we can choose what the type of `Item`
-will be only once because there can be only one `impl Iterator for Counter`. We
-don’t have to specify that we want an iterator of `u32` values everywhere we
-call `next` on `Counter`.
+مع الأنواع المرتبطة، لا نحتاج إلى التعليق على الأنواع، لأننا لا نستطيع تطبيق سِمَة على نوع عدة مرات. في القائمة 20-13 مع التعريف الذي يستخدم الأنواع المرتبطة، يمكننا اختيار ما سيكون نوع `Item` مرة واحدة فقط لأنه لا يمكن أن يكون هناك سوى `impl Iterator for Counter` واحد. لا يتعين علينا تحديد أننا نريد مُكرِّرًا من قيم `u32` في كل مكان نستدعي فيه `next` على `Counter`.
 
-Associated types also become part of the trait’s contract: Implementors of the
-trait must provide a type to stand in for the associated type placeholder.
-Associated types often have a name that describes how the type will be used,
-and documenting the associated type in the API documentation is a good practice.
+تصبح الأنواع المرتبطة أيضًا جزءًا من عقد السِمَة: يجب على منفذي السِمَة توفير نوع ليحل محل النوع المرتبط النائب. غالبًا ما تحمل الأنواع المرتبطة اسمًا يصف كيفية استخدام النوع، وتوثيق النوع المرتبط في وثائق API هو ممارسة جيدة.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="default-generic-type-parameters-and-operator-overloading"></a>
 
-### Using Default Generic Parameters and Operator Overloading
+### استخدام معاملات النوع العام الافتراضية وتحميل المعاملات الزائد
 
-When we use generic type parameters, we can specify a default concrete type for
-the generic type. This eliminates the need for implementors of the trait to
-specify a concrete type if the default type works. You specify a default type
-when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
+عندما نستخدم معاملات النوع العام، يمكننا تحديد نوع ملموس افتراضي للنوع العام. هذا يلغي حاجة منفذي السِمَة لتحديد نوع ملموس إذا كان النوع الافتراضي يعمل. تحدد نوعًا افتراضيًا عند التصريح عن نوع عام باستخدام بناء الجملة `<PlaceholderType=ConcreteType>`.
 
-A great example of a situation where this technique is useful is with _operator
-overloading_, in which you customize the behavior of an operator (such as `+`)
-in particular situations.
+مثال رائع على حالة تكون فيها هذه التقنية مفيدة هو مع _تحميل المعاملات الزائد_ (operator overloading)، حيث تخصص سلوك معامل (مثل `+`) في مواقف معينة.
 
-Rust doesn’t allow you to create your own operators or overload arbitrary
-operators. But you can overload the operations and corresponding traits listed
-in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 20-15, we overload the `+` operator to add two `Point`
-instances together. We do this by implementing the `Add` trait on a `Point`
-struct.
+لا يسمح لك Rust بإنشاء معاملات خاصة بك أو تحميل معاملات عشوائية بشكل زائد. ولكن يمكنك تحميل العمليات والسِمَات المقابلة المدرجة في `std::ops` بتطبيق السِمَات المرتبطة بالمعامل. على سبيل المثال، في القائمة 20-15، نحمّل المعامل `+` بشكل زائد لإضافة نسختين من `Point` معًا. نفعل ذلك بتطبيق سِمَة `Add` على بنية `Point`.
 
-<Listing number="20-15" file-name="src/main.rs" caption="Implementing the `Add` trait to overload the `+` operator for `Point` instances">
+<Listing number="20-15" file-name="src/main.rs" caption="تطبيق سِمَة `Add` لتحميل المعامل `+` بشكل زائد لنسخ `Point`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-15/src/main.rs}}
@@ -119,13 +71,9 @@ struct.
 
 </Listing>
 
-The `add` method adds the `x` values of two `Point` instances and the `y`
-values of two `Point` instances to create a new `Point`. The `Add` trait has an
-associated type named `Output` that determines the type returned from the `add`
-method.
+تضيف طريقة `add` قيم `x` لنسختين من `Point` وقيم `y` لنسختين من `Point` لإنشاء `Point` جديد. لدى سِمَة `Add` نوع مرتبط يُسمى `Output` يحدد النوع المُعاد من طريقة `add`.
 
-The default generic type in this code is within the `Add` trait. Here is its
-definition:
+النوع العام الافتراضي في هذا الكود موجود داخل سِمَة `Add`. إليك تعريفها:
 
 ```rust
 trait Add<Rhs=Self> {
@@ -135,28 +83,13 @@ trait Add<Rhs=Self> {
 }
 ```
 
-This code should look generally familiar: a trait with one method and an
-associated type. The new part is `Rhs=Self`: This syntax is called _default
-type parameters_. The `Rhs` generic type parameter (short for “right-hand
-side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
-specify a concrete type for `Rhs` when we implement the `Add` trait, the type
-of `Rhs` will default to `Self`, which will be the type we’re implementing
-`Add` on.
+يجب أن يبدو هذا الكود مألوفًا بشكل عام: سِمَة مع طريقة واحدة ونوع مرتبط. الجزء الجديد هو `Rhs=Self`: يُسمى هذا البناء _معاملات النوع الافتراضية_ (default type parameters). معامل النوع العام `Rhs` (اختصار لـ "right-hand side") يحدد نوع معامل `rhs` في طريقة `add`. إذا لم نحدد نوعًا ملموسًا لـ `Rhs` عند تطبيق سِمَة `Add`، فسيكون نوع `Rhs` افتراضيًا `Self`، والذي سيكون النوع الذي نطبق عليه `Add`.
 
-When we implemented `Add` for `Point`, we used the default for `Rhs` because we
-wanted to add two `Point` instances. Let’s look at an example of implementing
-the `Add` trait where we want to customize the `Rhs` type rather than using the
-default.
+عندما طبقنا `Add` لـ `Point`، استخدمنا الافتراضي لـ `Rhs` لأننا أردنا إضافة نسختين من `Point`. دعنا ننظر إلى مثال لتطبيق سِمَة `Add` حيث نريد تخصيص نوع `Rhs` بدلاً من استخدام الافتراضي.
 
-We have two structs, `Millimeters` and `Meters`, holding values in different
-units. This thin wrapping of an existing type in another struct is known as the
-_newtype pattern_, which we describe in more detail in the [“Implementing
-External Traits with the Newtype Pattern”][newtype]<!-- ignore --> section. We
-want to add values in millimeters to values in meters and have the
-implementation of `Add` do the conversion correctly. We can implement `Add` for
-`Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
+لدينا بنيتان، `Millimeters` و `Meters`، تحتويان على قيم بوحدات مختلفة. هذا الغلاف الرقيق لنوع موجود في بنية أخرى يُعرف بنمط _newtype_، والذي نصفه بمزيد من التفصيل في قسم ["تطبيق السِمَات الخارجية مع نمط Newtype"][newtype]<!-- ignore -->. نريد إضافة قيم بالمليمترات إلى قيم بالأمتار والحصول على تطبيق `Add` يقوم بالتحويل بشكل صحيح. يمكننا تطبيق `Add` لـ `Millimeters` مع `Meters` كـ `Rhs`، كما هو موضح في القائمة 20-16.
 
-<Listing number="20-16" file-name="src/lib.rs" caption="Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`">
+<Listing number="20-16" file-name="src/lib.rs" caption="تطبيق سِمَة `Add` على `Millimeters` لإضافة `Millimeters` و `Meters`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-16/src/lib.rs}}
@@ -164,45 +97,29 @@ implementation of `Add` do the conversion correctly. We can implement `Add` for
 
 </Listing>
 
-To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
-value of the `Rhs` type parameter instead of using the default of `Self`.
+لإضافة `Millimeters` و `Meters`، نحدد `impl Add<Meters>` لتعيين قيمة معامل النوع `Rhs` بدلاً من استخدام الافتراضي `Self`.
 
-You’ll use default type parameters in two main ways:
+ستستخدم معاملات النوع الافتراضية بطريقتين رئيسيتين:
 
-1. To extend a type without breaking existing code
-2. To allow customization in specific cases most users won’t need
+1. لتوسيع نوع دون كسر الكود الموجود
+2. للسماح بالتخصيص في حالات محددة لا يحتاجها معظم المستخدمين
 
-The standard library’s `Add` trait is an example of the second purpose:
-Usually, you’ll add two like types, but the `Add` trait provides the ability to
-customize beyond that. Using a default type parameter in the `Add` trait
-definition means you don’t have to specify the extra parameter most of the
-time. In other words, a bit of implementation boilerplate isn’t needed, making
-it easier to use the trait.
+سِمَة `Add` في المكتبة القياسية هي مثال على الغرض الثاني: عادةً، ستضيف نوعين متشابهين، لكن سِمَة `Add` توفر القدرة على التخصيص بما يتجاوز ذلك. استخدام معامل نوع افتراضي في تعريف سِمَة `Add` يعني أنك لا تضطر لتحديد المعامل الإضافي في معظم الوقت. بمعنى آخر، لا حاجة لقليل من الكود الشكلي للتطبيق، مما يجعل استخدام السِمَة أسهل.
 
-The first purpose is similar to the second but in reverse: If you want to add a
-type parameter to an existing trait, you can give it a default to allow
-extension of the functionality of the trait without breaking the existing
-implementation code.
+الغرض الأول مشابه للثاني ولكن بالعكس: إذا كنت تريد إضافة معامل نوع إلى سِمَة موجودة، يمكنك إعطاؤه افتراضيًا للسماح بتوسيع وظيفة السِمَة دون كسر كود التطبيق الموجود.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
 <a id="disambiguating-between-methods-with-the-same-name"></a>
 
-### Disambiguating Between Identically Named Methods
+### التمييز بين الطرق بنفس الاسم
 
-Nothing in Rust prevents a trait from having a method with the same name as
-another trait’s method, nor does Rust prevent you from implementing both traits
-on one type. It’s also possible to implement a method directly on the type with
-the same name as methods from traits.
+لا شيء في Rust يمنع سِمَة من وجود طريقة بنفس اسم طريقة سِمَة أخرى، ولا يمنع Rust من تطبيق كلتا السِمَتين على نوع واحد. من الممكن أيضًا تطبيق طريقة مباشرة على النوع بنفس اسم الطرق من السِمَات.
 
-When calling methods with the same name, you’ll need to tell Rust which one you
-want to use. Consider the code in Listing 20-17 where we’ve defined two traits,
-`Pilot` and `Wizard`, that both have a method called `fly`. We then implement
-both traits on a type `Human` that already has a method named `fly` implemented
-on it. Each `fly` method does something different.
+عند استدعاء طرق بنفس الاسم، ستحتاج إلى إخبار Rust أيها تريد استخدامه. ضع في اعتبارك الكود في القائمة 20-17 حيث عرفنا سِمَتين، `Pilot` و `Wizard`، وكلاهما لهما طريقة تسمى `fly`. ثم نطبق كلتا السِمَتين على نوع `Human` الذي لديه بالفعل طريقة تسمى `fly` مطبقة عليه. كل طريقة `fly` تفعل شيئًا مختلفًا.
 
-<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a `fly` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.">
+<Listing number="20-17" file-name="src/main.rs" caption="تم تعريف سِمَتين لهما طريقة `fly` وتم تطبيقهما على نوع `Human`، وتم تطبيق طريقة `fly` على `Human` مباشرة.">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-17/src/main.rs:here}}
@@ -210,10 +127,9 @@ on it. Each `fly` method does something different.
 
 </Listing>
 
-When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 20-18.
+عندما نستدعي `fly` على نسخة من `Human`، يستخدم المترجم افتراضيًا استدعاء الطريقة المطبقة مباشرة على النوع، كما هو موضح في القائمة 20-18.
 
-<Listing number="20-18" file-name="src/main.rs" caption="Calling `fly` on an instance of `Human`">
+<Listing number="20-18" file-name="src/main.rs" caption="استدعاء `fly` على نسخة من `Human`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-18/src/main.rs:here}}
@@ -221,14 +137,11 @@ the method that is directly implemented on the type, as shown in Listing 20-18.
 
 </Listing>
 
-Running this code will print `*waving arms furiously*`, showing that Rust
-called the `fly` method implemented on `Human` directly.
+سيطبع تشغيل هذا الكود `*waving arms furiously*`، مما يُظهر أن Rust استدعت طريقة `fly` المطبقة على `Human` مباشرة.
 
-To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
-we need to use more explicit syntax to specify which `fly` method we mean.
-Listing 20-19 demonstrates this syntax.
+لاستدعاء طرق `fly` من سِمَة `Pilot` أو سِمَة `Wizard`، نحتاج إلى استخدام بناء جملة أكثر وضوحًا لتحديد أي طريقة `fly` نعنيها. توضح القائمة 20-19 هذا البناء.
 
-<Listing number="20-19" file-name="src/main.rs" caption="Specifying which trait’s `fly` method we want to call">
+<Listing number="20-19" file-name="src/main.rs" caption="تحديد أي طريقة `fly` للسِمَة نريد استدعاءها">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-19/src/main.rs:here}}
@@ -236,32 +149,19 @@ Listing 20-19 demonstrates this syntax.
 
 </Listing>
 
-Specifying the trait name before the method name clarifies to Rust which
-implementation of `fly` we want to call. We could also write
-`Human::fly(&person)`, which is equivalent to the `person.fly()` that we used
-in Listing 20-19, but this is a bit longer to write if we don’t need to
-disambiguate.
+تحديد اسم السِمَة قبل اسم الطريقة يوضح لـ Rust أي تطبيق لـ `fly` نريد استدعاءه. يمكننا أيضًا كتابة `Human::fly(&person)`، وهو ما يعادل `person.fly()` الذي استخدمناه في القائمة 20-19، ولكن هذا أطول قليلاً للكتابة إذا لم نكن بحاجة إلى التمييز.
 
-Running this code prints the following:
+سيطبع تشغيل هذا الكود ما يلي:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-19/output.txt}}
 ```
 
-Because the `fly` method takes a `self` parameter, if we had two _types_ that
-both implement one _trait_, Rust could figure out which implementation of a
-trait to use based on the type of `self`.
+لأن طريقة `fly` تأخذ معامل `self`، إذا كان لدينا نوعان يطبقان سِمَة واحدة، يمكن لـ Rust معرفة أي تطبيق للسِمَة لاستخدامه بناءً على نوع `self`.
 
-However, associated functions that are not methods don’t have a `self`
-parameter. When there are multiple types or traits that define non-method
-functions with the same function name, Rust doesn’t always know which type you
-mean unless you use fully qualified syntax. For example, in Listing 20-20, we
-create a trait for an animal shelter that wants to name all baby dogs Spot. We
-make an `Animal` trait with an associated non-method function `baby_name`. The
-`Animal` trait is implemented for the struct `Dog`, on which we also provide an
-associated non-method function `baby_name` directly.
+ومع ذلك، الدوال المرتبطة التي ليست طرقًا لا تحتوي على معامل `self`. عندما تكون هناك أنواع أو سِمَات متعددة تحدد دوال غير طرقية بنفس اسم الدالة، لا يعرف Rust دائمًا أي نوع تعنيه ما لم تستخدم بناء الجملة المؤهل بالكامل. على سبيل المثال، في القائمة 20-20، ننشئ سِمَة لملجأ حيوانات يريد تسمية جميع الجراء الصغيرة Spot. ننشئ سِمَة `Animal` بدالة مرتبطة غير طريقية `baby_name`. يتم تطبيق سِمَة `Animal` لبنية `Dog`، والتي نوفر عليها أيضًا دالة مرتبطة غير طريقية `baby_name` مباشرة.
 
-<Listing number="20-20" file-name="src/main.rs" caption="A trait with an associated function and a type with an associated function of the same name that also implements the trait">
+<Listing number="20-20" file-name="src/main.rs" caption="سِمَة بدالة مرتبطة ونوع بدالة مرتبطة بنفس الاسم الذي يطبق السِمَة أيضًا">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-20/src/main.rs}}
@@ -269,26 +169,17 @@ associated non-method function `baby_name` directly.
 
 </Listing>
 
-We implement the code for naming all puppies Spot in the `baby_name` associated
-function that is defined on `Dog`. The `Dog` type also implements the trait
-`Animal`, which describes characteristics that all animals have. Baby dogs are
-called puppies, and that is expressed in the implementation of the `Animal`
-trait on `Dog` in the `baby_name` function associated with the `Animal` trait.
+نطبق الكود لتسمية جميع الجراء Spot في الدالة المرتبطة `baby_name` المعرفة على `Dog`. يطبق نوع `Dog` أيضًا سِمَة `Animal`، التي تصف الخصائص التي تمتلكها جميع الحيوانات. تُسمى الجراء الصغيرة puppies، وهذا معبر عنه في تطبيق سِمَة `Animal` على `Dog` في دالة `baby_name` المرتبطة بسِمَة `Animal`.
 
-In `main`, we call the `Dog::baby_name` function, which calls the associated
-function defined on `Dog` directly. This code prints the following:
+في `main`، نستدعي دالة `Dog::baby_name`، التي تستدعي الدالة المرتبطة المعرفة على `Dog` مباشرة. يطبع هذا الكود ما يلي:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-20/output.txt}}
 ```
 
-This output isn’t what we wanted. We want to call the `baby_name` function that
-is part of the `Animal` trait that we implemented on `Dog` so that the code
-prints `A baby dog is called a puppy`. The technique of specifying the trait
-name that we used in Listing 20-19 doesn’t help here; if we change `main` to
-the code in Listing 20-21, we’ll get a compilation error.
+هذا الإخراج ليس ما أردناه. نريد استدعاء دالة `baby_name` التي هي جزء من سِمَة `Animal` التي طبقناها على `Dog` حتى يطبع الكود `A baby dog is called a puppy`. تقنية تحديد اسم السِمَة التي استخدمناها في القائمة 20-19 لا تساعد هنا؛ إذا غيرنا `main` إلى الكود في القائمة 20-21، سنحصل على خطأ ترجمة.
 
-<Listing number="20-21" file-name="src/main.rs" caption="Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use">
+<Listing number="20-21" file-name="src/main.rs" caption="محاولة استدعاء دالة `baby_name` من سِمَة `Animal`، لكن Rust لا يعرف أي تطبيق لاستخدامه">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-21/src/main.rs:here}}
@@ -296,20 +187,15 @@ the code in Listing 20-21, we’ll get a compilation error.
 
 </Listing>
 
-Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be
-other types that implement the `Animal` trait, Rust can’t figure out which
-implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+لأن `Animal::baby_name` لا تحتوي على معامل `self`، ويمكن أن تكون هناك أنواع أخرى تطبق سِمَة `Animal`، لا يستطيع Rust معرفة أي تطبيق لـ `Animal::baby_name` نريده. سنحصل على هذا الخطأ من المترجم:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-21/output.txt}}
 ```
 
-To disambiguate and tell Rust that we want to use the implementation of
-`Animal` for `Dog` as opposed to the implementation of `Animal` for some other
-type, we need to use fully qualified syntax. Listing 20-22 demonstrates how to
-use fully qualified syntax.
+للتمييز وإخبار Rust بأننا نريد استخدام تطبيق `Animal` لـ `Dog` بدلاً من تطبيق `Animal` لنوع آخر، نحتاج إلى استخدام بناء الجملة المؤهل بالكامل. توضح القائمة 20-22 كيفية استخدام بناء الجملة المؤهل بالكامل.
 
-<Listing number="20-22" file-name="src/main.rs" caption="Using fully qualified syntax to specify that we want to call the `baby_name` function from the `Animal` trait as implemented on `Dog`">
+<Listing number="20-22" file-name="src/main.rs" caption="استخدام بناء الجملة المؤهل بالكامل لتحديد أننا نريد استدعاء دالة `baby_name` من سِمَة `Animal` كما تم تطبيقها على `Dog`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-22/src/main.rs:here}}
@@ -317,47 +203,29 @@ use fully qualified syntax.
 
 </Listing>
 
-We’re providing Rust with a type annotation within the angle brackets, which
-indicates we want to call the `baby_name` method from the `Animal` trait as
-implemented on `Dog` by saying that we want to treat the `Dog` type as an
-`Animal` for this function call. This code will now print what we want:
+نوفر لـ Rust تعليق نوع داخل الأقواس الزاوية، والذي يشير إلى أننا نريد استدعاء طريقة `baby_name` من سِمَة `Animal` كما تم تطبيقها على `Dog` بالقول أننا نريد معاملة نوع `Dog` كـ `Animal` لاستدعاء هذه الدالة. سيطبع هذا الكود الآن ما نريده:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-22/output.txt}}
 ```
 
-In general, fully qualified syntax is defined as follows:
+بشكل عام، يُعرف بناء الجملة المؤهل بالكامل على النحو التالي:
 
 ```rust,ignore
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
-For associated functions that aren’t methods, there would not be a `receiver`:
-There would only be the list of other arguments. You could use fully qualified
-syntax everywhere that you call functions or methods. However, you’re allowed
-to omit any part of this syntax that Rust can figure out from other information
-in the program. You only need to use this more verbose syntax in cases where
-there are multiple implementations that use the same name and Rust needs help
-to identify which implementation you want to call.
+للدوال المرتبطة التي ليست طرقًا، لن يكون هناك `receiver`: سيكون هناك قائمة الوسائط الأخرى فقط. يمكنك استخدام بناء الجملة المؤهل بالكامل في كل مكان تستدعي فيه الدوال أو الطرق. ومع ذلك، يُسمح لك بحذف أي جزء من هذا البناء يمكن لـ Rust معرفته من معلومات أخرى في البرنامج. تحتاج فقط إلى استخدام هذا البناء الأكثر تفصيلاً في الحالات التي توجد فيها تطبيقات متعددة تستخدم نفس الاسم ويحتاج Rust إلى مساعدة لتحديد أي تطبيق تريد استدعاءه.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
 
-### Using Supertraits
+### استخدام السِمَات الفائقة
 
-Sometimes you might write a trait definition that depends on another trait: For
-a type to implement the first trait, you want to require that type to also
-implement the second trait. You would do this so that your trait definition can
-make use of the associated items of the second trait. The trait your trait
-definition is relying on is called a _supertrait_ of your trait.
+في بعض الأحيان قد تكتب تعريف سِمَة يعتمد على سِمَة أخرى: لكي ينفذ نوع السِمَة الأولى، تريد طلب أن ينفذ هذا النوع السِمَة الثانية أيضًا. ستفعل ذلك حتى يتمكن تعريف سِمَتك من استخدام العناصر المرتبطة بالسِمَة الثانية. السِمَة التي يعتمد عليها تعريف سِمَتك تُسمى _سِمَة فائقة_ (supertrait) لسِمَتك.
 
-For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print a given value formatted so that it’s
-framed in asterisks. That is, given a `Point` struct that implements the
-standard library trait `Display` to result in `(x, y)`, when we call
-`outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
-should print the following:
+على سبيل المثال، لنفترض أننا نريد إنشاء سِمَة `OutlinePrint` بطريقة `outline_print` التي ستطبع قيمة معينة منسقة بحيث تكون محاطة بإطار من العلامات النجمية. أي، بالنظر إلى بنية `Point` التي تطبق سِمَة المكتبة القياسية `Display` لتنتج `(x, y)`، عندما نستدعي `outline_print` على نسخة `Point` لها `1` لـ `x` و `3` لـ `y`، يجب أن تطبع ما يلي:
 
 ```text
 **********
@@ -367,15 +235,9 @@ should print the following:
 **********
 ```
 
-In the implementation of the `outline_print` method, we want to use the
-`Display` trait’s functionality. Therefore, we need to specify that the
-`OutlinePrint` trait will work only for types that also implement `Display` and
-provide the functionality that `OutlinePrint` needs. We can do that in the
-trait definition by specifying `OutlinePrint: Display`. This technique is
-similar to adding a trait bound to the trait. Listing 20-23 shows an
-implementation of the `OutlinePrint` trait.
+في تطبيق طريقة `outline_print`، نريد استخدام وظيفة سِمَة `Display`. لذلك، نحتاج إلى تحديد أن سِمَة `OutlinePrint` ستعمل فقط للأنواع التي تطبق أيضًا `Display` وتوفر الوظيفة التي تحتاجها `OutlinePrint`. يمكننا فعل ذلك في تعريف السِمَة بتحديد `OutlinePrint: Display`. هذه التقنية مشابهة لإضافة قيد سِمَة إلى السِمَة. توضح القائمة 20-23 تطبيق سِمَة `OutlinePrint`.
 
-<Listing number="20-23" file-name="src/main.rs" caption="Implementing the `OutlinePrint` trait that requires the functionality from `Display`">
+<Listing number="20-23" file-name="src/main.rs" caption="تطبيق سِمَة `OutlinePrint` التي تتطلب الوظيفة من `Display`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-23/src/main.rs:here}}
@@ -383,15 +245,9 @@ implementation of the `OutlinePrint` trait.
 
 </Listing>
 
-Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
-can use the `to_string` function that is automatically implemented for any type
-that implements `Display`. If we tried to use `to_string` without adding a
-colon and specifying the `Display` trait after the trait name, we’d get an
-error saying that no method named `to_string` was found for the type `&Self` in
-the current scope.
+لأننا حددنا أن `OutlinePrint` تتطلب سِمَة `Display`، يمكننا استخدام دالة `to_string` التي يتم تطبيقها تلقائيًا لأي نوع يطبق `Display`. إذا حاولنا استخدام `to_string` دون إضافة نقطتين وتحديد سِمَة `Display` بعد اسم السِمَة، سنحصل على خطأ يقول إنه لم يتم العثور على طريقة تسمى `to_string` للنوع `&Self` في النطاق الحالي.
 
-Let’s see what happens when we try to implement `OutlinePrint` on a type that
-doesn’t implement `Display`, such as the `Point` struct:
+دعنا نرى ما يحدث عندما نحاول تطبيق `OutlinePrint` على نوع لا يطبق `Display`، مثل بنية `Point`:
 
 <Listing file-name="src/main.rs">
 
@@ -401,14 +257,13 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 </Listing>
 
-We get an error saying that `Display` is required but not implemented:
+نحصل على خطأ يقول إن `Display` مطلوب ولكن لم يتم تطبيقه:
 
 ```console
 {{#include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
-To fix this, we implement `Display` on `Point` and satisfy the constraint that
-`OutlinePrint` requires, like so:
+لإصلاح ذلك، نطبق `Display` على `Point` ونرضي القيد الذي تطلبه `OutlinePrint`، هكذا:
 
 <Listing file-name="src/main.rs">
 
@@ -418,37 +273,20 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 
 </Listing>
 
-Then, implementing the `OutlinePrint` trait on `Point` will compile
-successfully, and we can call `outline_print` on a `Point` instance to display
-it within an outline of asterisks.
+بعد ذلك، سيتم ترجمة تطبيق سِمَة `OutlinePrint` على `Point` بنجاح، ويمكننا استدعاء `outline_print` على نسخة `Point` لعرضها داخل إطار من العلامات النجمية.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
 <a id="using-the-newtype-pattern-to-implement-external-traits"></a>
 
-### Implementing External Traits with the Newtype Pattern
+### تطبيق السِمَات الخارجية مع نمط Newtype
 
-In the [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!--
-ignore --> section in Chapter 10, we mentioned the orphan rule that states
-we’re only allowed to implement a trait on a type if either the trait or the
-type, or both, are local to our crate. It’s possible to get around this
-restriction using the newtype pattern, which involves creating a new type in a
-tuple struct. (We covered tuple structs in the [“Creating Different Types with
-Tuple Structs”][tuple-structs]<!-- ignore --> section in Chapter 5.) The tuple
-struct will have one field and be a thin wrapper around the type for which we
-want to implement a trait. Then, the wrapper type is local to our crate, and we
-can implement the trait on the wrapper. _Newtype_ is a term that originates
-from the Haskell programming language. There is no runtime performance penalty
-for using this pattern, and the wrapper type is elided at compile time.
+في قسم ["تطبيق سِمَة على نوع"][implementing-a-trait-on-a-type]<!-- ignore --> في الفصل 10، ذكرنا قاعدة اليتيم (orphan rule) التي تنص على أننا مسموح لنا بتطبيق سِمَة على نوع فقط إذا كانت السِمَة أو النوع، أو كلاهما، محليين لصندوقنا. من الممكن التحايل على هذا القيد باستخدام نمط newtype، والذي يتضمن إنشاء نوع جديد في بنية tuple. (لقد غطينا بنيات tuple في قسم ["إنشاء أنواع مختلفة مع بنيات Tuple"][tuple-structs]<!-- ignore --> في الفصل 5.) ستحتوي بنية tuple على حقل واحد وتكون غلافًا رقيقًا حول النوع الذي نريد تطبيق سِمَة له. بعد ذلك، يكون نوع الغلاف محليًا لصندوقنا، ويمكننا تطبيق السِمَة على الغلاف. _Newtype_ هو مصطلح ينشأ من لغة البرمجة Haskell. لا توجد عقوبة أداء في وقت التشغيل لاستخدام هذا النمط، ويتم إزالة نوع الغلاف في وقت الترجمة.
 
-As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
-orphan rule prevents us from doing directly because the `Display` trait and the
-`Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
-that holds an instance of `Vec<T>`; then, we can implement `Display` on
-`Wrapper` and use the `Vec<T>` value, as shown in Listing 20-24.
+كمثال، لنفترض أننا نريد تطبيق `Display` على `Vec<T>`، الذي تمنعنا قاعدة اليتيم من القيام به مباشرة لأن سِمَة `Display` ونوع `Vec<T>` معرفان خارج صندوقنا. يمكننا إنشاء بنية `Wrapper` تحتوي على نسخة من `Vec<T>`؛ بعد ذلك، يمكننا تطبيق `Display` على `Wrapper` واستخدام قيمة `Vec<T>`، كما هو موضح في القائمة 20-24.
 
-<Listing number="20-24" file-name="src/main.rs" caption="Creating a `Wrapper` type around `Vec<String>` to implement `Display`">
+<Listing number="20-24" file-name="src/main.rs" caption="إنشاء نوع `Wrapper` حول `Vec<String>` لتطبيق `Display`">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-24/src/main.rs}}
@@ -456,24 +294,11 @@ that holds an instance of `Vec<T>`; then, we can implement `Display` on
 
 </Listing>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
-because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
-tuple. Then, we can use the functionality of the `Display` trait on `Wrapper`.
+يستخدم تطبيق `Display` `self.0` للوصول إلى `Vec<T>` الداخلي لأن `Wrapper` هو بنية tuple و `Vec<T>` هو العنصر في الفهرس 0 في tuple. بعد ذلك، يمكننا استخدام وظيفة سِمَة `Display` على `Wrapper`.
 
-The downside of using this technique is that `Wrapper` is a new type, so it
-doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec<T>` directly on `Wrapper` such that the methods
-delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
-`Vec<T>`. If we wanted the new type to have every method the inner type has,
-implementing the `Deref` trait on the `Wrapper` to return the inner type would
-be a solution (we discussed implementing the `Deref` trait in the [“Treating
-Smart Pointers Like Regular References”][smart-pointer-deref]<!-- ignore -->
-section in Chapter 15). If we didn’t want the `Wrapper` type to have all the
-methods of the inner type—for example, to restrict the `Wrapper` type’s
-behavior—we would have to implement just the methods we do want manually.
+العيب في استخدام هذه التقنية هو أن `Wrapper` هو نوع جديد، لذلك لا يحتوي على طرق القيمة التي يحتفظ بها. سيتعين علينا تطبيق جميع طرق `Vec<T>` مباشرة على `Wrapper` بحيث تفوض الطرق إلى `self.0`، مما سيسمح لنا بمعاملة `Wrapper` تمامًا مثل `Vec<T>`. إذا أردنا أن يحتوي النوع الجديد على كل طريقة للنوع الداخلي، فإن تطبيق سِمَة `Deref` على `Wrapper` لإرجاع النوع الداخلي سيكون حلاً (ناقشنا تطبيق سِمَة `Deref` في قسم ["معاملة المؤشرات الذكية كمراجع عادية"][smart-pointer-deref]<!-- ignore --> في الفصل 15). إذا لم نرد أن يحتوي نوع `Wrapper` على جميع طرق النوع الداخلي - على سبيل المثال، لتقييد سلوك نوع `Wrapper` - سيتعين علينا تطبيق الطرق التي نريدها فقط يدويًا.
 
-This newtype pattern is also useful even when traits are not involved. Let’s
-switch focus and look at some advanced ways to interact with Rust’s type system.
+نمط newtype مفيد أيضًا حتى عندما لا تكون السِمَات معنية. دعنا نغير التركيز وننظر إلى بعض الطرق المتقدمة للتفاعل مع نظام الأنواع في Rust.
 
 [newtype]: ch20-02-advanced-traits.html#implementing-external-traits-with-the-newtype-pattern
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#implementing-a-trait-on-a-type

@@ -2,33 +2,21 @@
 
 <a id="concurrency-with-async"></a>
 
-## Applying Concurrency with Async
+## تطبيق التزامن باستخدام Async
 
-In this section, we’ll apply async to some of the same concurrency challenges
-we tackled with threads in Chapter 16. Because we already talked about a lot of
-the key ideas there, in this section we’ll focus on what’s different between
-threads and futures.
+في هذا القسم، سنطبق async على بعض تحديات التزامن نفسها التي تعاملنا معها باستخدام الخيوط في الفصل 16. نظرًا لأننا تحدثنا بالفعل عن الكثير من الأفكار الأساسية هناك، في هذا القسم سنركز على ما هو مختلف بين الخيوط والمستقبلات.
 
-In many cases, the APIs for working with concurrency using async are very
-similar to those for using threads. In other cases, they end up being quite
-different. Even when the APIs _look_ similar between threads and async, they
-often have different behavior—and they nearly always have different performance
-characteristics.
+في كثير من الحالات، تكون واجهات برمجة التطبيقات (APIs) للعمل مع التزامن باستخدام async مشابهة جدًا لتلك الخاصة باستخدام الخيوط. في حالات أخرى، ينتهي بهم الأمر بأن يكونوا مختلفين تمامًا. حتى عندما تبدو واجهات برمجة التطبيقات _متشابهة_ بين الخيوط و async، فإنها غالبًا ما يكون لها سلوك مختلف - وتقريبًا دائمًا لها خصائص أداء مختلفة.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="counting"></a>
 
-### Creating a New Task with `spawn_task`
+### إنشاء مهمة جديدة باستخدام `spawn_task`
 
-The first operation we tackled in the [“Creating a New Thread with
-`spawn`”][thread-spawn]<!-- ignore --> section in Chapter 16 was counting up on
-two separate threads. Let’s do the same using async. The `trpl` crate supplies
-a `spawn_task` function that looks very similar to the `thread::spawn` API, and
-a `sleep` function that is an async version of the `thread::sleep` API. We can
-use these together to implement the counting example, as shown in Listing 17-6.
+العملية الأولى التي تعاملنا معها في قسم ["إنشاء خيط جديد باستخدام `spawn`"][thread-spawn]<!-- ignore --> في الفصل 16 كانت العد على خيطين منفصلين. لنفعل الشيء نفسه باستخدام async. توفر مكتبة `trpl` دالة `spawn_task` التي تبدو مشابهة جدًا لواجهة برمجة التطبيقات `thread::spawn`، ودالة `sleep` التي هي نسخة async من واجهة برمجة التطبيقات `thread::sleep`. يمكننا استخدام هذه معًا لتنفيذ مثال العد، كما هو موضح في القائمة 17-6.
 
-<Listing number="17-6" caption="Creating a new task to print one thing while the main task prints something else" file-name="src/main.rs">
+<Listing number="17-6" caption="إنشاء مهمة جديدة لطباعة شيء واحد بينما تطبع المهمة الرئيسية شيئًا آخر" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:all}}
@@ -36,21 +24,13 @@ use these together to implement the counting example, as shown in Listing 17-6.
 
 </Listing>
 
-As our starting point, we set up our `main` function with `trpl::block_on` so
-that our top-level function can be async.
+كنقطة انطلاق، نقوم بإعداد دالة `main` باستخدام `trpl::block_on` بحيث يمكن أن تكون دالتنا ذات المستوى الأعلى async.
 
-> Note: From this point forward in the chapter, every example will include this
-> exact same wrapping code with `trpl::block_on` in `main`, so we’ll often skip it
-> just as we do with `main`. Remember to include it in your code!
+> ملاحظة: من هذه النقطة فصاعدًا في الفصل، سيتضمن كل مثال نفس كود التغليف هذا بالضبط مع `trpl::block_on` في `main`، لذلك غالبًا ما نتخطاه تمامًا كما نفعل مع `main`. تذكر تضمينه في الكود الخاص بك!
 
-Then we write two loops within that block, each containing a `trpl::sleep`
-call, which waits for half a second (500 milliseconds) before sending the next
-message. We put one loop in the body of a `trpl::spawn_task` and the other in a
-top-level `for` loop. We also add an `await` after the `sleep` calls.
+ثم نكتب حلقتين داخل تلك الكتلة، كل منهما تحتوي على استدعاء `trpl::sleep`، الذي ينتظر نصف ثانية (500 ميلي ثانية) قبل إرسال الرسالة التالية. نضع حلقة واحدة في نص `trpl::spawn_task` والأخرى في حلقة `for` ذات المستوى الأعلى. نضيف أيضًا `await` بعد استدعاءات `sleep`.
 
-This code behaves similarly to the thread-based implementation—including the
-fact that you may see the messages appear in a different order in your own
-terminal when you run it:
+يتصرف هذا الكود بشكل مشابه للتنفيذ المعتمد على الخيوط - بما في ذلك حقيقة أنك قد ترى الرسائل تظهر بترتيب مختلف في terminal الخاص بك عند تشغيله:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -68,16 +48,9 @@ hi number 4 from the second task!
 hi number 5 from the first task!
 ```
 
-This version stops as soon as the `for` loop in the body of the main async
-block finishes, because the task spawned by `spawn_task` is shut down when the
-`main` function ends. If you want it to run all the way to the task’s
-completion, you will need to use a join handle to wait for the first task to
-complete. With threads, we used the `join` method to “block” until the thread
-was done running. In Listing 17-7, we can use `await` to do the same thing,
-because the task handle itself is a future. Its `Output` type is a `Result`, so
-we also unwrap it after awaiting it.
+تتوقف هذه النسخة بمجرد انتهاء حلقة `for` في نص كتلة async الرئيسية، لأن المهمة التي تم إنشاؤها بواسطة `spawn_task` يتم إيقافها عند انتهاء دالة `main`. إذا كنت تريد تشغيلها حتى اكتمال المهمة، فستحتاج إلى استخدام مقبض انضمام (join handle) للانتظار حتى تنتهي المهمة الأولى. مع الخيوط، استخدمنا طريقة `join` لـ "حجب" حتى ينتهي الخيط من العمل. في القائمة 17-7، يمكننا استخدام `await` للقيام بنفس الشيء، لأن مقبض المهمة نفسه هو مستقبل. نوع `Output` الخاص به هو `Result`، لذلك نقوم أيضًا بفك تغليفه بعد انتظاره.
 
-<Listing number="17-7" caption="Using `await` with a join handle to run a task to completion" file-name="src/main.rs">
+<Listing number="17-7" caption="استخدام `await` مع مقبض انضمام لتشغيل مهمة حتى الاكتمال" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:handle}}
@@ -85,7 +58,7 @@ we also unwrap it after awaiting it.
 
 </Listing>
 
-This updated version runs until _both_ loops finish:
+تعمل هذه النسخة المحدثة حتى تنتهي _كلتا_ الحلقتين:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -107,27 +80,13 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-So far, it looks like async and threads give us similar outcomes, just with
-different syntax: using `await` instead of calling `join` on the join handle,
-and awaiting the `sleep` calls.
+حتى الآن، يبدو أن async والخيوط تعطينا نتائج مماثلة، فقط بصيغة مختلفة: استخدام `await` بدلاً من استدعاء `join` على مقبض الانضمام، وانتظار استدعاءات `sleep`.
 
-The bigger difference is that we didn’t need to spawn another operating system
-thread to do this. In fact, we don’t even need to spawn a task here. Because
-async blocks compile to anonymous futures, we can put each loop in an async
-block and have the runtime run them both to completion using the `trpl::join`
-function.
+الفرق الأكبر هو أننا لم نحتج إلى إنشاء خيط نظام تشغيل آخر للقيام بذلك. في الواقع، لا نحتاج حتى إلى إنشاء مهمة هنا. نظرًا لأن كتل async يتم تجميعها إلى مستقبلات مجهولة، يمكننا وضع كل حلقة في كتلة async ونجعل بيئة التشغيل تشغلهما كليهما حتى الاكتمال باستخدام دالة `trpl::join`.
 
-In the [“Waiting for All Threads to Finish”][join-handles]<!-- ignore -->
-section in Chapter 16, we showed how to use the `join` method on the
-`JoinHandle` type returned when you call `std::thread::spawn`. The `trpl::join`
-function is similar, but for futures. When you give it two futures, it produces
-a single new future whose output is a tuple containing the output of each
-future you passed in once they _both_ complete. Thus, in Listing 17-8, we use
-`trpl::join` to wait for both `fut1` and `fut2` to finish. We do _not_ await
-`fut1` and `fut2` but instead the new future produced by `trpl::join`. We
-ignore the output, because it’s just a tuple containing two unit values.
+في قسم ["انتظار انتهاء جميع الخيوط"][join-handles]<!-- ignore --> في الفصل 16، أظهرنا كيفية استخدام طريقة `join` على نوع `JoinHandle` المرجع عند استدعاء `std::thread::spawn`. دالة `trpl::join` مشابهة، ولكن للمستقبلات. عندما تعطيها مستقبلين، فإنها تنتج مستقبلًا جديدًا واحدًا يكون ناتجه tuple يحتوي على ناتج كل مستقبل قمت بتمريره بمجرد اكتمال _كليهما_. وبالتالي، في القائمة 17-8، نستخدم `trpl::join` للانتظار حتى ينتهي كل من `fut1` و `fut2`. نحن _لا_ ننتظر `fut1` و `fut2` بل المستقبل الجديد الذي ينتجه `trpl::join`. نتجاهل الناتج، لأنه مجرد tuple يحتوي على قيمتي وحدة.
 
-<Listing number="17-8" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
+<Listing number="17-8" caption="استخدام `trpl::join` لانتظار كتلتي async مجهولتين" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:join}}
@@ -135,7 +94,7 @@ ignore the output, because it’s just a tuple containing two unit values.
 
 </Listing>
 
-When we run this, we see both futures run to completion:
+عندما نشغل هذا، نرى كلا المستقبلين يعملان حتى الاكتمال:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -157,45 +116,26 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-Now, you’ll see the exact same order every time, which is very different from
-what we saw with threads and with `trpl::spawn_task` in Listing 17-7. That is
-because the `trpl::join` function is _fair_, meaning it checks each future
-equally often, alternating between them, and never lets one race ahead if the
-other is ready. With threads, the operating system decides which thread to
-check and how long to let it run. With async Rust, the runtime decides which
-task to check. (In practice, the details get complicated because an async
-runtime might use operating system threads under the hood as part of how it
-manages concurrency, so guaranteeing fairness can be more work for a
-runtime—but it’s still possible!) Runtimes don’t have to guarantee fairness for
-any given operation, and they often offer different APIs to let you choose
-whether or not you want fairness.
+الآن، سترى نفس الترتيب بالضبط في كل مرة، وهو مختلف تمامًا عما رأيناه مع الخيوط ومع `trpl::spawn_task` في القائمة 17-7. ذلك لأن دالة `trpl::join` _عادلة_ (fair)، مما يعني أنها تتحقق من كل مستقبل بشكل متساوٍ، متناوبة بينهما، ولا تدع واحدًا يسبق إذا كان الآخر جاهزًا. مع الخيوط، يقرر نظام التشغيل أي خيط يجب التحقق منه ومدة السماح له بالعمل. مع async في Rust، تقرر بيئة التشغيل أي مهمة يجب التحقق منها. (عمليًا، تصبح التفاصيل معقدة لأن بيئة تشغيل async قد تستخدم خيوط نظام التشغيل تحت الغطاء كجزء من كيفية إدارة التزامن، لذلك قد يكون ضمان العدالة المزيد من العمل لبيئة التشغيل - لكنه لا يزال ممكنًا!) لا يتعين على بيئات التشغيل ضمان العدالة لأي عملية معينة، وغالبًا ما توفر واجهات برمجة تطبيقات مختلفة لتتيح لك اختيار ما إذا كنت تريد العدالة أم لا.
 
-Try some of these variations on awaiting the futures and see what they do:
+جرب بعضًا من هذه الاختلافات في انتظار المستقبلات وانظر ماذا يفعلون:
 
-- Remove the async block from around either or both of the loops.
-- Await each async block immediately after defining it.
-- Wrap only the first loop in an async block, and await the resulting future
-  after the body of second loop.
+- إزالة كتلة async من حول إحدى الحلقتين أو كليهما.
+- انتظار كل كتلة async فور تحديدها.
+- تغليف الحلقة الأولى فقط في كتلة async، وانتظار المستقبل الناتج بعد نص الحلقة الثانية.
 
-For an extra challenge, see if you can figure out what the output will be in
-each case _before_ running the code!
+كتحدي إضافي، انظر إذا كنت تستطيع معرفة ما سيكون الناتج في كل حالة _قبل_ تشغيل الكود!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="message-passing"></a>
 <a id="counting-up-on-two-tasks-using-message-passing"></a>
 
-### Sending Data Between Two Tasks Using Message Passing
+### إرسال البيانات بين مهمتين باستخدام تمرير الرسائل
 
-Sharing data between futures will also be familiar: we’ll use message passing
-again, but this time with async versions of the types and functions. We’ll take
-a slightly different path than we did in the [“Transfer Data Between Threads
-with Message Passing”][message-passing-threads]<!-- ignore --> section in
-Chapter 16 to illustrate some of the key differences between thread-based and
-futures-based concurrency. In Listing 17-9, we’ll begin with just a single
-async block—_not_ spawning a separate task as we spawned a separate thread.
+سيكون مشاركة البيانات بين المستقبلات مألوفًا أيضًا: سنستخدم تمرير الرسائل مرة أخرى، لكن هذه المرة بإصدارات async من الأنواع والدوال. سنأخذ مسارًا مختلفًا قليلاً عما فعلناه في قسم ["نقل البيانات بين الخيوط بتمرير الرسائل"][message-passing-threads]<!-- ignore --> في الفصل 16 لتوضيح بعض الاختلافات الرئيسية بين التزامن المعتمد على الخيوط والتزامن المعتمد على المستقبلات. في القائمة 17-9، سنبدأ بكتلة async واحدة فقط - _لا_ ننشئ مهمة منفصلة كما أنشأنا خيطًا منفصلاً.
 
-<Listing number="17-9" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
+<Listing number="17-9" caption="إنشاء قناة async وتعيين النصفين إلى `tx` و `rx`" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:channel}}
@@ -203,40 +143,19 @@ async block—_not_ spawning a separate task as we spawned a separate thread.
 
 </Listing>
 
-Here, we use `trpl::channel`, an async version of the multiple-producer,
-single-consumer channel API we used with threads back in Chapter 16. The async
-version of the API is only a little different from the thread-based version: it
-uses a mutable rather than an immutable receiver `rx`, and its `recv` method
-produces a future we need to await rather than producing the value directly.
-Now we can send messages from the sender to the receiver. Notice that we don’t
-have to spawn a separate thread or even a task; we merely need to await the
-`rx.recv` call.
+هنا، نستخدم `trpl::channel`، وهي نسخة async من واجهة برمجة التطبيقات للقناة متعددة المنتجين أحادية المستهلك التي استخدمناها مع الخيوط في الفصل 16. النسخة async من واجهة برمجة التطبيقات مختلفة قليلاً فقط عن النسخة المعتمدة على الخيوط: تستخدم مستقبل `rx` قابل للتغيير بدلاً من غير قابل للتغيير، وطريقة `recv` الخاصة بها تنتج مستقبلًا نحتاج إلى انتظاره بدلاً من إنتاج القيمة مباشرة. الآن يمكننا إرسال رسائل من المرسل إلى المستقبل. لاحظ أننا لا نحتاج إلى إنشاء خيط منفصل أو حتى مهمة؛ نحتاج فقط إلى انتظار استدعاء `rx.recv`.
 
-The synchronous `Receiver::recv` method in `std::mpsc::channel` blocks until it
-receives a message. The `trpl::Receiver::recv` method does not, because it is
-async. Instead of blocking, it hands control back to the runtime until either a
-message is received or the send side of the channel closes. By contrast, we
-don’t await the `send` call, because it doesn’t block. It doesn’t need to,
-because the channel we’re sending it into is unbounded.
+طريقة `Receiver::recv` المتزامنة في `std::mpsc::channel` تحجب حتى تستلم رسالة. طريقة `trpl::Receiver::recv` لا تفعل ذلك، لأنها async. بدلاً من الحجب، تعيد التحكم إلى بيئة التشغيل حتى يتم استلام رسالة أو إغلاق جانب الإرسال من القناة. على النقيض من ذلك، لا ننتظر استدعاء `send`، لأنه لا يحجب. لا يحتاج إلى ذلك، لأن القناة التي نرسل إليها غير محدودة.
 
-> Note: Because all of this async code runs in an async block in a
-> `trpl::block_on` call, everything within it can avoid blocking. However, the
-> code _outside_ it will block on the `block_on` function returning. That’s the
-> whole point of the `trpl::block_on` function: it lets you _choose_ where to
-> block on some set of async code, and thus where to transition between sync
-> and async code.
+> ملاحظة: نظرًا لأن كل هذا الكود async يعمل في كتلة async في استدعاء `trpl::block_on`، يمكن لكل شيء بداخله تجنب الحجب. ومع ذلك، فإن الكود _خارجه_ سيحجب على دالة `block_on` التي ترجع. هذه هي النقطة الكاملة لدالة `trpl::block_on`: تتيح لك _اختيار_ مكان الحجب على بعض مجموعة من الكود async، وبالتالي مكان الانتقال بين الكود المتزامن وغير المتزامن.
 
-Notice two things about this example. First, the message will arrive right
-away. Second, although we use a future here, there’s no concurrency yet.
-Everything in the listing happens in sequence, just as it would if there were
-no futures involved.
+لاحظ شيئين حول هذا المثال. أولاً، ستصل الرسالة على الفور. ثانيًا، على الرغم من أننا نستخدم مستقبلًا هنا، لا يوجد تزامن بعد. كل شيء في القائمة يحدث بالتسلسل، تمامًا كما لو لم يكن هناك مستقبلات متضمنة.
 
-Let’s address the first part by sending a series of messages and sleeping in
-between them, as shown in Listing 17-10.
+دعنا نعالج الجزء الأول عن طريق إرسال سلسلة من الرسائل والنوم بينها، كما هو موضح في القائمة 17-10.
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `await` between each message" file-name="src/main.rs">
+<Listing number="17-10" caption="إرسال واستقبال رسائل متعددة عبر القناة async والنوم مع `await` بين كل رسالة" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
@@ -244,65 +163,27 @@ between them, as shown in Listing 17-10.
 
 </Listing>
 
-In addition to sending the messages, we need to receive them. In this case,
-because we know how many messages are coming in, we could do that manually by
-calling `rx.recv().await` four times. In the real world, though, we’ll generally
-be waiting on some _unknown_ number of messages, so we need to keep waiting
-until we determine that there are no more messages.
+بالإضافة إلى إرسال الرسائل، نحتاج إلى استقبالها. في هذه الحالة، نظرًا لأننا نعرف عدد الرسائل القادمة، يمكننا القيام بذلك يدويًا عن طريق استدعاء `rx.recv().await` أربع مرات. ولكن في العالم الحقيقي، سننتظر عادةً بعض العدد _غير المعروف_ من الرسائل، لذلك نحتاج إلى الاستمرار في الانتظار حتى نحدد أنه لا توجد المزيد من الرسائل.
 
-In Listing 16-10, we used a `for` loop to process all the items received from a
-synchronous channel. Rust doesn’t yet have a way to use a `for` loop with an
-_asynchronously produced_ series of items, however, so we need to use a loop we
-haven’t seen before: the `while let` conditional loop. This is the loop version
-of the `if let` construct we saw back in the [“Concise Control Flow with `if
-let` and `let else`”][if-let]<!-- ignore --> section in Chapter 6. The loop
-will continue executing as long as the pattern it specifies continues to match
-the value.
+في القائمة 16-10، استخدمنا حلقة `for` لمعالجة جميع العناصر المستلمة من قناة متزامنة. ومع ذلك، ليس لدى Rust بعد طريقة لاستخدام حلقة `for` مع سلسلة من العناصر _المنتجة بشكل غير متزامن_، لذلك نحتاج إلى استخدام حلقة لم نرها من قبل: حلقة `while let` الشرطية. هذه هي نسخة الحلقة من بناء `if let` الذي رأيناه في قسم ["تدفق التحكم المختصر باستخدام `if let` و `let else`"][if-let]<!-- ignore --> في الفصل 6. ستستمر الحلقة في التنفيذ طالما استمر النمط الذي تحدده في مطابقة القيمة.
 
-The `rx.recv` call produces a future, which we await. The runtime will pause
-the future until it is ready. Once a message arrives, the future will resolve
-to `Some(message)` as many times as a message arrives. When the channel closes,
-regardless of whether _any_ messages have arrived, the future will instead
-resolve to `None` to indicate that there are no more values and thus we should
-stop polling—that is, stop awaiting.
+يُنتج استدعاء `rx.recv` مستقبلًا، والذي ننتظره. ستوقف بيئة التشغيل المستقبل مؤقتًا حتى يصبح جاهزًا. بمجرد وصول رسالة، سيتحول المستقبل إلى `Some(message)` بقدر ما تصل رسالة. عندما تُغلق القناة، بغض النظر عما إذا كانت قد وصلت _أي_ رسائل، سيتحول المستقبل بدلاً من ذلك إلى `None` للإشارة إلى عدم وجود المزيد من القيم وبالتالي يجب أن نتوقف عن الاستطلاع - أي، نتوقف عن الانتظار.
 
-The `while let` loop pulls all of this together. If the result of calling
-`rx.recv().await` is `Some(message)`, we get access to the message and we can
-use it in the loop body, just as we could with `if let`. If the result is
-`None`, the loop ends. Every time the loop completes, it hits the await point
-again, so the runtime pauses it again until another message arrives.
+تجمع حلقة `while let` كل هذا معًا. إذا كانت نتيجة استدعاء `rx.recv().await` هي `Some(message)`، فنحصل على الوصول إلى الرسالة ويمكننا استخدامها في نص الحلقة، تمامًا كما يمكننا مع `if let`. إذا كانت النتيجة `None`، تنتهي الحلقة. في كل مرة تكتمل فيها الحلقة، تصل إلى نقطة await مرة أخرى، لذلك توقفها بيئة التشغيل مؤقتًا مرة أخرى حتى تصل رسالة أخرى.
 
-The code now successfully sends and receives all of the messages.
-Unfortunately, there are still a couple of problems. For one thing, the
-messages do not arrive at half-second intervals. They arrive all at once, 2
-seconds (2,000 milliseconds) after we start the program. For another, this
-program also never exits! Instead, it waits forever for new messages. You will
-need to shut it down using <kbd>ctrl</kbd>-<kbd>C</kbd>.
+ينجح الكود الآن في إرسال واستقبال جميع الرسائل. لسوء الحظ، لا يزال هناك مشكلتان. أولاً، لا تصل الرسائل على فترات نصف ثانية. إنها تصل جميعًا مرة واحدة، بعد ثانيتين (2000 ميلي ثانية) من بدء البرنامج. ثانيًا، لا ينتهي هذا البرنامج أبدًا! بدلاً من ذلك، ينتظر إلى الأبد رسائل جديدة. ستحتاج إلى إيقافه باستخدام <kbd>ctrl</kbd>-<kbd>C</kbd>.
 
-#### Code Within One Async Block Executes Linearly
+#### الكود داخل كتلة Async واحدة يتم تنفيذه خطيًا
 
-Let’s start by examining why the messages come in all at once after the full
-delay, rather than coming in with delays between each one. Within a given async
-block, the order in which `await` keywords appear in the code is also the order
-in which they’re executed when the program runs.
+لنبدأ بفحص سبب وصول الرسائل جميعها في وقت واحد بعد التأخير الكامل، بدلاً من الوصول مع تأخيرات بينها. داخل كتلة async معينة، الترتيب الذي تظهر فيه الكلمات الأساسية `await` في الكود هو أيضًا الترتيب الذي يتم فيه تنفيذها عند تشغيل البرنامج.
 
-There’s only one async block in Listing 17-10, so everything in it runs
-linearly. There’s still no concurrency. All the `tx.send` calls happen,
-interspersed with all of the `trpl::sleep` calls and their associated await
-points. Only then does the `while let` loop get to go through any of the
-`await` points on the `recv` calls.
+يوجد كتلة async واحدة فقط في القائمة 17-10، لذلك كل شيء فيها يعمل خطيًا. لا يزال لا يوجد تزامن. تحدث جميع استدعاءات `tx.send`، متناثرة مع جميع استدعاءات `trpl::sleep` ونقاط await المرتبطة بها. بعد ذلك فقط تصل حلقة `while let` للذهاب خلال أي من نقاط `await` على استدعاءات `recv`.
 
-To get the behavior we want, where the sleep delay happens between each
-message, we need to put the `tx` and `rx` operations in their own async blocks,
-as shown in Listing 17-11. Then the runtime can execute each of them separately
-using `trpl::join`, just as in Listing 17-8. Once again, we await the result of
-calling `trpl::join`, not the individual futures. If we awaited the individual
-futures in sequence, we would just end up back in a sequential flow—exactly
-what we’re trying _not_ to do.
+للحصول على السلوك الذي نريده، حيث يحدث تأخير النوم بين كل رسالة، نحتاج إلى وضع عمليات `tx` و `rx` في كتل async الخاصة بها، كما هو موضح في القائمة 17-11. ثم يمكن لبيئة التشغيل تنفيذ كل منها بشكل منفصل باستخدام `trpl::join`، تمامًا كما في القائمة 17-8. مرة أخرى، ننتظر نتيجة استدعاء `trpl::join`، وليس المستقبلات الفردية. إذا انتظرنا المستقبلات الفردية بالتسلسل، فسننتهي مرة أخرى في تدفق تسلسلي - بالضبط ما نحاول _عدم_ القيام به.
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-11" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
+<Listing number="17-11" caption="فصل `send` و `recv` إلى كتل `async` الخاصة بهما وانتظار المستقبلات لتلك الكتل" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:futures}}
@@ -310,44 +191,26 @@ what we’re trying _not_ to do.
 
 </Listing>
 
-With the updated code in Listing 17-11, the messages get printed at
-500-millisecond intervals, rather than all in a rush after 2 seconds.
+مع الكود المحدث في القائمة 17-11، يتم طباعة الرسائل على فترات 500 ميلي ثانية، بدلاً من كلها في اندفاع بعد ثانيتين.
 
-#### Moving Ownership Into an Async Block
+#### نقل الملكية إلى كتلة Async
 
-The program still never exits, though, because of the way the `while let` loop
-interacts with `trpl::join`:
+ومع ذلك، لا يزال البرنامج لا ينتهي أبدًا، بسبب الطريقة التي تتفاعل بها حلقة `while let` مع `trpl::join`:
 
-- The future returned from `trpl::join` completes only once _both_ futures
-  passed to it have completed.
-- The `tx_fut` future completes once it finishes sleeping after sending the last
-  message in `vals`.
-- The `rx_fut` future won’t complete until the `while let` loop ends.
-- The `while let` loop won’t end until awaiting `rx.recv` produces `None`.
-- Awaiting `rx.recv` will return `None` only once the other end of the channel
-  is closed.
-- The channel will close only if we call `rx.close` or when the sender side,
-  `tx`, is dropped.
-- We don’t call `rx.close` anywhere, and `tx` won’t be dropped until the
-  outermost async block passed to `trpl::block_on` ends.
-- The block can’t end because it is blocked on `trpl::join` completing, which
-  takes us back to the top of this list.
+- المستقبل المرجع من `trpl::join` يكتمل فقط بمجرد اكتمال _كلا_ المستقبلين الممررين إليه.
+- يكتمل المستقبل `tx_fut` بمجرد الانتهاء من النوم بعد إرسال آخر رسالة في `vals`.
+- لن يكتمل المستقبل `rx_fut` حتى تنتهي حلقة `while let`.
+- لن تنتهي حلقة `while let` حتى ينتج انتظار `rx.recv` `None`.
+- سيعيد انتظار `rx.recv` `None` فقط بمجرد إغلاق الطرف الآخر من القناة.
+- ستُغلق القناة فقط إذا استدعينا `rx.close` أو عندما يتم إسقاط جانب المرسل، `tx`.
+- نحن لا نستدعي `rx.close` في أي مكان، ولن يتم إسقاط `tx` حتى تنتهي كتلة async الخارجية الممررة إلى `trpl::block_on`.
+- لا يمكن للكتلة أن تنتهي لأنها محجوبة على اكتمال `trpl::join`، مما يعيدنا إلى أعلى هذه القائمة.
 
-Right now, the async block where we send the messages only _borrows_ `tx`
-because sending a message doesn’t require ownership, but if we could _move_
-`tx` into that async block, it would be dropped once that block ends. In the
-[“Capturing References or Moving Ownership”][capture-or-move]<!-- ignore -->
-section in Chapter 13, you learned how to use the `move` keyword with closures,
-and, as discussed in the [“Using `move` Closures with
-Threads”][move-threads]<!-- ignore --> section in Chapter 16, we often need to
-move data into closures when working with threads. The same basic dynamics
-apply to async blocks, so the `move` keyword works with async blocks just as it
-does with closures.
+الآن، كتلة async التي نرسل فيها الرسائل فقط _تستعير_ `tx` لأن إرسال رسالة لا يتطلب الملكية، ولكن إذا استطعنا _نقل_ `tx` إلى تلك الكتلة async، فسيتم إسقاطها بمجرد انتهاء تلك الكتلة. في قسم ["التقاط المراجع أو نقل الملكية"][capture-or-move]<!-- ignore --> في الفصل 13، تعلمت كيفية استخدام الكلمة الأساسية `move` مع الإغلاقات، وكما تمت مناقشته في قسم ["استخدام إغلاقات `move` مع الخيوط"][move-threads]<!-- ignore --> في الفصل 16، غالبًا ما نحتاج إلى نقل البيانات إلى الإغلاقات عند العمل مع الخيوط. تنطبق نفس الديناميكيات الأساسية على كتل async، لذلك تعمل الكلمة الأساسية `move` مع كتل async تمامًا كما تفعل مع الإغلاقات.
 
-In Listing 17-12, we change the block used to send messages from `async` to
-`async move`.
+في القائمة 17-12، نقوم بتغيير الكتلة المستخدمة لإرسال الرسائل من `async` إلى `async move`.
 
-<Listing number="17-12" caption="A revision of the code from Listing 17-11 that correctly shuts down when complete" file-name="src/main.rs">
+<Listing number="17-12" caption="مراجعة للكود من القائمة 17-11 التي تُغلق بشكل صحيح عند الاكتمال" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:with-move}}
@@ -355,17 +218,13 @@ In Listing 17-12, we change the block used to send messages from `async` to
 
 </Listing>
 
-When we run _this_ version of the code, it shuts down gracefully after the last
-message is sent and received. Next, let’s see what would need to change to send
-data from more than one future.
+عندما نشغل _هذه_ النسخة من الكود، يُغلق بشكل جيد بعد إرسال واستقبال آخر رسالة. بعد ذلك، دعنا نرى ما يحتاج إلى التغيير لإرسال البيانات من أكثر من مستقبل واحد.
 
-#### Joining a Number of Futures with the `join!` Macro
+#### ضم عدد من المستقبلات باستخدام ماكرو `join!`
 
-This async channel is also a multiple-producer channel, so we can call `clone`
-on `tx` if we want to send messages from multiple futures, as shown in Listing
-17-13.
+هذه القناة async هي أيضًا قناة متعددة المنتجين، لذلك يمكننا استدعاء `clone` على `tx` إذا أردنا إرسال رسائل من مستقبلات متعددة، كما هو موضح في القائمة 17-13.
 
-<Listing number="17-13" caption="Using multiple producers with async blocks" file-name="src/main.rs">
+<Listing number="17-13" caption="استخدام منتجين متعددين مع كتل async" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
@@ -373,25 +232,13 @@ on `tx` if we want to send messages from multiple futures, as shown in Listing
 
 </Listing>
 
-First, we clone `tx`, creating `tx1` outside the first async block. We move
-`tx1` into that block just as we did before with `tx`. Then, later, we move the
-original `tx` into a _new_ async block, where we send more messages on a
-slightly slower delay. We happen to put this new async block after the async
-block for receiving messages, but it could go before it just as well. The key is
-the order in which the futures are awaited, not in which they’re created.
+أولاً، نستنسخ `tx`، منشئين `tx1` خارج كتلة async الأولى. ننقل `tx1` إلى تلك الكتلة تمامًا كما فعلنا من قبل مع `tx`. ثم، لاحقًا، ننقل `tx` الأصلي إلى كتلة async _جديدة_، حيث نرسل المزيد من الرسائل على تأخير أبطأ قليلاً. يحدث أننا نضع هذه الكتلة async الجديدة بعد كتلة async لاستقبال الرسائل، لكن يمكن أن تذهب قبلها بنفس الطريقة. المفتاح هو ترتيب انتظار المستقبلات، وليس ترتيب إنشائها.
 
-Both of the async blocks for sending messages need to be `async move` blocks so
-that both `tx` and `tx1` get dropped when those blocks finish. Otherwise, we’ll
-end up back in the same infinite loop we started out in.
+يجب أن تكون كلتا كتلتي async لإرسال الرسائل كتل `async move` بحيث يتم إسقاط كل من `tx` و `tx1` عند انتهاء تلك الكتل. وإلا، فسننتهي مرة أخرى في نفس الحلقة اللانهائية التي بدأنا بها.
 
-Finally, we switch from `trpl::join` to `trpl::join!` to handle the additional
-future: the `join!` macro awaits an arbitrary number of futures where we know
-the number of futures at compile time. We’ll discuss awaiting a collection of
-an unknown number of futures later in this chapter.
+أخيرًا، نتحول من `trpl::join` إلى `trpl::join!` للتعامل مع المستقبل الإضافي: ماكرو `join!` ينتظر عددًا عشوائيًا من المستقبلات حيث نعرف عدد المستقبلات في وقت الترجمة. سنناقش انتظار مجموعة من عدد غير معروف من المستقبلات لاحقًا في هذا الفصل.
 
-Now we see all the messages from both sending futures, and because the sending
-futures use slightly different delays after sending, the messages are also
-received at those different intervals:
+الآن نرى جميع الرسائل من كلا مستقبلي الإرسال، ولأن مستقبلي الإرسال يستخدمان تأخيرات مختلفة قليلاً بعد الإرسال، يتم استقبال الرسائل أيضًا على تلك الفترات المختلفة:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -408,10 +255,7 @@ received 'for'
 received 'you'
 ```
 
-We’ve explored how to use message passing to send data between futures, how
-code within an async block runs sequentially, how to move ownership into an
-async block, and how to join multiple futures. Next, let’s discuss how and why
-to tell the runtime it can switch to another task.
+لقد استكشفنا كيفية استخدام تمرير الرسائل لإرسال البيانات بين المستقبلات، وكيف يعمل الكود داخل كتلة async بشكل تسلسلي، وكيفية نقل الملكية إلى كتلة async، وكيفية ضم مستقبلات متعددة. بعد ذلك، دعنا نناقش كيف ولماذا نخبر بيئة التشغيل أنه يمكنها التبديل إلى مهمة أخرى.
 
 [thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
 [join-handles]: ch16-01-threads.html#waiting-for-all-threads-to-finish

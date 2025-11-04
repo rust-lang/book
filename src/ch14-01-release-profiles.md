@@ -1,16 +1,16 @@
-## Customizing Builds with Release Profiles
+## تخصيص عمليات البناء باستخدام ملفات تعريف الإصدار
 
-In Rust, _release profiles_ are predefined, customizable profiles with
-different configurations that allow a programmer to have more control over
-various options for compiling code. Each profile is configured independently of
-the others.
+في Rust، _ملفات تعريف الإصدار_ (release profiles) هي ملفات تعريف محددة مسبقًا وقابلة للتخصيص مع
+إعدادات مختلفة تسمح للمبرمج بالحصول على مزيد من التحكم في
+خيارات متنوعة لتصريف الكود. كل ملف تعريف مُهيأ بشكل مستقل عن
+الآخرين.
 
-Cargo has two main profiles: the `dev` profile Cargo uses when you run `cargo
-build`, and the `release` profile Cargo uses when you run `cargo build
---release`. The `dev` profile is defined with good defaults for development,
-and the `release` profile has good defaults for release builds.
+يحتوي Cargo على ملفي تعريف رئيسيين: ملف تعريف `dev` الذي يستخدمه Cargo عندما تشغّل `cargo
+build`، وملف تعريف `release` الذي يستخدمه Cargo عندما تشغّل `cargo build
+--release`. يتم تعريف ملف تعريف `dev` بإعدادات افتراضية جيدة للتطوير،
+وملف تعريف `release` له إعدادات افتراضية جيدة لبناء الإصدار.
 
-These profile names might be familiar from the output of your builds:
+قد تكون أسماء ملفات التعريف هذه مألوفة من مخرجات عمليات البناء الخاصة بك:
 
 <!-- manual-regeneration
 anywhere, run:
@@ -26,15 +26,15 @@ $ cargo build --release
     Finished `release` profile [optimized] target(s) in 0.32s
 ```
 
-The `dev` and `release` are these different profiles used by the compiler.
+`dev` و `release` هما ملفات التعريف المختلفة المستخدمة من قبل المصرِّف.
 
-Cargo has default settings for each of the profiles that apply when you haven't
-explicitly added any `[profile.*]` sections in the project’s _Cargo.toml_ file.
-By adding `[profile.*]` sections for any profile you want to customize, you
-override any subset of the default settings. For example, here are the default
-values for the `opt-level` setting for the `dev` and `release` profiles:
+يحتوي Cargo على إعدادات افتراضية لكل ملف من ملفات التعريف التي تُطبق عندما لا تكون قد
+أضفت صراحةً أي أقسام `[profile.*]` في ملف _Cargo.toml_ الخاص بالمشروع.
+من خلال إضافة أقسام `[profile.*]` لأي ملف تعريف تريد تخصيصه، يمكنك
+تجاوز أي مجموعة فرعية من الإعدادات الافتراضية. على سبيل المثال، هنا القيم الافتراضية
+لإعداد `opt-level` لملفات تعريف `dev` و `release`:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">اسم الملف: Cargo.toml</span>
 
 ```toml
 [profile.dev]
@@ -44,32 +44,32 @@ opt-level = 0
 opt-level = 3
 ```
 
-The `opt-level` setting controls the number of optimizations Rust will apply to
-your code, with a range of 0 to 3. Applying more optimizations extends
-compiling time, so if you’re in development and compiling your code often,
-you’ll want fewer optimizations to compile faster even if the resultant code
-runs slower. The default `opt-level` for `dev` is therefore `0`. When you’re
-ready to release your code, it’s best to spend more time compiling. You’ll only
-compile in release mode once, but you’ll run the compiled program many times,
-so release mode trades longer compile time for code that runs faster. That is
-why the default `opt-level` for the `release` profile is `3`.
+إعداد `opt-level` يتحكم في عدد التحسينات التي سيطبقها Rust على
+كودك، بنطاق من 0 إلى 3. تطبيق المزيد من التحسينات يزيد من
+وقت التصريف، لذا إذا كنت في مرحلة التطوير وتصرّف كودك بشكل متكرر،
+ستريد تحسينات أقل للتصريف بشكل أسرع حتى لو كان الكود الناتج
+يعمل بشكل أبطأ. `opt-level` الافتراضي لـ `dev` هو بالتالي `0`. عندما تكون
+مستعدًا لإصدار كودك، من الأفضل قضاء وقت أطول في التصريف. ستصرّف
+في وضع الإصدار مرة واحدة فقط، ولكنك ستشغل البرنامج المُصرَّف عدة مرات،
+لذا فإن وضع الإصدار يضحي بوقت تصريف أطول مقابل كود يعمل بشكل أسرع. هذا هو
+السبب في أن `opt-level` الافتراضي لملف تعريف `release` هو `3`.
 
-You can override a default setting by adding a different value for it in
-_Cargo.toml_. For example, if we want to use optimization level 1 in the
-development profile, we can add these two lines to our project’s _Cargo.toml_
-file:
+يمكنك تجاوز إعداد افتراضي بإضافة قيمة مختلفة له في
+_Cargo.toml_. على سبيل المثال، إذا أردنا استخدام مستوى التحسين 1 في
+ملف تعريف التطوير، يمكننا إضافة هذين السطرين إلى ملف _Cargo.toml_
+الخاص بمشروعنا:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">اسم الملف: Cargo.toml</span>
 
 ```toml
 [profile.dev]
 opt-level = 1
 ```
 
-This code overrides the default setting of `0`. Now when we run `cargo build`,
-Cargo will use the defaults for the `dev` profile plus our customization to
-`opt-level`. Because we set `opt-level` to `1`, Cargo will apply more
-optimizations than the default, but not as many as in a release build.
+هذا الكود يتجاوز الإعداد الافتراضي `0`. الآن عندما نشغل `cargo build`،
+سيستخدم Cargo الإعدادات الافتراضية لملف تعريف `dev` بالإضافة إلى تخصيصنا لـ
+`opt-level`. نظرًا لأننا قمنا بتعيين `opt-level` إلى `1`، سيطبق Cargo المزيد من
+التحسينات مقارنة بالإعداد الافتراضي، ولكن ليس بقدر ما هو موجود في بناء الإصدار.
 
-For the full list of configuration options and defaults for each profile, see
-[Cargo’s documentation](https://doc.rust-lang.org/cargo/reference/profiles.html).
+للحصول على القائمة الكاملة لخيارات التكوين والإعدادات الافتراضية لكل ملف تعريف، راجع
+[وثائق Cargo](https://doc.rust-lang.org/cargo/reference/profiles.html).

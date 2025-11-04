@@ -2,56 +2,27 @@
 
 <a id="comparing-performance-loops-vs-iterators"></a>
 
-## Performance in Loops vs. Iterators
+## الأداء في الحلقات مقابل المُكرِّرات
 
-To determine whether to use loops or iterators, you need to know which
-implementation is faster: the version of the `search` function with an explicit
-`for` loop or the version with iterators.
+لتحديد ما إذا كان يجب استخدام الحلقات أو المُكرِّرات، تحتاج إلى معرفة أي تنفيذ أسرع: نسخة دالة `search` مع حلقة `for` صريحة أو النسخة مع المُكرِّرات.
 
-We ran a benchmark by loading the entire contents of _The Adventures of
-Sherlock Holmes_ by Sir Arthur Conan Doyle into a `String` and looking for the
-word _the_ in the contents. Here are the results of the benchmark on the
-version of `search` using the `for` loop and the version using iterators:
+قمنا بتشغيل معيار قياس عن طريق تحميل المحتويات الكاملة لـ _مغامرات شيرلوك هولمز_ بقلم السير آرثر كونان دويل في `String` والبحث عن كلمة _the_ في المحتويات. فيما يلي نتائج المعيار على نسخة `search` باستخدام حلقة `for` والنسخة باستخدام المُكرِّرات:
 
 ```text
 test bench_search_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
 test bench_search_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 ```
 
-The two implementations have similar performance! We won’t explain the
-benchmark code here because the point is not to prove that the two versions
-are equivalent but to get a general sense of how these two implementations
-compare performance-wise.
+التنفيذان لديهما أداء مماثل! لن نشرح كود المعيار هنا لأن النقطة ليست إثبات أن النسختين متكافئتان ولكن للحصول على إحساس عام بكيفية مقارنة هذين التنفيذين من حيث الأداء.
 
-For a more comprehensive benchmark, you should check using various texts of
-various sizes as the `contents`, different words and words of different lengths
-as the `query`, and all kinds of other variations. The point is this:
-Iterators, although a high-level abstraction, get compiled down to roughly the
-same code as if you’d written the lower-level code yourself. Iterators are one
-of Rust’s _zero-cost abstractions_, by which we mean that using the abstraction
-imposes no additional runtime overhead. This is analogous to how Bjarne
-Stroustrup, the original designer and implementor of C++, defines
-zero-overhead in his 2012 ETAPS keynote presentation “Foundations of C++”:
+للحصول على معيار أكثر شمولاً، يجب عليك التحقق باستخدام نصوص مختلفة بأحجام مختلفة كـ `contents`، وكلمات مختلفة وكلمات بأطوال مختلفة كـ `query`، وجميع أنواع الاختلافات الأخرى. النقطة هي هذه: المُكرِّرات، على الرغم من كونها تجريدًا عالي المستوى، يتم ترجمتها إلى نفس الكود تقريبًا كما لو كنت قد كتبت الكود منخفض المستوى بنفسك. المُكرِّرات هي أحد _التجريدات ذات التكلفة الصفرية_ (zero-cost abstractions) في Rust، ونعني بذلك أن استخدام التجريد لا يفرض أي تكلفة إضافية في وقت التشغيل. هذا مشابه لكيفية تعريف بيارن ستروستروب، المصمم والمنفذ الأصلي لـ C++، للتكلفة الصفرية في عرضه التقديمي الرئيسي لـ ETAPS 2012 "أسس C++":
 
-> In general, C++ implementations obey the zero-overhead principle: What you
-> don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
-> code any better.
+> بشكل عام، تتبع تطبيقات C++ مبدأ التكلفة الصفرية: ما لا تستخدمه، لا تدفع ثمنه. وأكثر من ذلك: ما تستخدمه، لا يمكنك كتابته يدويًا بشكل أفضل.
 
-In many cases, Rust code using iterators compiles to the same assembly you’d
-write by hand. Optimizations such as loop unrolling and eliminating bounds
-checking on array access apply and make the resultant code extremely efficient.
-Now that you know this, you can use iterators and closures without fear! They
-make code seem like it’s higher level but don’t impose a runtime performance
-penalty for doing so.
+في كثير من الحالات، يترجم كود Rust الذي يستخدم المُكرِّرات إلى نفس التجميع الذي كنت ستكتبه يدويًا. تنطبق التحسينات مثل فك الحلقة (loop unrolling) والقضاء على فحوصات الحدود على الوصول إلى المصفوفة وتجعل الكود الناتج فعالاً للغاية. الآن بعد أن عرفت هذا، يمكنك استخدام المُكرِّرات والإغلاقات دون خوف! إنها تجعل الكود يبدو وكأنه في مستوى أعلى لكنها لا تفرض عقوبة أداء في وقت التشغيل للقيام بذلك.
 
-## Summary
+## الملخص
 
-Closures and iterators are Rust features inspired by functional programming
-language ideas. They contribute to Rust’s capability to clearly express
-high-level ideas at low-level performance. The implementations of closures and
-iterators are such that runtime performance is not affected. This is part of
-Rust’s goal to strive to provide zero-cost abstractions.
+الإغلاقات والمُكرِّرات هي ميزات Rust مستوحاة من أفكار لغات البرمجة الوظيفية. تساهم في قدرة Rust على التعبير بوضوح عن الأفكار عالية المستوى بأداء منخفض المستوى. تنفيذات الإغلاقات والمُكرِّرات بحيث لا يتأثر أداء وقت التشغيل. هذا جزء من هدف Rust للسعي لتوفير تجريدات ذات تكلفة صفرية.
 
-Now that we’ve improved the expressiveness of our I/O project, let’s look at
-some more features of `cargo` that will help us share the project with the
-world.
+الآن بعد أن قمنا بتحسين التعبيرية لمشروع الإدخال/الإخراج الخاص بنا، دعنا ننظر إلى بعض الميزات الإضافية لـ `cargo` التي ستساعدنا في مشاركة المشروع مع العالم.
