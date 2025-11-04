@@ -1,34 +1,11 @@
-# Writing Automated Tests
+# كتابة الاختبارات الآلية
 
-In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that “program
-testing can be a very effective way to show the presence of bugs, but it is
-hopelessly inadequate for showing their absence.” That doesn’t mean we shouldn’t
-try to test as much as we can!
+في مقالته عام 1972 بعنوان "المبرمج المتواضع"، قال إدسخر دبليو ديكسترا أن "اختبار البرامج يمكن أن يكون طريقة فعالة جداً لإظهار وجود الأخطاء، لكنه غير كافٍ بشكل يائس لإظهار غيابها". هذا لا يعني أننا لا يجب أن نحاول الاختبار بقدر ما نستطيع!
 
-_Correctness_ in our programs is the extent to which our code does what we
-intend it to do. Rust is designed with a high degree of concern about the
-correctness of programs, but correctness is complex and not easy to prove.
-Rust’s type system shoulders a huge part of this burden, but the type system
-cannot catch everything. As such, Rust includes support for writing automated
-software tests.
+_الصحة_ في برامجنا هي المدى الذي يقوم فيه كودنا بما ننوي له القيام به. تم تصميم Rust مع درجة عالية من الاهتمام بصحة البرامج، لكن الصحة معقدة وليست سهلة الإثبات. يتحمل نظام الأنواع في Rust جزءاً كبيراً من هذا العبء، لكن نظام الأنواع لا يمكنه اكتشاف كل شيء. وعلى هذا النحو، يتضمن Rust دعماً لكتابة اختبارات البرمجيات الآلية.
 
-Say we write a function `add_two` that adds 2 to whatever number is passed to
-it. This function’s signature accepts an integer as a parameter and returns an
-integer as a result. When we implement and compile that function, Rust does all
-the type checking and borrow checking that you’ve learned so far to ensure
-that, for instance, we aren’t passing a `String` value or an invalid reference
-to this function. But Rust _can’t_ check that this function will do precisely
-what we intend, which is return the parameter plus 2 rather than, say, the
-parameter plus 10 or the parameter minus 50! That’s where tests come in.
+لنفترض أننا كتبنا دالة `add_two` التي تضيف 2 إلى أي رقم يتم تمريره إليها. توقيع هذه الدالة يقبل عدداً صحيحاً كمعامل ويعيد عدداً صحيحاً كنتيجة. عندما ننفذ ونجمع هذه الدالة، يقوم Rust بكل عمليات فحص الأنواع وفحص الاستعارة التي تعلمتها حتى الآن لضمان أننا، على سبيل المثال، لا نمرر قيمة `String` أو مرجعاً غير صالح لهذه الدالة. لكن Rust _لا يمكنه_ التحقق من أن هذه الدالة ستفعل بالضبط ما ننوي، وهو إعادة المعامل زائد 2 بدلاً من، على سبيل المثال، المعامل زائد 10 أو المعامل ناقص 50! هنا تأتي أهمية الاختبارات.
 
-We can write tests that assert, for example, that when we pass `3` to the
-`add_two` function, the returned value is `5`. We can run these tests whenever
-we make changes to our code to make sure any existing correct behavior has not
-changed.
+يمكننا كتابة اختبارات تؤكد، على سبيل المثال، أنه عندما نمرر `3` إلى دالة `add_two`، تكون القيمة المعادة هي `5`. يمكننا تشغيل هذه الاختبارات كلما أجرينا تغييرات على كودنا للتأكد من أن أي سلوك صحيح موجود لم يتغير.
 
-Testing is a complex skill: Although we can’t cover in one chapter every detail
-about how to write good tests, in this chapter we will discuss the mechanics of
-Rust’s testing facilities. We’ll talk about the annotations and macros
-available to you when writing your tests, the default behavior and options
-provided for running your tests, and how to organize tests into unit tests and
-integration tests.
+الاختبار مهارة معقدة: على الرغم من أننا لا نستطيع تغطية كل التفاصيل حول كيفية كتابة اختبارات جيدة في فصل واحد، سنناقش في هذا الفصل آليات تسهيلات الاختبار في Rust. سنتحدث عن التعليقات التوضيحية والماكروهات المتاحة لك عند كتابة اختباراتك، والسلوك الافتراضي والخيارات المقدمة لتشغيل اختباراتك، وكيفية تنظيم الاختبارات إلى اختبارات الوحدة واختبارات التكامل.

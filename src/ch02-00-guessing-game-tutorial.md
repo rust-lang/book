@@ -1,33 +1,21 @@
-# Programming a Guessing Game
+# برمجة لعبة التخمين
 
-Let’s jump into Rust by working through a hands-on project together! This
-chapter introduces you to a few common Rust concepts by showing you how to use
-them in a real program. You’ll learn about `let`, `match`, methods, associated
-functions, external crates, and more! In the following chapters, we’ll explore
-these ideas in more detail. In this chapter, you’ll just practice the
-fundamentals.
+لنبدأ في تعلم Rust من خلال العمل على مشروع عملي معاً! يقدم لك هذا الفصل بعض المفاهيم الشائعة في Rust من خلال توضيح كيفية استخدامها في برنامج حقيقي. ستتعلم عن `let` و `match` والدوال والدوال المرتبطة والصناديق الخارجية والمزيد! في الفصول التالية، سنستكشف هذه الأفكار بمزيد من التفصيل. في هذا الفصل، ستمارس الأساسيات فقط.
 
-We’ll implement a classic beginner programming problem: a guessing game. Here’s
-how it works: The program will generate a random integer between 1 and 100. It
-will then prompt the player to enter a guess. After a guess is entered, the
-program will indicate whether the guess is too low or too high. If the guess is
-correct, the game will print a congratulatory message and exit.
+سنقوم بتنفيذ مشكلة برمجية كلاسيكية للمبتدئين: لعبة تخمين. إليك كيفية عملها: سيولد البرنامج عدداً صحيحاً عشوائياً بين 1 و 100. ثم سيطلب من اللاعب إدخال تخمين. بعد إدخال التخمين، سيشير البرنامج إلى ما إذا كان التخمين منخفضاً جداً أو مرتفعاً جداً. إذا كان التخمين صحيحاً، ستطبع اللعبة رسالة تهنئة وتنتهي.
 
-## Setting Up a New Project
+## إعداد مشروع جديد
 
-To set up a new project, go to the _projects_ directory that you created in
-Chapter 1 and make a new project using Cargo, like so:
+لإعداد مشروع جديد، انتقل إلى دليل _projects_ الذي أنشأته في الفصل 1 وأنشئ مشروعاً جديداً باستخدام Cargo، هكذا:
 
 ```console
 $ cargo new guessing_game
 $ cd guessing_game
 ```
 
-The first command, `cargo new`, takes the name of the project (`guessing_game`)
-as the first argument. The second command changes to the new project’s
-directory.
+الأمر الأول، `cargo new`، يأخذ اسم المشروع (`guessing_game`) كأول وسيط. الأمر الثاني ينتقل إلى دليل المشروع الجديد.
 
-Look at the generated _Cargo.toml_ file:
+انظر إلى ملف _Cargo.toml_ المُنشأ:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
@@ -38,42 +26,35 @@ cargo run > output.txt 2>&1
 cd ../../..
 -->
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">اسم الملف: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
-As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the _src/main.rs_ file:
+كما رأيت في الفصل 1، `cargo new` يولد برنامج "Hello, world!" لك. تحقق من ملف _src/main.rs_:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
-Now let’s compile this “Hello, world!” program and run it in the same step
-using the `cargo run` command:
+الآن لنقم بتجميع برنامج "Hello, world!" وتشغيله في نفس الخطوة باستخدام أمر `cargo run`:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
-The `run` command comes in handy when you need to rapidly iterate on a project,
-as we’ll do in this game, quickly testing each iteration before moving on to
-the next one.
+أمر `run` مفيد عندما تحتاج إلى التكرار بسرعة على مشروع، كما سنفعل في هذه اللعبة، اختبار كل تكرار بسرعة قبل الانتقال إلى التالي.
 
-Reopen the _src/main.rs_ file. You’ll be writing all the code in this file.
+أعد فتح ملف _src/main.rs_. ستكتب كل الكود في هذا الملف.
 
-## Processing a Guess
+## معالجة تخمين
 
-The first part of the guessing game program will ask for user input, process
-that input, and check that the input is in the expected form. To start, we’ll
-allow the player to input a guess. Enter the code in Listing 2-1 into
-_src/main.rs_.
+الجزء الأول من برنامج لعبة التخمين سيطلب إدخال المستخدم، ويعالج ذلك الإدخال، ويتحقق من أن الإدخال في الشكل المتوقع. للبدء، سنسمح للاعب بإدخال تخمين. أدخل الكود في القائمة 2-1 في _src/main.rs_.
 
-<Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
+<Listing number="2-1" file-name="src/main.rs" caption="كود يحصل على تخمين من المستخدم ويطبعه">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
@@ -81,208 +62,118 @@ _src/main.rs_.
 
 </Listing>
 
-This code contains a lot of information, so let’s go over it line by line. To
-obtain user input and then print the result as output, we need to bring the
-`io` input/output library into scope. The `io` library comes from the standard
-library, known as `std`:
+يحتوي هذا الكود على الكثير من المعلومات، لذا دعنا نستعرضه سطراً بسطر. للحصول على إدخال المستخدم ثم طباعة النتيجة كمخرج، نحتاج إلى إحضار مكتبة `io` (الإدخال/الإخراج) إلى النطاق. تأتي مكتبة `io` من المكتبة القياسية، المعروفة باسم `std`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-By default, Rust has a set of items defined in the standard library that it
-brings into the scope of every program. This set is called the _prelude_, and
-you can see everything in it [in the standard library documentation][prelude].
+بشكل افتراضي، يحتوي Rust على مجموعة من العناصر المعرفة في المكتبة القياسية التي يجلبها إلى نطاق كل برنامج. تُسمى هذه المجموعة _التمهيدية_ (_prelude_)، ويمكنك رؤية كل شيء فيها [في توثيق المكتبة القياسية][prelude].
 
-If a type you want to use isn’t in the prelude, you have to bring that type
-into scope explicitly with a `use` statement. Using the `std::io` library
-provides you with a number of useful features, including the ability to accept
-user input.
+إذا لم يكن النوع الذي تريد استخدامه في التمهيدية، فعليك إحضار هذا النوع إلى النطاق صراحةً باستخدام عبارة `use`. استخدام مكتبة `std::io` يوفر لك عدداً من الميزات المفيدة، بما في ذلك القدرة على قبول إدخال المستخدم.
 
-As you saw in Chapter 1, the `main` function is the entry point into the
-program:
+كما رأيت في الفصل 1، دالة `main` هي نقطة الدخول إلى البرنامج:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-The `fn` syntax declares a new function; the parentheses, `()`, indicate there
-are no parameters; and the curly bracket, `{`, starts the body of the function.
+يُعلن صيغة `fn` عن دالة جديدة؛ الأقواس، `()`، تشير إلى عدم وجود معاملات؛ والقوس المعقوف، `{`، يبدأ جسم الدالة.
 
-As you also learned in Chapter 1, `println!` is a macro that prints a string to
-the screen:
+كما تعلمت أيضاً في الفصل 1، `println!` هو ماكرو يطبع نصاً على الشاشة:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
-This code is printing a prompt stating what the game is and requesting input
-from the user.
+يطبع هذا الكود رسالة توضح ماهية اللعبة ويطلب إدخالاً من المستخدم.
 
-### Storing Values with Variables
+### تخزين القيم باستخدام المتغيرات
 
-Next, we’ll create a _variable_ to store the user input, like this:
+بعد ذلك، سننشئ _متغيراً_ لتخزين إدخال المستخدم، هكذا:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
-Now the program is getting interesting! There’s a lot going on in this little
-line. We use the `let` statement to create the variable. Here’s another example:
+الآن أصبح البرنامج مثيراً للاهتمام! يحدث الكثير في هذا السطر الصغير. نستخدم عبارة `let` لإنشاء المتغير. إليك مثال آخر:
 
 ```rust,ignore
 let apples = 5;
 ```
 
-This line creates a new variable named `apples` and binds it to the value `5`.
-In Rust, variables are immutable by default, meaning once we give the variable
-a value, the value won’t change. We’ll be discussing this concept in detail in
-the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
-section in Chapter 3. To make a variable mutable, we add `mut` before the
-variable name:
+ينشئ هذا السطر متغيراً جديداً باسم `apples` ويربطه بالقيمة `5`. في Rust، المتغيرات غير قابلة للتغيير بشكل افتراضي، مما يعني أنه بمجرد إعطاء المتغير قيمة، لن تتغير القيمة. سنناقش هذا المفهوم بالتفصيل في قسم ["المتغيرات والقابلية للتغيير"][variables-and-mutability]<!-- ignore --> في الفصل 3. لجعل متغير قابلاً للتغيير، نضيف `mut` قبل اسم المتغير:
 
 ```rust,ignore
-let apples = 5; // immutable
-let mut bananas = 5; // mutable
+let apples = 5; // غير قابل للتغيير
+let mut bananas = 5; // قابل للتغيير
 ```
 
-> Note: The `//` syntax starts a comment that continues until the end of the
-> line. Rust ignores everything in comments. We’ll discuss comments in more
-> detail in [Chapter 3][comments]<!-- ignore -->.
+> ملاحظة: يبدأ صيغة `//` تعليقاً يستمر حتى نهاية السطر. يتجاهل Rust كل شيء في التعليقات. سنناقش التعليقات بمزيد من التفصيل في [الفصل 3][comments]<!-- ignore -->.
 
-Returning to the guessing game program, you now know that `let mut guess` will
-introduce a mutable variable named `guess`. The equal sign (`=`) tells Rust we
-want to bind something to the variable now. On the right of the equal sign is
-the value that `guess` is bound to, which is the result of calling
-`String::new`, a function that returns a new instance of a `String`.
-[`String`][string]<!-- ignore --> is a string type provided by the standard
-library that is a growable, UTF-8 encoded bit of text.
+بالعودة إلى برنامج لعبة التخمين، أنت تعلم الآن أن `let mut guess` سيقدم متغيراً قابلاً للتغيير باسم `guess`. تُخبر علامة المساواة (`=`) Rust أننا نريد ربط شيء بالمتغير الآن. على يمين علامة المساواة توجد القيمة التي يُربط بها `guess`، وهي نتيجة استدعاء `String::new`، دالة تُعيد مثيلاً جديداً من `String`. [`String`][string]<!-- ignore --> هو نوع نصي توفره المكتبة القياسية وهو جزء من نص قابل للنمو ومشفر بـ UTF-8.
 
-The `::` syntax in the `::new` line indicates that `new` is an associated
-function of the `String` type. An _associated function_ is a function that’s
-implemented on a type, in this case `String`. This `new` function creates a
-new, empty string. You’ll find a `new` function on many types because it’s a
-common name for a function that makes a new value of some kind.
+صيغة `::` في سطر `::new` تشير إلى أن `new` هي دالة مرتبطة بنوع `String`. _الدالة المرتبطة_ هي دالة مطبقة على نوع، في هذه الحالة `String`. تُنشئ دالة `new` هذه نصاً جديداً فارغاً. ستجد دالة `new` على أنواع كثيرة لأنه اسم شائع لدالة تُنشئ قيمة جديدة من نوع ما.
 
-In full, the `let mut guess = String::new();` line has created a mutable
-variable that is currently bound to a new, empty instance of a `String`. Whew!
+بالكامل، أنشأ سطر `let mut guess = String::new();` متغيراً قابلاً للتغيير مرتبطاً حالياً بمثيل جديد فارغ من `String`. واو!
 
-### Receiving User Input
+### استقبال إدخال المستخدم
 
-Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we’ll call
-the `stdin` function from the `io` module, which will allow us to handle user
-input:
+تذكر أننا أدرجنا وظيفة الإدخال/الإخراج من المكتبة القياسية باستخدام `use std::io;` في السطر الأول من البرنامج. الآن سنستدعي دالة `stdin` من وحدة `io`، والتي ستسمح لنا بالتعامل مع إدخال المستخدم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-If we hadn’t imported the `io` module with `use std::io;` at the beginning of
-the program, we could still use the function by writing this function call as
-`std::io::stdin`. The `stdin` function returns an instance of
-[`std::io::Stdin`][iostdin]<!-- ignore -->, which is a type that represents a
-handle to the standard input for your terminal.
+إذا لم نستورد وحدة `io` باستخدام `use std::io;` في بداية البرنامج، فلا يزال بإمكاننا استخدام الدالة بكتابة استدعاء الدالة هذا كـ `std::io::stdin`. تُعيد دالة `stdin` مثيلاً من [`std::io::Stdin`][iostdin]<!-- ignore -->، وهو نوع يمثل مقبضاً للإدخال القياسي لطرفيتك.
 
-Next, the line `.read_line(&mut guess)` calls the [`read_line`][read_line]<!--
-ignore --> method on the standard input handle to get input from the user.
-We’re also passing `&mut guess` as the argument to `read_line` to tell it what
-string to store the user input in. The full job of `read_line` is to take
-whatever the user types into standard input and append that into a string
-(without overwriting its contents), so we therefore pass that string as an
-argument. The string argument needs to be mutable so that the method can change
-the string’s content.
+بعد ذلك، يستدعي السطر `.read_line(&mut guess)` طريقة [`read_line`][read_line]<!-- ignore --> على مقبض الإدخال القياسي للحصول على إدخال من المستخدم. نمرر أيضاً `&mut guess` كوسيط لـ `read_line` لنخبره بالنص الذي يجب تخزين إدخال المستخدم فيه. المهمة الكاملة لـ `read_line` هي أخذ ما يكتبه المستخدم في الإدخال القياسي وإلحاقه بنص (دون الكتابة فوق محتوياته)، لذلك نمرر هذا النص كوسيط. يجب أن يكون وسيط النص قابلاً للتغيير حتى تتمكن الطريقة من تغيير محتوى النص.
 
-The `&` indicates that this argument is a _reference_, which gives you a way to
-let multiple parts of your code access one piece of data without needing to
-copy that data into memory multiple times. References are a complex feature,
-and one of Rust’s major advantages is how safe and easy it is to use
-references. You don’t need to know a lot of those details to finish this
-program. For now, all you need to know is that, like variables, references are
-immutable by default. Hence, you need to write `&mut guess` rather than
-`&guess` to make it mutable. (Chapter 4 will explain references more
-thoroughly.)
+يشير `&` إلى أن هذا الوسيط هو _مرجع_ (_reference_)، مما يمنحك طريقة للسماح لأجزاء متعددة من الكود بالوصول إلى جزء واحد من البيانات دون الحاجة إلى نسخ تلك البيانات إلى الذاكرة عدة مرات. المراجع ميزة معقدة، وإحدى المزايا الرئيسية لـ Rust هي مدى أمان وسهولة استخدام المراجع. لا تحتاج إلى معرفة الكثير من تلك التفاصيل لإنهاء هذا البرنامج. الآن، كل ما تحتاج إلى معرفته هو أن المراجع، مثل المتغيرات، غير قابلة للتغيير بشكل افتراضي. لذلك، تحتاج إلى كتابة `&mut guess` بدلاً من `&guess` لجعلها قابلة للتغيير. (سيشرح الفصل 4 المراجع بشكل أكثر شمولاً.)
 
-<!-- Old headings. Do not remove or links may break. -->
+### التعامل مع الفشل المحتمل باستخدام `Result`
 
-<a id="handling-potential-failure-with-the-result-type"></a>
-
-### Handling Potential Failure with `Result`
-
-We’re still working on this line of code. We’re now discussing a third line of
-text, but note that it’s still part of a single logical line of code. The next
-part is this method:
+ما زلنا نعمل على هذا السطر من الكود. نناقش الآن سطراً ثالثاً من النص، لكنه لا يزال جزءاً من سطر منطقي واحد من الكود. الجزء التالي هو هذه الطريقة:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-We could have written this code as:
+يمكننا كتابة هذا الكود كـ:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it. It’s
-often wise to introduce a newline and other whitespace to help break up long
-lines when you call a method with the `.method_name()` syntax. Now let’s
-discuss what this line does.
+ومع ذلك، يصعب قراءة سطر واحد طويل، لذلك من الأفضل تقسيمه. غالباً ما يكون من الحكمة إدخال سطر جديد وأحرف مسافة بيضاء أخرى للمساعدة في تقسيم الأسطر الطويلة عند استدعاء طريقة باستخدام صيغة `.method_name()`. الآن دعنا نناقش ما يفعله هذا السطر.
 
-As mentioned earlier, `read_line` puts whatever the user enters into the string
-we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
-ignore --> is an [_enumeration_][enums]<!-- ignore -->, often called an _enum_,
-which is a type that can be in one of multiple possible states. We call each
-possible state a _variant_.
+كما ذكرنا سابقاً، تضع `read_line` ما يكتبه المستخدم في النص الذي نمرره إليه، لكنها أيضاً تُعيد قيمة `Result`. [`Result`][result]<!-- ignore --> هو [_تعداد_][enums]<!-- ignore -->، غالباً ما يُسمى _enum_، وهو نوع يمكن أن يكون في إحدى الحالات المتعددة الممكنة. نسمي كل حالة ممكنة _متغيراً_ (_variant_).
 
-[Chapter 6][enums]<!-- ignore --> will cover enums in more detail. The purpose
-of these `Result` types is to encode error-handling information.
+يُستخدم [الفصل 6][enums]<!-- ignore --> للتغطية التعدادات بمزيد من التفصيل. الغرض من أنواع `Result` هذه هو ترميز معلومات معالجة الأخطاء.
 
-`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
-operation was successful, and it contains the successfully generated value.
-The `Err` variant means the operation failed, and it contains information
-about how or why the operation failed.
+متغيرات `Result` هي `Ok` و `Err`. متغير `Ok` يشير إلى نجاح العملية، وداخل `Ok` توجد القيمة المُولدة بنجاح. يعني متغير `Err` أن العملية فشلت، ويحتوي `Err` على معلومات حول كيفية أو لماذا فشلت العملية.
 
-Values of the `Result` type, like values of any type, have methods defined on
-them. An instance of `Result` has an [`expect` method][expect]<!-- ignore -->
-that you can call. If this instance of `Result` is an `Err` value, `expect`
-will cause the program to crash and display the message that you passed as an
-argument to `expect`. If the `read_line` method returns an `Err`, it would
-likely be the result of an error coming from the underlying operating system.
-If this instance of `Result` is an `Ok` value, `expect` will take the return
-value that `Ok` is holding and return just that value to you so that you can
-use it. In this case, that value is the number of bytes in the user’s input.
+تحتوي قيم نوع `Result`، مثل القيم من أي نوع، على طرق معرفة عليها. لمثيل `Result` طريقة [`expect`][expect]<!-- ignore --> يمكنك استدعاؤها. إذا كان مثيل `Result` هذا قيمة `Err`، فستتسبب `expect` في تعطل البرنامج وعرض الرسالة التي مررتها كوسيط لـ `expect`. إذا أعادت طريقة `read_line` `Err`، فمن المحتمل أن تكون نتيجة لخطأ قادم من نظام التشغيل الأساسي. إذا كان مثيل `Result` هذا قيمة `Ok`، فستأخذ `expect` القيمة المُرجعة التي يحتفظ بها `Ok` وتُعيد لك تلك القيمة فقط حتى تتمكن من استخدامها. في هذه الحالة، تلك القيمة هي عدد البايتات في إدخال المستخدم.
 
-If you don’t call `expect`, the program will compile, but you’ll get a warning:
+إذا لم تستدع `expect`، فسيترجم البرنامج، لكنك ستحصل على تحذير:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
-Rust warns that you haven’t used the `Result` value returned from `read_line`,
-indicating that the program hasn’t handled a possible error.
+ينبه Rust إلى أنك لم تستخدم قيمة `Result` المُرجعة من `read_line`، مما يشير إلى أن البرنامج لم يتعامل مع خطأ محتمل.
 
-The right way to suppress the warning is to actually write error-handling code,
-but in our case we just want to crash this program when a problem occurs, so we
-can use `expect`. You’ll learn about recovering from errors in [Chapter
-9][recover]<!-- ignore -->.
+الطريقة الصحيحة لإخماد التحذير هي في الواقع كتابة كود معالجة الأخطاء، لكن في حالتنا نريد فقط تعطيل هذا البرنامج عند حدوث مشكلة، لذلك يمكننا استخدام `expect`. ستتعلم عن التعافي من الأخطاء في [الفصل 9][recover]<!-- ignore -->.
 
-### Printing Values with `println!` Placeholders
+### طباعة القيم باستخدام العناصر النائبة في `println!`
 
-Aside from the closing curly bracket, there’s only one more line to discuss in
-the code so far:
+بصرف النظر عن القوس المعقوف الإغلاق، هناك سطر واحد فقط آخر لمناقشته في الكود الذي أضفناه حتى الآن:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
-This line prints the string that now contains the user’s input. The `{}` set of
-curly brackets is a placeholder: Think of `{}` as little crab pincers that hold
-a value in place. When printing the value of a variable, the variable name can
-go inside the curly brackets. When printing the result of evaluating an
-expression, place empty curly brackets in the format string, then follow the
-format string with a comma-separated list of expressions to print in each empty
-curly bracket placeholder in the same order. Printing a variable and the result
-of an expression in one call to `println!` would look like this:
+يطبع هذا السطر النص الذي يحتوي الآن على إدخال المستخدم. مجموعة الأقواس المعقوفة، `{}`، هي عنصر نائب: فكر في `{}` كمخالب سرطان صغيرة تحمل قيمة في مكانها. عند طباعة قيمة متغير، يمكن أن يذهب اسم المتغير داخل الأقواس المعقوفة. عند طباعة نتيجة تقييم تعبير، ضع أقواساً معقوفة فارغة في نص التنسيق، ثم اتبع نص التنسيق بقائمة مفصولة بفواصل من التعبيرات لطباعتها في كل عنصر نائب من الأقواس المعقوفة الفارغة بنفس الترتيب. ستبدو طباعة متغير ونتيجة تعبير في استدعاء واحد لـ `println!` هكذا:
 
 ```rust
 let x = 5;
@@ -291,11 +182,11 @@ let y = 10;
 println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
-This code would print `x = 5 and y + 2 = 12`.
+سيطبع هذا الكود `x = 5 and y + 2 = 12`.
 
-### Testing the First Part
+### اختبار الجزء الأول
 
-Let’s test the first part of the guessing game. Run it using `cargo run`:
+لنختبر الجزء الأول من لعبة التخمين. شغله باستخدام `cargo run`:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-01/
@@ -306,7 +197,7 @@ input 6 -->
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.44s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -314,34 +205,17 @@ Please input your guess.
 You guessed: 6
 ```
 
-At this point, the first part of the game is done: We’re getting input from the
-keyboard and then printing it.
+في هذه المرحلة، الجزء الأول من اللعبة منتهي: نحصل على إدخال من لوحة المفاتيح ثم نطبعه.
 
-## Generating a Secret Number
+## توليد رقم سري
 
-Next, we need to generate a secret number that the user will try to guess. The
-secret number should be different every time so that the game is fun to play
-more than once. We’ll use a random number between 1 and 100 so that the game
-isn’t too difficult. Rust doesn’t yet include random number functionality in
-its standard library. However, the Rust team does provide a [`rand`
-crate][randcrate] with said functionality.
+بعد ذلك، نحتاج إلى توليد رقم سري سيحاول المستخدم تخمينه. يجب أن يكون الرقم السري مختلفاً في كل مرة حتى تكون اللعبة ممتعة للعب أكثر من مرة. لنستخدم رقماً عشوائياً بين 1 و 100 حتى لا تكون اللعبة صعبة جداً. لا يتضمن Rust بعد وظيفة الأرقام العشوائية في مكتبته القياسية. ومع ذلك، يوفر فريق Rust [صندوق `rand`][randcrate] بهذه الوظيفة.
 
-<!-- Old headings. Do not remove or links may break. -->
-<a id="using-a-crate-to-get-more-functionality"></a>
+### استخدام صندوق للحصول على وظائف إضافية
 
-### Increasing Functionality with a Crate
+تذكر أن الصندوق هو مجموعة من ملفات كود Rust المصدر. المشروع الذي نبنيه هو _صندوق ثنائي_ (_binary crate_)، وهو ملف قابل للتنفيذ. صندوق `rand` هو _صندوق مكتبة_ (_library crate_)، يحتوي على كود مخصص للاستخدام في برامج أخرى ولا يمكن تنفيذه بمفرده.
 
-Remember that a crate is a collection of Rust source code files. The project
-we’ve been building is a binary crate, which is an executable. The `rand` crate
-is a library crate, which contains code that is intended to be used in other
-programs and can’t be executed on its own.
-
-Cargo’s coordination of external crates is where Cargo really shines. Before we
-can write code that uses `rand`, we need to modify the _Cargo.toml_ file to
-include the `rand` crate as a dependency. Open that file now and add the
-following line to the bottom, beneath the `[dependencies]` section header that
-Cargo created for you. Be sure to specify `rand` exactly as we have here, with
-this version number, or the code examples in this tutorial may not work:
+تنسيق Cargo للصناديق الخارجية هو المكان الذي يتألق فيه Cargo حقاً. قبل أن نتمكن من كتابة كود يستخدم `rand`، نحتاج إلى تعديل ملف _Cargo.toml_ لتضمين صندوق `rand` كتبعية. افتح هذا الملف الآن وأضف السطر التالي إلى الأسفل، تحت رأس قسم `[dependencies]` الذي أنشأه Cargo لك. تأكد من تحديد `rand` تماماً كما نفعل هنا، بهذا رقم الإصدار، وإلا قد لا تعمل أمثلة الكود في هذا الدليل:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -349,30 +223,17 @@ this version number, or the code examples in this tutorial may not work:
 * ch14-03-cargo-workspaces.md
 -->
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">اسم الملف: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
 
-In the _Cargo.toml_ file, everything that follows a header is part of that
-section that continues until another section starts. In `[dependencies]`, you
-tell Cargo which external crates your project depends on and which versions of
-those crates you require. In this case, we specify the `rand` crate with the
-semantic version specifier `0.8.5`. Cargo understands [Semantic
-Versioning][semver]<!-- ignore --> (sometimes called _SemVer_), which is a
-standard for writing version numbers. The specifier `0.8.5` is actually
-shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
-below 0.9.0.
+في ملف _Cargo.toml_، كل شيء يلي رأساً هو جزء من ذلك القسم الذي يستمر حتى يبدأ قسم آخر. في `[dependencies]` تخبر Cargo أي صناديق خارجية يعتمد عليها مشروعك وأي إصدارات من تلك الصناديق تحتاج. في هذه الحالة، نحدد صندوق `rand` بمحدد الإصدار الدلالي `0.8.5`. يفهم Cargo [الإصدار الدلالي][semver]<!-- ignore --> (يُسمى أحياناً _SemVer_)، وهو معيار لكتابة أرقام الإصدارات. المحدد `0.8.5` في الواقع اختصار لـ `^0.8.5`، مما يعني أي إصدار على الأقل 0.8.5 ولكن أقل من 0.9.0.
 
-Cargo considers these versions to have public APIs compatible with version
-0.8.5, and this specification ensures that you’ll get the latest patch release
-that will still compile with the code in this chapter. Any version 0.9.0 or
-greater is not guaranteed to have the same API as what the following examples
-use.
+يعتبر Cargo هذه الإصدارات على أنها تحتوي على واجهات برمجة تطبيقات عامة متوافقة مع الإصدار 0.8.5، وتضمن هذه المواصفة حصولك على أحدث إصدار تصحيحي سيظل يترجم مع الكود في هذا الفصل. لا يُضمن أن أي إصدار 0.9.0 أو أكبر له نفس واجهة برمجة التطبيقات التي تستخدمها الأمثلة التالية.
 
-Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2.
+الآن، دون تغيير أي من الكود، لنبني المشروع، كما هو موضح في القائمة 2-2.
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -380,57 +241,38 @@ rm Cargo.lock
 cargo clean
 cargo build -->
 
-<Listing number="2-2" caption="The output from running `cargo build` after adding the `rand` crate as a dependency">
-
 ```console
 $ cargo build
-  Updating crates.io index
-   Locking 15 packages to latest Rust 1.85.0 compatible versions
-    Adding rand v0.8.5 (available: v0.9.0)
- Compiling proc-macro2 v1.0.93
- Compiling unicode-ident v1.0.17
- Compiling libc v0.2.170
- Compiling cfg-if v1.0.0
- Compiling byteorder v1.5.0
- Compiling getrandom v0.2.15
- Compiling rand_core v0.6.4
- Compiling quote v1.0.38
- Compiling syn v2.0.98
- Compiling zerocopy-derive v0.7.35
- Compiling zerocopy v0.7.35
- Compiling ppv-lite86 v0.2.20
- Compiling rand_chacha v0.3.1
- Compiling rand v0.8.5
- Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-  Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
+    Updating crates.io index
+  Downloaded rand v0.8.5
+  Downloaded libc v0.2.127
+  Downloaded getrandom v0.2.7
+  Downloaded cfg-if v1.0.0
+  Downloaded ppv-lite86 v0.2.16
+  Downloaded rand_chacha v0.3.1
+  Downloaded rand_core v0.6.3
+   Compiling libc v0.2.127
+   Compiling getrandom v0.2.7
+   Compiling cfg-if v1.0.0
+   Compiling ppv-lite86 v0.2.16
+   Compiling rand_core v0.6.3
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-</Listing>
+<Listing number="2-2" caption="المخرج من تشغيل `cargo build` بعد إضافة صندوق rand كتبعية">
 
-You may see different version numbers (but they will all be compatible with the
-code, thanks to SemVer!) and different lines (depending on the operating
-system), and the lines may be in a different order.
+قد ترى أرقام إصدارات مختلفة (ولكنها ستكون جميعها متوافقة مع الكود، بفضل SemVer!) وأسطر مختلفة (حسب نظام التشغيل)، وقد تكون الأسطر بترتيب مختلف.
 
-When we include an external dependency, Cargo fetches the latest versions of
-everything that dependency needs from the _registry_, which is a copy of data
-from [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem
-post their open source Rust projects for others to use.
+عندما نتضمن تبعية خارجية، يُحضر Cargo أحدث إصدارات كل شيء تحتاجه تلك التبعية من _السجل_ (_registry_)، وهو نسخة من البيانات من [Crates.io][cratesio]. Crates.io هو المكان الذي ينشر فيه الأشخاص في نظام Rust البيئي مشاريع Rust مفتوحة المصدر ليستخدمها الآخرون.
 
-After updating the registry, Cargo checks the `[dependencies]` section and
-downloads any crates listed that aren’t already downloaded. In this case,
-although we only listed `rand` as a dependency, Cargo also grabbed other crates
-that `rand` depends on to work. After downloading the crates, Rust compiles
-them and then compiles the project with the dependencies available.
+بعد تحديث السجل، يتحقق Cargo من قسم `[dependencies]` ويحمّل أي صناديق مدرجة لم تُحمّل بعد. في هذه الحالة، على الرغم من أننا أدرجنا فقط `rand` كتبعية، فقد استولى Cargo أيضاً على صناديق أخرى يعتمد عليها `rand` للعمل. بعد تنزيل الصناديق، يقوم Rust بتجميعها ثم يجمع المشروع مع توفر التبعيات.
 
-If you immediately run `cargo build` again without making any changes, you
-won’t get any output aside from the `Finished` line. Cargo knows it has already
-downloaded and compiled the dependencies, and you haven’t changed anything
-about them in your _Cargo.toml_ file. Cargo also knows that you haven’t changed
-anything about your code, so it doesn’t recompile that either. With nothing to
-do, it simply exits.
+إذا قمت على الفور بتشغيل `cargo build` مرة أخرى دون إجراء أي تغييرات، فلن تحصل على أي مخرج بصرف النظر عن سطر `Finished`. يعلم Cargo أنه قد حمّل وجمع التبعيات بالفعل، ولم تغير أي شيء عنها في ملف _Cargo.toml_. يعلم Cargo أيضاً أنك لم تغير أي شيء عن الكود الخاص بك، لذلك لا يعيد تجميع ذلك أيضاً. بدون شيء للقيام به، فإنه ببساطة يخرج.
 
-If you open the _src/main.rs_ file, make a trivial change, and then save it and
-build again, you’ll only see two lines of output:
+إذا فتحت ملف _src/main.rs_، وأجريت تغييراً بسيطاً، ثم حفظته وبنيته مرة أخرى، فسترى سطرين فقط من المخرج:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -440,46 +282,20 @@ cargo build -->
 ```console
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.35s
 ```
 
-These lines show that Cargo only updates the build with your tiny change to the
-_src/main.rs_ file. Your dependencies haven’t changed, so Cargo knows it can
-reuse what it has already downloaded and compiled for those.
+تُظهر هذه الأسطر أن Cargo يحدث فقط البناء بتغييرك الصغير على ملف _src/main.rs_. لم تتغير تبعياتك، لذلك يعلم Cargo أنه يمكنه إعادة استخدام ما سبق تنزيله وتجميعه لها.
 
-<!-- Old headings. Do not remove or links may break. -->
-<a id="ensuring-reproducible-builds-with-the-cargo-lock-file"></a>
+#### ضمان البناءات القابلة للتكرار باستخدام ملف _Cargo.lock_
 
-#### Ensuring Reproducible Builds
+يحتوي Cargo على آلية تضمن أنه يمكنك إعادة بناء نفس الأداة في كل مرة أنت أو أي شخص آخر يبني الكود الخاص بك: سيستخدم Cargo فقط إصدارات التبعيات التي حددتها حتى تشير إلى خلاف ذلك. على سبيل المثال، لنقل أن الأسبوع القادم سيصدر الإصدار 0.8.6 من صندوق `rand`، وأن هذا الإصدار يحتوي على إصلاح خطأ مهم، ولكنه يحتوي أيضاً على انحدار سيكسر الكود الخاص بك. للتعامل مع ذلك، يُنشئ Rust ملف _Cargo.lock_ في المرة الأولى التي تقوم فيها بتشغيل `cargo build`، لذلك لدينا الآن هذا في دليل _guessing_game_.
 
-Cargo has a mechanism that ensures that you can rebuild the same artifact every
-time you or anyone else builds your code: Cargo will use only the versions of
-the dependencies you specified until you indicate otherwise. For example, say
-that next week version 0.8.6 of the `rand` crate comes out, and that version
-contains an important bug fix, but it also contains a regression that will
-break your code. To handle this, Rust creates the _Cargo.lock_ file the first
-time you run `cargo build`, so we now have this in the _guessing_game_
-directory.
+عندما تبني مشروعاً لأول مرة، يحسب Cargo جميع إصدارات التبعيات التي تتناسب مع المعايير ثم يكتبها إلى ملف _Cargo.lock_. عندما تبني مشروعك في المستقبل، سيرى Cargo أن ملف _Cargo.lock_ موجود وسيستخدم الإصدارات المحددة هناك بدلاً من القيام بكل العمل لمعرفة الإصدارات مرة أخرى. هذا يتيح لك الحصول على بناء قابل للتكرار تلقائياً. بمعنى آخر، سيبقى مشروعك في 0.8.5 حتى تقوم بالترقية صراحةً، بفضل ملف _Cargo.lock_. نظراً لأن ملف _Cargo.lock_ مهم للبناءات القابلة للتكرار، فغالباً ما يُفحص في نظام التحكم في المصدر مع بقية الكود في مشروعك.
 
-When you build a project for the first time, Cargo figures out all the versions
-of the dependencies that fit the criteria and then writes them to the
-_Cargo.lock_ file. When you build your project in the future, Cargo will see
-that the _Cargo.lock_ file exists and will use the versions specified there
-rather than doing all the work of figuring out versions again. This lets you
-have a reproducible build automatically. In other words, your project will
-remain at 0.8.5 until you explicitly upgrade, thanks to the _Cargo.lock_ file.
-Because the _Cargo.lock_ file is important for reproducible builds, it’s often
-checked into source control with the rest of the code in your project.
+#### تحديث صندوق للحصول على إصدار جديد
 
-#### Updating a Crate to Get a New Version
-
-When you _do_ want to update a crate, Cargo provides the command `update`,
-which will ignore the _Cargo.lock_ file and figure out all the latest versions
-that fit your specifications in _Cargo.toml_. Cargo will then write those
-versions to the _Cargo.lock_ file. Otherwise, by default, Cargo will only look
-for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
-released the two new versions 0.8.6 and 0.9.0, you would see the following if
-you ran `cargo update`:
+عندما _تريد_ تحديث صندوق، يوفر Cargo أمر `update`، والذي سيتجاهل ملف _Cargo.lock_ ويكتشف جميع أحدث الإصدارات التي تتناسب مع مواصفاتك في _Cargo.toml_. سيكتب Cargo بعد ذلك تلك الإصدارات إلى ملف _Cargo.lock_. خلاف ذلك، بشكل افتراضي، سيبحث Cargo فقط عن إصدارات أكبر من 0.8.5 وأقل من 0.9.0. إذا أصدر صندوق `rand` إصدارين جديدين، 0.8.6 و 0.9.0، فسترى ما يلي إذا قمت بتشغيل `cargo update`:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -490,36 +306,25 @@ as a guide to creating the hypothetical output shown here -->
 ```console
 $ cargo update
     Updating crates.io index
-     Locking 1 package to latest Rust 1.85.0 compatible version
-    Updating rand v0.8.5 -> v0.8.6 (available: v0.9.0)
+    Updating rand v0.8.5 -> v0.8.6
 ```
 
-Cargo ignores the 0.9.0 release. At this point, you would also notice a change
-in your _Cargo.lock_ file noting that the version of the `rand` crate you are
-now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9._x_
-series, you’d have to update the _Cargo.toml_ file to look like this instead:
+يتجاهل Cargo إصدار 0.9.0. في هذه المرحلة، ستلاحظ أيضاً تغييراً في ملف _Cargo.lock_ الخاص بك مشيراً إلى أن إصدار صندوق `rand` الذي تستخدمه الآن هو 0.8.6. لاستخدام إصدار `rand` 0.9.0 أو أي إصدار في سلسلة 0.9._x_، سيتعين عليك تحديث ملف _Cargo.toml_ ليبدو هكذا بدلاً من ذلك:
 
 ```toml
 [dependencies]
 rand = "0.9.0"
 ```
 
-The next time you run `cargo build`, Cargo will update the registry of crates
-available and reevaluate your `rand` requirements according to the new version
-you have specified.
+في المرة القادمة التي تقوم فيها بتشغيل `cargo build`، سيحدث Cargo سجل الصناديق المتاحة ويعيد تقييم متطلبات `rand` الخاصة بك وفقاً للإصدار الجديد الذي حددته.
 
-There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore -->, which we’ll discuss in Chapter 14, but
-for now, that’s all you need to know. Cargo makes it very easy to reuse
-libraries, so Rustaceans are able to write smaller projects that are assembled
-from a number of packages.
+هناك الكثير لقوله عن [Cargo][doccargo]<!-- ignore --> [ونظامه البيئي][doccratesio]<!-- ignore --> والذي سنناقشه في الفصل 14، لكن في الوقت الحالي، هذا كل ما تحتاج إلى معرفته. يسهل Cargo إعادة استخدام المكتبات كثيراً، لذلك يستطيع Rustaceans كتابة مشاريع أصغر يتم تجميعها من عدد من الحزم.
 
-### Generating a Random Number
+### توليد رقم عشوائي
 
-Let’s start using `rand` to generate a number to guess. The next step is to
-update _src/main.rs_, as shown in Listing 2-3.
+لنبدأ في استخدام `rand` لتوليد رقم لتخمينه. الخطوة التالية هي تحديث _src/main.rs_، كما هو موضح في القائمة 2-3.
 
-<Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
+<Listing number="2-3" file-name="src/main.rs" caption="إضافة كود لتوليد رقم عشوائي">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
@@ -527,35 +332,15 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 </Listing>
 
-First, we add the line `use rand::Rng;`. The `Rng` trait defines methods that
-random number generators implement, and this trait must be in scope for us to
-use those methods. Chapter 10 will cover traits in detail.
+أولاً نضيف السطر `use rand::Rng;`. سمة `Rng` تحدد طرقاً تطبقها مولدات الأرقام العشوائية، ويجب أن تكون هذه السمة في النطاق حتى نستخدم تلك الطرق. سيغطي الفصل 10 السمات بالتفصيل.
 
-Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
-generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then, we call the `gen_range`
-method on the random number generator. This method is defined by the `Rng`
-trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
-random number in the range. The kind of range expression we’re using here takes
-the form `start..=end` and is inclusive on the lower and upper bounds, so we
-need to specify `1..=100` to request a number between 1 and 100.
+بعد ذلك، نضيف سطرين في الوسط. في السطر الأول، نستدعي دالة `rand::thread_rng` التي تعطينا مولد الأرقام العشوائية المحدد الذي سنستخدمه: واحد محلي للخيط الحالي للتنفيذ ومُزود بالبذرة من نظام التشغيل. ثم نستدعي طريقة `gen_range` على مولد الأرقام العشوائية. هذه الطريقة معرّفة بواسطة سمة `Rng` التي أحضرناها إلى النطاق باستخدام عبارة `use rand::Rng;`. تأخذ طريقة `gen_range` تعبير نطاق كوسيط وتولد رقماً عشوائياً في النطاق. نوع تعبير النطاق الذي نستخدمه هنا له شكل `start..=end` وهو شامل على الحدود السفلى والعليا، لذلك نحتاج إلى تحديد `1..=100` لطلب رقم بين 1 و 100.
 
-> Note: You won’t just know which traits to use and which methods and functions
-> to call from a crate, so each crate has documentation with instructions for
-> using it. Another neat feature of Cargo is that running the `cargo doc
-> --open` command will build documentation provided by all your dependencies
-> locally and open it in your browser. If you’re interested in other
-> functionality in the `rand` crate, for example, run `cargo doc --open` and
-> click `rand` in the sidebar on the left.
+> ملاحظة: لن تعرف فقط أي سمات تستخدمها وأي طرق ودوال من صندوق تستدعي، لذلك لكل صندوق توثيق بتعليمات للاستخدام. ميزة رائعة أخرى في Cargo هي أن تشغيل أمر `cargo doc --open` سيبني توثيقاً محلياً توفره جميع تبعياتك ويفتحه في متصفحك. إذا كنت مهتماً بوظائف أخرى في صندوق `rand`، على سبيل المثال، قم بتشغيل `cargo doc --open` وانقر على `rand` في الشريط الجانبي على اليسار.
 
-The second new line prints the secret number. This is useful while we’re
-developing the program to be able to test it, but we’ll delete it from the
-final version. It’s not much of a game if the program prints the answer as soon
-as it starts!
+السطر الثاني الجديد يطبع الرقم السري. هذا مفيد بينما نطور البرنامج لنتمكن من اختباره، لكننا سنحذفه من الإصدار النهائي. إنها ليست لعبة كبيرة إذا طبع البرنامج الإجابة بمجرد بدئه!
 
-Try running the program a few times:
+جرب تشغيل البرنامج عدة مرات:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-03/
@@ -568,7 +353,7 @@ cargo run
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.37s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -586,16 +371,13 @@ Please input your guess.
 You guessed: 5
 ```
 
-You should get different random numbers, and they should all be numbers between
-1 and 100. Great job!
+يجب أن تحصل على أرقام عشوائية مختلفة، ويجب أن تكون جميعها أرقاماً بين 1 و 100. عمل رائع!
 
-## Comparing the Guess to the Secret Number
+## مقارنة التخمين بالرقم السري
 
-Now that we have user input and a random number, we can compare them. That step
-is shown in Listing 2-4. Note that this code won’t compile just yet, as we will
-explain.
+الآن بعد أن أصبح لدينا إدخال المستخدم ورقم عشوائي، يمكننا مقارنتهما. هذه الخطوة موضحة في القائمة 2-4. لاحظ أن هذا الكود لن يترجم بعد، كما سنشرح.
 
-<Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
+<Listing number="2-4" file-name="src/main.rs" caption="التعامل مع القيم المُرجعة المحتملة من مقارنة رقمين">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
@@ -603,132 +385,52 @@ explain.
 
 </Listing>
 
-First, we add another `use` statement, bringing a type called
-`std::cmp::Ordering` into scope from the standard library. The `Ordering` type
-is another enum and has the variants `Less`, `Greater`, and `Equal`. These are
-the three outcomes that are possible when you compare two values.
+أولاً نضيف عبارة `use` أخرى، نحضر نوعاً يسمى `std::cmp::Ordering` إلى النطاق من المكتبة القياسية. نوع `Ordering` هو تعداد آخر وله المتغيرات `Less` و `Greater` و `Equal`. هذه هي النتائج الثلاث المحتملة عند مقارنة قيمتين.
 
-Then, we add five new lines at the bottom that use the `Ordering` type. The
-`cmp` method compares two values and can be called on anything that can be
-compared. It takes a reference to whatever you want to compare with: Here, it’s
-comparing `guess` to `secret_number`. Then, it returns a variant of the
-`Ordering` enum we brought into scope with the `use` statement. We use a
-[`match`][match]<!-- ignore --> expression to decide what to do next based on
-which variant of `Ordering` was returned from the call to `cmp` with the values
-in `guess` and `secret_number`.
+ثم نضيف خمسة أسطر جديدة في الأسفل تستخدم نوع `Ordering`. تأخذ طريقة `cmp` قيمتين وتقارنهما ويمكن استدعاؤها على أي شيء يمكن مقارنته. تأخذ مرجعاً إلى ما تريد المقارنة به: هنا تقارن `guess` بـ `secret_number`. ثم تُعيد متغيراً من تعداد `Ordering` الذي أحضرناه إلى النطاق باستخدام عبارة `use`. نستخدم تعبير [`match`][match]<!-- ignore --> لتحديد ما يجب فعله بعد ذلك بناءً على متغير `Ordering` الذي تم إرجاعه من استدعاء `cmp` بالقيم في `guess` و `secret_number`.
 
-A `match` expression is made up of _arms_. An arm consists of a _pattern_ to
-match against, and the code that should be run if the value given to `match`
-fits that arm’s pattern. Rust takes the value given to `match` and looks
-through each arm’s pattern in turn. Patterns and the `match` construct are
-powerful Rust features: They let you express a variety of situations your code
-might encounter, and they make sure you handle them all. These features will be
-covered in detail in Chapter 6 and Chapter 19, respectively.
+يُصنع تعبير `match` من _أذرع_ (_arms_). يتكون ذراع من _نمط_ (_pattern_) للمطابقة ضده والكود الذي يجب تشغيله إذا كانت القيمة المعطاة لـ `match` تتناسب مع نمط ذلك الذراع. يأخذ Rust القيمة المعطاة لـ `match` ويبحث عبر نمط كل ذراع بالترتيب. الأنماط وبناء `match` ميزات قوية في Rust: تتيح لك التعبير عن مجموعة متنوعة من المواقف التي قد يواجهها الكود الخاص بك وتضمن أنك تتعامل معها جميعاً. سيتم تغطية هذه الميزات بالتفصيل في الفصل 6 والفصل 19، على التوالي.
 
-Let’s walk through an example with the `match` expression we use here. Say that
-the user has guessed 50 and the randomly generated secret number this time is
-38.
+لنتابع مثالاً مع تعبير `match` الذي نستخدمه هنا. لنقل أن المستخدم خمّن 50 والرقم السري المولد عشوائياً هذه المرة هو 38.
 
-When the code compares 50 to 38, the `cmp` method will return
-`Ordering::Greater` because 50 is greater than 38. The `match` expression gets
-the `Ordering::Greater` value and starts checking each arm’s pattern. It looks
-at the first arm’s pattern, `Ordering::Less`, and sees that the value
-`Ordering::Greater` does not match `Ordering::Less`, so it ignores the code in
-that arm and moves to the next arm. The next arm’s pattern is
-`Ordering::Greater`, which _does_ match `Ordering::Greater`! The associated
-code in that arm will execute and print `Too big!` to the screen. The `match`
-expression ends after the first successful match, so it won’t look at the last
-arm in this scenario.
+عندما يقارن الكود 50 بـ 38، ستُعيد طريقة `cmp` `Ordering::Greater` لأن 50 أكبر من 38. يحصل تعبير `match` على قيمة `Ordering::Greater` ويبدأ في التحقق من نمط كل ذراع. ينظر إلى نمط الذراع الأول، `Ordering::Less`، ويرى أن القيمة `Ordering::Greater` لا تطابق `Ordering::Less`، لذلك يتجاهل الكود في ذلك الذراع وينتقل إلى الذراع التالي. نمط الذراع التالي هو `Ordering::Greater`، الذي _يطابق_ `Ordering::Greater`! سيتم تنفيذ الكود المرتبط في ذلك الذراع وسيطبع `Too big!` على الشاشة. ينتهي تعبير `match` بعد المطابقة الناجحة الأولى، لذلك لن ينظر إلى الذراع الأخير في هذا السيناريو.
 
-However, the code in Listing 2-4 won’t compile yet. Let’s try it:
-
-<!--
-The error numbers in this output should be that of the code **WITHOUT** the
-anchor or snip comments
--->
+ومع ذلك، فإن الكود في القائمة 2-4 لن يترجم بعد. دعنا نحاول:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
-The core of the error states that there are _mismatched types_. Rust has a
-strong, static type system. However, it also has type inference. When we wrote
-`let mut guess = String::new()`, Rust was able to infer that `guess` should be
-a `String` and didn’t make us write the type. The `secret_number`, on the other
-hand, is a number type. A few of Rust’s number types can have a value between 1
-and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
-64-bit number; as well as others. Unless otherwise specified, Rust defaults to
-an `i32`, which is the type of `secret_number` unless you add type information
-elsewhere that would cause Rust to infer a different numerical type. The reason
-for the error is that Rust cannot compare a string and a number type.
+جوهر الخطأ يشير إلى وجود _أنواع غير متطابقة_ (_mismatched types_). Rust له نظام نوع قوي ثابت. ومع ذلك، فإنه يحتوي أيضاً على استنتاج النوع. عندما كتبنا `let mut guess = String::new()`، تمكن Rust من استنتاج أن `guess` يجب أن يكون `String` ولم يجعلنا نكتب النوع. من ناحية أخرى، `secret_number` هو نوع رقم. يمكن أن يكون عدد من أنواع أرقام Rust قيمة بين 1 و 100: `i32`، رقم 32 بت؛ `u32`، رقم بدون إشارة 32 بت؛ `i64`، رقم 64 بت؛ بالإضافة إلى الآخرين. ما لم يُحدد خلاف ذلك، يستخدم Rust افتراضياً `i32`، وهو نوع `secret_number` ما لم تضف معلومات نوع في مكان آخر من شأنها أن تستنتج Rust نوع رقم مختلف. سبب الخطأ هو أن Rust لا يمكنه مقارنة نص ونوع رقم.
 
-Ultimately, we want to convert the `String` the program reads as input into a
-number type so that we can compare it numerically to the secret number. We do
-so by adding this line to the `main` function body:
+في النهاية، نريد تحويل `String` الذي يقرأه البرنامج كإدخال إلى نوع رقم حقيقي حتى نتمكن من مقارنته رقمياً بالرقم السري. نفعل ذلك بإضافة هذا السطر إلى جسم دالة `main`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
-The line is:
+السطر هو:
 
 ```rust,ignore
 let guess: u32 = guess.trim().parse().expect("Please type a number!");
 ```
 
-We create a variable named `guess`. But wait, doesn’t the program already have
-a variable named `guess`? It does, but helpfully Rust allows us to shadow the
-previous value of `guess` with a new one. _Shadowing_ lets us reuse the `guess`
-variable name rather than forcing us to create two unique variables, such as
-`guess_str` and `guess`, for example. We’ll cover this in more detail in
-[Chapter 3][shadowing]<!-- ignore -->, but for now, know that this feature is
-often used when you want to convert a value from one type to another type.
+ننشئ متغيراً يسمى `guess`. لكن انتظر، أليس لدى البرنامج بالفعل متغير يسمى `guess`? نعم، لكن بشكل مفيد يسمح Rust لنا بـ _تظليل_ (_shadow_) القيمة السابقة لـ `guess` بقيمة جديدة. التظليل يتيح لنا إعادة استخدام اسم المتغير `guess` بدلاً من إجبارنا على إنشاء متغيرين فريدين، مثل `guess_str` و `guess` على سبيل المثال. سنغطي هذا بمزيد من التفصيل في [الفصل 3][shadowing]<!-- ignore -->، ولكن في الوقت الحالي، اعلم أن هذه الميزة تُستخدم غالباً عندما تريد تحويل قيمة من نوع إلى نوع آخر.
 
-We bind this new variable to the expression `guess.trim().parse()`. The `guess`
-in the expression refers to the original `guess` variable that contained the
-input as a string. The `trim` method on a `String` instance will eliminate any
-whitespace at the beginning and end, which we must do before we can convert the
-string to a `u32`, which can only contain numerical data. The user must press
-<kbd>enter</kbd> to satisfy `read_line` and input their guess, which adds a
-newline character to the string. For example, if the user types <kbd>5</kbd> and
-presses <kbd>enter</kbd>, `guess` looks like this: `5\n`. The `\n` represents
-“newline.” (On Windows, pressing <kbd>enter</kbd> results in a carriage return
-and a newline, `\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting
-in just `5`.
+نربط هذا المتغير الجديد بالتعبير `guess.trim().parse()`. يشير `guess` في التعبير إلى متغير `guess` الأصلي الذي يحتوي على الإدخال كنص. تزيل طريقة `trim` على مثيل `String` أي مسافة بيضاء في البداية والنهاية، الأمر الذي يجب علينا فعله لنتمكن من مقارنة النص بـ `u32`، الذي يمكن أن يحتوي على بيانات رقمية فقط. يجب على المستخدم الضغط على <kbd>enter</kbd> لتلبية `read_line` وإدخال تخمينهم، مما يضيف حرف سطر جديد إلى النص. على سبيل المثال، إذا كتب المستخدم <kbd>5</kbd> وضغط على <kbd>enter</kbd>، يبدو `guess` هكذا: `5\n`. يمثل `\n` "سطر جديد". (على Windows، الضغط على <kbd>enter</kbd> ينتج عنه إرجاع سطر وسطر جديد، `\r\n`.) تزيل طريقة `trim` `\n` أو `\r\n`، مما ينتج عنه فقط `5`.
 
-The [`parse` method on strings][parse]<!-- ignore --> converts a string to
-another type. Here, we use it to convert from a string to a number. We need to
-tell Rust the exact number type we want by using `let guess: u32`. The colon
-(`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust has a
-few built-in number types; the `u32` seen here is an unsigned, 32-bit integer.
-It’s a good default choice for a small positive number. You’ll learn about
-other number types in [Chapter 3][integers]<!-- ignore -->.
+[طريقة `parse` على النصوص][parse]<!-- ignore --> تحول نصاً إلى نوع آخر. هنا، نستخدمها لتحويل من نص إلى رقم. نحتاج إلى إخبار Rust بنوع الرقم الدقيق الذي نريده باستخدام `let guess: u32`. النقطتان (`:`) بعد `guess` تخبر Rust أننا سنوضح نوع المتغير. يحتوي Rust على بعض أنواع الأرقام المدمجة؛ `u32` المُشار إليه هنا هو عدد صحيح بدون إشارة 32 بت. إنه خيار افتراضي جيد لرقم موجب صغير. ستتعلم عن أنواع الأرقام الأخرى في [الفصل 3][integers]<!-- ignore -->.
 
-Additionally, the `u32` annotation in this example program and the comparison
-with `secret_number` means Rust will infer that `secret_number` should be a
-`u32` as well. So, now the comparison will be between two values of the same
-type!
+بالإضافة إلى ذلك، فإن التوضيح `u32` في برنامج المثال هذا وعملية المقارنة مع `secret_number` يعني أن Rust سيستنتج أن `secret_number` يجب أن يكون `u32` أيضاً. لذا الآن ستكون المقارنة بين قيمتين من نفس النوع!
 
-The `parse` method will only work on characters that can logically be converted
-into numbers and so can easily cause errors. If, for example, the string
-contained `A👍%`, there would be no way to convert that to a number. Because it
-might fail, the `parse` method returns a `Result` type, much as the `read_line`
-method does (discussed earlier in [“Handling Potential Failure with
-`Result`”](#handling-potential-failure-with-result)<!-- ignore -->). We’ll treat
-this `Result` the same way by using the `expect` method again. If `parse`
-returns an `Err` `Result` variant because it couldn’t create a number from the
-string, the `expect` call will crash the game and print the message we give it.
-If `parse` can successfully convert the string to a number, it will return the
-`Ok` variant of `Result`, and `expect` will return the number that we want from
-the `Ok` value.
+يمكن أن تفشل طريقة `parse` بسهولة. إذا احتوى النص، على سبيل المثال، على `A👍%`، فلن تكون هناك طريقة لتحويله إلى رقم. نظراً لأنه قد يفشل، تُعيد طريقة `parse` نوع `Result`، بشكل مشابه لطريقة `read_line` (التي نوقشت سابقاً في ["التعامل مع الفشل المحتمل باستخدام `Result`"](#handling-potential-failure-with-result)<!-- ignore -->). سنعامل هذا `Result` بنفس الطريقة باستخدام طريقة `expect` مرة أخرى. إذا أعادت `parse` متغير `Err` `Result` لأنها لم تتمكن من إنشاء رقم من النص، فسيعطل استدعاء `expect` اللعبة ويطبع الرسالة التي نعطيها لها. إذا تمكنت `parse` من تحويل النص بنجاح إلى رقم، فستُعيد متغير `Ok` من `Result`، وستُعيد `expect` الرقم الذي نريده من قيمة `Ok`.
 
-Let’s run the program now:
+لنشغل البرنامج الآن:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
-touch src/main.rs
 cargo run
   76
 -->
@@ -736,7 +438,7 @@ cargo run
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.26s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -746,36 +448,23 @@ You guessed: 76
 Too big!
 ```
 
-Nice! Even though spaces were added before the guess, the program still figured
-out that the user guessed 76. Run the program a few times to verify the
-different behavior with different kinds of input: Guess the number correctly,
-guess a number that is too high, and guess a number that is too low.
+رائع! على الرغم من إضافة مسافات قبل التخمين، ما زال البرنامج يكتشف أن المستخدم خمّن 76. شغّل البرنامج عدة مرات للتحقق من السلوك المختلف مع أنواع مختلفة من الإدخالات: خمّن الرقم بشكل صحيح، خمّن رقماً مرتفعاً جداً، وخمّن رقماً منخفضاً جداً.
 
-We have most of the game working now, but the user can make only one guess.
-Let’s change that by adding a loop!
+لدينا معظم اللعبة تعمل الآن، لكن لا يمكن للمستخدم إجراء سوى تخمين واحد. لنغير ذلك بإضافة حلقة!
 
-## Allowing Multiple Guesses with Looping
+## السماح بتخمينات متعددة باستخدام التكرار
 
-The `loop` keyword creates an infinite loop. We’ll add a loop to give users
-more chances at guessing the number:
+كلمة `loop` الرئيسية تنشئ حلقة لا نهائية. سنضيف حلقة لمنح المستخدمين مزيداً من الفرص لتخمين الرقم:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
-As you can see, we’ve moved everything from the guess input prompt onward into
-a loop. Be sure to indent the lines inside the loop another four spaces each
-and run the program again. The program will now ask for another guess forever,
-which actually introduces a new problem. It doesn’t seem like the user can quit!
+كما ترى، انتقلنا بكل شيء من مطالبة إدخال التخمين فصاعداً إلى حلقة. تأكد من إدخال الأسطر داخل الحلقة أربع مسافات إضافية لكل منها وشغّل البرنامج مرة أخرى. سيطلب البرنامج الآن تخميناً آخر إلى الأبد، مما يُقدم في الواقع مشكلة جديدة. لا يبدو أن المستخدم يمكنه الإنهاء!
 
-The user could always interrupt the program by using the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>C</kbd>. But there’s another way to escape this insatiable
-monster, as mentioned in the `parse` discussion in [“Comparing the Guess to the
-Secret Number”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: If
-the user enters a non-number answer, the program will crash. We can take
-advantage of that to allow the user to quit, as shown here:
+يمكن للمستخدم دائماً مقاطعة البرنامج باستخدام اختصار لوحة المفاتيح <kbd>ctrl</kbd>-<kbd>c</kbd>. لكن هناك طريقة أخرى للهروب من هذا الوحش النهم، كما ذُكر في نقاش `parse` في ["مقارنة التخمين بالرقم السري"](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: إذا أدخل المستخدم إجابة غير رقمية، سيتعطل البرنامج. يمكننا الاستفادة من ذلك للسماح للمستخدم بالإنهاء، كما هو موضح هنا:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
@@ -814,32 +503,25 @@ Please type a number!: ParseIntError { kind: InvalidDigit }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-Typing `quit` will quit the game, but as you’ll notice, so will entering any
-other non-number input. This is suboptimal, to say the least; we want the game
-to also stop when the correct number is guessed.
+كتابة `quit` ستنهي اللعبة، لكن كما ستلاحظ، كذلك سيفعل إدخال أي إدخال غير رقمي. هذا دون المستوى الأمثل، على أقل تقدير؛ نريد أن تتوقف اللعبة أيضاً عندما يتم تخمين الرقم الصحيح.
 
-### Quitting After a Correct Guess
+### الإنهاء بعد تخمين صحيح
 
-Let’s program the game to quit when the user wins by adding a `break` statement:
+لنبرمج اللعبة للإنهاء عندما يفوز المستخدم بإضافة عبارة `break`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
-Adding the `break` line after `You win!` makes the program exit the loop when
-the user guesses the secret number correctly. Exiting the loop also means
-exiting the program, because the loop is the last part of `main`.
+إضافة سطر `break` بعد `You win!` تجعل البرنامج يخرج من الحلقة عندما يخمّن المستخدم الرقم السري بشكل صحيح. الخروج من الحلقة يعني أيضاً الخروج من البرنامج، لأن الحلقة هي الجزء الأخير من `main`.
 
-### Handling Invalid Input
+### التعامل مع الإدخال غير الصالح
 
-To further refine the game’s behavior, rather than crashing the program when
-the user inputs a non-number, let’s make the game ignore a non-number so that
-the user can continue guessing. We can do that by altering the line where
-`guess` is converted from a `String` to a `u32`, as shown in Listing 2-5.
+لتحسين سلوك اللعبة بشكل أكبر، بدلاً من تعطيل البرنامج عندما يُدخل المستخدم رقماً غير صحيح، لنجعل اللعبة تتجاهل الرقم غير الصحيح حتى يتمكن المستخدم من متابعة التخمين. يمكننا القيام بذلك عن طريق تغيير السطر الذي يتم فيه تحويل `guess` من `String` إلى `u32`، كما هو موضح في القائمة 2-5.
 
-<Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
+<Listing number="2-5" file-name="src/main.rs" caption="تجاهل تخمين غير رقمي وطلب تخمين آخر بدلاً من تعطيل البرنامج">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
@@ -847,29 +529,13 @@ the user can continue guessing. We can do that by altering the line where
 
 </Listing>
 
-We switch from an `expect` call to a `match` expression to move from crashing
-on an error to handling the error. Remember that `parse` returns a `Result`
-type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using
-a `match` expression here, as we did with the `Ordering` result of the `cmp`
-method.
+نتحول من استدعاء `expect` إلى تعبير `match` للانتقال من التعطيل عند خطأ إلى التعامل مع الخطأ. تذكر أن `parse` تُعيد نوع `Result` و `Result` هو تعداد له المتغيرات `Ok` و `Err`. نستخدم تعبير `match` هنا، كما فعلنا مع نتيجة `Ordering` من طريقة `cmp`.
 
-If `parse` is able to successfully turn the string into a number, it will
-return an `Ok` value that contains the resultant number. That `Ok` value will
-match the first arm’s pattern, and the `match` expression will just return the
-`num` value that `parse` produced and put inside the `Ok` value. That number
-will end up right where we want it in the new `guess` variable we’re creating.
+إذا تمكنت `parse` من تحويل النص بنجاح إلى رقم، فستُعيد قيمة `Ok` تحتوي على الرقم الناتج. ستطابق قيمة `Ok` تلك نمط الذراع الأول، وسيُعيد تعبير `match` فقط قيمة `num` التي أنتجتها `parse` ووضعتها داخل قيمة `Ok`. سينتهي ذلك الرقم في المكان الذي نريده بالضبط في متغير `guess` الجديد الذي ننشئه.
 
-If `parse` is _not_ able to turn the string into a number, it will return an
-`Err` value that contains more information about the error. The `Err` value
-does not match the `Ok(num)` pattern in the first `match` arm, but it does
-match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
-catch-all value; in this example, we’re saying we want to match all `Err`
-values, no matter what information they have inside them. So, the program will
-execute the second arm’s code, `continue`, which tells the program to go to the
-next iteration of the `loop` and ask for another guess. So, effectively, the
-program ignores all errors that `parse` might encounter!
+إذا _لم_ تتمكن `parse` من تحويل النص إلى رقم، فستُعيد قيمة `Err` تحتوي على مزيد من المعلومات حول الخطأ. لا تطابق قيمة `Err` نمط `Ok(num)` في ذراع `match` الأول، لكنها تطابق نمط `Err(_)` في الذراع الثاني. الشرطة السفلية، `_`، هي قيمة شاملة؛ في هذا المثال، نقول أننا نريد مطابقة جميع قيم `Err`، بغض النظر عن المعلومات التي تحتويها. لذلك، سينفذ البرنامج كود الذراع الثاني، `continue`، الذي يخبر البرنامج بالانتقال إلى التكرار التالي من `loop` وطلب تخمين آخر. لذا، فعلياً، يتجاهل البرنامج جميع الأخطاء التي قد تواجهها `parse`!
 
-Now everything in the program should work as expected. Let’s try it:
+الآن يجب أن يعمل كل شيء في البرنامج كما هو متوقع. لنجربه:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-05/
@@ -903,12 +569,9 @@ You guessed: 61
 You win!
 ```
 
-Awesome! With one tiny final tweak, we will finish the guessing game. Recall
-that the program is still printing the secret number. That worked well for
-testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-6 shows the final code.
+رائع! مع تعديل صغير نهائي، سننتهي من لعبة التخمين. تذكر أن البرنامج ما زال يطبع الرقم السري. عمل ذلك جيداً للاختبار، لكنه يُفسد اللعبة. لنحذف `println!` الذي يُخرج الرقم السري. توضح القائمة 2-6 الكود النهائي.
 
-<Listing number="2-6" file-name="src/main.rs" caption="Complete guessing game code">
+<Listing number="2-6" file-name="src/main.rs" caption="كود لعبة التخمين الكامل">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
@@ -916,17 +579,11 @@ secret number. Listing 2-6 shows the final code.
 
 </Listing>
 
-At this point, you’ve successfully built the guessing game. Congratulations!
+في هذه المرحلة، نجحت في بناء لعبة التخمين. تهانينا!
 
-## Summary
+## الخلاصة
 
-This project was a hands-on way to introduce you to many new Rust concepts:
-`let`, `match`, functions, the use of external crates, and more. In the next
-few chapters, you’ll learn about these concepts in more detail. Chapter 3
-covers concepts that most programming languages have, such as variables, data
-types, and functions, and shows how to use them in Rust. Chapter 4 explores
-ownership, a feature that makes Rust different from other languages. Chapter 5
-discusses structs and method syntax, and Chapter 6 explains how enums work.
+كان هذا المشروع طريقة عملية لتقديمك للعديد من مفاهيم Rust الجديدة: `let` و `match` والدوال واستخدام الصناديق الخارجية والمزيد. في الفصول القليلة التالية، ستتعلم عن هذه المفاهيم بمزيد من التفصيل. يغطي الفصل 3 المفاهيم التي تحتوي عليها معظم لغات البرمجة، مثل المتغيرات وأنواع البيانات والدوال، ويوضح كيفية استخدامها في Rust. يستكشف الفصل 4 الملكية، وهي ميزة تجعل Rust مختلفاً عن اللغات الأخرى. يناقش الفصل 5 البُنى وصيغة الطرق، ويشرح الفصل 6 كيفية عمل التعدادات.
 
 [prelude]: ../std/prelude/index.html
 [variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability

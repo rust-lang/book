@@ -2,51 +2,23 @@
 
 <a id="managing-growing-projects-with-packages-crates-and-modules"></a>
 
-# Packages, Crates, and Modules
+# الحزم، الصناديق، والوحدات
 
-As you write large programs, organizing your code will become increasingly
-important. By grouping related functionality and separating code with distinct
-features, you’ll clarify where to find code that implements a particular
-feature and where to go to change how a feature works.
+مع كتابة البرامج الكبيرة، سيصبح تنظيم الكود الخاص بك أكثر أهمية بشكل متزايد. من خلال تجميع الوظائف ذات الصلة وفصل الكود ذي الميزات المميزة، ستوضح أين تجد الكود الذي ينفذ ميزة معينة وأين تذهب لتغيير كيفية عمل الميزة.
 
-The programs we’ve written so far have been in one module in one file. As a
-project grows, you should organize code by splitting it into multiple modules
-and then multiple files. A package can contain multiple binary crates and
-optionally one library crate. As a package grows, you can extract parts into
-separate crates that become external dependencies. This chapter covers all
-these techniques. For very large projects comprising a set of interrelated
-packages that evolve together, Cargo provides workspaces, which we’ll cover in
-[“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
+البرامج التي كتبناها حتى الآن كانت في وحدة واحدة في ملف واحد. مع نمو المشروع، يجب عليك تنظيم الكود عن طريق تقسيمه إلى وحدات متعددة ثم ملفات متعددة. يمكن أن تحتوي الحزمة على صناديق ثنائية متعددة وصندوق مكتبة واحد اختيارياً. مع نمو الحزمة، يمكنك استخراج أجزاء منها إلى صناديق منفصلة تصبح تبعيات خارجية. يغطي هذا الفصل كل هذه التقنيات. بالنسبة للمشاريع الكبيرة جداً التي تتكون من مجموعة من الحزم المترابطة التي تتطور معاً، يوفر Cargo مساحات العمل، والتي سنغطيها في [«مساحات عمل Cargo»][workspaces]<!-- ignore --> في الفصل 14.
 
-We’ll also discuss encapsulating implementation details, which lets you reuse
-code at a higher level: Once you’ve implemented an operation, other code can
-call your code via its public interface without having to know how the
-implementation works. The way you write code defines which parts are public for
-other code to use and which parts are private implementation details that you
-reserve the right to change. This is another way to limit the amount of detail
-you have to keep in your head.
+سنناقش أيضاً تغليف تفاصيل التنفيذ، مما يتيح لك إعادة استخدام الكود على مستوى أعلى: بمجرد تنفيذ عملية ما، يمكن للكود الآخر استدعاء الكود الخاص بك عبر واجهته العامة دون الحاجة إلى معرفة كيفية عمل التنفيذ. الطريقة التي تكتب بها الكود تحدد أي الأجزاء عامة ليستخدمها الكود الآخر وأي الأجزاء هي تفاصيل تنفيذ خاصة تحتفظ بحق تغييرها. هذه طريقة أخرى للحد من كمية التفاصيل التي يجب أن تحتفظ بها في رأسك.
 
-A related concept is scope: The nested context in which code is written has a
-set of names that are defined as “in scope.” When reading, writing, and
-compiling code, programmers and compilers need to know whether a particular
-name at a particular spot refers to a variable, function, struct, enum, module,
-constant, or other item and what that item means. You can create scopes and
-change which names are in or out of scope. You can’t have two items with the
-same name in the same scope; tools are available to resolve name conflicts.
+المفهوم ذو الصلة هو النطاق: السياق المتداخل الذي يُكتب فيه الكود له مجموعة من الأسماء المعرّفة على أنها «في النطاق». عند قراءة الكود أو كتابته أو تصريفه، يحتاج المبرمجون والمترجمون إلى معرفة ما إذا كان اسم معين في مكان معين يشير إلى متغير أو دالة أو هيكل أو تعداد أو وحدة أو ثابت أو عنصر آخر وما يعنيه هذا العنصر. يمكنك إنشاء نطاقات وتغيير الأسماء الموجودة داخل النطاق أو خارجه. لا يمكن أن يكون لديك عنصران بنفس الاسم في نفس النطاق؛ الأدوات متاحة لحل تعارضات الأسماء.
 
-Rust has a number of features that allow you to manage your code’s
-organization, including which details are exposed, which details are private,
-and what names are in each scope in your programs. These features, sometimes
-collectively referred to as the _module system_, include:
+لدى Rust عدد من الميزات التي تسمح لك بإدارة تنظيم الكود الخاص بك، بما في ذلك التفاصيل المكشوفة والتفاصيل الخاصة والأسماء الموجودة في كل نطاق في برامجك. يشار إلى هذه الميزات، التي يُشار إليها أحياناً بشكل جماعي باسم _نظام الوحدات_، وتشمل:
 
-* **Packages**: A Cargo feature that lets you build, test, and share crates
-* **Crates**: A tree of modules that produces a library or executable
-* **Modules and use**: Let you control the organization, scope, and privacy of
-paths
-* **Paths**: A way of naming an item, such as a struct, function, or module
+* **الحزم**: ميزة Cargo التي تتيح لك بناء واختبار ومشاركة الصناديق
+* **الصناديق**: شجرة من الوحدات التي تنتج مكتبة أو ملف تنفيذي
+* **الوحدات و use**: تتيح لك التحكم في التنظيم والنطاق والخصوصية للمسارات
+* **المسارات**: طريقة لتسمية عنصر، مثل هيكل أو دالة أو وحدة
 
-In this chapter, we’ll cover all these features, discuss how they interact, and
-explain how to use them to manage scope. By the end, you should have a solid
-understanding of the module system and be able to work with scopes like a pro!
+في هذا الفصل، سنغطي كل هذه الميزات، ونناقش كيفية تفاعلها، ونشرح كيفية استخدامها لإدارة النطاق. بحلول النهاية، يجب أن يكون لديك فهم قوي لنظام الوحدات وأن تكون قادراً على العمل مع النطاقات كمحترف!
 
 [workspaces]: ch14-03-cargo-workspaces.html

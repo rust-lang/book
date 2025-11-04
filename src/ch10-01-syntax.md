@@ -1,22 +1,14 @@
-## Generic Data Types
+## أنواع البيانات العامة (Generic Data Types)
 
-We use generics to create definitions for items like function signatures or
-structs, which we can then use with many different concrete data types. Let’s
-first look at how to define functions, structs, enums, and methods using
-generics. Then, we’ll discuss how generics affect code performance.
+نستخدم الأنواع العامة لإنشاء تعريفات لعناصر مثل توقيعات الدوال أو الهياكل، والتي يمكننا استخدامها بعد ذلك مع العديد من أنواع البيانات الملموسة المختلفة. دعنا أولاً ننظر إلى كيفية تعريف الدوال والهياكل والتعدادات والأساليب باستخدام الأنواع العامة. بعد ذلك، سنناقش كيف تؤثر الأنواع العامة على أداء الكود.
 
-### In Function Definitions
+### في تعريفات الدوال
 
-When defining a function that uses generics, we place the generics in the
-signature of the function where we would usually specify the data types of the
-parameters and return value. Doing so makes our code more flexible and provides
-more functionality to callers of our function while preventing code duplication.
+عند تعريف دالة تستخدم الأنواع العامة، نضع الأنواع العامة في توقيع الدالة حيث نحدد عادةً أنواع البيانات للمعاملات والقيمة المُرجعة. القيام بذلك يجعل كودنا أكثر مرونة ويوفر المزيد من الوظائف للمستدعين لدالتنا مع منع تكرار الكود.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions that
-both find the largest value in a slice. We’ll then combine these into a single
-function that uses generics.
+مواصلةً لدالتنا `largest`، يُظهر القائمة 10-4 دالتين تجدان أكبر قيمة في شريحة. سنجمع بعد ذلك هاتين الدالتين في دالة واحدة تستخدم الأنواع العامة.
 
-<Listing number="10-4" file-name="src/main.rs" caption="Two functions that differ only in their names and in the types in their signatures">
+<Listing number="10-4" file-name="src/main.rs" caption="دالتان تختلفان فقط في أسمائهما وفي الأنواع في توقيعاتهما">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
@@ -24,40 +16,21 @@ function that uses generics.
 
 </Listing>
 
-The `largest_i32` function is the one we extracted in Listing 10-3 that finds
-the largest `i32` in a slice. The `largest_char` function finds the largest
-`char` in a slice. The function bodies have the same code, so let’s eliminate
-the duplication by introducing a generic type parameter in a single function.
+دالة `largest_i32` هي التي استخرجناها في القائمة 10-3 والتي تجد أكبر `i32` في شريحة. تجد دالة `largest_char` أكبر `char` في شريحة. تحتوي أجسام الدوال على نفس الكود، لذا دعنا نزيل التكرار من خلال إدخال معامل نوع عام في دالة واحدة.
 
-To parameterize the types in a new single function, we need to name the type
-parameter, just as we do for the value parameters to a function. You can use
-any identifier as a type parameter name. But we’ll use `T` because, by
-convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
-default choice of most Rust programmers.
+لجعل الأنواع معلمات في دالة جديدة واحدة، نحتاج إلى تسمية معامل النوع، تمامًا كما نفعل مع معاملات القيمة لدالة. يمكنك استخدام أي معرف كاسم لمعامل النوع. لكننا سنستخدم `T` لأنه، بحسب الاتفاق، أسماء معاملات الأنواع في Rust قصيرة، غالبًا حرف واحد فقط، واتفاقية تسمية الأنواع في Rust هي UpperCamelCase. اختصارًا لـ _type_ (نوع)، يُعتبر `T` الخيار الافتراضي لمعظم مبرمجي Rust.
 
-When we use a parameter in the body of the function, we have to declare the
-parameter name in the signature so that the compiler knows what that name
-means. Similarly, when we use a type parameter name in a function signature, we
-have to declare the type parameter name before we use it. To define the generic
-`largest` function, we place type name declarations inside angle brackets,
-`<>`, between the name of the function and the parameter list, like this:
+عندما نستخدم معاملاً في جسم الدالة، يجب أن نُعلن اسم المعامل في التوقيع حتى يعرف المترجم ما يعنيه هذا الاسم. وبالمثل، عندما نستخدم اسم معامل نوع في توقيع دالة، يجب أن نُعلن اسم معامل النوع قبل استخدامه. لتعريف دالة `largest` العامة، نضع تصريحات اسم النوع داخل الأقواس الزاوية، `<>`، بين اسم الدالة وقائمة المعاملات، هكذا:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> &T {
 ```
 
-We read this definition as “The function `largest` is generic over some type
-`T`.” This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a reference to a value of the
-same type `T`.
+نقرأ هذا التعريف على أنه "الدالة `largest` عامة على نوع ما `T`". هذه الدالة لديها معامل واحد يُدعى `list`، وهو شريحة من القيم من النوع `T`. ستُرجع دالة `largest` مرجعًا إلى قيمة من نفس النوع `T`.
 
-Listing 10-5 shows the combined `largest` function definition using the generic
-data type in its signature. The listing also shows how we can call the function
-with either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet.
+تُظهر القائمة 10-5 تعريف دالة `largest` المجمعة باستخدام نوع البيانات العام في توقيعها. تُظهر القائمة أيضًا كيف يمكننا استدعاء الدالة إما بشريحة من قيم `i32` أو قيم `char`. لاحظ أن هذا الكود لن يُترجم بعد.
 
-<Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
+<Listing number="10-5" file-name="src/main.rs" caption="دالة `largest` باستخدام معاملات النوع العام؛ هذا لن يُترجم بعد">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
@@ -65,30 +38,19 @@ compile yet.
 
 </Listing>
 
-If we compile this code right now, we’ll get this error:
+إذا قمنا بترجمة هذا الكود الآن، سنحصل على هذا الخطأ:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a trait, and we’re
-going to talk about traits in the next section. For now, know that this error
-states that the body of `largest` won’t work for all possible types that `T`
-could be. Because we want to compare values of type `T` in the body, we can
-only use types whose values can be ordered. To enable comparisons, the standard
-library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). To fix Listing 10-5, we can follow the
-help text’s suggestion and restrict the types valid for `T` to only those that
-implement `PartialOrd`. The listing will then compile, because the standard
-library implements `PartialOrd` on both `i32` and `char`.
+يذكر نص المساعدة `std::cmp::PartialOrd`، وهي سمة (trait)، وسنتحدث عن السمات في القسم التالي. في الوقت الحالي، اعلم أن هذا الخطأ ينص على أن جسم `largest` لن يعمل مع جميع الأنواع المحتملة التي يمكن أن يكون عليها `T`. لأننا نريد مقارنة القيم من النوع `T` في الجسم، يمكننا استخدام الأنواع فقط التي يمكن ترتيب قيمها. لتمكين المقارنات، تحتوي المكتبة القياسية على سمة `std::cmp::PartialOrd` التي يمكنك تطبيقها على الأنواع (راجع الملحق C لمزيد من المعلومات حول هذه السمة). لإصلاح القائمة 10-5، يمكننا اتباع اقتراح نص المساعدة وتقييد الأنواع الصالحة لـ `T` فقط لتلك التي تُطبق `PartialOrd`. ستُترجم القائمة بعد ذلك، لأن المكتبة القياسية تُطبق `PartialOrd` على كل من `i32` و `char`.
 
-### In Struct Definitions
+### في تعريفات الهياكل
 
-We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
-`x` and `y` coordinate values of any type.
+يمكننا أيضًا تعريف الهياكل لاستخدام معامل نوع عام في حقل واحد أو أكثر باستخدام صيغة `<>`. تُعرّف القائمة 10-6 هيكل `Point<T>` لاحتواء قيم الإحداثيات `x` و `y` من أي نوع.
 
-<Listing number="10-6" file-name="src/main.rs" caption="A `Point<T>` struct that holds `x` and `y` values of type `T`">
+<Listing number="10-6" file-name="src/main.rs" caption="هيكل `Point<T>` يحتوي على قيم `x` و `y` من النوع `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
@@ -96,18 +58,11 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 
 </Listing>
 
-The syntax for using generics in struct definitions is similar to that used in
-function definitions. First, we declare the name of the type parameter inside
-angle brackets just after the name of the struct. Then, we use the generic type
-in the struct definition where we would otherwise specify concrete data types.
+الصيغة لاستخدام الأنواع العامة في تعريفات الهياكل مشابهة لتلك المستخدمة في تعريفات الدوال. أولاً، نُعلن اسم معامل النوع داخل الأقواس الزاوية مباشرة بعد اسم الهيكل. ثم، نستخدم النوع العام في تعريف الهيكل حيث سنحدد خلاف ذلك أنواع البيانات الملموسة.
 
-Note that because we’ve used only one generic type to define `Point<T>`, this
-definition says that the `Point<T>` struct is generic over some type `T`, and
-the fields `x` and `y` are _both_ that same type, whatever that type may be. If
-we create an instance of a `Point<T>` that has values of different types, as in
-Listing 10-7, our code won’t compile.
+لاحظ أنه نظرًا لأننا استخدمنا نوعًا عامًا واحدًا فقط لتعريف `Point<T>`، فإن هذا التعريف يقول أن هيكل `Point<T>` عام على نوع ما `T`، والحقلين `x` و `y` هما _كلاهما_ من نفس النوع، مهما كان هذا النوع. إذا أنشأنا مثيلاً من `Point<T>` يحتوي على قيم من أنواع مختلفة، كما في القائمة 10-7، فلن يُترجم كودنا.
 
-<Listing number="10-7" file-name="src/main.rs" caption="The fields `x` and `y` must be the same type because both have the same generic data type `T`.">
+<Listing number="10-7" file-name="src/main.rs" caption="يجب أن يكون الحقلان `x` و `y` من نفس النوع لأن كليهما لديهما نفس نوع البيانات العام `T`.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
@@ -115,21 +70,15 @@ Listing 10-7, our code won’t compile.
 
 </Listing>
 
-In this example, when we assign the integer value `5` to `x`, we let the
-compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then, when we specify `4.0` for `y`, which we’ve defined to have
-the same type as `x`, we’ll get a type mismatch error like this:
+في هذا المثال، عندما نعين القيمة الصحيحة `5` لـ `x`، نُعلم المترجم أن النوع العام `T` سيكون عددًا صحيحًا لهذا المثيل من `Point<T>`. ثم، عندما نحدد `4.0` لـ `y`، والذي عرّفناه ليكون من نفس نوع `x`، سنحصل على خطأ عدم تطابق النوع مثل هذا:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
-To define a `Point` struct where `x` and `y` are both generics but could have
-different types, we can use multiple generic type parameters. For example, in
-Listing 10-8, we change the definition of `Point` to be generic over types `T`
-and `U` where `x` is of type `T` and `y` is of type `U`.
+لتعريف هيكل `Point` حيث `x` و `y` كلاهما عامان ولكن يمكن أن يكونا من أنواع مختلفة، يمكننا استخدام معاملات نوع عامة متعددة. على سبيل المثال، في القائمة 10-8، نغير تعريف `Point` ليكون عامًا على النوعين `T` و `U` حيث `x` من النوع `T` و `y` من النوع `U`.
 
-<Listing number="10-8" file-name="src/main.rs" caption="A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types">
+<Listing number="10-8" file-name="src/main.rs" caption="هيكل `Point<T, U>` عام على نوعين بحيث يمكن أن يكون `x` و `y` قيمًا من أنواع مختلفة">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
@@ -137,17 +86,11 @@ and `U` where `x` is of type `T` and `y` is of type `U`.
 
 </Listing>
 
-Now all the instances of `Point` shown are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few makes
-your code hard to read. If you’re finding you need lots of generic types in
-your code, it could indicate that your code needs restructuring into smaller
-pieces.
+الآن جميع مثيلات `Point` الموضحة مسموح بها! يمكنك استخدام العديد من معاملات النوع العام في تعريف كما تريد، ولكن استخدام أكثر من بضعة يجعل كودك صعب القراءة. إذا وجدت أنك بحاجة إلى الكثير من الأنواع العامة في كودك، فقد يشير ذلك إلى أن كودك بحاجة إلى إعادة هيكلة إلى قطع أصغر.
 
-### In Enum Definitions
+### في تعريفات التعدادات
 
-As we did with structs, we can define enums to hold generic data types in their
-variants. Let’s take another look at the `Option<T>` enum that the standard
-library provides, which we used in Chapter 6:
+كما فعلنا مع الهياكل، يمكننا تعريف التعدادات لاحتواء أنواع البيانات العامة في متغيراتها. دعنا نلقي نظرة أخرى على تعداد `Option<T>` الذي توفره المكتبة القياسية، والذي استخدمناه في الفصل 6:
 
 ```rust
 enum Option<T> {
@@ -156,15 +99,9 @@ enum Option<T> {
 }
 ```
 
-This definition should now make more sense to you. As you can see, the
-`Option<T>` enum is generic over type `T` and has two variants: `Some`, which
-holds one value of type `T`, and a `None` variant that doesn’t hold any value.
-By using the `Option<T>` enum, we can express the abstract concept of an
-optional value, and because `Option<T>` is generic, we can use this abstraction
-no matter what the type of the optional value is.
+يجب أن يكون هذا التعريف أكثر منطقية لك الآن. كما ترى، تعداد `Option<T>` عام على النوع `T` ولديه متغيران: `Some`، الذي يحتوي على قيمة واحدة من النوع `T`، ومتغير `None` الذي لا يحتوي على أي قيمة. باستخدام تعداد `Option<T>`، يمكننا التعبير عن المفهوم المجرد لقيمة اختيارية، ولأن `Option<T>` عام، يمكننا استخدام هذا التجريد بغض النظر عن نوع القيمة الاختيارية.
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+يمكن أن تستخدم التعدادات أنواعًا عامة متعددة أيضًا. تعريف تعداد `Result` الذي استخدمناه في الفصل 9 هو أحد الأمثلة:
 
 ```rust
 enum Result<T, E> {
@@ -173,26 +110,15 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`, and has two variants:
-`Ok`, which holds a value of type `T`, and `Err`, which holds a value of type
-`E`. This definition makes it convenient to use the `Result` enum anywhere we
-have an operation that might succeed (return a value of some type `T`) or fail
-(return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
-the file was opened successfully and `E` was filled in with the type
-`std::io::Error` when there were problems opening the file.
+تعداد `Result` عام على نوعين، `T` و `E`، ولديه متغيران: `Ok`، الذي يحتوي على قيمة من النوع `T`، و `Err`، الذي يحتوي على قيمة من النوع `E`. يجعل هذا التعريف من المريح استخدام تعداد `Result` في أي مكان لدينا عملية قد تنجح (تُرجع قيمة من نوع ما `T`) أو تفشل (تُرجع خطأ من نوع ما `E`). في الواقع، هذا ما استخدمناه لفتح ملف في القائمة 9-3، حيث تم ملء `T` بالنوع `std::fs::File` عندما تم فتح الملف بنجاح وتم ملء `E` بالنوع `std::io::Error` عندما كانت هناك مشاكل في فتح الملف.
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-avoid duplication by using generic types instead.
+عندما تتعرف على مواقف في كودك مع تعريفات هياكل أو تعدادات متعددة تختلف فقط في أنواع القيم التي تحتوي عليها، يمكنك تجنب التكرار باستخدام الأنواع العامة بدلاً من ذلك.
 
-### In Method Definitions
+### في تعريفات الأساليب
 
-We can implement methods on structs and enums (as we did in Chapter 5) and use
-generic types in their definitions too. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6 with a method named `x` implemented on it.
+يمكننا تطبيق الأساليب على الهياكل والتعدادات (كما فعلنا في الفصل 5) واستخدام الأنواع العامة في تعريفاتها أيضًا. تُظهر القائمة 10-9 هيكل `Point<T>` الذي عرّفناه في القائمة 10-6 مع أسلوب يُدعى `x` مُطبق عليه.
 
-<Listing number="10-9" file-name="src/main.rs" caption="Implementing a method named `x` on the `Point<T>` struct that will return a reference to the `x` field of type `T`">
+<Listing number="10-9" file-name="src/main.rs" caption="تطبيق أسلوب يُدعى `x` على هيكل `Point<T>` والذي سيُرجع مرجعًا إلى حقل `x` من النوع `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
@@ -200,25 +126,13 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
 </Listing>
 
-Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
-to the data in the field `x`.
+هنا، عرّفنا أسلوبًا يُدعى `x` على `Point<T>` يُرجع مرجعًا إلى البيانات في الحقل `x`.
 
-Note that we have to declare `T` just after `impl` so that we can use `T` to
-specify that we’re implementing methods on the type `Point<T>`. By declaring
-`T` as a generic type after `impl`, Rust can identify that the type in the
-angle brackets in `Point` is a generic type rather than a concrete type. We
-could have chosen a different name for this generic parameter than the generic
-parameter declared in the struct definition, but using the same name is
-conventional. If you write a method within an `impl` that declares a generic
-type, that method will be defined on any instance of the type, no matter what
-concrete type ends up substituting for the generic type.
+لاحظ أننا يجب أن نُعلن `T` مباشرة بعد `impl` حتى نتمكن من استخدام `T` لتحديد أننا نطبق أساليب على النوع `Point<T>`. من خلال الإعلان عن `T` كنوع عام بعد `impl`، يمكن لـ Rust تحديد أن النوع في الأقواس الزاوية في `Point` هو نوع عام بدلاً من نوع ملموس. كان بإمكاننا اختيار اسم مختلف لهذا المعامل العام غير المعامل العام المُعلن في تعريف الهيكل، لكن استخدام نفس الاسم تقليدي. إذا كتبت أسلوبًا داخل `impl` يُعلن نوعًا عامًا، فسيتم تعريف هذا الأسلوب على أي مثيل من النوع، بغض النظر عن النوع الملموس الذي ينتهي به الأمر ليحل محل النوع العام.
 
-We can also specify constraints on generic types when defining methods on the
-type. We could, for example, implement methods only on `Point<f32>` instances
-rather than on `Point<T>` instances with any generic type. In Listing 10-10, we
-use the concrete type `f32`, meaning we don’t declare any types after `impl`.
+يمكننا أيضًا تحديد قيود على الأنواع العامة عند تعريف الأساليب على النوع. يمكننا، على سبيل المثال، تطبيق الأساليب فقط على مثيلات `Point<f32>` بدلاً من مثيلات `Point<T>` بأي نوع عام. في القائمة 10-10، نستخدم النوع الملموس `f32`، مما يعني أننا لا نُعلن أي أنواع بعد `impl`.
 
-<Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
+<Listing number="10-10" file-name="src/main.rs" caption="كتلة `impl` تنطبق فقط على هيكل بنوع ملموس معين لمعامل النوع العام `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
@@ -226,20 +140,11 @@ use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 </Listing>
 
-This code means the type `Point<f32>` will have a `distance_from_origin`
-method; other instances of `Point<T>` where `T` is not of type `f32` will not
-have this method defined. The method measures how far our point is from the
-point at coordinates (0.0, 0.0) and uses mathematical operations that are
-available only for floating-point types.
+يعني هذا الكود أن النوع `Point<f32>` سيكون لديه أسلوب `distance_from_origin`؛ المثيلات الأخرى من `Point<T>` حيث `T` ليس من النوع `f32` لن يكون لديها هذا الأسلوب المُعرّف. يقيس الأسلوب مدى بُعد نقطتنا عن النقطة عند الإحداثيات (0.0، 0.0) ويستخدم عمليات رياضية متاحة فقط لأنواع الفاصلة العائمة.
 
-Generic type parameters in a struct definition aren’t always the same as those
-you use in that same struct’s method signatures. Listing 10-11 uses the generic
-types `X1` and `Y1` for the `Point` struct and `X2` and `Y2` for the `mixup`
-method signature to make the example clearer. The method creates a new `Point`
-instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
-value from the passed-in `Point` (of type `Y2`).
+معاملات النوع العام في تعريف الهيكل ليست دائمًا نفسها التي تستخدمها في توقيعات أساليب ذلك الهيكل نفسه. تستخدم القائمة 10-11 الأنواع العامة `X1` و `Y1` لهيكل `Point` و `X2` و `Y2` لتوقيع أسلوب `mixup` لجعل المثال أوضح. يُنشئ الأسلوب مثيل `Point` جديد بقيمة `x` من `Point` الـ `self` (من النوع `X1`) وقيمة `y` من `Point` المُمرر (من النوع `Y2`).
 
-<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types that are different from its struct’s definition">
+<Listing number="10-11" file-name="src/main.rs" caption="أسلوب يستخدم أنواعًا عامة مختلفة عن تعريف هيكله">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
@@ -247,52 +152,26 @@ value from the passed-in `Point` (of type `Y2`).
 
 </Listing>
 
-In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
-that has a string slice for `x` (with value `"Hello"`) and a `char` for `y`
-(with value `c`). Calling `mixup` on `p1` with the argument `p2` gives us `p3`,
-which will have an `i32` for `x` because `x` came from `p1`. The `p3` variable
-will have a `char` for `y` because `y` came from `p2`. The `println!` macro
-call will print `p3.x = 5, p3.y = c`.
+في `main`، عرّفنا `Point` يحتوي على `i32` لـ `x` (بقيمة `5`) و `f64` لـ `y` (بقيمة `10.4`). متغير `p2` هو هيكل `Point` يحتوي على شريحة نصية لـ `x` (بقيمة `"Hello"`) و `char` لـ `y` (بقيمة `c`). استدعاء `mixup` على `p1` مع الوسيط `p2` يعطينا `p3`، والذي سيكون لديه `i32` لـ `x` لأن `x` جاء من `p1`. سيكون لمتغير `p3` `char` لـ `y` لأن `y` جاء من `p2`. سيطبع استدعاء ماكرو `println!` `p3.x = 5, p3.y = c`.
 
-The purpose of this example is to demonstrate a situation in which some generic
-parameters are declared with `impl` and some are declared with the method
-definition. Here, the generic parameters `X1` and `Y1` are declared after
-`impl` because they go with the struct definition. The generic parameters `X2`
-and `Y2` are declared after `fn mixup` because they’re only relevant to the
-method.
+الهدف من هذا المثال هو إثبات حالة يتم فيها الإعلان عن بعض المعاملات العامة مع `impl` والبعض الآخر يتم الإعلان عنه مع تعريف الأسلوب. هنا، المعاملات العامة `X1` و `Y1` مُعلنة بعد `impl` لأنها تتماشى مع تعريف الهيكل. المعاملات العامة `X2` و `Y2` مُعلنة بعد `fn mixup` لأنها ذات صلة فقط بالأسلوب.
 
-### Performance of Code Using Generics
+### أداء الكود باستخدام الأنواع العامة
 
-You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won’t make your program
-run any slower than it would with concrete types.
+قد تتساءل عما إذا كانت هناك تكلفة وقت التشغيل عند استخدام معاملات النوع العام. الخبر السار هو أن استخدام الأنواع العامة لن يجعل برنامجك يعمل بشكل أبطأ مما سيكون عليه مع الأنواع الملموسة.
 
-Rust accomplishes this by performing monomorphization of the code using
-generics at compile time. _Monomorphization_ is the process of turning generic
-code into specific code by filling in the concrete types that are used when
-compiled. In this process, the compiler does the opposite of the steps we used
-to create the generic function in Listing 10-5: The compiler looks at all the
-places where generic code is called and generates code for the concrete types
-the generic code is called with.
+تحقق Rust ذلك من خلال إجراء التوحيد الشكلي (monomorphization) للكود باستخدام الأنواع العامة في وقت الترجمة. _التوحيد الشكلي_ هو عملية تحويل الكود العام إلى كود محدد عن طريق ملء الأنواع الملموسة المستخدمة عند الترجمة. في هذه العملية، يقوم المترجم بعكس الخطوات التي استخدمناها لإنشاء الدالة العامة في القائمة 10-5: ينظر المترجم إلى جميع الأماكن التي يتم فيها استدعاء الكود العام ويُنشئ كودًا للأنواع الملموسة التي يتم استدعاء الكود العام بها.
 
-Let’s look at how this works by using the standard library’s generic
-`Option<T>` enum:
+دعنا ننظر إلى كيفية عمل ذلك باستخدام تعداد `Option<T>` العام للمكتبة القياسية:
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it performs monomorphization. During that
-process, the compiler reads the values that have been used in `Option<T>`
-instances and identifies two kinds of `Option<T>`: One is `i32` and the other
-is `f64`. As such, it expands the generic definition of `Option<T>` into two
-definitions specialized to `i32` and `f64`, thereby replacing the generic
-definition with the specific ones.
+عندما تُترجم Rust هذا الكود، تُجري التوحيد الشكلي. خلال تلك العملية، يقرأ المترجم القيم التي تم استخدامها في مثيلات `Option<T>` ويحدد نوعين من `Option<T>`: أحدهما `i32` والآخر `f64`. على هذا النحو، يوسع التعريف العام لـ `Option<T>` إلى تعريفين متخصصين لـ `i32` و `f64`، وبالتالي استبدال التعريف العام بالتعريفات المحددة.
 
-The monomorphized version of the code looks similar to the following (the
-compiler uses different names than what we’re using here for illustration):
+تبدو النسخة الموحدة شكليًا من الكود مشابهة للتالي (يستخدم المترجم أسماء مختلفة عما نستخدمه هنا للتوضيح):
 
 <Listing file-name="src/main.rs">
 
@@ -315,9 +194,4 @@ fn main() {
 
 </Listing>
 
-The generic `Option<T>` is replaced with the specific definitions created by
-the compiler. Because Rust compiles generic code into code that specifies the
-type in each instance, we pay no runtime cost for using generics. When the code
-runs, it performs just as it would if we had duplicated each definition by
-hand. The process of monomorphization makes Rust’s generics extremely efficient
-at runtime.
+يتم استبدال `Option<T>` العام بالتعريفات المحددة التي أنشأها المترجم. لأن Rust تُترجم الكود العام إلى كود يحدد النوع في كل مثيل، لا ندفع أي تكلفة وقت التشغيل لاستخدام الأنواع العامة. عندما يعمل الكود، يؤدي تمامًا كما لو كنا قد كررنا كل تعريف يدويًا. تجعل عملية التوحيد الشكلي الأنواع العامة في Rust فعالة للغاية في وقت التشغيل.

@@ -1,19 +1,10 @@
-## Defining and Instantiating Structs
+## تعريف الهياكل وإنشاء نسخ منها
 
-Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
-ignore --> section, in that both hold multiple related values. Like tuples, the
-pieces of a struct can be different types. Unlike with tuples, in a struct
-you’ll name each piece of data so it’s clear what the values mean. Adding these
-names means that structs are more flexible than tuples: You don’t have to rely
-on the order of the data to specify or access the values of an instance.
+الهياكل تشبه المجموعات (tuples)، التي تمت مناقشتها في قسم [â€œنوع المجموعةâ€][tuples]<!-- ignore -->، في أن كلاهما يحتوي على قيم متعددة مترابطة. مثل المجموعات، يمكن أن تكون أجزاء الهيكل من أنواع مختلفة. على عكس المجموعات، في الهيكل ستقوم بتسمية كل جزء من البيانات بحيث يكون واضحاً ما تعنيه القيم. إضافة هذه الأسماء تعني أن الهياكل أكثر مرونة من المجموعات: لا يتعين عليك الاعتماد على ترتيب البيانات لتحديد أو الوصول إلى قيم النسخة.
 
-To define a struct, we enter the keyword `struct` and name the entire struct. A
-struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call _fields_. For example, Listing 5-1 shows a
-struct that stores information about a user account.
+لتعريف هيكل، نُدخل الكلمة المفتاحية `struct` ونسمي الهيكل بأكمله. يجب أن يصف اسم الهيكل أهمية أجزاء البيانات التي يتم تجميعها معاً. ثم، داخل الأقواس المعقوفة، نحدد أسماء وأنواع أجزاء البيانات، والتي نسميها _الحقول_ (fields). على سبيل المثال، يُظهر Listing 5-1 هيكلاً يخزن معلومات حول حساب مستخدم.
 
-<Listing number="5-1" file-name="src/main.rs" caption="A `User` struct definition">
+<Listing number="5-1" file-name="src/main.rs" caption="تعريف هيكل `User`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
@@ -21,17 +12,9 @@ struct that stores information about a user account.
 
 </Listing>
 
-To use a struct after we’ve defined it, we create an _instance_ of that struct
-by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing _`key:
-value`_ pairs, where the keys are the names of the fields and the values are the
-data we want to store in those fields. We don’t have to specify the fields in
-the same order in which we declared them in the struct. In other words, the
-struct definition is like a general template for the type, and instances fill
-in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2.
+لاستخدام هيكل بعد تعريفه، نقوم بإنشاء _نسخة_ (instance) من ذلك الهيكل عن طريق تحديد قيم محددة لكل من الحقول. نقوم بإنشاء نسخة من خلال ذكر اسم الهيكل ثم إضافة أقواس معقوفة تحتوي على أزواج _`key: value`_، حيث المفاتيح هي أسماء الحقول والقيم هي البيانات التي نريد تخزينها في تلك الحقول. لا يتعين علينا تحديد الحقول بنفس الترتيب الذي أعلناها به في الهيكل. بمعنى آخر، تعريف الهيكل يشبه قالباً عاماً للنوع، والنسخ تملأ ذلك القالب ببيانات محددة لإنشاء قيم من النوع. على سبيل المثال، يمكننا التصريح عن مستخدم معين كما هو موضح في Listing 5-2.
 
-<Listing number="5-2" file-name="src/main.rs" caption="Creating an instance of the `User` struct">
+<Listing number="5-2" file-name="src/main.rs" caption="إنشاء نسخة من هيكل `User`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
@@ -39,13 +22,9 @@ example, we can declare a particular user as shown in Listing 5-2.
 
 </Listing>
 
-To get a specific value from a struct, we use dot notation. For example, to
-access this user’s email address, we use `user1.email`. If the instance is
-mutable, we can change a value by using the dot notation and assigning into a
-particular field. Listing 5-3 shows how to change the value in the `email`
-field of a mutable `User` instance.
+للحصول على قيمة محددة من هيكل، نستخدم التدوين النقطي (dot notation). على سبيل المثال، للوصول إلى عنوان البريد الإلكتروني لهذا المستخدم، نستخدم `user1.email`. إذا كانت النسخة قابلة للتغيير (mutable)، يمكننا تغيير قيمة باستخدام التدوين النقطي والإسناد إلى حقل معين. يوضح Listing 5-3 كيفية تغيير القيمة في حقل `email` من نسخة `User` قابلة للتغيير.
 
-<Listing number="5-3" file-name="src/main.rs" caption="Changing the value in the `email` field of a `User` instance">
+<Listing number="5-3" file-name="src/main.rs" caption="تغيير القيمة في حقل `email` من نسخة `User`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
@@ -53,16 +32,11 @@ field of a mutable `User` instance.
 
 </Listing>
 
-Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable. As with any expression, we can construct a new
-instance of the struct as the last expression in the function body to
-implicitly return that new instance.
+لاحظ أن النسخة بأكملها يجب أن تكون قابلة للتغيير؛ Rust لا تسمح لنا بوضع علامة على حقول معينة فقط كقابلة للتغيير. كما هو الحال مع أي تعبير، يمكننا إنشاء نسخة جديدة من الهيكل كآخر تعبير في جسم الدالة لإرجاع تلك النسخة الجديدة ضمنياً.
 
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
-the given email and username. The `active` field gets the value `true`, and the
-`sign_in_count` gets a value of `1`.
+يُظهر Listing 5-4 دالة `build_user` التي تُرجع نسخة `User` مع البريد الإلكتروني واسم المستخدم المعطيين. يحصل حقل `active` على القيمة `true`، ويحصل `sign_in_count` على قيمة `1`.
 
-<Listing number="5-4" file-name="src/main.rs" caption="A `build_user` function that takes an email and username and returns a `User` instance">
+<Listing number="5-4" file-name="src/main.rs" caption="دالة `build_user` تأخذ بريداً إلكترونياً واسم مستخدم وتُرجع نسخة `User`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
@@ -70,23 +44,17 @@ the given email and username. The `active` field gets the value `true`, and the
 
 </Listing>
 
-It makes sense to name the function parameters with the same name as the struct
-fields, but having to repeat the `email` and `username` field names and
-variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there’s a convenient shorthand!
+من المنطقي تسمية معاملات الدالة بنفس اسم حقول الهيكل، ولكن الاضطرار إلى تكرار أسماء حقول `email` و `username` والمتغيرات أمر مُمل قليلاً. إذا كان الهيكل يحتوي على المزيد من الحقول، فإن تكرار كل اسم سيصبح أكثر إزعاجاً. لحسن الحظ، هناك اختصار مريح!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
-### Using the Field Init Shorthand
+### استخدام اختصار تهيئة الحقل
 
-Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
-`build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `username` and `email`, as shown in Listing 5-5.
+نظراً لأن أسماء المعاملات وأسماء حقول الهيكل متطابقة تماماً في Listing 5-4، يمكننا استخدام بناء _اختصار تهيئة الحقل_ (field init shorthand) لإعادة كتابة `build_user` بحيث تتصرف بالضبط بنفس الطريقة ولكن دون تكرار `username` و `email`، كما هو موضح في Listing 5-5.
 
-<Listing number="5-5" file-name="src/main.rs" caption="A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields">
+<Listing number="5-5" file-name="src/main.rs" caption="دالة `build_user` تستخدم اختصار تهيئة الحقل لأن معاملي `username` و `email` لهما نفس اسم حقول الهيكل">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
@@ -94,27 +62,19 @@ repetition of `username` and `email`, as shown in Listing 5-5.
 
 </Listing>
 
-Here, we’re creating a new instance of the `User` struct, which has a field
-named `email`. We want to set the `email` field’s value to the value in the
-`email` parameter of the `build_user` function. Because the `email` field and
-the `email` parameter have the same name, we only need to write `email` rather
-than `email: email`.
+هنا، نقوم بإنشاء نسخة جديدة من هيكل `User`، الذي يحتوي على حقل اسمه `email`. نريد تعيين قيمة حقل `email` إلى القيمة الموجودة في معامل `email` من دالة `build_user`. نظراً لأن حقل `email` ومعامل `email` لهما نفس الاسم، نحتاج فقط إلى كتابة `email` بدلاً من `email: email`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-instances-from-other-instances-with-struct-update-syntax"></a>
 
-### Creating Instances with Struct Update Syntax
+### إنشاء نسخ باستخدام بناء تحديث الهيكل
 
-It’s often useful to create a new instance of a struct that includes most of
-the values from another instance of the same type, but changes some of them.
-You can do this using struct update syntax.
+غالباً ما يكون من المفيد إنشاء نسخة جديدة من هيكل تتضمن معظم القيم من نسخة أخرى من نفس النوع، ولكن تغيير بعضها. يمكنك القيام بذلك باستخدام بناء تحديث الهيكل (struct update syntax).
 
-First, in Listing 5-6 we show how to create a new `User` instance in `user2` in
-the regular way, without the update syntax. We set a new value for `email` but
-otherwise use the same values from `user1` that we created in Listing 5-2.
+أولاً، في Listing 5-6 نوضح كيفية إنشاء نسخة `User` جديدة في `user2` بالطريقة العادية، بدون بناء التحديث. نحدد قيمة جديدة لـ `email` ولكن نستخدم القيم نفسها من `user1` التي أنشأناها في Listing 5-2.
 
-<Listing number="5-6" file-name="src/main.rs" caption="Creating a new `User` instance using all but one of the values from `user1`">
+<Listing number="5-6" file-name="src/main.rs" caption="إنشاء نسخة `User` جديدة باستخدام جميع القيم باستثناء واحدة من `user1`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
@@ -122,11 +82,9 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 
 </Listing>
 
-Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
-explicitly set should have the same value as the fields in the given instance.
+باستخدام بناء تحديث الهيكل، يمكننا تحقيق نفس التأثير بكود أقل، كما هو موضح في Listing 5-7. يحدد البناء `..` أن الحقول المتبقية التي لم يتم تعيينها صراحة يجب أن يكون لها نفس القيمة كالحقول في النسخة المعطاة.
 
-<Listing number="5-7" file-name="src/main.rs" caption="Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`">
+<Listing number="5-7" file-name="src/main.rs" caption="استخدام بناء تحديث الهيكل لتعيين قيمة `email` جديدة لنسخة `User` ولكن لاستخدام بقية القيم من `user1`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
@@ -134,42 +92,19 @@ explicitly set should have the same value as the fields in the given instance.
 
 </Listing>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
-different value for `email` but has the same values for the `username`,
-`active`, and `sign_in_count` fields from `user1`. The `..user1` must come last
-to specify that any remaining fields should get their values from the
-corresponding fields in `user1`, but we can choose to specify values for as
-many fields as we want in any order, regardless of the order of the fields in
-the struct’s definition.
+الكود في Listing 5-7 أيضاً ينشئ نسخة في `user2` لها قيمة مختلفة لـ `email` ولكن لها نفس القيم لحقول `username` و `active` و `sign_in_count` من `user1`. يجب أن يأتي `..user1` أخيراً لتحديد أن أي حقول متبقية يجب أن تحصل على قيمها من الحقول المقابلة في `user1`، ولكن يمكننا اختيار تحديد قيم لأي عدد من الحقول نريده بأي ترتيب، بغض النظر عن ترتيب الحقول في تعريف الهيكل.
 
-Note that the struct update syntax uses `=` like an assignment; this is because
-it moves the data, just as we saw in the [“Variables and Data Interacting with
-Move”][move]<!-- ignore --> section. In this example, we can no longer use
-`user1` after creating `user2` because the `String` in the `username` field of
-`user1` was moved into `user2`. If we had given `user2` new `String` values for
-both `email` and `username`, and thus only used the `active` and `sign_in_count`
-values from `user1`, then `user1` would still be valid after creating `user2`.
-Both `active` and `sign_in_count` are types that implement the `Copy` trait, so
-the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore -->
-section would apply. We can also still use `user1.email` in this example,
-because its value was not moved out of `user1`.
+لاحظ أن بناء تحديث الهيكل يستخدم `=` مثل الإسناد؛ وذلك لأنه ينقل البيانات، تماماً كما رأينا في قسم [â€œالمتغيرات والبيانات المتفاعلة مع النقلâ€][move]<!-- ignore -->. في هذا المثال، لا يمكننا استخدام `user1` بعد إنشاء `user2` لأن `String` في حقل `username` من `user1` تم نقله إلى `user2`. إذا كنا قد أعطينا `user2` قيم `String` جديدة لكل من `email` و `username`، وبالتالي استخدمنا فقط قيم `active` و `sign_in_count` من `user1`، فإن `user1` سيظل صالحاً بعد إنشاء `user2`. كل من `active` و `sign_in_count` هما أنواع تنفذ خاصية `Copy`، لذا فإن السلوك الذي ناقشناه في قسم [â€œبيانات المكدس فقط: Copyâ€][copy]<!-- ignore --> سينطبق. يمكننا أيضاً استخدام `user1.email` في هذا المثال، لأن قيمته لم يتم نقلها من `user1`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-tuple-structs-without-named-fields-to-create-different-types"></a>
 
-### Creating Different Types with Tuple Structs
+### إنشاء أنواع مختلفة باستخدام هياكل المجموعة
 
-Rust also supports structs that look similar to tuples, called _tuple structs_.
-Tuple structs have the added meaning the struct name provides but don’t have
-names associated with their fields; rather, they just have the types of the
-fields. Tuple structs are useful when you want to give the whole tuple a name
-and make the tuple a different type from other tuples, and when naming each
-field as in a regular struct would be verbose or redundant.
+يدعم Rust أيضاً الهياكل التي تشبه المجموعات، والتي تسمى _هياكل المجموعة_ (tuple structs). هياكل المجموعة لها المعنى الإضافي الذي يوفره اسم الهيكل ولكن ليس لديها أسماء مرتبطة بحقولها؛ بل لديها أنواع الحقول فقط. هياكل المجموعة مفيدة عندما تريد إعطاء المجموعة بأكملها اسماً وجعل المجموعة نوعاً مختلفاً عن المجموعات الأخرى، وعندما تكون تسمية كل حقل كما في الهيكل العادي مطولة أو زائدة.
 
-To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use two
-tuple structs named `Color` and `Point`:
+لتعريف هيكل مجموعة، ابدأ بالكلمة المفتاحية `struct` واسم الهيكل متبوعاً بالأنواع في المجموعة. على سبيل المثال، هنا نعرف ونستخدم هيكلي مجموعة اسمهما `Color` و `Point`:
 
 <Listing file-name="src/main.rs">
 
@@ -179,31 +114,15 @@ tuple structs named `Color` and `Point`:
 
 </Listing>
 
-Note that the `black` and `origin` values are different types because they’re
-instances of different tuple structs. Each struct you define is its own type,
-even though the fields within the struct might have the same types. For
-example, a function that takes a parameter of type `Color` cannot take a
-`Point` as an argument, even though both types are made up of three `i32`
-values. Otherwise, tuple struct instances are similar to tuples in that you can
-destructure them into their individual pieces, and you can use a `.` followed
-by the index to access an individual value. Unlike tuples, tuple structs
-require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = origin;` to destructure the
-values in the `origin` point into variables named `x`, `y`, and `z`.
+لاحظ أن قيم `black` و `origin` هي أنواع مختلفة لأنها نسخ من هياكل مجموعة مختلفة. كل هيكل تعرفه هو نوعه الخاص، حتى لو كانت الحقول داخل الهيكل قد يكون لها نفس الأنواع. على سبيل المثال، دالة تأخذ معاملاً من نوع `Color` لا يمكنها أخذ `Point` كوسيطة، حتى لو كان كلا النوعين مكونين من ثلاث قيم `i32`. خلاف ذلك، نسخ هيكل المجموعة تشبه المجموعات من حيث أنه يمكنك تفكيكها إلى أجزائها الفردية، ويمكنك استخدام `.` متبوعاً بالفهرس للوصول إلى قيمة فردية. على عكس المجموعات، تتطلب هياكل المجموعة تسمية نوع الهيكل عند تفكيكها. على سبيل المثال، سنكتب `let Point(x, y, z) = origin;` لتفكيك القيم في نقطة `origin` إلى متغيرات اسمها `x` و `y` و `z`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="unit-like-structs-without-any-fields"></a>
 
-### Defining Unit-Like Structs
+### تعريف هياكل شبيهة بالوحدة
 
-You can also define structs that don’t have any fields! These are called
-_unit-like structs_ because they behave similarly to `()`, the unit type that
-we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
-structs can be useful when you need to implement a trait on some type but don’t
-have any data that you want to store in the type itself. We’ll discuss traits
-in Chapter 10. Here’s an example of declaring and instantiating a unit struct
-named `AlwaysEqual`:
+يمكنك أيضاً تعريف هياكل ليس لها أي حقول! تسمى هذه _هياكل شبيهة بالوحدة_ (unit-like structs) لأنها تتصرف بشكل مشابه لـ `()`، نوع الوحدة الذي ذكرناه في قسم [â€œنوع المجموعةâ€][tuples]<!-- ignore -->. الهياكل الشبيهة بالوحدة يمكن أن تكون مفيدة عندما تحتاج إلى تنفيذ خاصية (trait) على نوع ما ولكن ليس لديك أي بيانات تريد تخزينها في النوع نفسه. سنناقش الخصائص في الفصل 10. إليك مثال على التصريح عن وإنشاء نسخة من هيكل وحدة اسمه `AlwaysEqual`:
 
 <Listing file-name="src/main.rs">
 
@@ -213,29 +132,13 @@ named `AlwaysEqual`:
 
 </Listing>
 
-To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
-then a semicolon. No need for curly brackets or parentheses! Then, we can get
-an instance of `AlwaysEqual` in the `subject` variable in a similar way: using
-the name we defined, without any curly brackets or parentheses. Imagine that
-later we’ll implement behavior for this type such that every instance of
-`AlwaysEqual` is always equal to every instance of any other type, perhaps to
-have a known result for testing purposes. We wouldn’t need any data to
-implement that behavior! You’ll see in Chapter 10 how to define traits and
-implement them on any type, including unit-like structs.
+لتعريف `AlwaysEqual`، نستخدم الكلمة المفتاحية `struct`، والاسم الذي نريده، ثم فاصلة منقوطة. لا حاجة للأقواس المعقوفة أو الأقواس! ثم، يمكننا الحصول على نسخة من `AlwaysEqual` في المتغير `subject` بطريقة مماثلة: باستخدام الاسم الذي عرفناه، دون أي أقواس معقوفة أو أقواس. تخيل أننا لاحقاً سننفذ سلوكاً لهذا النوع بحيث تكون كل نسخة من `AlwaysEqual` متساوية دائماً مع كل نسخة من أي نوع آخر، ربما للحصول على نتيجة معروفة لأغراض الاختبار. لن نحتاج إلى أي بيانات لتنفيذ هذا السلوك! سترى في الفصل 10 كيفية تعريف الخصائص وتنفيذها على أي نوع، بما في ذلك الهياكل الشبيهة بالوحدة.
 
-> ### Ownership of Struct Data
+> ### ملكية بيانات الهيكل
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want each instance of this struct to own all of its data and for
-> that data to be valid for as long as the entire struct is valid.
+> في تعريف هيكل `User` في Listing 5-1، استخدمنا نوع `String` المملوك بدلاً من نوع شريحة السلسلة `&str`. هذا اختيار متعمد لأننا نريد أن تمتلك كل نسخة من هذا الهيكل جميع بياناتها وأن تكون تلك البيانات صالحة طالما أن الهيكل بأكمله صالح.
 >
-> It’s also possible for structs to store references to data owned by something
-> else, but to do so requires the use of _lifetimes_, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
-> is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like the following in
-> *src/main.rs*; this won’t work:
+> من الممكن أيضاً للهياكل تخزين مراجع للبيانات المملوكة من شيء آخر، ولكن القيام بذلك يتطلب استخدام _أوقات الحياة_ (lifetimes)، وهي ميزة في Rust سنناقشها في الفصل 10. تضمن أوقات الحياة أن البيانات المشار إليها بواسطة هيكل صالحة طالما أن الهيكل صالح. لنفترض أنك حاولت تخزين مرجع في هيكل دون تحديد أوقات الحياة، مثل ما يلي في *src/main.rs*؛ هذا لن ينجح:
 >
 > <Listing file-name="src/main.rs">
 >
@@ -261,7 +164,7 @@ implement them on any type, including unit-like structs.
 >
 > </Listing>
 >
-> The compiler will complain that it needs lifetime specifiers:
+> سيشتكي المترجم من أنه يحتاج إلى محددات وقت الحياة:
 >
 > ```console
 > $ cargo run
@@ -297,9 +200,7 @@ implement them on any type, including unit-like structs.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so that you can store
-> references in structs, but for now, we’ll fix errors like these using owned
-> types like `String` instead of references like `&str`.
+> في الفصل 10، سنناقش كيفية إصلاح هذه الأخطاء بحيث يمكنك تخزين مراجع في الهياكل، ولكن في الوقت الحالي، سنصلح أخطاء مثل هذه باستخدام الأنواع المملوكة مثل `String` بدلاً من المراجع مثل `&str`.
 
 <!-- manual-regeneration
 for the error above

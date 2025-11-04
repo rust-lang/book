@@ -1,25 +1,25 @@
-# Common Collections
+# المجموعات الشائعة
 
-Rust’s standard library includes a number of very useful data structures called
-_collections_. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data that these collections point to is stored on the heap, which
-means the amount of data does not need to be known at compile time and can grow
-or shrink as the program runs. Each kind of collection has different
-capabilities and costs, and choosing an appropriate one for your current
-situation is a skill you’ll develop over time. In this chapter, we’ll discuss
-three collections that are used very often in Rust programs:
+تتضمن المكتبة القياسية في Rust عددًا من هياكل البيانات المفيدة جدًا والتي تُسمى
+_المجموعات_. معظم أنواع البيانات الأخرى تمثل قيمة واحدة محددة، لكن
+المجموعات يمكن أن تحتوي على قيم متعددة. على عكس أنواع المصفوفات والصفوف
+المدمجة، البيانات التي تشير إليها هذه المجموعات مخزنة على الكومة، مما
+يعني أن كمية البيانات لا تحتاج إلى أن تكون معروفة في وقت الترجمة ويمكن أن تنمو
+أو تتقلص مع تشغيل البرنامج. كل نوع من المجموعات له قدرات
+وتكاليف مختلفة، واختيار النوع المناسب لحالتك الحالية
+هو مهارة ستطورها مع مرور الوقت. في هذا الفصل، سنناقش
+ثلاث مجموعات تُستخدم بكثرة في برامج Rust:
 
-- A _vector_ allows you to store a variable number of values next to each other.
-- A _string_ is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter, we’ll talk about it in depth.
-- A _hash map_ allows you to associate a value with a specific key. It’s a
-  particular implementation of the more general data structure called a _map_.
+- _المتجه_ يسمح لك بتخزين عدد متغير من القيم بجانب بعضها البعض.
+- _السلسلة النصية_ هي مجموعة من الأحرف. لقد ذكرنا نوع `String`
+  سابقًا، لكن في هذا الفصل، سنتحدث عنه بعمق.
+- _خريطة التجزئة_ تسمح لك بربط قيمة بمفتاح محدد. إنها
+  تطبيق خاص لهيكل البيانات الأكثر عمومية والذي يُسمى _خريطة_.
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+للتعرف على الأنواع الأخرى من المجموعات التي توفرها المكتبة القياسية،
+راجع [الوثائق][collections].
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well
-as what makes each special.
+سنناقش كيفية إنشاء وتحديث المتجهات والسلاسل النصية وخرائط التجزئة، بالإضافة إلى
+ما يجعل كل منها مميزًا.
 
 [collections]: ../std/collections/index.html

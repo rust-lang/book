@@ -1,37 +1,20 @@
-## Validating References with Lifetimes
+## التحقق من صحة المراجع باستخدام فترات الحياة
 
-Lifetimes are another kind of generic that we’ve already been using. Rather
-than ensuring that a type has the behavior we want, lifetimes ensure that
-references are valid as long as we need them to be.
+فترات الحياة هي نوع آخر من الأنواع العامة التي كنا نستخدمها بالفعل. بدلاً من ضمان أن النوع له السلوك الذي نريده، تضمن فترات الحياة أن المراجع صالحة طالما أننا بحاجة إليها.
 
-One detail we didn’t discuss in the [“References and
-Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
-that every reference in Rust has a lifetime, which is the scope for which
-that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We are only required to
-annotate types when multiple types are possible. In a similar way, we must
-annotate lifetimes when the lifetimes of references could be related in a few
-different ways. Rust requires us to annotate the relationships using generic
-lifetime parameters to ensure that the actual references used at runtime will
-definitely be valid.
+أحد التفاصيل التي لم نناقشها في قسم ["المراجع والاستعارة"][references-and-borrowing]<!-- ignore --> في الفصل 4 هو أن كل مرجع في Rust له فترة حياة، وهي النطاق الذي يكون فيه ذلك المرجع صالحًا. في معظم الأحيان، تكون فترات الحياة ضمنية ومستنتجة، تمامًا كما يتم استنتاج الأنواع في معظم الأحيان. نحتاج فقط إلى تحديد الأنواع عندما تكون هناك أنواع متعددة ممكنة. وبطريقة مماثلة، يجب علينا تحديد فترات الحياة عندما يمكن أن تكون فترات حياة المراجع مرتبطة ببعضها بطرق مختلفة. يطلب منا Rust تحديد العلاقات باستخدام معاملات فترة الحياة العامة للتأكد من أن المراجع الفعلية المستخدمة في وقت التشغيل ستكون بالتأكيد صالحة.
 
-Annotating lifetimes is not even a concept most other programming languages
-have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
-their entirety in this chapter, we’ll discuss common ways you might encounter
-lifetime syntax so that you can get comfortable with the concept.
+تحديد فترات الحياة ليس حتى مفهومًا تمتلكه معظم لغات البرمجة الأخرى، لذا سيبدو هذا غير مألوف. على الرغم من أننا لن نغطي فترات الحياة بالكامل في هذا الفصل، سنناقش الطرق الشائعة التي قد تواجه فيها صياغة فترات الحياة حتى تتمكن من الشعور بالراحة مع المفهوم.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="preventing-dangling-references-with-lifetimes"></a>
 
-### Dangling References
+### المراجع المعلقة
 
-The main aim of lifetimes is to prevent dangling references, which, if they
-were allowed to exist, would cause a program to reference data other than the
-data it’s intended to reference. Consider the program in Listing 10-16, which
-has an outer scope and an inner scope.
+الهدف الرئيسي من فترات الحياة هو منع المراجع المعلقة، والتي، إذا كان مسموحًا بوجودها، ستتسبب في إشارة البرنامج إلى بيانات غير البيانات المقصودة. ضع في اعتبارك البرنامج في القائمة 10-16، الذي يحتوي على نطاق خارجي ونطاق داخلي.
 
-<Listing number="10-16" caption="An attempt to use a reference whose value has gone out of scope">
+<Listing number="10-16" caption="محاولة استخدام مرجع قيمته خرجت من النطاق">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs}}
@@ -39,39 +22,21 @@ has an outer scope and an inner scope.
 
 </Listing>
 
-> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
-> without giving them an initial value, so the variable name exists in the outer
-> scope. At first glance, this might appear to be in conflict with Rust having
-> no null values. However, if we try to use a variable before giving it a value,
-> we’ll get a compile-time error, which shows that indeed Rust does not allow
-> null values.
+> ملاحظة: تعلن الأمثلة في القوائم 10-16، 10-17، و 10-23 عن متغيرات دون إعطائها قيمة أولية، لذا يوجد اسم المتغير في النطاق الخارجي. للوهلة الأولى، قد يبدو هذا متعارضًا مع عدم وجود قيم خالية في Rust. ومع ذلك، إذا حاولنا استخدام متغير قبل إعطائه قيمة، سنحصل على خطأ في وقت الترجمة، مما يوضح أن Rust بالفعل لا يسمح بالقيم الخالية.
 
-The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of `5`. Inside
-the inner scope, we attempt to set the value of `r` as a reference to `x`.
-Then, the inner scope ends, and we attempt to print the value in `r`. This code
-won’t compile, because the value that `r` is referring to has gone out of scope
-before we try to use it. Here is the error message:
+يعلن النطاق الخارجي عن متغير يسمى `r` بدون قيمة أولية، ويعلن النطاق الداخلي عن متغير يسمى `x` بالقيمة الأولية `5`. داخل النطاق الداخلي، نحاول تعيين قيمة `r` كمرجع إلى `x`. ثم ينتهي النطاق الداخلي، ونحاول طباعة القيمة في `r`. لن يتم ترجمة هذا الكود، لأن القيمة التي يشير إليها `r` قد خرجت من النطاق قبل أن نحاول استخدامها. هذه هي رسالة الخطأ:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
 ```
 
-The error message says that the variable `x` “does not live long enough.” The
-reason is that `x` will be out of scope when the inner scope ends on line 7.
-But `r` is still valid for the outer scope; because its scope is larger, we say
-that it “lives longer.” If Rust allowed this code to work, `r` would be
-referencing memory that was deallocated when `x` went out of scope, and
-anything we tried to do with `r` wouldn’t work correctly. So, how does Rust
-determine that this code is invalid? It uses a borrow checker.
+تقول رسالة الخطأ أن المتغير `x` "لا يعيش لفترة كافية". السبب هو أن `x` سيكون خارج النطاق عندما ينتهي النطاق الداخلي في السطر 7. لكن `r` لا يزال صالحًا للنطاق الخارجي؛ لأن نطاقه أكبر، نقول إنه "يعيش لفترة أطول". إذا سمح Rust لهذا الكود بالعمل، فإن `r` سيشير إلى ذاكرة تم تحريرها عندما خرج `x` من النطاق، وأي شيء نحاول القيام به مع `r` لن يعمل بشكل صحيح. إذن، كيف يحدد Rust أن هذا الكود غير صالح؟ يستخدم مدقق الاستعارة.
 
-### The Borrow Checker
+### مدقق الاستعارة
 
-The Rust compiler has a _borrow checker_ that compares scopes to determine
-whether all borrows are valid. Listing 10-17 shows the same code as Listing
-10-16 but with annotations showing the lifetimes of the variables.
+يحتوي مترجم Rust على _مدقق استعارة_ يقارن النطاقات لتحديد ما إذا كانت جميع الاستعارات صالحة. تُظهر القائمة 10-17 نفس الكود الموجود في القائمة 10-16 ولكن مع تعليقات توضح فترات حياة المتغيرات.
 
-<Listing number="10-17" caption="Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`, respectively">
+<Listing number="10-17" caption="تعليقات توضيحية لفترات حياة `r` و `x`، مسماة `'a` و `'b`، على التوالي">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs}}
@@ -79,17 +44,11 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 
 </Listing>
 
-Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
-with `'b`. As you can see, the inner `'b` block is much smaller than the outer
-`'a` lifetime block. At compile time, Rust compares the size of the two
-lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
-with a lifetime of `'b`. The program is rejected because `'b` is shorter than
-`'a`: The subject of the reference doesn’t live as long as the reference.
+هنا، قمنا بتعليق فترة حياة `r` بـ `'a` وفترة حياة `x` بـ `'b`. كما ترى، كتلة `'b` الداخلية أصغر بكثير من كتلة فترة الحياة الخارجية `'a`. في وقت الترجمة، يقارن Rust حجم فترتي الحياة ويرى أن `r` له فترة حياة `'a` لكنه يشير إلى ذاكرة بفترة حياة `'b`. يُرفض البرنامج لأن `'b` أقصر من `'a`: موضوع المرجع لا يعيش طالما المرجع.
 
-Listing 10-18 fixes the code so that it doesn’t have a dangling reference and
-it compiles without any errors.
+تصلح القائمة 10-18 الكود بحيث لا يحتوي على مرجع معلق ويتم ترجمته بدون أي أخطاء.
 
-<Listing number="10-18" caption="A valid reference because the data has a longer lifetime than the reference">
+<Listing number="10-18" caption="مرجع صالح لأن البيانات لها فترة حياة أطول من المرجع">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
@@ -97,22 +56,15 @@ it compiles without any errors.
 
 </Listing>
 
-Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
-means `r` can reference `x` because Rust knows that the reference in `r` will
-always be valid while `x` is valid.
+هنا، لدى `x` فترة الحياة `'b`، والتي في هذه الحالة أكبر من `'a`. هذا يعني أن `r` يمكن أن يشير إلى `x` لأن Rust يعرف أن المرجع في `r` سيكون دائمًا صالحًا طالما أن `x` صالح.
 
-Now that you know where the lifetimes of references are and how Rust analyzes
-lifetimes to ensure that references will always be valid, let’s explore generic
-lifetimes in function parameters and return values.
+الآن بعد أن عرفت أين توجد فترات حياة المراجع وكيف يحلل Rust فترات الحياة للتأكد من أن المراجع ستكون دائمًا صالحة، دعنا نستكشف فترات الحياة العامة في معاملات الدوال والقيم المرجعة.
 
-### Generic Lifetimes in Functions
+### فترات الحياة العامة في الدوال
 
-We’ll write a function that returns the longer of two string slices. This
-function will take two string slices and return a single string slice. After
-we’ve implemented the `longest` function, the code in Listing 10-19 should
-print `The longest string is abcd`.
+سنكتب دالة تُرجع الأطول من شريحتي سلسلة نصية. ستأخذ هذه الدالة شريحتي سلسلة نصية وتُرجع شريحة سلسلة نصية واحدة. بعد تنفيذ دالة `longest`، يجب أن يطبع الكود في القائمة 10-19 `The longest string is abcd`.
 
-<Listing number="10-19" file-name="src/main.rs" caption="A `main` function that calls the `longest` function to find the longer of two string slices">
+<Listing number="10-19" file-name="src/main.rs" caption="دالة `main` تستدعي دالة `longest` لإيجاد الأطول من شريحتي سلسلة نصية">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs}}
@@ -120,17 +72,11 @@ print `The longest string is abcd`.
 
 </Listing>
 
-Note that we want the function to take string slices, which are references,
-rather than strings, because we don’t want the `longest` function to take
-ownership of its parameters. Refer to [“String Slices as
-Parameters”][string-slices-as-parameters]<!-- ignore --> in Chapter 4 for more
-discussion about why the parameters we use in Listing 10-19 are the ones we
-want.
+لاحظ أننا نريد أن تأخذ الدالة شرائح سلسلة نصية، وهي مراجع، بدلاً من السلاسل النصية، لأننا لا نريد أن تأخذ دالة `longest` ملكية معاملاتها. راجع ["شرائح السلاسل النصية كمعاملات"][string-slices-as-parameters]<!-- ignore --> في الفصل 4 لمزيد من المناقشة حول سبب كون المعاملات التي نستخدمها في القائمة 10-19 هي تلك التي نريدها.
 
-If we try to implement the `longest` function as shown in Listing 10-20, it
-won’t compile.
+إذا حاولنا تنفيذ دالة `longest` كما هو موضح في القائمة 10-20، فلن يتم ترجمتها.
 
-<Listing number="10-20" file-name="src/main.rs" caption="An implementation of the `longest` function that returns the longer of two string slices but does not yet compile">
+<Listing number="10-20" file-name="src/main.rs" caption="تنفيذ لدالة `longest` تُرجع الأطول من شريحتي سلسلة نصية لكنها لم تُترجم بعد">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs:here}}
@@ -138,75 +84,39 @@ won’t compile.
 
 </Listing>
 
-Instead, we get the following error that talks about lifetimes:
+بدلاً من ذلك، نحصل على الخطأ التالي الذي يتحدث عن فترات الحياة:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/output.txt}}
 ```
 
-The help text reveals that the return type needs a generic lifetime parameter
-on it because Rust can’t tell whether the reference being returned refers to
-`x` or `y`. Actually, we don’t know either, because the `if` block in the body
-of this function returns a reference to `x` and the `else` block returns a
-reference to `y`!
+يكشف نص المساعدة أن نوع الإرجاع يحتاج إلى معامل فترة حياة عامة لأن Rust لا يمكنه معرفة ما إذا كان المرجع الذي يتم إرجاعه يشير إلى `x` أو `y`. في الواقع، نحن أيضًا لا نعرف، لأن كتلة `if` في جسم هذه الدالة تُرجع مرجعًا إلى `x` وكتلة `else` تُرجع مرجعًا إلى `y`!
 
-When we’re defining this function, we don’t know the concrete values that will
-be passed into this function, so we don’t know whether the `if` case or the
-`else` case will execute. We also don’t know the concrete lifetimes of the
-references that will be passed in, so we can’t look at the scopes as we did in
-Listings 10-17 and 10-18 to determine whether the reference we return will
-always be valid. The borrow checker can’t determine this either, because it
-doesn’t know how the lifetimes of `x` and `y` relate to the lifetime of the
-return value. To fix this error, we’ll add generic lifetime parameters that
-define the relationship between the references so that the borrow checker can
-perform its analysis.
+عندما نعرّف هذه الدالة، لا نعرف القيم الفعلية التي سيتم تمريرها إلى هذه الدالة، لذا لا نعرف ما إذا كانت حالة `if` أو حالة `else` ستُنفذ. كما أننا لا نعرف فترات الحياة الفعلية للمراجع التي سيتم تمريرها، لذا لا يمكننا النظر إلى النطاقات كما فعلنا في القوائم 10-17 و 10-18 لتحديد ما إذا كان المرجع الذي نرجعه سيكون دائمًا صالحًا. لا يمكن لمدقق الاستعارة تحديد ذلك أيضًا، لأنه لا يعرف كيف ترتبط فترات حياة `x` و `y` بفترة حياة القيمة المرجعة. لإصلاح هذا الخطأ، سنضيف معاملات فترة حياة عامة تحدد العلاقة بين المراجع حتى يتمكن مدقق الاستعارة من إجراء تحليله.
 
-### Lifetime Annotation Syntax
+### صياغة تعليق فترة الحياة
 
-Lifetime annotations don’t change how long any of the references live. Rather,
-they describe the relationships of the lifetimes of multiple references to each
-other without affecting the lifetimes. Just as functions can accept any type
-when the signature specifies a generic type parameter, functions can accept
-references with any lifetime by specifying a generic lifetime parameter.
+تعليقات فترة الحياة لا تغير المدة التي تعيشها أي من المراجع. بل، تصف العلاقات بين فترات حياة المراجع المتعددة دون التأثير على فترات الحياة. تمامًا كما يمكن للدوال قبول أي نوع عندما يحدد التوقيع معامل نوع عام، يمكن للدوال قبول المراجع بأي فترة حياة من خلال تحديد معامل فترة حياة عامة.
 
-Lifetime annotations have a slightly unusual syntax: The names of lifetime
-parameters must start with an apostrophe (`'`) and are usually all lowercase
-and very short, like generic types. Most people use the name `'a` for the first
-lifetime annotation. We place lifetime parameter annotations after the `&` of a
-reference, using a space to separate the annotation from the reference’s type.
+تعليقات فترة الحياة لها صياغة غير عادية قليلاً: أسماء معاملات فترة الحياة يجب أن تبدأ بعلامة الاقتباس الفردية (`'`) وعادة ما تكون كلها أحرفًا صغيرة وقصيرة جدًا، مثل الأنواع العامة. معظم الناس يستخدمون الاسم `'a` لأول تعليق لفترة الحياة. نضع تعليقات معامل فترة الحياة بعد `&` من المرجع، باستخدام مسافة لفصل التعليق عن نوع المرجع.
 
-Here are some examples—a reference to an `i32` without a lifetime parameter, a
-reference to an `i32` that has a lifetime parameter named `'a`, and a mutable
-reference to an `i32` that also has the lifetime `'a`:
+فيما يلي بعض الأمثلة: مرجع إلى `i32` بدون معامل فترة حياة، مرجع إلى `i32` الذي له معامل فترة حياة يسمى `'a`، ومرجع قابل للتعديل إلى `i32` الذي له أيضًا فترة الحياة `'a`.
 
 ```rust,ignore
-&i32        // a reference
-&'a i32     // a reference with an explicit lifetime
-&'a mut i32 // a mutable reference with an explicit lifetime
+&i32        // مرجع
+&'a i32     // مرجع مع فترة حياة صريحة
+&'a mut i32 // مرجع قابل للتعديل مع فترة حياة صريحة
 ```
 
-One lifetime annotation by itself doesn’t have much meaning, because the
-annotations are meant to tell Rust how generic lifetime parameters of multiple
-references relate to each other. Let’s examine how the lifetime annotations
-relate to each other in the context of the `longest` function.
+تعليق فترة حياة واحد في حد ذاته ليس له معنى كبير، لأن التعليقات تهدف إلى إخبار Rust بكيفية ارتباط معاملات فترة الحياة العامة للمراجع المتعددة ببعضها البعض. دعنا نفحص كيف ترتبط تعليقات فترة الحياة ببعضها البعض في سياق دالة `longest`.
 
-<!-- Old headings. Do not remove or links may break. -->
+### تعليقات فترة الحياة في توقيعات الدوال
 
-<a id="lifetime-annotations-in-function-signatures"></a>
+لاستخدام تعليقات فترة الحياة في توقيعات الدوال، نحتاج إلى تعريف معاملات فترة الحياة العامة داخل الأقواس الزاوية بين اسم الدالة وقائمة المعاملات، تمامًا كما فعلنا مع معاملات النوع العام.
 
-### In Function Signatures
+نريد أن يعبر التوقيع عن القيد التالي: المرجع المرجع سيكون صالحًا طالما أن كلا المعاملين صالحين. هذه هي العلاقة بين فترات حياة المعاملات والقيمة المرجعة. سنسمي فترة الحياة `'a` ثم نضيفها إلى كل مرجع، كما هو موضح في القائمة 10-21.
 
-To use lifetime annotations in function signatures, we need to declare the
-generic lifetime parameters inside angle brackets between the function name and
-the parameter list, just as we did with generic type parameters.
-
-We want the signature to express the following constraint: The returned
-reference will be valid as long as both of the parameters are valid. This is
-the relationship between lifetimes of the parameters and the return value.
-We’ll name the lifetime `'a` and then add it to each reference, as shown in
-Listing 10-21.
-
-<Listing number="10-21" file-name="src/main.rs" caption="The `longest` function definition specifying that all the references in the signature must have the same lifetime `'a`">
+<Listing number="10-21" file-name="src/main.rs" caption="تعريف دالة `longest` الذي يحدد أن جميع المراجع في التوقيع يجب أن يكون لها نفس فترة الحياة `'a`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
@@ -214,49 +124,19 @@ Listing 10-21.
 
 </Listing>
 
-This code should compile and produce the result we want when we use it with the
-`main` function in Listing 10-19.
+يجب أن يتم ترجمة هذا الكود وإنتاج النتيجة التي نريدها عندما نستخدمه مع دالة `main` في القائمة 10-19.
 
-The function signature now tells Rust that for some lifetime `'a`, the function
-takes two parameters, both of which are string slices that live at least as
-long as lifetime `'a`. The function signature also tells Rust that the string
-slice returned from the function will live at least as long as lifetime `'a`.
-In practice, it means that the lifetime of the reference returned by the
-`longest` function is the same as the smaller of the lifetimes of the values
-referred to by the function arguments. These relationships are what we want
-Rust to use when analyzing this code.
+التوقيع يخبر Rust الآن أنه لبعض فترة الحياة `'a`، تأخذ الدالة معاملين، وكلاهما شرائح سلسلة نصية تعيش على الأقل طالما فترة الحياة `'a`. يخبر توقيع الدالة أيضًا Rust أن شريحة السلسلة النصية المرجعة من الدالة ستعيش على الأقل طالما فترة الحياة `'a`. في الممارسة، هذا يعني أن فترة حياة المرجع المرجع من دالة `longest` هي نفسها أصغر فترات حياة القيم المشار إليها بواسطة معاملات الدالة. هذه العلاقات هي ما نريد من Rust استخدامها عند تحليل هذا الكود.
 
-Remember, when we specify the lifetime parameters in this function signature,
-we’re not changing the lifetimes of any values passed in or returned. Rather,
-we’re specifying that the borrow checker should reject any values that don’t
-adhere to these constraints. Note that the `longest` function doesn’t need to
-know exactly how long `x` and `y` will live, only that some scope can be
-substituted for `'a` that will satisfy this signature.
+تذكر، عندما نحدد معاملات فترة الحياة في توقيع هذه الدالة، فإننا لا نغير فترات حياة أي قيم تمر أو تُرجع. بل، نحدد أن مدقق الاستعارة يجب أن يرفض أي قيم لا تلتزم بهذه القيود. لاحظ أن دالة `longest` لا تحتاج إلى معرفة بالضبط كم من الوقت ستعيش `x` و `y`، فقط أن هناك بعض النطاق الذي يمكن استبداله بـ `'a` الذي سيحقق هذا التوقيع.
 
-When annotating lifetimes in functions, the annotations go in the function
-signature, not in the function body. The lifetime annotations become part of
-the contract of the function, much like the types in the signature. Having
-function signatures contain the lifetime contract means the analysis the Rust
-compiler does can be simpler. If there’s a problem with the way a function is
-annotated or the way it is called, the compiler errors can point to the part of
-our code and the constraints more precisely. If, instead, the Rust compiler
-made more inferences about what we intended the relationships of the lifetimes
-to be, the compiler might only be able to point to a use of our code many steps
-away from the cause of the problem.
+عند تعليق فترات الحياة في الدوال، تنتقل التعليقات في توقيع الدالة، وليس في جسم الدالة. يمكن لـ Rust تحليل الكود داخل الدالة دون أي مساعدة. ومع ذلك، عندما تحتوي دالة على مراجع إلى أو من كود خارج تلك الدالة، يصبح من المستحيل تقريبًا على Rust معرفة فترات حياة المعاملات أو القيم المرجعة بمفرده. قد تكون فترات الحياة مختلفة في كل مرة يتم استدعاء الدالة. لهذا السبب نحتاج إلى تعليق فترات الحياة يدويًا.
 
-When we pass concrete references to `longest`, the concrete lifetime that is
-substituted for `'a` is the part of the scope of `x` that overlaps with the
-scope of `y`. In other words, the generic lifetime `'a` will get the concrete
-lifetime that is equal to the smaller of the lifetimes of `x` and `y`. Because
-we’ve annotated the returned reference with the same lifetime parameter `'a`,
-the returned reference will also be valid for the length of the smaller of the
-lifetimes of `x` and `y`.
+عندما نمرر مراجع فعلية إلى `longest`، فإن فترة الحياة المحددة التي يتم استبدالها بـ `'a` هي جزء من نطاق `x` الذي يتداخل مع نطاق `y`. بعبارة أخرى، فترة الحياة العامة `'a` ستحصل على فترة الحياة المحددة التي تساوي الأصغر من فترات حياة `x` و `y`. لأننا قمنا بتعليق المرجع المرجع بنفس معامل فترة الحياة `'a`، فإن المرجع المرجع سيكون أيضًا صالحًا طول فترة الحياة الأصغر من `x` و `y`.
 
-Let’s look at how the lifetime annotations restrict the `longest` function by
-passing in references that have different concrete lifetimes. Listing 10-22 is
-a straightforward example.
+دعنا ننظر إلى كيفية تقييد تعليقات فترة الحياة لدالة `longest` من خلال تمرير مراجع لها فترات حياة فعلية مختلفة. القائمة 10-22 هي مثال مباشر.
 
-<Listing number="10-22" file-name="src/main.rs" caption="Using the `longest` function with references to `String` values that have different concrete lifetimes">
+<Listing number="10-22" file-name="src/main.rs" caption="استخدام دالة `longest` مع مراجع إلى قيم `String` التي لها فترات حياة فعلية مختلفة">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
@@ -264,21 +144,11 @@ a straightforward example.
 
 </Listing>
 
-In this example, `string1` is valid until the end of the outer scope, `string2`
-is valid until the end of the inner scope, and `result` references something
-that is valid until the end of the inner scope. Run this code and you’ll see
-that the borrow checker approves; it will compile and print `The longest string
-is long string is long`.
+في هذا المثال، `string1` صالحة حتى نهاية النطاق الخارجي، و `string2` صالحة حتى نهاية النطاق الداخلي، و `result` تشير إلى شيء صالح حتى نهاية النطاق الداخلي. قم بتشغيل هذا الكود، وسترى أن مدقق الاستعارة يوافق؛ سيتم ترجمته وطباعة `The longest string is long string is long`.
 
-Next, let’s try an example that shows that the lifetime of the reference in
-`result` must be the smaller lifetime of the two arguments. We’ll move the
-declaration of the `result` variable outside the inner scope but leave the
-assignment of the value to the `result` variable inside the scope with
-`string2`. Then, we’ll move the `println!` that uses `result` to outside the
-inner scope, after the inner scope has ended. The code in Listing 10-23 will
-not compile.
+بعد ذلك، دعنا نجرب مثالًا يوضح أن فترة حياة المرجع في `result` يجب أن تكون الفترة الأصغر من فترتي حياة المعاملين. سنقوم بنقل تعريف متغير `result` خارج النطاق الداخلي لكن نترك تعيين قيمة متغير `result` داخل النطاق مع `string2`. ثم سننقل `println!` الذي يستخدم `result` خارج النطاق الداخلي، بعد انتهاء النطاق الداخلي. الكود في القائمة 10-23 لن يتم ترجمته.
 
-<Listing number="10-23" file-name="src/main.rs" caption="Attempting to use `result` after `string2` has gone out of scope">
+<Listing number="10-23" file-name="src/main.rs" caption="محاولة استخدام `result` بعد خروج `string2` من النطاق">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
@@ -286,42 +156,21 @@ not compile.
 
 </Listing>
 
-When we try to compile this code, we get this error:
+عندما نحاول ترجمة هذا الكود، نحصل على هذا الخطأ:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/output.txt}}
 ```
 
-The error shows that for `result` to be valid for the `println!` statement,
-`string2` would need to be valid until the end of the outer scope. Rust knows
-this because we annotated the lifetimes of the function parameters and return
-values using the same lifetime parameter `'a`.
+يُظهر الخطأ أنه لكي تكون `result` صالحة لعبارة `println!`، يجب أن تكون `string2` صالحة حتى نهاية النطاق الخارجي. يعرف Rust ذلك لأننا قمنا بتعليق فترات حياة معاملات الدالة والقيم المرجعة باستخدام نفس معامل فترة الحياة `'a`.
 
-As humans, we can look at this code and see that `string1` is longer than
-`string2`, and therefore, `result` will contain a reference to `string1`.
-Because `string1` has not gone out of scope yet, a reference to `string1` will
-still be valid for the `println!` statement. However, the compiler can’t see
-that the reference is valid in this case. We’ve told Rust that the lifetime of
-the reference returned by the `longest` function is the same as the smaller of
-the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-23 as possibly having an invalid reference.
+كبشر، يمكننا النظر إلى هذا الكود ونرى أن `string1` أطول من `string2` وبالتالي فإن `result` ستحتوي على مرجع إلى `string1`. لأن `string1` لم تخرج من النطاق بعد، فإن المرجع إلى `string1` سيظل صالحًا لعبارة `println!`. ومع ذلك، لا يمكن للمترجم رؤية أن المرجع صالح في هذه الحالة. لقد أخبرنا Rust أن فترة حياة المرجع المرجع من دالة `longest` هي نفسها الأصغر من فترات حياة المراجع الممررة. لذلك، يرفض مدقق الاستعارة الكود في القائمة 10-23 كمحتمل أن يكون له مرجعًا غير صالح.
 
-Try designing more experiments that vary the values and lifetimes of the
-references passed in to the `longest` function and how the returned reference
-is used. Make hypotheses about whether or not your experiments will pass the
-borrow checker before you compile; then, check to see if you’re right!
+جرّب تصميم تجارب أخرى تختلف في القيم وفترات حياة المراجع الممررة إلى دالة `longest` وكيفية استخدام المرجع المرجع. قم بوضع فرضيات حول ما إذا كانت تجاربك ستمر مدقق الاستعارة قبل الترجمة؛ ثم تحقق لترى ما إذا كنت على حق!
 
-<!-- Old headings. Do not remove or links may break. -->
+### التفكير من حيث فترات الحياة
 
-<a id="thinking-in-terms-of-lifetimes"></a>
-
-### Relationships
-
-The way in which you need to specify lifetime parameters depends on what your
-function is doing. For example, if we changed the implementation of the
-`longest` function to always return the first parameter rather than the longest
-string slice, we wouldn’t need to specify a lifetime on the `y` parameter. The
-following code will compile:
+الطريقة التي تحتاج بها إلى تحديد معاملات فترة الحياة تعتمد على ما تفعله دالتك. على سبيل المثال، إذا قمنا بتغيير تنفيذ دالة `longest` لتُرجع دائمًا المعامل الأول بدلاً من أطول شريحة سلسلة نصية، فلن نحتاج إلى تحديد فترة حياة على المعامل `y`. الكود التالي سيتم ترجمته:
 
 <Listing file-name="src/main.rs">
 
@@ -331,17 +180,9 @@ following code will compile:
 
 </Listing>
 
-We’ve specified a lifetime parameter `'a` for the parameter `x` and the return
-type, but not for the parameter `y`, because the lifetime of `y` does not have
-any relationship with the lifetime of `x` or the return value.
+لقد حددنا معامل فترة الحياة `'a` للمعامل `x` ونوع الإرجاع، لكن ليس للمعامل `y`، لأن فترة حياة `y` ليس لها أي علاقة بفترة حياة `x` أو القيمة المرجعة.
 
-When returning a reference from a function, the lifetime parameter for the
-return type needs to match the lifetime parameter for one of the parameters. If
-the reference returned does _not_ refer to one of the parameters, it must refer
-to a value created within this function. However, this would be a dangling
-reference because the value will go out of scope at the end of the function.
-Consider this attempted implementation of the `longest` function that won’t
-compile:
+عند إرجاع مرجع من دالة، يجب أن يتطابق معامل فترة الحياة لنوع الإرجاع مع معامل فترة الحياة لأحد المعاملات. إذا كان المرجع المرجع _لا_ يشير إلى أحد المعاملات، فيجب أن يشير إلى قيمة تم إنشاؤها داخل هذه الدالة. ومع ذلك، سيكون هذا مرجعًا معلقًا لأن القيمة ستخرج من النطاق في نهاية الدالة. ضع في اعتبارك محاولة التنفيذ هذه لدالة `longest` التي لن تتم ترجمتها:
 
 <Listing file-name="src/main.rs">
 
@@ -351,40 +192,21 @@ compile:
 
 </Listing>
 
-Here, even though we’ve specified a lifetime parameter `'a` for the return
-type, this implementation will fail to compile because the return value
-lifetime is not related to the lifetime of the parameters at all. Here is the
-error message we get:
+هنا، على الرغم من أننا حددنا معامل فترة حياة `'a` لنوع الإرجاع، فإن هذا التنفيذ سيفشل في الترجمة لأن قيمة فترة الحياة للإرجاع غير مرتبطة على الإطلاق بفترة حياة المعاملات. هذه هي رسالة الخطأ التي نحصل عليها:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
-The problem is that `result` goes out of scope and gets cleaned up at the end
-of the `longest` function. We’re also trying to return a reference to `result`
-from the function. There is no way we can specify lifetime parameters that
-would change the dangling reference, and Rust won’t let us create a dangling
-reference. In this case, the best fix would be to return an owned data type
-rather than a reference so that the calling function is then responsible for
-cleaning up the value.
+المشكلة هي أن `result` يخرج من النطاق ويتم تنظيفه في نهاية دالة `longest`. نحاول أيضًا إرجاع مرجع إلى `result` من الدالة. لا توجد طريقة يمكننا بها تحديد معاملات فترة الحياة التي من شأنها تغيير المرجع المعلق، ولا يسمح لنا Rust بإنشاء مرجع معلق. في هذه الحالة، أفضل حل هو إرجاع نوع بيانات مملوك بدلاً من مرجع بحيث تكون الدالة المستدعية مسؤولة بعد ذلك عن تنظيف القيمة.
 
-Ultimately, lifetime syntax is about connecting the lifetimes of various
-parameters and return values of functions. Once they’re connected, Rust has
-enough information to allow memory-safe operations and disallow operations that
-would create dangling pointers or otherwise violate memory safety.
+في النهاية، صياغة فترة الحياة تتعلق بربط فترات حياة معاملات مختلفة وقيم الإرجاع للدوال. بمجرد ربطها، يكون لدى Rust معلومات كافية للسماح بعمليات آمنة للذاكرة ورفض العمليات التي قد تنشئ مؤشرات معلقة أو تنتهك سلامة الذاكرة.
 
-<!-- Old headings. Do not remove or links may break. -->
+### تعليقات فترة الحياة في تعريفات البنية
 
-<a id="lifetime-annotations-in-struct-definitions"></a>
+حتى الآن، عرّفنا البنى لتحتفظ بأنواع مملوكة. يمكننا تعريف البنى لتحتفظ بمراجع، لكننا في هذه الحالة نحتاج إلى إضافة تعليق فترة حياة على كل مرجع في تعريف البنية. القائمة 10-24 لديها بنية تسمى `ImportantExcerpt` التي تحتفظ بشريحة سلسلة نصية.
 
-### In Struct Definitions
-
-So far, the structs we’ve defined all hold owned types. We can define structs
-to hold references, but in that case, we would need to add a lifetime
-annotation on every reference in the struct’s definition. Listing 10-24 has a
-struct named `ImportantExcerpt` that holds a string slice.
-
-<Listing number="10-24" file-name="src/main.rs" caption="A struct that holds a reference, requiring a lifetime annotation">
+<Listing number="10-24" file-name="src/main.rs" caption="بنية تحتفظ بمرجع، تتطلب تعليق فترة حياة">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs}}
@@ -392,28 +214,15 @@ struct named `ImportantExcerpt` that holds a string slice.
 
 </Listing>
 
-This struct has the single field `part` that holds a string slice, which is a
-reference. As with generic data types, we declare the name of the generic
-lifetime parameter inside angle brackets after the name of the struct so that
-we can use the lifetime parameter in the body of the struct definition. This
-annotation means an instance of `ImportantExcerpt` can’t outlive the reference
-it holds in its `part` field.
+تحتوي هذه البنية على حقل واحد، `part`، الذي يحتفظ بشريحة سلسلة نصية، وهي مرجع. كما هو الحال مع أنواع البيانات العامة، نعلن عن اسم معامل فترة الحياة العامة داخل الأقواس الزاوية بعد اسم البنية بحيث يمكننا استخدام معامل فترة الحياة في جسم تعريف البنية. يعني هذا التعليق أن نسخة من `ImportantExcerpt` لا يمكنها أن تعيش أطول من المرجع الذي تحتفظ به في حقلها `part`.
 
-The `main` function here creates an instance of the `ImportantExcerpt` struct
-that holds a reference to the first sentence of the `String` owned by the
-variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
-instance is created. In addition, `novel` doesn’t go out of scope until after
-the `ImportantExcerpt` goes out of scope, so the reference in the
-`ImportantExcerpt` instance is valid.
+دالة `main` هنا تنشئ نسخة من بنية `ImportantExcerpt` التي تحتفظ بمرجع إلى الجملة الأولى من `String` المملوكة بواسطة متغير `novel`. البيانات في `novel` موجودة قبل إنشاء نسخة `ImportantExcerpt`. بالإضافة إلى ذلك، `novel` لا تخرج من النطاق حتى بعد خروج `ImportantExcerpt` من النطاق، لذا فإن المرجع في نسخة `ImportantExcerpt` صالح.
 
-### Lifetime Elision
+### استبعاد فترة الحياة
 
-You’ve learned that every reference has a lifetime and that you need to specify
-lifetime parameters for functions or structs that use references. However, we
-had a function in Listing 4-9, shown again in Listing 10-25, that compiled
-without lifetime annotations.
+لقد تعلمت أن كل مرجع له فترة حياة وأنك تحتاج إلى تحديد معاملات فترة الحياة للدوال أو البنى التي تستخدم المراجع. ومع ذلك، كان لدينا دالة في القائمة 4-9، موضحة مرة أخرى في القائمة 10-25، التي تم ترجمتها دون تعليقات فترة الحياة.
 
-<Listing number="10-25" file-name="src/lib.rs" caption="A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references">
+<Listing number="10-25" file-name="src/lib.rs" caption="دالة عرّفناها في القائمة 4-9 التي تم ترجمتها دون تعليقات فترة الحياة، على الرغم من أن المعامل والقيمة المرجعة كلاهما مراجع">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
@@ -421,220 +230,125 @@ without lifetime annotations.
 
 </Listing>
 
-The reason this function compiles without lifetime annotations is historical:
-In early versions (pre-1.0) of Rust, this code wouldn’t have compiled, because
-every reference needed an explicit lifetime. At that time, the function
-signature would have been written like this:
+السبب في أن هذه الدالة تُترجم دون تعليقات فترة الحياة تاريخي: في الإصدارات المبكرة (قبل 1.0) من Rust، لم يكن هذا الكود ليُترجم لأن كل مرجع كان يحتاج إلى فترة حياة صريحة. في ذلك الوقت، كان توقيع الدالة سيُكتب هكذا:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-After writing a lot of Rust code, the Rust team found that Rust programmers
-were entering the same lifetime annotations over and over in particular
-situations. These situations were predictable and followed a few deterministic
-patterns. The developers programmed these patterns into the compiler’s code so
-that the borrow checker could infer the lifetimes in these situations and
-wouldn’t need explicit annotations.
+بعد كتابة الكثير من كود Rust، وجد فريق Rust أن مبرمجي Rust كانوا يدخلون تعليقات فترة الحياة نفسها مرارًا وتكرارًا في حالات معينة. كانت هذه الحالات متوقعة وتتبع بعض الأنماط الحتمية. قام المطورون ببرمجة هذه الأنماط في كود المترجم بحيث يمكن لمدقق الاستعارة استنتاج فترات الحياة في هذه الحالات ولا يحتاج إلى تعليقات صريحة.
 
-This piece of Rust history is relevant because it’s possible that more
-deterministic patterns will emerge and be added to the compiler. In the future,
-even fewer lifetime annotations might be required.
+يُذكر هذا الجزء من تاريخ Rust لأنه من الممكن أن تظهر المزيد من الأنماط الحتمية وتضاف إلى المترجم. في المستقبل، قد تكون هناك حاجة إلى عدد أقل من تعليقات فترة الحياة.
 
-The patterns programmed into Rust’s analysis of references are called the
-_lifetime elision rules_. These aren’t rules for programmers to follow; they’re
-a set of particular cases that the compiler will consider, and if your code
-fits these cases, you don’t need to write the lifetimes explicitly.
+الأنماط المبرمجة في تحليل Rust للمراجع تسمى _قواعد استبعاد فترة الحياة_. هذه ليست قواعد يجب على المبرمجين اتباعها؛ إنها مجموعة من الحالات الخاصة التي سينظر فيها المترجم، وإذا كان كودك يتناسب مع هذه الحالات، فلن تحتاج إلى كتابة فترات الحياة بشكل صريح.
 
-The elision rules don’t provide full inference. If there is still ambiguity
-about what lifetimes the references have after Rust applies the rules, the
-compiler won’t guess what the lifetime of the remaining references should be.
-Instead of guessing, the compiler will give you an error that you can resolve
-by adding the lifetime annotations.
+قواعد الاستبعاد لا توفر استنتاجًا كاملاً. إذا طبق Rust القواعد بشكل حتمي لكن لا يزال هناك غموض حول ماهية فترات حياة المراجع، فلن يخمن المترجم ما يجب أن تكون عليه فترة حياة المراجع المتبقية. بدلاً من التخمين، سيعطيك المترجم خطأ يمكنك حله عن طريق إضافة تعليقات فترة الحياة.
 
-Lifetimes on function or method parameters are called _input lifetimes_, and
-lifetimes on return values are called _output lifetimes_.
+فترات الحياة على معاملات الدالة أو الدالة تسمى _فترات حياة الإدخال_، وفترات الحياة على القيم المرجعة تسمى _فترات حياة الإخراج_.
 
-The compiler uses three rules to figure out the lifetimes of the references
-when there aren’t explicit annotations. The first rule applies to input
-lifetimes, and the second and third rules apply to output lifetimes. If the
-compiler gets to the end of the three rules and there are still references for
-which it can’t figure out lifetimes, the compiler will stop with an error.
-These rules apply to `fn` definitions as well as `impl` blocks.
+يستخدم المترجم ثلاث قواعد لمعرفة فترات حياة المراجع عندما لا توجد تعليقات صريحة. تنطبق القاعدة الأولى على فترات حياة الإدخال، وتنطبق القاعدتان الثانية والثالثة على فترات حياة الإخراج. إذا وصل المترجم إلى نهاية القواعد الثلاث ولا يزال هناك مراجع لا يمكنه معرفة فترات حياتها، سيتوقف المترجم مع خطأ. تنطبق هذه القواعد على تعريفات `fn` وكذلك كتل `impl`.
 
-The first rule is that the compiler assigns a lifetime parameter to each
-parameter that’s a reference. In other words, a function with one parameter
-gets one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
-parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
-y: &'b i32)`; and so on.
+القاعدة الأولى هي أن المترجم يعين معامل فترة حياة لكل معامل هو مرجع. بعبارة أخرى، دالة بمعامل واحد تحصل على معامل فترة حياة واحد: `fn foo<'a>(x: &'a i32)`؛ دالة بمعاملين تحصل على معاملي فترة حياة منفصلين: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`؛ وهكذا.
 
-The second rule is that, if there is exactly one input lifetime parameter, that
-lifetime is assigned to all output lifetime parameters: `fn foo<'a>(x: &'a i32)
--> &'a i32`.
+القاعدة الثانية هي أنه إذا كان هناك معامل فترة حياة إدخال واحد بالضبط، فإن تلك فترة الحياة يتم تعيينها لجميع معاملات فترة حياة الإخراج: `fn foo<'a>(x: &'a i32) -> &'a i32`.
 
-The third rule is that, if there are multiple input lifetime parameters, but
-one of them is `&self` or `&mut self` because this is a method, the lifetime of
-`self` is assigned to all output lifetime parameters. This third rule makes
-methods much nicer to read and write because fewer symbols are necessary.
+القاعدة الثالثة هي أنه إذا كان هناك معاملات فترة حياة إدخال متعددة، لكن أحدها هو `&self` أو `&mut self` لأن هذه دالة، فإن فترة حياة `self` يتم تعيينها لجميع معاملات فترة حياة الإخراج. هذه القاعدة الثالثة تجعل الدوال أكثر سهولة في القراءة والكتابة لأن عددًا أقل من الرموز ضروري.
 
-Let’s pretend we’re the compiler. We’ll apply these rules to figure out the
-lifetimes of the references in the signature of the `first_word` function in
-Listing 10-25. The signature starts without any lifetimes associated with the
-references:
+دعنا نتظاهر بأننا المترجم. سنطبق هذه القواعد لمعرفة فترات حياة المراجع في توقيع دالة `first_word` في القائمة 10-25. يبدأ التوقيع دون أي فترات حياة مرتبطة بالمراجع:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-Then, the compiler applies the first rule, which specifies that each parameter
-gets its own lifetime. We’ll call it `'a` as usual, so now the signature is
-this:
+ثم، يطبق المترجم القاعدة الأولى، التي تحدد أن كل معامل يحصل على فترة حياته الخاصة. سنسميها `'a` كالعادة، لذا فإن التوقيع الآن هو:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
 ```
 
-The second rule applies because there is exactly one input lifetime. The second
-rule specifies that the lifetime of the one input parameter gets assigned to
-the output lifetime, so the signature is now this:
+تنطبق القاعدة الثانية لأن هناك معامل فترة حياة إدخال واحد بالضبط. تحدد القاعدة الثانية أن فترة حياة معامل الإدخال الواحد يتم تعيينها لفترة حياة الإخراج، لذا فإن التوقيع الآن هو:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-Now all the references in this function signature have lifetimes, and the
-compiler can continue its analysis without needing the programmer to annotate
-the lifetimes in this function signature.
+الآن جميع المراجع في توقيع هذه الدالة لها فترات حياة، ويمكن للمترجم متابعة تحليله دون الحاجة إلى أن يعلق المبرمج على فترات الحياة في توقيع هذه الدالة.
 
-Let’s look at another example, this time using the `longest` function that had
-no lifetime parameters when we started working with it in Listing 10-20:
+دعنا ننظر إلى مثال آخر، هذه المرة باستخدام دالة `longest` التي لم يكن لها معاملات فترة حياة عندما بدأنا العمل بها في القائمة 10-20:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
 ```
 
-Let’s apply the first rule: Each parameter gets its own lifetime. This time we
-have two parameters instead of one, so we have two lifetimes:
+دعنا نطبق القاعدة الأولى: كل معامل يحصل على فترة حياته الخاصة. هذه المرة لدينا معاملان بدلاً من واحد، لذا لدينا فترتا حياة:
 
 ```rust,ignore
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 ```
 
-You can see that the second rule doesn’t apply, because there is more than one
-input lifetime. The third rule doesn’t apply either, because `longest` is a
-function rather than a method, so none of the parameters are `self`. After
-working through all three rules, we still haven’t figured out what the return
-type’s lifetime is. This is why we got an error trying to compile the code in
-Listing 10-20: The compiler worked through the lifetime elision rules but still
-couldn’t figure out all the lifetimes of the references in the signature.
+يمكنك أن ترى أن القاعدة الثانية لا تنطبق، لأن هناك أكثر من فترة حياة إدخال واحدة. القاعدة الثالثة لا تنطبق أيضًا، لأن `longest` هي دالة بدلاً من دالة، لذا لا يوجد معامل `self`. بعد العمل من خلال القواعد الثلاث جميعها، لا نزال لم نكتشف ما هي فترة حياة نوع الإرجاع. لهذا السبب حصلنا على خطأ عند محاولة ترجمة الكود في القائمة 10-20: عمل المترجم من خلال قواعد استبعاد فترة الحياة لكنه لا يزال لا يمكنه معرفة جميع فترات حياة المراجع في التوقيع.
 
-Because the third rule really only applies in method signatures, we’ll look at
-lifetimes in that context next to see why the third rule means we don’t have to
-annotate lifetimes in method signatures very often.
+لأن القاعدة الثالثة تنطبق فقط في توقيعات الدوال، سننظر إلى فترات الحياة في هذا السياق بعد ذلك لنرى لماذا القاعدة الثالثة تعني أنه لا يتعين علينا تعليق فترات الحياة في توقيعات الدوال في كثير من الأحيان.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="lifetime-annotations-in-method-definitions"></a>
 
-### In Method Definitions
+### في تعريفات الدوال
 
-When we implement methods on a struct with lifetimes, we use the same syntax as
-that of generic type parameters, as shown in Listing 10-11. Where we declare
-and use the lifetime parameters depends on whether they’re related to the
-struct fields or the method parameters and return values.
+عندما نطبق الدوال على بنية بها فترات حياة، نستخدم نفس الصياغة الخاصة بمعاملات النوع العام، كما هو موضح في القائمة 10-11. حيث نعلن ونستخدم معاملات فترة الحياة يعتمد على ما إذا كانت مرتبطة بحقول البنية أو معاملات الدالة والقيم المرجعة.
 
-Lifetime names for struct fields always need to be declared after the `impl`
-keyword and then used after the struct’s name because those lifetimes are part
-of the struct’s type.
+أسماء فترات الحياة لحقول البنية تحتاج دائمًا إلى التعريف بعد كلمة `impl` ثم استخدامها بعد اسم البنية لأن فترات الحياة هذه جزء من نوع البنية.
 
-In method signatures inside the `impl` block, references might be tied to the
-lifetime of references in the struct’s fields, or they might be independent. In
-addition, the lifetime elision rules often make it so that lifetime annotations
-aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in Listing 10-24.
+في توقيعات الدوال داخل كتلة `impl`، قد تكون المراجع مرتبطة بفترة حياة المراجع في حقول البنية، أو قد تكون مستقلة. بالإضافة إلى ذلك، غالبًا ما تجعل قواعد استبعاد فترة الحياة من غير الضروري أن تكون تعليقات فترة الحياة في توقيعات الدوال. دعنا ننظر إلى بعض الأمثلة باستخدام البنية المسماة `ImportantExcerpt` التي عرّفناها في القائمة 10-24.
 
-First, we’ll use a method named `level` whose only parameter is a reference to
-`self` and whose return value is an `i32`, which is not a reference to anything:
+أولاً، سنستخدم دالة تسمى `level` التي معاملها الوحيد هو مرجع إلى `self` وقيمتها المرجعة هي `i32`، والتي ليست مرجعًا لأي شيء:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
-The lifetime parameter declaration after `impl` and its use after the type name
-are required, but because of the first elision rule, we’re not required to
-annotate the lifetime of the reference to `self`.
+تعريف معامل فترة الحياة بعد `impl` واستخدامه بعد اسم النوع مطلوب، ولكن بسبب قاعدة الاستبعاد الأولى، لسنا مطالبين بتعليق فترة حياة المرجع إلى `self`.
 
-Here is an example where the third lifetime elision rule applies:
+هنا مثال حيث تنطبق قاعدة استبعاد فترة الحياة الثالثة:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
-There are two input lifetimes, so Rust applies the first lifetime elision rule
-and gives both `&self` and `announcement` their own lifetimes. Then, because
-one of the parameters is `&self`, the return type gets the lifetime of `&self`,
-and all lifetimes have been accounted for.
+هناك فترتا حياة إدخال، لذا يطبق Rust قاعدة استبعاد فترة الحياة الأولى ويعطي كلاً من `&self` و `announcement` فترات حياتهما الخاصة. ثم، لأن أحد المعاملات هو `&self`، يحصل نوع الإرجاع على فترة حياة `&self`، وتم حساب جميع فترات الحياة.
 
-### The Static Lifetime
+### فترة الحياة الثابتة
 
-One special lifetime we need to discuss is `'static`, which denotes that the
-affected reference _can_ live for the entire duration of the program. All
-string literals have the `'static` lifetime, which we can annotate as follows:
+فترة حياة خاصة واحدة نحتاج إلى مناقشتها هي `'static`، والتي تشير إلى أن المرجع المتأثر _يمكن أن_ يعيش طوال مدة البرنامج بأكملها. جميع السلاسل النصية الحرفية لها فترة الحياة `'static`، والتي يمكننا تعليقها كما يلي:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the program’s binary, which is
-always available. Therefore, the lifetime of all string literals is `'static`.
+يتم تخزين نص هذه السلسلة النصية مباشرة في ملف البرنامج الثنائي، والذي يكون متاحًا دائمًا. لذلك، فإن فترة حياة جميع السلاسل النصية الحرفية هي `'static`.
 
-You might see suggestions in error messages to use the `'static` lifetime. But
-before specifying `'static` as the lifetime for a reference, think about
-whether or not the reference you have actually lives the entire lifetime of
-your program, and whether you want it to. Most of the time, an error message
-suggesting the `'static` lifetime results from attempting to create a dangling
-reference or a mismatch of the available lifetimes. In such cases, the solution
-is to fix those problems, not to specify the `'static` lifetime.
+قد ترى اقتراحات في رسائل الخطأ لاستخدام فترة الحياة `'static`. ولكن قبل تحديد `'static` كفترة حياة للمرجع، فكر فيما إذا كان المرجع الذي لديك يعيش فعلاً طوال فترة حياة البرنامج بأكملها، وما إذا كنت تريد ذلك. في معظم الأحيان، تنتج رسالة خطأ تقترح فترة الحياة `'static` عن محاولة إنشاء مرجع معلق أو عدم تطابق فترات الحياة المتاحة. في مثل هذه الحالات، الحل هو إصلاح تلك المشاكل، وليس تحديد فترة الحياة `'static`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="generic-type-parameters-trait-bounds-and-lifetimes-together"></a>
 
-## Generic Type Parameters, Trait Bounds, and Lifetimes
+## معاملات النوع العام، قيود السمات، وفترات الحياة
 
-Let’s briefly look at the syntax of specifying generic type parameters, trait
-bounds, and lifetimes all in one function!
+دعنا ننظر بإيجاز إلى صياغة تحديد معاملات النوع العام، قيود السمات، وفترات الحياة كلها في دالة واحدة!
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
-This is the `longest` function from Listing 10-21 that returns the longer of
-two string slices. But now it has an extra parameter named `ann` of the generic
-type `T`, which can be filled in by any type that implements the `Display`
-trait as specified by the `where` clause. This extra parameter will be printed
-using `{}`, which is why the `Display` trait bound is necessary. Because
-lifetimes are a type of generic, the declarations of the lifetime parameter
-`'a` and the generic type parameter `T` go in the same list inside the angle
-brackets after the function name.
+هذه هي دالة `longest` من القائمة 10-21 التي تُرجع الأطول من شريحتي سلسلة نصية. لكنها الآن تحتوي على معامل إضافي يسمى `ann` من النوع العام `T`، والذي يمكن ملؤه بأي نوع ينفذ سمة `Display` كما هو محدد بواسطة شرط `where`. سيتم طباعة هذا المعامل الإضافي باستخدام `{}`، ولهذا السبب يكون قيد سمة `Display` ضروريًا. لأن فترات الحياة هي نوع من الأنواع العامة، تذهب تعريفات معامل فترة الحياة `'a` ومعامل النوع العام `T` في نفس القائمة داخل الأقواس الزاوية بعد اسم الدالة.
 
-## Summary
+## الخلاصة
 
-We covered a lot in this chapter! Now that you know about generic type
-parameters, traits and trait bounds, and generic lifetime parameters, you’re
-ready to write code without repetition that works in many different situations.
-Generic type parameters let you apply the code to different types. Traits and
-trait bounds ensure that even though the types are generic, they’ll have the
-behavior the code needs. You learned how to use lifetime annotations to ensure
-that this flexible code won’t have any dangling references. And all of this
-analysis happens at compile time, which doesn’t affect runtime performance!
+قمنا بتغطية الكثير في هذا الفصل! الآن بعد أن تعرف عن معاملات النوع العام، والسمات وقيود السمات، ومعاملات فترة الحياة العامة، أنت مستعد لكتابة كود دون تكرار يعمل في العديد من المواقف المختلفة. معاملات النوع العام تتيح لك تطبيق الكود على أنواع مختلفة. السمات وقيود السمات تضمن أنه حتى مع كون الأنواع عامة، فإنها ستمتلك السلوك الذي يحتاجه الكود. لقد تعلمت كيفية استخدام تعليقات فترة الحياة للتأكد من أن هذا الكود المرن لن يحتوي على أي مراجع معلقة. وكل هذا التحليل يحدث في وقت الترجمة، مما لا يؤثر على أداء وقت التشغيل!
 
-Believe it or not, there is much more to learn on the topics we discussed in
-this chapter: Chapter 18 discusses trait objects, which are another way to use
-traits. There are also more complex scenarios involving lifetime annotations
-that you will only need in very advanced scenarios; for those, you should read
-the [Rust Reference][reference]. But next, you’ll learn how to write tests in
-Rust so that you can make sure your code is working the way it should.
+صدق أو لا تصدق، هناك الكثير لتعلمه حول المواضيع التي ناقشناها في هذا الفصل: يناقش الفصل 18 كائنات السمات، وهي طريقة أخرى لاستخدام السمات. هناك أيضًا سيناريوهات أكثر تعقيدًا تتضمن تعليقات فترة الحياة التي ستحتاجها فقط في سيناريوهات متقدمة جدًا؛ لتلك، يجب عليك قراءة [مرجع Rust][reference]. ولكن بعد ذلك، ستتعلم كيفية كتابة الاختبارات في Rust حتى تتمكن من التأكد من أن كودك يعمل بالطريقة التي ينبغي أن يعمل بها.
 
 [references-and-borrowing]: ch04-02-references-and-borrowing.html#references-and-borrowing
 [string-slices-as-parameters]: ch04-03-slices.html#string-slices-as-parameters

@@ -1,12 +1,11 @@
-## Concise Control Flow with `if let` and `let else`
+## تدفق تحكم موجز مع `if let` و `let else`
 
-The `if let` syntax lets you combine `if` and `let` into a less verbose way to
-handle values that match one pattern while ignoring the rest. Consider the
-program in Listing 6-6 that matches on an `Option<u8>` value in the
-`config_max` variable but only wants to execute code if the value is the `Some`
-variant.
+تتيح لك صياغة `if let` دمج `if` و `let` في طريقة أقل إسهاباً للتعامل مع القيم
+التي تطابق نمطاً واحداً بينما تتجاهل الباقي. فكر في البرنامج في القائمة 6-6
+الذي يطابق قيمة `Option<u8>` في متغير `config_max` ولكنه يريد فقط تنفيذ الكود
+إذا كانت القيمة هي متغير `Some`.
 
-<Listing number="6-6" caption="A `match` that only cares about executing code when the value is `Some`">
+<Listing number="6-6" caption="`match` يهتم فقط بتنفيذ الكود عندما تكون القيمة `Some`">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
@@ -14,70 +13,62 @@ variant.
 
 </Listing>
 
-If the value is `Some`, we print out the value in the `Some` variant by binding
-the value to the variable `max` in the pattern. We don’t want to do anything
-with the `None` value. To satisfy the `match` expression, we have to add `_ =>
-()` after processing just one variant, which is annoying boilerplate code to
-add.
+إذا كانت القيمة `Some`، نطبع القيمة في متغير `Some` عن طريق ربط القيمة بالمتغير
+`max` في النمط. لا نريد فعل أي شيء مع قيمة `None`. لإرضاء تعبير `match`، يجب
+أن نضيف `_ => ()` بعد معالجة متغير واحد فقط، وهو كود نموذجي مزعج للإضافة.
 
-Instead, we could write this in a shorter way using `if let`. The following
-code behaves the same as the `match` in Listing 6-6:
+بدلاً من ذلك، يمكننا كتابة هذا بطريقة أقصر باستخدام `if let`. الكود التالي
+يتصرف بنفس طريقة `match` في القائمة 6-6:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-12-if-let/src/main.rs:here}}
 ```
 
-The syntax `if let` takes a pattern and an expression separated by an equal
-sign. It works the same way as a `match`, where the expression is given to the
-`match` and the pattern is its first arm. In this case, the pattern is
-`Some(max)`, and the `max` binds to the value inside the `Some`. We can then
-use `max` in the body of the `if let` block in the same way we used `max` in
-the corresponding `match` arm. The code in the `if let` block only runs if the
-value matches the pattern.
+تأخذ صياغة `if let` نمطاً وتعبيراً مفصولين بعلامة يساوي. تعمل بنفس طريقة
+`match`، حيث يُعطى التعبير إلى `match` والنمط هو ذراعها الأول. في هذه الحالة،
+النمط هو `Some(max)`، و `max` يرتبط بالقيمة داخل `Some`. يمكننا حينها استخدام
+`max` في جسم كتلة `if let` بنفس الطريقة التي استخدمنا بها `max` في ذراع
+`match` المقابل. الكود في كتلة `if let` يعمل فقط إذا طابقت القيمة النمط.
 
-Using `if let` means less typing, less indentation, and less boilerplate code.
-However, you lose the exhaustive checking `match` enforces that ensures that
-you aren’t forgetting to handle any cases. Choosing between `match` and `if
-let` depends on what you’re doing in your particular situation and whether
-gaining conciseness is an appropriate trade-off for losing exhaustive checking.
+استخدام `if let` يعني كتابة أقل، وإزاحة أقل، وكود نموذجي أقل. ومع ذلك، تفقد
+الفحص الشامل الذي يفرضه `match` والذي يضمن أنك لا تنسى التعامل مع أي حالات.
+الاختيار بين `match` و `if let` يعتمد على ما تفعله في موقفك الخاص وما إذا كان
+الحصول على الإيجاز هو مقايضة مناسبة لفقدان الفحص الشامل.
 
-In other words, you can think of `if let` as syntax sugar for a `match` that
-runs code when the value matches one pattern and then ignores all other values.
+بعبارة أخرى، يمكنك التفكير في `if let` على أنها سكر نحوي لـ `match` التي
+تشغل الكود عندما تطابق القيمة نمطاً واحداً ثم تتجاهل جميع القيم الأخرى.
 
-We can include an `else` with an `if let`. The block of code that goes with the
-`else` is the same as the block of code that would go with the `_` case in the
-`match` expression that is equivalent to the `if let` and `else`. Recall the
-`Coin` enum definition in Listing 6-4, where the `Quarter` variant also held a
-`UsState` value. If we wanted to count all non-quarter coins we see while also
-announcing the state of the quarters, we could do that with a `match`
-expression, like this:
+يمكننا تضمين `else` مع `if let`. كتلة الكود التي تذهب مع `else` هي نفس كتلة
+الكود التي ستذهب مع حالة `_` في تعبير `match` الذي يعادل `if let` و `else`.
+تذكر تعريف تعداد `Coin` في القائمة 6-4، حيث احتوى متغير `Quarter` أيضاً على
+قيمة `UsState`. إذا أردنا عد جميع العملات غير الربع التي نراها بينما نعلن
+أيضاً عن ولاية الربع، يمكننا فعل ذلك باستخدام تعبير `match`، كهذا:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-13-count-and-announce-match/src/main.rs:here}}
 ```
 
-Or we could use an `if let` and `else` expression, like this:
+أو يمكننا استخدام تعبير `if let` و `else`، كهذا:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
 ```
 
-## Staying on the “Happy Path” with `let...else`
+## البقاء على "المسار السعيد" مع `let...else`
 
-The common pattern is to perform some computation when a value is present and
-return a default value otherwise. Continuing with our example of coins with a
-`UsState` value, if we wanted to say something funny depending on how old the
-state on the quarter was, we might introduce a method on `UsState` to check the
-age of a state, like so:
+النمط الشائع هو إجراء بعض الحسابات عندما تكون القيمة موجودة وإعادة قيمة
+افتراضية بخلاف ذلك. متابعة مع مثالنا للعملات مع قيمة `UsState`، إذا أردنا قول
+شيء مضحك اعتماداً على عمر الولاية على الربع، قد نقدم دالة على `UsState` للتحقق
+من عمر الولاية، كهذا:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:state}}
 ```
 
-Then, we might use `if let` to match on the type of coin, introducing a `state`
-variable within the body of the condition, as in Listing 6-7.
+ثم قد نستخدم `if let` لمطابقة نوع العملة، مقدمين متغير `state` داخل جسم
+الشرط، كما في القائمة 6-7.
 
-<Listing number="6-7" caption="Checking whether a state existed in 1900 by using conditionals nested inside an `if let`">
+<Listing number="6-7" caption="التحقق مما إذا كانت ولاية موجودة في عام 1900 باستخدام شروط متداخلة داخل `if let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:describe}}
@@ -85,14 +76,13 @@ variable within the body of the condition, as in Listing 6-7.
 
 </Listing>
 
-That gets the job done, but it has pushed the work into the body of the `if
-let` statement, and if the work to be done is more complicated, it might be
-hard to follow exactly how the top-level branches relate. We could also take
-advantage of the fact that expressions produce a value either to produce the
-`state` from the `if let` or to return early, as in Listing 6-8. (You could do
-something similar with a `match`, too.)
+هذا ينجز المهمة، لكنه دفع العمل إلى جسم بيان `if let`، وإذا كان العمل المراد
+إنجازه أكثر تعقيداً، قد يكون من الصعب تتبع كيفية ارتباط الفروع ذات المستوى
+الأعلى تماماً. يمكننا أيضاً الاستفادة من حقيقة أن التعبيرات تنتج قيمة إما
+لإنتاج `state` من `if let` أو للعودة مبكراً، كما في القائمة 6-8. (يمكنك فعل
+شيء مماثل مع `match` أيضاً.)
 
-<Listing number="6-8" caption="Using `if let` to produce a value or return early">
+<Listing number="6-8" caption="استخدام `if let` لإنتاج قيمة أو العودة مبكراً">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-08/src/main.rs:describe}}
@@ -100,20 +90,19 @@ something similar with a `match`, too.)
 
 </Listing>
 
-This is a bit annoying to follow in its own way, though! One branch of the `if
-let` produces a value, and the other one returns from the function entirely.
+هذا مزعج قليلاً للمتابعة بطريقته الخاصة! فرع واحد من `if let` ينتج قيمة،
+والآخر يعود من الدالة بالكامل.
 
-To make this common pattern nicer to express, Rust has `let...else`. The
-`let...else` syntax takes a pattern on the left side and an expression on the
-right, very similar to `if let`, but it does not have an `if` branch, only an
-`else` branch. If the pattern matches, it will bind the value from the pattern
-in the outer scope. If the pattern does _not_ match, the program will flow into
-the `else` arm, which must return from the function.
+لجعل هذا النمط الشائع أفضل للتعبير عنه، تمتلك Rust `let...else`. صياغة
+`let...else` تأخذ نمطاً على الجانب الأيسر وتعبيراً على اليمين، مشابه جداً لـ
+`if let`، لكنها لا تمتلك فرع `if`، فقط فرع `else`. إذا طابق النمط، سيربط
+القيمة من النمط في النطاق الخارجي. إذا _لم_ يطابق النمط، سيتدفق البرنامج إلى
+ذراع `else`، والذي يجب أن يعود من الدالة.
 
-In Listing 6-9, you can see how Listing 6-8 looks when using `let...else` in
-place of `if let`.
+في القائمة 6-9، يمكنك رؤية كيف تبدو القائمة 6-8 عند استخدام `let...else` بدلاً
+من `if let`.
 
-<Listing number="6-9" caption="Using `let...else` to clarify the flow through the function">
+<Listing number="6-9" caption="استخدام `let...else` لتوضيح التدفق عبر الدالة">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-09/src/main.rs:describe}}
@@ -121,27 +110,25 @@ place of `if let`.
 
 </Listing>
 
-Notice that it stays on the “happy path” in the main body of the function this
-way, without having significantly different control flow for two branches the
-way the `if let` did.
+لاحظ أنها تبقى على "المسار السعيد" في الجسم الرئيسي للدالة بهذه الطريقة، بدون
+تدفق تحكم مختلف بشكل كبير لفرعين كما فعل `if let`.
 
-If you have a situation in which your program has logic that is too verbose to
-express using a `match`, remember that `if let` and `let...else` are in your
-Rust toolbox as well.
+إذا كان لديك موقف حيث برنامجك لديه منطق مطول جداً للتعبير عنه باستخدام
+`match`، تذكر أن `if let` و `let...else` موجودان أيضاً في صندوق أدوات Rust
+الخاص بك.
 
-## Summary
+## الخلاصة
 
-We’ve now covered how to use enums to create custom types that can be one of a
-set of enumerated values. We’ve shown how the standard library’s `Option<T>`
-type helps you use the type system to prevent errors. When enum values have
-data inside them, you can use `match` or `if let` to extract and use those
-values, depending on how many cases you need to handle.
+لقد غطينا الآن كيفية استخدام التعدادات لإنشاء أنواع مخصصة يمكن أن تكون واحدة
+من مجموعة من القيم المعدودة. لقد أظهرنا كيف يساعدك نوع `Option<T>` الخاص
+بالمكتبة القياسية على استخدام نظام الأنواع لمنع الأخطاء. عندما تحتوي قيم
+التعداد على بيانات بداخلها، يمكنك استخدام `match` أو `if let` لاستخراج
+واستخدام تلك القيم، اعتماداً على عدد الحالات التي تحتاج إلى التعامل معها.
 
-Your Rust programs can now express concepts in your domain using structs and
-enums. Creating custom types to use in your API ensures type safety: The
-compiler will make certain your functions only get values of the type each
-function expects.
+يمكن لبرامج Rust الخاصة بك الآن التعبير عن المفاهيم في مجالك باستخدام البنى
+والتعدادات. إنشاء أنواع مخصصة للاستخدام في واجهة برمجة التطبيقات الخاصة بك
+يضمن سلامة الأنواع: سيتأكد المترجم من أن دوالك تحصل فقط على قيم من النوع الذي
+تتوقعه كل دالة.
 
-In order to provide a well-organized API to your users that is straightforward
-to use and only exposes exactly what your users will need, let’s now turn to
-Rust’s modules.
+من أجل توفير واجهة برمجة تطبيقات منظمة جيداً لمستخدميك تكون مباشرة للاستخدام
+وتكشف بالضبط فقط ما سيحتاجه مستخدموك، لننتقل الآن إلى وحدات Rust.

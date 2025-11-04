@@ -2,37 +2,21 @@
 
 <a id="traits-defining-shared-behavior"></a>
 
-## Defining Shared Behavior with Traits
+## تعريف السلوك المشترك باستخدام السمات
 
-A _trait_ defines the functionality a particular type has and can share with
-other types. We can use traits to define shared behavior in an abstract way. We
-can use _trait bounds_ to specify that a generic type can be any type that has
-certain behavior.
+_السمة_ (trait) تحدد الوظيفة التي يمتلكها نوع معين ويمكن مشاركتها مع أنواع أخرى. يمكننا استخدام السمات لتعريف السلوك المشترك بطريقة مجردة. يمكننا استخدام _حدود السمات_ (trait bounds) لتحديد أن النوع العام يمكن أن يكون أي نوع له سلوك معين.
 
-> Note: Traits are similar to a feature often called _interfaces_ in other
-> languages, although with some differences.
+> ملاحظة: السمات مشابهة لميزة تُسمى غالبًا _الواجهات_ (interfaces) في اللغات الأخرى، على الرغم من وجود بعض الاختلافات.
 
-### Defining a Trait
+### تعريف سمة
 
-A type’s behavior consists of the methods we can call on that type. Different
-types share the same behavior if we can call the same methods on all of those
-types. Trait definitions are a way to group method signatures together to
-define a set of behaviors necessary to accomplish some purpose.
+يتكون سلوك النوع من الدوال التي يمكننا استدعاؤها على ذلك النوع. تشترك الأنواع المختلفة في نفس السلوك إذا كان بإمكاننا استدعاء نفس الدوال على كل تلك الأنواع. تعريفات السمات هي طريقة لتجميع توقيعات الدوال معًا لتحديد مجموعة من السلوكيات اللازمة لتحقيق غرض ما.
 
-For example, let’s say we have multiple structs that hold various kinds and
-amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `SocialPost` that can have, at most, 280 characters
-along with metadata that indicates whether it was a new post, a repost, or a
-reply to another post.
+على سبيل المثال، لنفترض أن لدينا عدة بنيات (structs) تحتوي على أنواع وكميات مختلفة من النصوص: بنية `NewsArticle` التي تحتوي على قصة إخبارية مودعة في موقع معين وبنية `SocialPost` التي يمكن أن تحتوي، كحد أقصى، على 280 حرفًا إلى جانب البيانات الوصفية التي تشير إلى ما إذا كانت منشورًا جديدًا أو إعادة نشر أو ردًا على منشور آخر.
 
-We want to make a media aggregator library crate named `aggregator` that can
-display summaries of data that might be stored in a `NewsArticle` or
-`SocialPost` instance. To do this, we need a summary from each type, and we’ll
-request that summary by calling a `summarize` method on an instance. Listing
-10-12 shows the definition of a public `Summary` trait that expresses this
-behavior.
+نريد إنشاء مكتبة تجميع وسائط تُسمى `aggregator` يمكنها عرض ملخصات للبيانات التي قد تكون مخزنة في نسخة من `NewsArticle` أو `SocialPost`. للقيام بذلك، نحتاج إلى ملخص من كل نوع، وسنطلب ذلك الملخص عن طريق استدعاء دالة `summarize` على نسخة. يُظهر القائمة 10-12 تعريف سمة `Summary` العامة التي تعبر عن هذا السلوك.
 
-<Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
+<Listing number="10-12" file-name="src/lib.rs" caption="سمة `Summary` التي تتكون من السلوك المقدم من دالة `summarize`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
@@ -40,33 +24,17 @@ behavior.
 
 </Listing>
 
-Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We also declare the trait as `pub` so that
-crates depending on this crate can make use of this trait too, as we’ll see in
-a few examples. Inside the curly brackets, we declare the method signatures
-that describe the behaviors of the types that implement this trait, which in
-this case is `fn summarize(&self) -> String`.
+هنا، نعلن عن سمة باستخدام الكلمة المفتاحية `trait` ثم اسم السمة، وهو `Summary` في هذه الحالة. نعلن أيضًا السمة كـ `pub` حتى تتمكن الصناديق التي تعتمد على هذا الصندوق من استخدام هذه السمة أيضًا، كما سنرى في بعض الأمثلة. داخل الأقواس المعقوفة، نعلن عن توقيعات الدوال التي تصف سلوكيات الأنواع التي تنفذ هذه السمة، والتي في هذه الحالة هي `fn summarize(&self) -> String`.
 
-After the method signature, instead of providing an implementation within curly
-brackets, we use a semicolon. Each type implementing this trait must provide
-its own custom behavior for the body of the method. The compiler will enforce
-that any type that has the `Summary` trait will have the method `summarize`
-defined with this signature exactly.
+بعد توقيع الدالة، بدلاً من توفير تنفيذ داخل الأقواس المعقوفة، نستخدم فاصلة منقوطة. يجب على كل نوع ينفذ هذه السمة أن يوفر سلوكه المخصص لجسم الدالة. سيفرض المترجم أن أي نوع له سمة `Summary` سيكون لديه الدالة `summarize` معرفة بهذا التوقيع بالضبط.
 
-A trait can have multiple methods in its body: The method signatures are listed
-one per line, and each line ends in a semicolon.
+يمكن أن تحتوي السمة على دوال متعددة في جسمها: يتم سرد توقيعات الدوال واحدة في كل سطر، وكل سطر ينتهي بفاصلة منقوطة.
 
-### Implementing a Trait on a Type
+### تنفيذ سمة على نوع
 
-Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
-we can implement it on the types in our media aggregator. Listing 10-13 shows
-an implementation of the `Summary` trait on the `NewsArticle` struct that uses
-the headline, the author, and the location to create the return value of
-`summarize`. For the `SocialPost` struct, we define `summarize` as the username
-followed by the entire text of the post, assuming that the post content is
-already limited to 280 characters.
+الآن بعد أن عرّفنا التوقيعات المطلوبة لدوال سمة `Summary`، يمكننا تنفيذها على الأنواع في مجمع الوسائط الخاص بنا. توضح القائمة 10-13 تنفيذ سمة `Summary` على بنية `NewsArticle` التي تستخدم العنوان الرئيسي والكاتب والموقع لإنشاء القيمة المرجعة لـ `summarize`. بالنسبة لبنية `SocialPost`، نعرّف `summarize` على أنه اسم المستخدم متبوعًا بالنص الكامل للمنشور، بافتراض أن محتوى المنشور محدود بالفعل بـ 280 حرفًا.
 
-<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `SocialPost` types">
+<Listing number="10-13" file-name="src/lib.rs" caption="تنفيذ سمة `Summary` على أنواع `NewsArticle` و `SocialPost`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
@@ -74,64 +42,31 @@ already limited to 280 characters.
 
 </Listing>
 
-Implementing a trait on a type is similar to implementing regular methods. The
-difference is that after `impl`, we put the trait name we want to implement,
-then use the `for` keyword, and then specify the name of the type we want to
-implement the trait for. Within the `impl` block, we put the method signatures
-that the trait definition has defined. Instead of adding a semicolon after each
-signature, we use curly brackets and fill in the method body with the specific
-behavior that we want the methods of the trait to have for the particular type.
+تنفيذ سمة على نوع مشابه لتنفيذ الدوال العادية. الفرق هو أنه بعد `impl`، نضع اسم السمة التي نريد تنفيذها، ثم نستخدم الكلمة المفتاحية `for`، ثم نحدد اسم النوع الذي نريد تنفيذ السمة له. داخل كتلة `impl`، نضع توقيعات الدوال التي عرّفها تعريف السمة. بدلاً من إضافة فاصلة منقوطة بعد كل توقيع، نستخدم الأقواس المعقوفة ونملأ جسم الدالة بالسلوك المحدد الذي نريده لدوال السمة لهذا النوع المعين.
 
-Now that the library has implemented the `Summary` trait on `NewsArticle` and
-`SocialPost`, users of the crate can call the trait methods on instances of
-`NewsArticle` and `SocialPost` in the same way we call regular methods. The only
-difference is that the user must bring the trait into scope as well as the
-types. Here’s an example of how a binary crate could use our `aggregator`
-library crate:
+الآن بعد أن نفذت المكتبة سمة `Summary` على `NewsArticle` و `SocialPost`، يمكن لمستخدمي الصندوق استدعاء دوال السمة على نسخ من `NewsArticle` و `SocialPost` بنفس الطريقة التي نستدعي بها الدوال العادية. الفرق الوحيد هو أن المستخدم يجب أن يجلب السمة إلى النطاق بالإضافة إلى الأنواع. إليك مثالاً على كيفية استخدام صندوق ثنائي لمكتبة `aggregator` الخاصة بنا:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new post: horse_ebooks: of course, as you probably already
-know, people`.
+يطبع هذا الكود `1 new post: horse_ebooks: of course, as you probably already know, people`.
 
-Other crates that depend on the `aggregator` crate can also bring the `Summary`
-trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if either the trait or the
-type, or both, are local to our crate. For example, we can implement standard
-library traits like `Display` on a custom type like `SocialPost` as part of our
-`aggregator` crate functionality because the type `SocialPost` is local to our
-`aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
-`aggregator` crate because the trait `Summary` is local to our `aggregator`
-crate.
+يمكن أيضًا للصناديق الأخرى التي تعتمد على صندوق `aggregator` جلب سمة `Summary` إلى النطاق لتنفيذ `Summary` على أنواعها الخاصة. أحد القيود التي يجب ملاحظتها هو أنه يمكننا تنفيذ سمة على نوع فقط إذا كانت السمة أو النوع، أو كليهما، محليين لصندوقنا. على سبيل المثال، يمكننا تنفيذ سمات المكتبة القياسية مثل `Display` على نوع مخصص مثل `SocialPost` كجزء من وظائف صندوق `aggregator` لأن النوع `SocialPost` محلي لصندوق `aggregator` الخاص بنا. يمكننا أيضًا تنفيذ `Summary` على `Vec<T>` في صندوق `aggregator` لأن سمة `Summary` محلية لصندوق `aggregator` الخاص بنا.
 
-But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
-because `Display` and `Vec<T>` are both defined in the standard library and
-aren’t local to our `aggregator` crate. This restriction is part of a property
-called _coherence_, and more specifically the _orphan rule_, so named because
-the parent type is not present. This rule ensures that other people’s code
-can’t break your code and vice versa. Without the rule, two crates could
-implement the same trait for the same type, and Rust wouldn’t know which
-implementation to use.
+لكن لا يمكننا تنفيذ سمات خارجية على أنواع خارجية. على سبيل المثال، لا يمكننا تنفيذ سمة `Display` على `Vec<T>` داخل صندوق `aggregator`، لأن `Display` و `Vec<T>` كلاهما معرفان في المكتبة القياسية وليسا محليين لصندوق `aggregator` الخاص بنا. هذا القيد جزء من خاصية تسمى _التماسك_ (coherence)، وبشكل أكثر تحديدًا _قاعدة اليتيم_ (orphan rule)، سميت كذلك لأن النوع الأصلي غير موجود. تضمن هذه القاعدة أن كود الأشخاص الآخرين لا يمكنه كسر كودك والعكس صحيح. بدون القاعدة، يمكن لصندوقين تنفيذ نفس السمة لنفس النوع، ولن تعرف Rust أي تنفيذ تستخدم.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="default-implementations"></a>
 
-### Using Default Implementations
+### استخدام التنفيذات الافتراضية
 
-Sometimes it’s useful to have default behavior for some or all of the methods
-in a trait instead of requiring implementations for all methods on every type.
-Then, as we implement the trait on a particular type, we can keep or override
-each method’s default behavior.
+في بعض الأحيان يكون من المفيد وجود سلوك افتراضي لبعض أو كل الدوال في سمة بدلاً من طلب تنفيذات لجميع الدوال على كل نوع. ثم، عندما ننفذ السمة على نوع معين، يمكننا الاحتفاظ بالسلوك الافتراضي لكل دالة أو تجاوزه.
 
-In Listing 10-14, we specify a default string for the `summarize` method of the
-`Summary` trait instead of only defining the method signature, as we did in
-Listing 10-12.
+في القائمة 10-14، نحدد نصًا افتراضيًا لدالة `summarize` من سمة `Summary` بدلاً من تعريف توقيع الدالة فقط، كما فعلنا في القائمة 10-12.
 
-<Listing number="10-14" file-name="src/lib.rs" caption="Defining a `Summary` trait with a default implementation of the `summarize` method">
+<Listing number="10-14" file-name="src/lib.rs" caption="تعريف سمة `Summary` مع تنفيذ افتراضي لدالة `summarize`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-14/src/lib.rs:here}}
@@ -139,94 +74,57 @@ Listing 10-12.
 
 </Listing>
 
-To use a default implementation to summarize instances of `NewsArticle`, we
-specify an empty `impl` block with `impl Summary for NewsArticle {}`.
+لاستخدام تنفيذ افتراضي لتلخيص نسخ من `NewsArticle`، نحدد كتلة `impl` فارغة بـ `impl Summary for NewsArticle {}`.
 
-Even though we’re no longer defining the `summarize` method on `NewsArticle`
-directly, we’ve provided a default implementation and specified that
-`NewsArticle` implements the `Summary` trait. As a result, we can still call
-the `summarize` method on an instance of `NewsArticle`, like this:
+على الرغم من أننا لم نعد نعرّف دالة `summarize` على `NewsArticle` مباشرة، فقد قدمنا تنفيذًا افتراضيًا وحددنا أن `NewsArticle` ينفذ سمة `Summary`. ونتيجة لذلك، لا يزال بإمكاننا استدعاء دالة `summarize` على نسخة من `NewsArticle`، مثل هذا:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
 ```
 
-This code prints `New article available! (Read more...)`.
+يطبع هذا الكود `New article available! (Read more...)`.
 
-Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `SocialPost` in Listing 10-13. The reason is
-that the syntax for overriding a default implementation is the same as the
-syntax for implementing a trait method that doesn’t have a default
-implementation.
+إنشاء تنفيذ افتراضي لا يتطلب منا تغيير أي شيء حول تنفيذ `Summary` على `SocialPost` في القائمة 10-13. السبب هو أن صيغة تجاوز تنفيذ افتراضي هي نفس صيغة تنفيذ دالة سمة لا تحتوي على تنفيذ افتراضي.
 
-Default implementations can call other methods in the same trait, even if those
-other methods don’t have a default implementation. In this way, a trait can
-provide a lot of useful functionality and only require implementors to specify
-a small part of it. For example, we could define the `Summary` trait to have a
-`summarize_author` method whose implementation is required, and then define a
-`summarize` method that has a default implementation that calls the
-`summarize_author` method:
+يمكن للتنفيذات الافتراضية استدعاء دوال أخرى في نفس السمة، حتى لو لم يكن لتلك الدوال الأخرى تنفيذ افتراضي. بهذه الطريقة، يمكن للسمة توفير الكثير من الوظائف المفيدة وتتطلب فقط من المنفذين تحديد جزء صغير منها. على سبيل المثال، يمكننا تعريف سمة `Summary` لتحتوي على دالة `summarize_author` التي يكون تنفيذها مطلوبًا، ثم تعريف دالة `summarize` التي لها تنفيذ افتراضي يستدعي دالة `summarize_author`:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:here}}
 ```
 
-To use this version of `Summary`, we only need to define `summarize_author`
-when we implement the trait on a type:
+لاستخدام هذا الإصدار من `Summary`، نحتاج فقط إلى تعريف `summarize_author` عندما ننفذ السمة على نوع:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 
-After we define `summarize_author`, we can call `summarize` on instances of the
-`SocialPost` struct, and the default implementation of `summarize` will call the
-definition of `summarize_author` that we’ve provided. Because we’ve implemented
-`summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code. Here’s what
-that looks like:
+بعد تعريف `summarize_author`، يمكننا استدعاء `summarize` على نسخ من بنية `SocialPost`، وسيستدعي التنفيذ الافتراضي لـ `summarize` تعريف `summarize_author` الذي قدمناه. نظرًا لأننا نفذنا `summarize_author`، فقد أعطتنا سمة `Summary` سلوك دالة `summarize` دون مطالبتنا بكتابة المزيد من الكود. إليك كيف يبدو:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
-This code prints `1 new post: (Read more from @horse_ebooks...)`.
+يطبع هذا الكود `1 new post from @horse_ebooks: of course, as you probably already know, people`.
 
-Note that it isn’t possible to call the default implementation from an
-overriding implementation of that same method.
+لاحظ أنه ليس من الممكن استدعاء التنفيذ الافتراضي من تنفيذ متجاوز لنفس الدالة.
 
-<!-- Old headings. Do not remove or links may break. -->
+### السمات كمعاملات
 
-<a id="traits-as-parameters"></a>
-
-### Using Traits as Parameters
-
-Now that you know how to define and implement traits, we can explore how to use
-traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `SocialPost` types in
-Listing 10-13 to define a `notify` function that calls the `summarize` method
-on its `item` parameter, which is of some type that implements the `Summary`
-trait. To do this, we use the `impl Trait` syntax, like this:
+الآن بعد أن عرفت كيفية تعريف وتنفيذ السمات، يمكننا استكشاف كيفية استخدام السمات لتعريف الدوال التي تقبل العديد من الأنواع المختلفة. سنستخدم سمة `Summary` التي نفذناها على الأنواع `NewsArticle` و `SocialPost` في القائمة 10-13 لتعريف دالة `notify` تستدعي دالة `summarize` على معاملها `item`، والذي هو من نوع ما ينفذ سمة `Summary`. للقيام بذلك، نستخدم صيغة `impl Trait`، مثل هذا:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
-Instead of a concrete type for the `item` parameter, we specify the `impl`
-keyword and the trait name. This parameter accepts any type that implements the
-specified trait. In the body of `notify`, we can call any methods on `item`
-that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `SocialPost`. Code that calls the
-function with any other type, such as a `String` or an `i32`, won’t compile,
-because those types don’t implement `Summary`.
+بدلاً من نوع محدد للمعامل `item`، نحدد الكلمة المفتاحية `impl` واسم السمة. يقبل هذا المعامل أي نوع ينفذ السمة المحددة. في جسم `notify`، يمكننا استدعاء أي دالة على `item` تأتي من سمة `Summary`، مثل `summarize`. يمكننا استدعاء `notify` وتمرير أي نسخة من `NewsArticle` أو `SocialPost`. الكود الذي يستدعي الدالة بأي نوع آخر، مثل `String` أو `i32`، لن يُترجم لأن تلك الأنواع لا تنفذ `Summary`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="fixing-the-largest-function-with-trait-bounds"></a>
 
-#### Trait Bound Syntax
+#### صيغة حد السمة
 
-The `impl Trait` syntax works for straightforward cases but is actually syntax
-sugar for a longer form known as a _trait bound_; it looks like this:
+صيغة `impl Trait` تعمل للحالات البسيطة ولكنها في الواقع صيغة مختصرة لشكل أطول يُعرف بـ _حد السمة_ (trait bound)؛ يبدو مثل هذا:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
@@ -234,128 +132,83 @@ pub fn notify<T: Summary>(item: &T) {
 }
 ```
 
-This longer form is equivalent to the example in the previous section but is
-more verbose. We place trait bounds with the declaration of the generic type
-parameter after a colon and inside angle brackets.
+هذا الشكل الأطول مكافئ للمثال في القسم السابق لكنه أكثر تفصيلاً. نضع حدود السمات مع تصريح معامل النوع العام بعد نقطتين وداخل الأقواس الزاوية.
 
-The `impl Trait` syntax is convenient and makes for more concise code in simple
-cases, while the fuller trait bound syntax can express more complexity in other
-cases. For example, we can have two parameters that implement `Summary`. Doing
-so with the `impl Trait` syntax looks like this:
+صيغة `impl Trait` مريحة وتجعل الكود أكثر إيجازًا في الحالات البسيطة، بينما يمكن لصيغة حد السمة الكاملة التعبير عن تعقيد أكبر في حالات أخرى. على سبيل المثال، يمكن أن يكون لدينا معاملان ينفذان `Summary`. القيام بذلك باستخدام صيغة `impl Trait` يبدو مثل هذا:
 
 ```rust,ignore
 pub fn notify(item1: &impl Summary, item2: &impl Summary) {
 ```
 
-Using `impl Trait` is appropriate if we want this function to allow `item1` and
-`item2` to have different types (as long as both types implement `Summary`). If
-we want to force both parameters to have the same type, however, we must use a
-trait bound, like this:
+استخدام `impl Trait` مناسب إذا أردنا أن تسمح هذه الدالة لـ `item1` و `item2` بأن يكونا من أنواع مختلفة (طالما أن كلا النوعين ينفذان `Summary`). إذا أردنا إجبار كلا المعاملين على أن يكونا من نفس النوع، فيجب علينا استخدام حد سمة، مثل هذا:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item1: &T, item2: &T) {
 ```
 
-The generic type `T` specified as the type of the `item1` and `item2`
-parameters constrains the function such that the concrete type of the value
-passed as an argument for `item1` and `item2` must be the same.
+النوع العام `T` المحدد كنوع المعاملين `item1` و `item2` يقيد الدالة بحيث يجب أن يكون النوع المحدد للقيمة الممررة كحجة لـ `item1` و `item2` هو نفسه.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="specifying-multiple-trait-bounds-with-the--syntax"></a>
 
-#### Multiple Trait Bounds with the `+` Syntax
+#### حدود سمات متعددة باستخدام صيغة `+`
 
-We can also specify more than one trait bound. Say we wanted `notify` to use
-display formatting as well as `summarize` on `item`: We specify in the `notify`
-definition that `item` must implement both `Display` and `Summary`. We can do
-so using the `+` syntax:
+يمكننا أيضًا تحديد أكثر من حد سمة واحد. لنفترض أننا أردنا `notify` لاستخدام تنسيق العرض بالإضافة إلى `summarize` على `item`: نحدد في تعريف `notify` أن `item` يجب أن ينفذ كلاً من `Display` و `Summary`. يمكننا القيام بذلك باستخدام صيغة `+`:
 
 ```rust,ignore
 pub fn notify(item: &(impl Summary + Display)) {
 ```
 
-The `+` syntax is also valid with trait bounds on generic types:
+صيغة `+` صالحة أيضًا مع حدود السمات على الأنواع العامة:
 
 ```rust,ignore
 pub fn notify<T: Summary + Display>(item: &T) {
 ```
 
-With the two trait bounds specified, the body of `notify` can call `summarize`
-and use `{}` to format `item`.
+مع تحديد حدي السمات، يمكن لجسم `notify` استدعاء `summarize` واستخدام `{}` لتنسيق `item`.
 
-#### Clearer Trait Bounds with `where` Clauses
+#### حدود سمات أوضح باستخدام جمل `where`
 
-Using too many trait bounds has its downsides. Each generic has its own trait
-bounds, so functions with multiple generic type parameters can contain lots of
-trait bound information between the function’s name and its parameter list,
-making the function signature hard to read. For this reason, Rust has alternate
-syntax for specifying trait bounds inside a `where` clause after the function
-signature. So, instead of writing this:
+استخدام عدد كبير جدًا من حدود السمات له عيوبه. كل نوع عام له حدود سماته الخاصة، لذلك يمكن للدوال ذات معاملات الأنواع العامة المتعددة أن تحتوي على الكثير من معلومات حدود السمات بين اسم الدالة وقائمة معاملاتها، مما يجعل توقيع الدالة صعب القراءة. لهذا السبب، لدى Rust صيغة بديلة لتحديد حدود السمات داخل جملة `where` بعد توقيع الدالة. لذا، بدلاً من كتابة هذا:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 ```
 
-we can use a `where` clause, like this:
+يمكننا استخدام جملة `where`، مثل هذا:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
-This function’s signature is less cluttered: The function name, parameter list,
-and return type are close together, similar to a function without lots of trait
-bounds.
+توقيع هذه الدالة أقل تشوشًا: اسم الدالة وقائمة المعاملات ونوع الإرجاع قريبون من بعضهم البعض، على غرار دالة بدون الكثير من حدود السمات.
 
-### Returning Types That Implement Traits
+### إرجاع أنواع تنفذ السمات
 
-We can also use the `impl Trait` syntax in the return position to return a
-value of some type that implements a trait, as shown here:
+يمكننا أيضًا استخدام صيغة `impl Trait` في موضع الإرجاع لإرجاع قيمة من نوع ما ينفذ سمة، كما هو موضح هنا:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 
-By using `impl Summary` for the return type, we specify that the
-`returns_summarizable` function returns some type that implements the `Summary`
-trait without naming the concrete type. In this case, `returns_summarizable`
-returns a `SocialPost`, but the code calling this function doesn’t need to know
-that.
+باستخدام `impl Summary` لنوع الإرجاع، نحدد أن الدالة `returns_summarizable` تُرجع نوعًا ما ينفذ سمة `Summary` دون تسمية النوع المحدد. في هذه الحالة، `returns_summarizable` يُرجع `SocialPost`، لكن الكود الذي يستدعي هذه الدالة لا يحتاج إلى معرفة ذلك.
 
-The ability to specify a return type only by the trait it implements is
-especially useful in the context of closures and iterators, which we cover in
-Chapter 13. Closures and iterators create types that only the compiler knows or
-types that are very long to specify. The `impl Trait` syntax lets you concisely
-specify that a function returns some type that implements the `Iterator` trait
-without needing to write out a very long type.
+القدرة على تحديد نوع إرجاع فقط بالسمة التي ينفذها مفيدة بشكل خاص في سياق الإغلاقات (closures) والمكررات (iterators)، والتي نغطيها في الفصل 13. تنشئ الإغلاقات والمكررات أنواعًا يعرفها المترجم فقط أو أنواعًا طويلة جدًا للتحديد. تتيح لك صيغة `impl Trait` تحديد أن دالة تُرجع نوعًا ما ينفذ سمة `Iterator` بإيجاز دون الحاجة إلى كتابة نوع طويل جدًا.
 
-However, you can only use `impl Trait` if you’re returning a single type. For
-example, this code that returns either a `NewsArticle` or a `SocialPost` with
-the return type specified as `impl Summary` wouldn’t work:
+ومع ذلك، يمكنك استخدام `impl Trait` فقط إذا كنت تُرجع نوعًا واحدًا. على سبيل المثال، هذا الكود الذي يُرجع إما `NewsArticle` أو `SocialPost` مع نوع الإرجاع المحدد كـ `impl Summary` لن يعمل:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
-Returning either a `NewsArticle` or a `SocialPost` isn’t allowed due to
-restrictions around how the `impl Trait` syntax is implemented in the compiler.
-We’ll cover how to write a function with this behavior in the [“Using Trait
-Objects to Abstract over Shared Behavior”][trait-objects]<!-- ignore -->
-section of Chapter 18.
+إرجاع إما `NewsArticle` أو `SocialPost` غير مسموح به بسبب القيود المتعلقة بكيفية تنفيذ صيغة `impl Trait` في المترجم. سنغطي كيفية كتابة دالة بهذا السلوك في قسم ["استخدام كائنات السمات للتجريد على السلوك المشترك"][trait-objects]<!-- ignore --> من الفصل 18.
 
-### Using Trait Bounds to Conditionally Implement Methods
+### استخدام حدود السمات لتنفيذ الدوال بشكل مشروط
 
-By using a trait bound with an `impl` block that uses generic type parameters,
-we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
-`new` function to return a new instance of `Pair<T>` (recall from the [“Method
-Syntax”][methods]<!-- ignore --> section of Chapter 5 that `Self` is a type
-alias for the type of the `impl` block, which in this case is `Pair<T>`). But
-in the next `impl` block, `Pair<T>` only implements the `cmp_display` method if
-its inner type `T` implements the `PartialOrd` trait that enables comparison
-_and_ the `Display` trait that enables printing.
+باستخدام حد سمة مع كتلة `impl` التي تستخدم معاملات الأنواع العامة، يمكننا تنفيذ الدوال بشكل مشروط للأنواع التي تنفذ السمات المحددة. على سبيل المثال، النوع `Pair<T>` في القائمة 10-15 ينفذ دائمًا الدالة `new` لإرجاع نسخة جديدة من `Pair<T>` (تذكر من قسم ["صيغة الدوال"][methods]<!-- ignore --> من الفصل 5 أن `Self` هو اسم مستعار لنوع كتلة `impl`، والذي في هذه الحالة هو `Pair<T>`). لكن في كتلة `impl` التالية، `Pair<T>` ينفذ دالة `cmp_display` فقط إذا كان نوعه الداخلي `T` ينفذ سمة `PartialOrd` التي تمكن المقارنة _و_ سمة `Display` التي تمكن الطباعة.
 
-<Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
+<Listing number="10-15" file-name="src/lib.rs" caption="تنفيذ الدوال بشكل مشروط على نوع عام اعتمادًا على حدود السمات">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
@@ -363,12 +216,7 @@ _and_ the `Display` trait that enables printing.
 
 </Listing>
 
-We can also conditionally implement a trait for any type that implements
-another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called _blanket implementations_ and are used extensively in the
-Rust standard library. For example, the standard library implements the
-`ToString` trait on any type that implements the `Display` trait. The `impl`
-block in the standard library looks similar to this code:
+يمكننا أيضًا تنفيذ سمة بشكل مشروط لأي نوع ينفذ سمة أخرى. تنفيذات سمة على أي نوع يفي بحدود السمات تسمى _التنفيذات الشاملة_ (blanket implementations) وتُستخدم على نطاق واسع في مكتبة Rust القياسية. على سبيل المثال، تنفذ المكتبة القياسية سمة `ToString` على أي نوع ينفذ سمة `Display`. كتلة `impl` في المكتبة القياسية تبدو مشابهة لهذا الكود:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
@@ -376,29 +224,15 @@ impl<T: Display> ToString for T {
 }
 ```
 
-Because the standard library has this blanket implementation, we can call the
-`to_string` method defined by the `ToString` trait on any type that implements
-the `Display` trait. For example, we can turn integers into their corresponding
-`String` values like this because integers implement `Display`:
+لأن المكتبة القياسية لديها هذا التنفيذ الشامل، يمكننا استدعاء دالة `to_string` المعرفة بواسطة سمة `ToString` على أي نوع ينفذ سمة `Display`. على سبيل المثال، يمكننا تحويل الأعداد الصحيحة إلى قيم `String` المقابلة لها مثل هذا لأن الأعداد الصحيحة تنفذ `Display`:
 
 ```rust
 let s = 3.to_string();
 ```
 
-Blanket implementations appear in the documentation for the trait in the
-“Implementors” section.
+تظهر التنفيذات الشاملة في الوثائق الخاصة بالسمة في قسم "Implementors".
 
-Traits and trait bounds let us write code that uses generic type parameters to
-reduce duplication but also specify to the compiler that we want the generic
-type to have particular behavior. The compiler can then use the trait bound
-information to check that all the concrete types used with our code provide the
-correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type that didn’t define the method. But Rust
-moves these errors to compile time so that we’re forced to fix the problems
-before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime, because we’ve already checked at compile
-time. Doing so improves performance without having to give up the flexibility
-of generics.
+تتيح لنا السمات وحدود السمات كتابة كود يستخدم معاملات الأنواع العامة لتقليل التكرار ولكن أيضًا تحديد للمترجم أننا نريد أن يكون للنوع العام سلوك معين. يمكن للمترجم بعد ذلك استخدام معلومات حدود السمات للتحقق من أن جميع الأنواع المحددة المستخدمة مع كودنا توفر السلوك الصحيح. في اللغات ذات الكتابة الديناميكية، سنحصل على خطأ في وقت التشغيل إذا استدعينا دالة على نوع لم يعرّف الدالة. لكن Rust تنقل هذه الأخطاء إلى وقت الترجمة بحيث نضطر إلى إصلاح المشاكل قبل أن يتمكن كودنا من التشغيل. بالإضافة إلى ذلك، لا يتعين علينا كتابة كود يتحقق من السلوك في وقت التشغيل، لأننا تحققنا بالفعل في وقت الترجمة. يؤدي القيام بذلك إلى تحسين الأداء دون الحاجة إلى التخلي عن مرونة الأنواع العامة.
 
 [trait-objects]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
 [methods]: ch05-03-method-syntax.html#method-syntax

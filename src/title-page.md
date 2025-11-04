@@ -1,23 +1,23 @@
-# The Rust Programming Language
+# لغة البرمجة Rust
 
-_by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
-Rust Community_
+_بقلم ستيف كلابنيك، كارول نيكولز، وكريس كريشو، بمساهمات من
+مجتمع Rust_
 
-This version of the text assumes you’re using Rust 1.90.0 (released 2025-09-18)
-or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2024 Edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> for instructions on installing or
-updating Rust, and see [Appendix E][appendix-e]<!-- ignore --> for information
-on editions.
+يفترض هذا الإصدار من النص أنك تستخدم Rust 1.90.0 (صدر في 2025-09-18)
+أو أحدث مع `edition = "2024"` في ملف *Cargo.toml* لجميع المشاريع
+لتكوينها لاستخدام تعابير Rust 2024 Edition. راجع [قسم "التثبيت"
+في الفصل 1][install]<!-- ignore --> للحصول على تعليمات حول تثبيت أو
+تحديث Rust، وراجع [الملحق E][appendix-e]<!-- ignore --> للحصول على معلومات
+حول الإصدارات.
 
-The HTML format is available online at
+تنسيق HTML متاح عبر الإنترنت على
 [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+وغير متصل مع تثبيتات Rust التي تم إجراؤها باستخدام `rustup`؛ قم بتشغيل `rustup doc
+--book` للفتح.
 
-Several community [translations] are also available.
+العديد من [الترجمات] المجتمعية متاحة أيضًا.
 
-This text is available in [paperback and ebook format from No Starch
+هذا النص متاح [بصيغة ورقية وإلكترونية من No Starch
 Press][nsprust].
 
 [install]: ch01-01-installation.html
@@ -25,6 +25,6 @@ Press][nsprust].
 [nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
 [translations]: appendix-06-translation.html
 
-> **🚨 Want a more interactive learning experience? Try out a different version
-> of the Rust Book, featuring: quizzes, highlighting, visualizations, and
-> more**: <https://rust-book.cs.brown.edu>
+> **🚨 تريد تجربة تعليمية أكثر تفاعلية؟ جرب إصدارًا مختلفًا
+> من كتاب Rust، يحتوي على: اختبارات، تمييز، تصورات، و
+> المزيد**: <https://rust-book.cs.brown.edu>

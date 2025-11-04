@@ -1,14 +1,5 @@
-# Using Structs to Structure Related Data
+# استخدام الهياكل لتنظيم البيانات المترابطة
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a struct is like an object’s
-data attributes. In this chapter, we’ll compare and contrast tuples with
-structs to build on what you already know and demonstrate when structs are a
-better way to group data.
+_الهيكل_ (struct)، أو _البنية_ (structure)، هو نوع بيانات مخصص يتيح لك تجميع وتسمية قيم متعددة مترابطة تشكل مجموعة ذات معنى. إذا كنت على دراية بلغة برمجة موجهة للكائنات، فإن الهيكل يشبه سمات البيانات الخاصة بالكائن. في هذا الفصل، سنقارن بين المجموعات (tuples) والهياكل للبناء على ما تعرفه بالفعل وسنوضح متى تكون الهياكل طريقة أفضل لتجميع البيانات.
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+سنوضح كيفية تعريف الهياكل وإنشاء نسخ منها. سنناقش كيفية تعريف الدوال المرتبطة (associated functions)، وخاصة النوع من الدوال المرتبطة المسمى _الأساليب_ (methods)، لتحديد السلوك المرتبط بنوع الهيكل. الهياكل والتعدادات (التي تمت مناقشتها في الفصل 6) هي اللبنات الأساسية لإنشاء أنواع جديدة في نطاق برنامجك للاستفادة الكاملة من فحص الأنواع في وقت الترجمة الذي توفره Rust.

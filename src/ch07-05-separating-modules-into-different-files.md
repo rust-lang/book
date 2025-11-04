@@ -1,22 +1,12 @@
-## Separating Modules into Different Files
+## فصل الوحدات إلى ملفات مختلفة
 
-So far, all the examples in this chapter defined multiple modules in one file.
-When modules get large, you might want to move their definitions to a separate
-file to make the code easier to navigate.
+حتى الآن، جميع الأمثلة في هذا الفصل عرّفت وحدات متعددة في ملف واحد. عندما تصبح الوحدات كبيرة، قد ترغب في نقل تعريفاتها إلى ملف منفصل لجعل الكود أسهل في التنقل.
 
-For example, let’s start from the code in Listing 7-17 that had multiple
-restaurant modules. We’ll extract modules into files instead of having all the
-modules defined in the crate root file. In this case, the crate root file is
-_src/lib.rs_, but this procedure also works with binary crates whose crate root
-file is _src/main.rs_.
+على سبيل المثال، لنبدأ من الكود في القائمة 7-17 الذي كان يحتوي على وحدات مطعم متعددة. سنستخرج الوحدات إلى ملفات بدلاً من تعريف جميع الوحدات في ملف جذر الصندوق. في هذه الحالة، ملف جذر الصندوق هو _src/lib.rs_، لكن هذا الإجراء يعمل أيضاً مع الصناديق الثنائية التي يكون ملف جذرها _src/main.rs_.
 
-First, we’ll extract the `front_of_house` module to its own file. Remove the
-code inside the curly brackets for the `front_of_house` module, leaving only
-the `mod front_of_house;` declaration, so that _src/lib.rs_ contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-_src/front_of_house.rs_ file in Listing 7-22.
+أولاً، سنستخرج وحدة `front_of_house` إلى ملفها الخاص. احذف الكود داخل الأقواس المعقوفة لوحدة `front_of_house`، مع ترك تصريح `mod front_of_house;` فقط، بحيث يحتوي _src/lib.rs_ على الكود الموضح في القائمة 7-21. لاحظ أن هذا لن يُترجم حتى ننشئ ملف _src/front_of_house.rs_ في القائمة 7-22.
 
-<Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
+<Listing number="7-21" file-name="src/lib.rs" caption="تصريح وحدة `front_of_house` التي سيكون جسمها في *src/front_of_house.rs*">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
@@ -24,12 +14,9 @@ _src/front_of_house.rs_ file in Listing 7-22.
 
 </Listing>
 
-Next, place the code that was in the curly brackets into a new file named
-_src/front_of_house.rs_, as shown in Listing 7-22. The compiler knows to look
-in this file because it came across the module declaration in the crate root
-with the name `front_of_house`.
+بعد ذلك، ضع الكود الذي كان في الأقواس المعقوفة في ملف جديد يُسمى _src/front_of_house.rs_، كما هو موضح في القائمة 7-22. يعرف المترجم أن يبحث في هذا الملف لأنه صادف تصريح الوحدة في جذر الصندوق بالاسم `front_of_house`.
 
-<Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
+<Listing number="7-22" file-name="src/front_of_house.rs" caption="التعريفات داخل وحدة `front_of_house` في *src/front_of_house.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
@@ -37,22 +24,11 @@ with the name `front_of_house`.
 
 </Listing>
 
-Note that you only need to load a file using a `mod` declaration _once_ in your
-module tree. Once the compiler knows the file is part of the project (and knows
-where in the module tree the code resides because of where you’ve put the `mod`
-statement), other files in your project should refer to the loaded file’s code
-using a path to where it was declared, as covered in the [“Paths for Referring
-to an Item in the Module Tree”][paths]<!-- ignore --> section. In other words,
-`mod` is _not_ an “include” operation that you may have seen in other
-programming languages.
+لاحظ أنك تحتاج فقط لتحميل ملف باستخدام تصريح `mod` _مرة واحدة_ في شجرة الوحدات الخاصة بك. بمجرد أن يعرف المترجم أن الملف جزء من المشروع (ويعرف أين في شجرة الوحدات يقع الكود بسبب مكان وضعك لجملة `mod`)، يجب أن تشير الملفات الأخرى في مشروعك إلى كود الملف المُحمَّل باستخدام مسار إلى حيث تم تصريحه، كما تم تغطيته في قسم ["مسارات للإشارة إلى عنصر في شجرة الوحدات"][paths]<!-- ignore -->. بعبارة أخرى، `mod` _ليست_ عملية "تضمين" ربما رأيتها في لغات البرمجة الأخرى.
 
-Next, we’ll extract the `hosting` module to its own file. The process is a bit
-different because `hosting` is a child module of `front_of_house`, not of the
-root module. We’ll place the file for `hosting` in a new directory that will be
-named for its ancestors in the module tree, in this case _src/front_of_house_.
+بعد ذلك، سنستخرج وحدة `hosting` إلى ملفها الخاص. العملية مختلفة قليلاً لأن `hosting` هي وحدة فرعية من `front_of_house`، وليست من الوحدة الجذرية. سنضع ملف `hosting` في دليل جديد سيُسمى على اسم أسلافه في شجرة الوحدات، في هذه الحالة _src/front_of_house_.
 
-To start moving `hosting`, we change _src/front_of_house.rs_ to contain only
-the declaration of the `hosting` module:
+لبدء نقل `hosting`، نغيّر _src/front_of_house.rs_ ليحتوي فقط على تصريح وحدة `hosting`:
 
 <Listing file-name="src/front_of_house.rs">
 
@@ -62,8 +38,7 @@ the declaration of the `hosting` module:
 
 </Listing>
 
-Then, we create a _src/front_of_house_ directory and a _hosting.rs_ file to
-contain the definitions made in the `hosting` module:
+ثم، ننشئ دليل _src/front_of_house_ وملف _hosting.rs_ ليحتوي على التعريفات الموجودة في وحدة `hosting`:
 
 <Listing file-name="src/front_of_house/hosting.rs">
 
@@ -73,57 +48,32 @@ contain the definitions made in the `hosting` module:
 
 </Listing>
 
-If we instead put _hosting.rs_ in the _src_ directory, the compiler would
-expect the _hosting.rs_ code to be in a `hosting` module declared in the crate
-root and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code mean the
-directories and files more closely match the module tree.
+إذا وضعنا بدلاً من ذلك _hosting.rs_ في دليل _src_، سيتوقع المترجم أن كود _hosting.rs_ موجود في وحدة `hosting` مُصرَّح بها في جذر الصندوق وليس مُصرَّح بها كوحدة فرعية من وحدة `front_of_house`. قواعد المترجم حول أي ملفات يجب التحقق منها لكود أي وحدات تعني أن الأدلة والملفات تطابق شجرة الوحدات بشكل أوثق.
 
-> ### Alternate File Paths
+> ### مسارات ملفات بديلة
 >
-> So far we’ve covered the most idiomatic file paths the Rust compiler uses,
-> but Rust also supports an older style of file path. For a module named
-> `front_of_house` declared in the crate root, the compiler will look for the
-> module’s code in:
+> حتى الآن قمنا بتغطية مسارات الملفات الأكثر شيوعاً التي يستخدمها مترجم Rust، لكن Rust يدعم أيضاً أسلوباً قديماً لمسار الملف. بالنسبة لوحدة تُسمى `front_of_house` مُصرَّح بها في جذر الصندوق، سيبحث المترجم عن كود الوحدة في:
 >
-> - _src/front_of_house.rs_ (what we covered)
-> - _src/front_of_house/mod.rs_ (older style, still supported path)
+> - _src/front_of_house.rs_ (ما قمنا بتغطيته)
+> - _src/front_of_house/mod.rs_ (أسلوب قديم، مسار لا يزال مدعوماً)
 >
-> For a module named `hosting` that is a submodule of `front_of_house`, the
-> compiler will look for the module’s code in:
+> بالنسبة لوحدة تُسمى `hosting` والتي هي وحدة فرعية من `front_of_house`، سيبحث المترجم عن كود الوحدة في:
 >
-> - _src/front_of_house/hosting.rs_ (what we covered)
-> - _src/front_of_house/hosting/mod.rs_ (older style, still supported path)
+> - _src/front_of_house/hosting.rs_ (ما قمنا بتغطيته)
+> - _src/front_of_house/hosting/mod.rs_ (أسلوب قديم، مسار لا يزال مدعوماً)
 >
-> If you use both styles for the same module, you’ll get a compiler error.
-> Using a mix of both styles for different modules in the same project is
-> allowed but might be confusing for people navigating your project.
+> إذا استخدمت كلا الأسلوبين لنفس الوحدة، ستحصل على خطأ في المترجم. استخدام مزيج من كلا الأسلوبين لوحدات مختلفة في نفس المشروع مسموح به لكنه قد يكون مربكاً للأشخاص الذين يتنقلون في مشروعك.
 >
-> The main downside to the style that uses files named _mod.rs_ is that your
-> project can end up with many files named _mod.rs_, which can get confusing
-> when you have them open in your editor at the same time.
+> العيب الرئيسي للأسلوب الذي يستخدم ملفات تُسمى _mod.rs_ هو أن مشروعك قد ينتهي به الأمر بالعديد من الملفات المسماة _mod.rs_، والتي يمكن أن تصبح مربكة عندما تفتحها في محررك في نفس الوقت.
 
-We’ve moved each module’s code to a separate file, and the module tree remains
-the same. The function calls in `eat_at_restaurant` will work without any
-modification, even though the definitions live in different files. This
-technique lets you move modules to new files as they grow in size.
+لقد نقلنا كود كل وحدة إلى ملف منفصل، وشجرة الوحدات تبقى كما هي. استدعاءات الدالة في `eat_at_restaurant` ستعمل دون أي تعديل، حتى لو كانت التعريفات موجودة في ملفات مختلفة. هذه التقنية تسمح لك بنقل الوحدات إلى ملفات جديدة مع نموها في الحجم.
 
-Note that the `pub use crate::front_of_house::hosting` statement in
-_src/lib.rs_ also hasn’t changed, nor does `use` have any impact on what files
-are compiled as part of the crate. The `mod` keyword declares modules, and Rust
-looks in a file with the same name as the module for the code that goes into
-that module.
+لاحظ أن جملة `pub use crate::front_of_house::hosting` في _src/lib.rs_ لم تتغير أيضاً، ولا يكون لـ `use` أي تأثير على أي ملفات يتم ترجمتها كجزء من الصندوق. الكلمة المفتاحية `mod` تُصرِّح الوحدات، وRust يبحث في ملف بنفس اسم الوحدة عن الكود الذي يدخل في تلك الوحدة.
 
-## Summary
+## ملخص
 
-Rust lets you split a package into multiple crates and a crate into modules so
-that you can refer to items defined in one module from another module. You can
-do this by specifying absolute or relative paths. These paths can be brought
-into scope with a `use` statement so that you can use a shorter path for
-multiple uses of the item in that scope. Module code is private by default, but
-you can make definitions public by adding the `pub` keyword.
+Rust يتيح لك تقسيم حزمة إلى صناديق متعددة وصندوق إلى وحدات بحيث يمكنك الإشارة إلى عناصر معرّفة في وحدة من وحدة أخرى. يمكنك القيام بذلك عن طريق تحديد مسارات مطلقة أو نسبية. يمكن إحضار هذه المسارات إلى النطاق باستخدام جملة `use` بحيث يمكنك استخدام مسار أقصر لاستخدامات متعددة للعنصر في ذلك النطاق. كود الوحدة خاص بشكل افتراضي، لكن يمكنك جعل التعريفات عامة بإضافة الكلمة المفتاحية `pub`.
 
-In the next chapter, we’ll look at some collection data structures in the
-standard library that you can use in your neatly organized code.
+في الفصل التالي، سننظر في بعض هياكل بيانات المجموعات في المكتبة القياسية التي يمكنك استخدامها في كودك المنظم بشكل جيد.
 
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

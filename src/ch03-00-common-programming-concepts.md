@@ -1,23 +1,23 @@
-# Common Programming Concepts
+# مفاهيم البرمجة الشائعة
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain the conventions
-around using them.
+يغطي هذا الفصل المفاهيم التي تظهر في معظم لغات البرمجة تقريبًا
+وكيفية عملها في Rust. تتشارك العديد من لغات البرمجة في الكثير من القواسم المشتركة في
+جوهرها. لا يوجد أي من المفاهيم المقدمة في هذا الفصل حصريًا في Rust،
+لكننا سنناقشها في سياق Rust ونشرح الاتفاقيات
+المتعلقة باستخدامها.
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+على وجه التحديد، ستتعلم عن المتغيرات والأنواع الأساسية والدوال والتعليقات
+وتدفق التحكم. ستكون هذه الأساسيات موجودة في كل برنامج Rust، وتعلمها
+في وقت مبكر سيمنحك أساسًا قويًا للبدء منه.
 
-> #### Keywords
+> #### الكلمات المفتاحية
 >
-> The Rust language has a set of _keywords_ that are reserved for use by the
-> language only, much as in other languages. Keep in mind that you cannot use
-> these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find the list of the keywords in [Appendix A][appendix_a]<!-- ignore -->.
+> تحتوي لغة Rust على مجموعة من _الكلمات المفتاحية_ المحجوزة للاستخدام بواسطة
+> اللغة فقط، تمامًا كما في اللغات الأخرى. ضع في اعتبارك أنه لا يمكنك استخدام
+> هذه الكلمات كأسماء للمتغيرات أو الدوال. معظم الكلمات المفتاحية لها
+> معانٍ خاصة، وستستخدمها لأداء مهام مختلفة في برامج Rust
+> الخاصة بك؛ بعضها ليس له وظيفة حالية مرتبطة به ولكنه
+> محجوز لوظائف قد تُضاف إلى Rust في المستقبل. يمكنك
+> العثور على قائمة الكلمات المفتاحية في [الملحق أ][appendix_a]<!-- ignore -->.
 
 [appendix_a]: appendix-01-keywords.md

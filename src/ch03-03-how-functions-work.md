@@ -1,124 +1,79 @@
-## Functions
+## الدوال
 
-Functions are prevalent in Rust code. You’ve already seen one of the most
-important functions in the language: the `main` function, which is the entry
-point of many programs. You’ve also seen the `fn` keyword, which allows you to
-declare new functions.
+الدوال منتشرة بكثرة في كود Rust. لقد رأيت بالفعل واحدة من أهم الدوال في اللغة: دالة `main`، والتي تمثل نقطة الدخول للعديد من البرامج. كما رأيت أيضًا الكلمة المفتاحية `fn`، والتي تسمح لك بتعريف دوال جديدة.
 
-Rust code uses _snake case_ as the conventional style for function and variable
-names, in which all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+يستخدم كود Rust _نمط الثعبان_ (snake case) كأسلوب تقليدي لأسماء الدوال والمتغيرات، حيث تكون جميع الحروف صغيرة وتُفصل الكلمات بواسطة شرطات سفلية. إليك برنامج يحتوي على مثال لتعريف دالة:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
-We define a function in Rust by entering `fn` followed by a function name and a
-set of parentheses. The curly brackets tell the compiler where the function
-body begins and ends.
+نعرّف دالة في Rust بإدخال `fn` متبوعة باسم الدالة ومجموعة من الأقواس. تخبر الأقواس المعقوفة المترجم بمكان بداية ونهاية جسم الدالة.
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
-called from inside the `main` function. Note that we defined `another_function`
-_after_ the `main` function in the source code; we could have defined it before
-as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere in a scope that can be seen by the caller.
+يمكننا استدعاء أي دالة قمنا بتعريفها بإدخال اسمها متبوعًا بمجموعة من الأقواس. نظرًا لأن `another_function` معرّفة في البرنامج، يمكن استدعاؤها من داخل دالة `main`. لاحظ أننا عرّفنا `another_function` _بعد_ دالة `main` في الكود المصدري؛ كان يمكننا تعريفها قبلها أيضًا. لا تهتم Rust بمكان تعريف الدوال، بل فقط بأنها معرّفة في مكان ما في نطاق يمكن للمستدعي رؤيته.
 
-Let’s start a new binary project named _functions_ to explore functions
-further. Place the `another_function` example in _src/main.rs_ and run it. You
-should see the following output:
+لنبدأ مشروع ثنائي جديد باسم _functions_ لاستكشاف الدوال بشكل أعمق. ضع مثال `another_function` في _src/main.rs_ وقم بتشغيله. يجب أن ترى الناتج التالي:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
-The lines execute in the order in which they appear in the `main` function.
-First the “Hello, world!” message prints, and then `another_function` is called
-and its message is printed.
+تُنفّذ الأسطر بالترتيب الذي تظهر به في دالة `main`. أولاً تُطبع رسالة "Hello, world!"، ثم يتم استدعاء `another_function` وتُطبع رسالتها.
 
-### Parameters
+### المعاملات
 
-We can define functions to have _parameters_, which are special variables that
-are part of a function’s signature. When a function has parameters, you can
-provide it with concrete values for those parameters. Technically, the concrete
-values are called _arguments_, but in casual conversation, people tend to use
-the words _parameter_ and _argument_ interchangeably for either the variables
-in a function’s definition or the concrete values passed in when you call a
-function.
+يمكننا تعريف دوال تحتوي على _معاملات_ (parameters)، وهي متغيرات خاصة تشكل جزءًا من توقيع الدالة. عندما تحتوي دالة على معاملات، يمكنك تزويدها بقيم محددة لتلك المعاملات. من الناحية التقنية، تُسمى القيم المحددة _وسائط_ (arguments)، ولكن في المحادثات العادية، يميل الناس إلى استخدام كلمتي _معامل_ و_وسيطة_ بشكل متبادل سواء للمتغيرات في تعريف الدالة أو للقيم المحددة الممررة عند استدعاء الدالة.
 
-In this version of `another_function` we add a parameter:
+في هذا الإصدار من `another_function` نضيف معاملًا:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
 ```
 
-Try running this program; you should get the following output:
+جرب تشغيل هذا البرنامج؛ يجب أن تحصل على الناتج التالي:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
-The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets containing `x` was
-in the format string.
+تعريف `another_function` يحتوي على معامل واحد يُسمى `x`. نوع `x` محدد بأنه `i32`. عندما نمرر `5` إلى `another_function`، يضع الماكرو `println!` قيمة `5` حيث كان زوج الأقواس المعقوفة الذي يحتوي على `x` في سلسلة التنسيق.
 
-In function signatures, you _must_ declare the type of each parameter. This is
-a deliberate decision in Rust’s design: Requiring type annotations in function
-definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what type you mean. The compiler is also able to give
-more-helpful error messages if it knows what types the function expects.
+في توقيعات الدوال، _يجب_ أن تعلن عن نوع كل معامل. هذا قرار متعمد في تصميم Rust: يعني طلب تعليقات النوع في تعاريف الدوال أن المترجم لا يحتاج تقريبًا أبدًا إلى استخدامها في مكان آخر في الكود لمعرفة النوع الذي تعنيه. كما أن المترجم قادر على تقديم رسائل خطأ أكثر إفادة إذا كان يعرف الأنواع التي تتوقعها الدالة.
 
-When defining multiple parameters, separate the parameter declarations with
-commas, like this:
+عند تعريف معاملات متعددة، افصل تعريفات المعاملات بفواصل، هكذا:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
-This example creates a function named `print_labeled_measurement` with two
-parameters. The first parameter is named `value` and is an `i32`. The second is
-named `unit_label` and is type `char`. The function then prints text containing
-both the `value` and the `unit_label`.
+هذا المثال ينشئ دالة باسم `print_labeled_measurement` بمعاملين. المعامل الأول يُسمى `value` وهو من نوع `i32`. المعامل الثاني يُسمى `unit_label` وهو من نوع `char`. تطبع الدالة بعد ذلك نصًا يحتوي على كل من `value` و`unit_label`.
 
-Let’s try running this code. Replace the program currently in your _functions_
-project’s _src/main.rs_ file with the preceding example and run it using `cargo
-run`:
+لنجرب تشغيل هذا الكود. استبدل البرنامج الموجود حاليًا في ملف _src/main.rs_ الخاص بمشروع _functions_ بالمثال السابق وقم بتشغيله باستخدام `cargo run`:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-Because we called the function with `5` as the value for `value` and `'h'` as
-the value for `unit_label`, the program output contains those values.
+نظرًا لأننا استدعينا الدالة بقيمة `5` لـ `value` وقيمة `'h'` لـ `unit_label`، يحتوي ناتج البرنامج على تلك القيم.
 
-### Statements and Expressions
+### العبارات والتعبيرات
 
-Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we’ve covered haven’t included an ending
-expression, but you have seen an expression as part of a statement. Because
-Rust is an expression-based language, this is an important distinction to
-understand. Other languages don’t have the same distinctions, so let’s look at
-what statements and expressions are and how their differences affect the bodies
-of functions.
+تتكون أجسام الدوال من سلسلة من العبارات تنتهي اختياريًا بتعبير. حتى الآن، لم تتضمن الدوال التي غطيناها تعبيرًا نهائيًا، لكنك رأيت تعبيرًا كجزء من عبارة. نظرًا لأن Rust لغة قائمة على التعبيرات، فهذا تمييز مهم يجب فهمه. اللغات الأخرى ليس لديها نفس التمييزات، لذا دعنا ننظر إلى ماهية العبارات والتعبيرات وكيف تؤثر اختلافاتهما على أجسام الدوال.
 
-- _Statements_ are instructions that perform some action and do not return
-  a value.
-- _Expressions_ evaluate to a resultant value.
+- _العبارات_ هي تعليمات تنفذ إجراءً ما ولا تُرجع قيمة.
+- _التعبيرات_ تُقيّم لتنتج قيمة ناتجة.
 
-Let’s look at some examples.
+لنلقِ نظرة على بعض الأمثلة.
 
-We’ve actually already used statements and expressions. Creating a variable and
-assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
-`let y = 6;` is a statement.
+لقد استخدمنا بالفعل العبارات والتعبيرات. إنشاء متغير وتعيين قيمة له باستخدام الكلمة المفتاحية `let` هو عبارة. في القائمة 3-1، `let y = 6;` هي عبارة.
 
-<Listing number="3-1" file-name="src/main.rs" caption="A `main` function declaration containing one statement">
+<Listing number="3-1" file-name="src/main.rs" caption="تعريف دالة `main` يحتوي على عبارة واحدة">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
@@ -126,46 +81,33 @@ assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 
 </Listing>
 
-Function definitions are also statements; the entire preceding example is a
-statement in itself. (As we’ll see shortly, calling a function is not a
-statement, though.)
+تعريفات الدوال هي أيضًا عبارات؛ المثال السابق بأكمله هو عبارة في حد ذاته. (كما سنرى قريبًا، استدعاء دالة ليس عبارة، رغم ذلك.)
 
-Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do; you’ll get an error:
+العبارات لا تُرجع قيمًا. لذلك، لا يمكنك تعيين عبارة `let` إلى متغير آخر، كما يحاول الكود التالي القيام به؛ ستحصل على خطأ:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
-When you run this program, the error you’ll get looks like this:
+عند تشغيل هذا البرنامج، سيبدو الخطأ الذي ستحصل عليه كالتالي:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for
-`x` to bind to. This is different from what happens in other languages, such as
-C and Ruby, where the assignment returns the value of the assignment. In those
-languages, you can write `x = y = 6` and have both `x` and `y` have the value
-`6`; that is not the case in Rust.
+عبارة `let y = 6` لا تُرجع قيمة، لذلك لا يوجد شيء يمكن ربط `x` به. هذا يختلف عما يحدث في لغات أخرى، مثل C وRuby، حيث يُرجع التعيين قيمة التعيين. في تلك اللغات، يمكنك كتابة `x = y = 6` ويكون لكل من `x` و`y` القيمة `6`؛ هذا ليس هو الحال في Rust.
 
-Expressions evaluate to a value and make up most of the rest of the code that
-you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
-expression that evaluates to the value `11`. Expressions can be part of
-statements: In Listing 3-1, the `6` in the statement `let y = 6;` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. A new scope block created with
-curly brackets is an expression, for example:
+التعبيرات تُقيّم لتنتج قيمة وتشكل معظم بقية الكود الذي ستكتبه في Rust. ضع في اعتبارك عملية رياضية، مثل `5 + 6`، وهي تعبير يُقيّم إلى القيمة `11`. يمكن أن تكون التعبيرات جزءًا من العبارات: في القائمة 3-1، الرقم `6` في عبارة `let y = 6;` هو تعبير يُقيّم إلى القيمة `6`. استدعاء دالة هو تعبير. استدعاء ماكرو هو تعبير. كتلة نطاق جديدة تُنشأ بأقواس معقوفة هي تعبير، على سبيل المثال:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
 ```
 
-This expression:
+هذا التعبير:
 
 ```rust,ignore
 {
@@ -174,80 +116,52 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note the `x + 1` line without a semicolon at
-the end, which is unlike most of the lines you’ve seen so far. Expressions do
-not include ending semicolons. If you add a semicolon to the end of an
-expression, you turn it into a statement, and it will then not return a value.
-Keep this in mind as you explore function return values and expressions next.
+هو كتلة، في هذه الحالة، تُقيّم إلى `4`. تلك القيمة تُربط بـ `y` كجزء من عبارة `let`. لاحظ السطر `x + 1` بدون فاصلة منقوطة في النهاية، وهو على عكس معظم الأسطر التي رأيتها حتى الآن. التعبيرات لا تتضمن فواصل منقوطة في النهاية. إذا أضفت فاصلة منقوطة في نهاية تعبير، فإنك تحوّله إلى عبارة، وبالتالي لن تُرجع قيمة. ضع هذا في اعتبارك بينما تستكشف قيم الإرجاع للدوال والتعبيرات في القسم التالي.
 
-### Functions with Return Values
+### الدوال التي تُرجع قيمًا
 
-Functions can return values to the code that calls them. We don’t name return
-values, but we must declare their type after an arrow (`->`). In Rust, the
-return value of the function is synonymous with the value of the final
-expression in the block of the body of a function. You can return early from a
-function by using the `return` keyword and specifying a value, but most
-functions return the last expression implicitly. Here’s an example of a
-function that returns a value:
+يمكن للدوال إرجاع قيم إلى الكود الذي يستدعيها. لا نُسمي قيم الإرجاع، لكن يجب أن نعلن عن نوعها بعد سهم (`->`). في Rust، قيمة إرجاع الدالة مرادفة لقيمة التعبير النهائي في كتلة جسم الدالة. يمكنك العودة مبكرًا من دالة باستخدام الكلمة المفتاحية `return` وتحديد قيمة، لكن معظم الدوال تُرجع التعبير الأخير ضمنيًا. إليك مثالاً على دالة تُرجع قيمة:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-There are no function calls, macros, or even `let` statements in the `five`
-function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified too, as `-> i32`. Try
-running this code; the output should look like this:
+لا توجد استدعاءات دوال أو ماكروهات أو حتى عبارات `let` في دالة `five`—فقط الرقم `5` بمفرده. هذه دالة صحيحة تمامًا في Rust. لاحظ أن نوع إرجاع الدالة محدد أيضًا، بصيغة `-> i32`. جرب تشغيل هذا الكود؛ يجب أن يبدو الناتج كالتالي:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type
-is `i32`. Let’s examine this in more detail. There are two important bits:
-First, the line `let x = five();` shows that we’re using the return value of a
-function to initialize a variable. Because the function `five` returns a `5`,
-that line is the same as the following:
+الرقم `5` في `five` هو قيمة إرجاع الدالة، ولهذا السبب نوع الإرجاع هو `i32`. لنفحص هذا بمزيد من التفصيل. هناك نقطتان مهمتان: أولاً، السطر `let x = five();` يوضح أننا نستخدم قيمة إرجاع دالة لتهيئة متغير. نظرًا لأن الدالة `five` تُرجع `5`، فإن ذلك السطر هو نفسه التالي:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value, but the body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return.
+ثانيًا، دالة `five` ليس لديها معاملات وتعرّف نوع قيمة الإرجاع، لكن جسم الدالة هو رقم `5` وحيد بدون فاصلة منقوطة لأنه تعبير نريد إرجاع قيمته.
 
-Let’s look at another example:
+لنلقِ نظرة على مثال آخر:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Running this code will print `The value of x is: 6`. But what happens if we
-place a semicolon at the end of the line containing `x + 1`, changing it from
-an expression to a statement?
+سيطبع تشغيل هذا الكود `The value of x is: 6`. لكن ماذا يحدث إذا وضعنا فاصلة منقوطة في نهاية السطر الذي يحتوي على `x + 1`، محوّلين إياه من تعبير إلى عبارة؟
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
-Compiling this code will produce an error, as follows:
+سيؤدي تجميع هذا الكود إلى خطأ، كما يلي:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-The main error message, `mismatched types`, reveals the core issue with this
-code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the unit type. Therefore, nothing is returned, which contradicts the function
-definition and results in an error. In this output, Rust provides a message to
-possibly help rectify this issue: It suggests removing the semicolon, which
-would fix the error.
+رسالة الخطأ الرئيسية، `mismatched types`، تكشف عن المشكلة الأساسية في هذا الكود. تعريف الدالة `plus_one` يقول إنها ستُرجع `i32`، لكن العبارات لا تُقيّم لتنتج قيمة، وهو ما يُعبر عنه بـ `()`، وهو نوع الوحدة. لذلك، لا يتم إرجاع أي شيء، وهو ما يتناقض مع تعريف الدالة ويؤدي إلى خطأ. في هذا الناتج، تقدم Rust رسالة للمساعدة في تصحيح هذه المشكلة: تقترح إزالة الفاصلة المنقوطة، والتي من شأنها إصلاح الخطأ.

@@ -1,34 +1,34 @@
-## The Slice Type
+## نوع الشريحة
 
-_Slices_ let you reference a contiguous sequence of elements in a
-[collection](ch08-00-common-collections.md)<!-- ignore -->. A slice is a kind
-of reference, so it does not have ownership.
+_الشرائح_ تتيح لك الإشارة إلى تسلسل متصل من العناصر في 
+[مجموعة](ch08-00-common-collections.md)<!-- ignore -->. الشريحة هي نوع
+من المرجع، لذلك ليس لها ملكية.
 
-Here’s a small programming problem: Write a function that takes a string of
-words separated by spaces and returns the first word it finds in that string.
-If the function doesn’t find a space in the string, the whole string must be
-one word, so the entire string should be returned.
+إليك مشكلة برمجية صغيرة: اكتب دالة تأخذ سلسلة نصية من
+الكلمات المفصولة بمسافات وتعيد الكلمة الأولى التي تجدها في تلك السلسلة.
+إذا لم تجد الدالة مسافة في السلسلة، فإن السلسلة بأكملها يجب أن تكون
+كلمة واحدة، لذا يجب إرجاع السلسلة بأكملها.
 
-> Note: For the purposes of introducing slices, we are assuming ASCII only in
-> this section; a more thorough discussion of UTF-8 handling is in the
-> [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> section
-> of Chapter 8.
+> ملاحظة: لأغراض تقديم الشرائح، نفترض ASCII فقط في
+> هذا القسم؛ مناقشة أكثر شمولاً لمعالجة UTF-8 موجودة في قسم
+> [«تخزين نص مشفر بـ UTF-8 باستخدام السلاسل النصية»][strings]<!-- ignore -->
+> من الفصل 8.
 
-Let’s work through how we’d write the signature of this function without using
-slices, to understand the problem that slices will solve:
+دعنا نعمل على كيفية كتابة توقيع هذه الدالة بدون استخدام
+الشرائح، لفهم المشكلة التي ستحلها الشرائح:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a parameter of type `&String`. We don’t need
-ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
-of their arguments unless they need to, and the reasons for that will become
-clear as we keep going.) But what should we return? We don’t really have a way
-to talk about *part* of a string. However, we could return the index of the end
-of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+دالة `first_word` لها معامل من نوع `&String`. لا نحتاج إلى
+الملكية، لذا هذا جيد. (في Rust الاصطلاحية، لا تأخذ الدوال ملكية
+وسائطها ما لم تحتاج إلى ذلك، والأسباب لذلك ستصبح
+واضحة مع استمرارنا.) ولكن ماذا يجب أن نعيد؟ ليس لدينا حقاً طريقة
+للتحدث عن *جزء* من سلسلة نصية. ومع ذلك، يمكننا إرجاع فهرس نهاية
+الكلمة، المشار إليه بمسافة. دعنا نجرب ذلك، كما هو موضح في القائمة 4-7.
 
-<Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
+<Listing number="4-7" file-name="src/main.rs" caption="دالة `first_word` التي تعيد قيمة فهرس البايت في معامل `String`">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
@@ -36,50 +36,50 @@ of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 </Listing>
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method.
+لأننا بحاجة إلى المرور عبر `String` عنصراً بعنصر والتحقق مما إذا كانت
+القيمة مسافة، سنحول `String` إلى مصفوفة من البايتات باستخدام
+طريقة `as_bytes`.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+بعد ذلك، ننشئ مكرراً عبر مصفوفة البايتات باستخدام طريقة `iter`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
-For now, know that `iter` is a method that returns each element in a collection
-and that `enumerate` wraps the result of `iter` and returns each element as
-part of a tuple instead. The first element of the tuple returned from
-`enumerate` is the index, and the second element is a reference to the element.
-This is a bit more convenient than calculating the index ourselves.
+سنناقش المكررات بمزيد من التفصيل في [الفصل 13][ch13]<!-- ignore -->.
+في الوقت الحالي، اعلم أن `iter` هي طريقة تعيد كل عنصر في مجموعة
+وأن `enumerate` تغلف نتيجة `iter` وتعيد كل عنصر كجزء
+من tuple بدلاً من ذلك. العنصر الأول من tuple المعاد من
+`enumerate` هو الفهرس، والعنصر الثاني هو مرجع للعنصر.
+هذا أكثر ملاءمة قليلاً من حساب الفهرس بأنفسنا.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in [Chapter
-6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
-for the index in the tuple and `&item` for the single byte in the tuple.
-Because we get a reference to the element from `.iter().enumerate()`, we use
-`&` in the pattern.
+لأن طريقة `enumerate` تعيد tuple، يمكننا استخدام الأنماط لتفكيك
+ذلك الـ tuple. سنناقش الأنماط أكثر في [الفصل
+6][ch6]<!-- ignore -->. في حلقة `for`، نحدد نمطاً له `i`
+للفهرس في tuple و `&item` للبايت الواحد في tuple.
+لأننا نحصل على مرجع للعنصر من `.iter().enumerate()`، نستخدم
+`&` في النمط.
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`.
+داخل حلقة `for`، نبحث عن البايت الذي يمثل المسافة باستخدام
+صيغة البايت الحرفية. إذا وجدنا مسافة، نعيد الموضع.
+وإلا، نعيد طول السلسلة باستخدام `s.len()`.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7.
+لدينا الآن طريقة لمعرفة فهرس نهاية الكلمة الأولى في
+السلسلة، ولكن هناك مشكلة. نحن نعيد `usize` بمفردها، لكنها
+رقم ذو معنى فقط في سياق `&String`. بمعنى آخر،
+لأنها قيمة منفصلة عن `String`، ليس هناك ضمان أنها
+ستظل صالحة في المستقبل. اعتبر البرنامج في القائمة 4-8 الذي
+يستخدم دالة `first_word` من القائمة 4-7.
 
-<Listing number="4-8" file-name="src/main.rs" caption="Storing the result from calling the `first_word` function and then changing the `String` contents">
+<Listing number="4-8" file-name="src/main.rs" caption="تخزين النتيجة من استدعاء دالة `first_word` ثم تغيير محتويات `String`">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
@@ -87,60 +87,60 @@ uses the `first_word` function from Listing 4-7.
 
 </Listing>
 
-This program compiles without any errors and would also do so if we used `word`
-after calling `s.clear()`. Because `word` isn’t connected to the state of `s`
-at all, `word` still contains the value `5`. We could use that value `5` with
-the variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+يُترجم هذا البرنامج بدون أي أخطاء وسيفعل ذلك أيضاً إذا استخدمنا `word`
+بعد استدعاء `s.clear()`. لأن `word` ليست متصلة بحالة `s`
+على الإطلاق، لا تزال `word` تحتوي على القيمة `5`. يمكننا استخدام تلك القيمة `5` مع
+المتغير `s` لمحاولة استخراج الكلمة الأولى، لكن هذا سيكون خطأ
+لأن محتويات `s` تغيرت منذ أن حفظنا `5` في `word`.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error-prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+الاضطرار إلى القلق بشأن فقدان الفهرس في `word` للتزامن مع البيانات في
+`s` أمر ممل وعرضة للخطأ! إدارة هذه الفهارس أكثر هشاشة إذا
+كتبنا دالة `second_word`. يجب أن يبدو توقيعها هكذا:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting _and_ an ending index, and we have even more
-values that were calculated from data in a particular state but aren’t tied to
-that state at all. We have three unrelated variables floating around that need
-to be kept in sync.
+الآن نتتبع فهرساً *للبداية* والنهاية، ولدينا المزيد من
+القيم التي تم حسابها من البيانات في حالة معينة ولكنها غير مرتبطة
+بتلك الحالة على الإطلاق. لدينا ثلاثة متغيرات غير مرتبطة تطفو حولها تحتاج
+إلى أن تبقى متزامنة.
 
-Luckily, Rust has a solution to this problem: string slices.
+لحسن الحظ، لدى Rust حل لهذه المشكلة: شرائح السلاسل النصية.
 
-### String Slices
+### شرائح السلاسل النصية
 
-A _string slice_ is a reference to a contiguous sequence of the elements of a
-`String`, and it looks like this:
+_شريحة السلسلة النصية_ هي مرجع إلى تسلسل متصل من عناصر
+`String`، وتبدو هكذا:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-Rather than a reference to the entire `String`, `hello` is a reference to a
-portion of the `String`, specified in the extra `[0..5]` bit. We create slices
-using a range within square brackets by specifying
-`[starting_index..ending_index]`, where _`starting_index`_ is the first
-position in the slice and _`ending_index`_ is one more than the last position
-in the slice. Internally, the slice data structure stores the starting position
-and the length of the slice, which corresponds to _`ending_index`_ minus
-_`starting_index`_. So, in the case of `let world = &s[6..11];`, `world` would
-be a slice that contains a pointer to the byte at index 6 of `s` with a length
-value of `5`.
+بدلاً من مرجع إلى `String` بأكملها، `hello` هو مرجع إلى
+جزء من `String`، محدد في الجزء الإضافي `[0..5]`. ننشئ الشرائح
+باستخدام نطاق داخل أقواس مربعة بتحديد
+`[starting_index..ending_index]`، حيث _`starting_index`_ هو الموضع الأول
+في الشريحة و _`ending_index`_ هو أكثر من الموضع الأخير بواحد
+في الشريحة. داخلياً، يخزن هيكل بيانات الشريحة موضع البداية
+وطول الشريحة، والذي يقابل _`ending_index`_ ناقص
+_`starting_index`_. لذا، في حالة `let world = &s[6..11];`، ستكون `world`
+شريحة تحتوي على مؤشر إلى البايت في الفهرس 6 من `s` مع قيمة طول
+`5`.
 
-Figure 4-7 shows this in a diagram.
+الشكل 4-7 يوضح هذا في مخطط.
 
-<img alt="Three tables: a table representing the stack data of s, which points
-to the byte at index 0 in a table of the string data &quot;hello world&quot; on
-the heap. The third table represents the stack data of the slice world, which
-has a length value of 5 and points to byte 6 of the heap data table."
+<img alt="ثلاثة جداول: جدول يمثل بيانات المكدس لـ s، والذي يشير
+إلى البايت في الفهرس 0 في جدول من بيانات السلسلة &quot;hello world&quot; على
+الكومة. الجدول الثالث يمثل بيانات المكدس للشريحة world، والتي
+لها قيمة طول 5 وتشير إلى البايت 6 من جدول بيانات الكومة."
 src="img/trpl04-07.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-7: A string slice referring to part of a
+<span class="caption">الشكل 4-7: شريحة سلسلة نصية تشير إلى جزء من
 `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at index 0, you can drop
-the value before the two periods. In other words, these are equal:
+مع صيغة نطاق `..` في Rust، إذا كنت تريد البدء من الفهرس 0، يمكنك حذف
+القيمة قبل النقطتين. بمعنى آخر، هذه متساوية:
 
 ```rust
 let s = String::from("hello");
@@ -149,8 +149,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+بالمثل، إذا كانت شريحتك تتضمن البايت الأخير من `String`، يمكنك
+حذف الرقم الزائد. وهذا يعني أن هذه متساوية:
 
 ```rust
 let s = String::from("hello");
@@ -161,8 +161,8 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So, these
-are equal:
+يمكنك أيضاً حذف كلا القيمتين لأخذ شريحة من السلسلة بأكملها. لذا، هذه
+متساوية:
 
 ```rust
 let s = String::from("hello");
@@ -173,12 +173,12 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> Note: String slice range indices must occur at valid UTF-8 character
-> boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error.
+> ملاحظة: يجب أن تحدث فهارس نطاق شريحة السلسلة النصية عند حدود أحرف UTF-8 صالحة.
+> إذا حاولت إنشاء شريحة سلسلة نصية في منتصف
+> حرف متعدد البايتات، سيخرج برنامجك بخطأ.
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+مع كل هذه المعلومات في الاعتبار، دعنا نعيد كتابة `first_word` لإرجاع
+شريحة. النوع الذي يشير إلى «شريحة السلسلة النصية» مكتوب كـ `&str`:
 
 <Listing file-name="src/main.rs">
 
@@ -188,30 +188,30 @@ slice. The type that signifies “string slice” is written as `&str`:
 
 </Listing>
 
-We get the index for the end of the word the same way we did in Listing 4-7, by
-looking for the first occurrence of a space. When we find a space, we return a
-string slice using the start of the string and the index of the space as the
-starting and ending indices.
+نحصل على فهرس نهاية الكلمة بنفس الطريقة التي فعلناها في القائمة 4-7، من خلال
+البحث عن أول ظهور لمسافة. عندما نجد مسافة، نعيد
+شريحة سلسلة نصية باستخدام بداية السلسلة وفهرس المسافة كفهارس
+البداية والنهاية.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+الآن عندما نستدعي `first_word`، نحصل على قيمة واحدة مرتبطة بالبيانات
+الأساسية. تتكون القيمة من مرجع إلى نقطة البداية
+للشريحة وعدد العناصر في الشريحة.
 
-Returning a slice would also work for a `second_word` function:
+إرجاع شريحة سيعمل أيضاً لدالة `second_word`:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up because the
-compiler will ensure that the references into the `String` remain valid.
-Remember the bug in the program in Listing 4-8, when we got the index to the
-end of the first word but then cleared the string so our index was invalid?
-That code was logically incorrect but didn’t show any immediate errors. The
-problems would show up later if we kept trying to use the first word index with
-an emptied string. Slices make this bug impossible and let us know much sooner
-that we have a problem with our code. Using the slice version of `first_word`
-will throw a compile-time error:
+لدينا الآن واجهة برمجة تطبيقات مباشرة يصعب كثيراً إفسادها لأن
+المترجم سيضمن أن المراجع إلى `String` تظل صالحة.
+تذكر الخطأ في البرنامج في القائمة 4-8، عندما حصلنا على الفهرس لنهاية
+الكلمة الأولى ولكن بعد ذلك مسحنا السلسلة فأصبح فهرسنا غير صالح؟
+كان هذا الكود غير صحيح منطقياً لكنه لم يظهر أي أخطاء فورية.
+ستظهر المشاكل لاحقاً إذا استمررنا في محاولة استخدام فهرس الكلمة الأولى مع
+سلسلة فارغة. تجعل الشرائح هذا الخطأ مستحيلاً وتخبرنا بشكل أسرع بكثير
+أن لدينا مشكلة في كودنا. استخدام نسخة الشريحة من `first_word`
+سيطرح خطأ وقت الترجمة:
 
 <Listing file-name="src/main.rs">
 
@@ -221,52 +221,52 @@ will throw a compile-time error:
 
 </Listing>
 
-Here’s the compiler error:
+إليك خطأ المترجم:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. The `println!`
-after the call to `clear` uses the reference in `word`, so the immutable
-reference must still be active at that point. Rust disallows the mutable
-reference in `clear` and the immutable reference in `word` from existing at the
-same time, and compilation fails. Not only has Rust made our API easier to use,
-but it has also eliminated an entire class of errors at compile time!
+تذكر من قواعد الاستعارة أنه إذا كان لدينا مرجع غير قابل للتعديل لشيء
+ما، لا يمكننا أيضاً أخذ مرجع قابل للتعديل. لأن `clear` تحتاج إلى
+اقتطاع `String`، فإنها تحتاج إلى الحصول على مرجع قابل للتعديل. تستخدم `println!`
+بعد الاستدعاء لـ `clear` المرجع في `word`، لذا يجب أن يكون المرجع غير القابل للتعديل
+لا يزال نشطاً في تلك النقطة. لا تسمح Rust بالمرجع القابل للتعديل
+في `clear` والمرجع غير القابل للتعديل في `word` من الوجود في
+نفس الوقت، ويفشل الترجمة. لم تجعل Rust واجهة برمجة التطبيقات الخاصة بنا أسهل في الاستخدام فحسب،
+بل أزالت أيضاً فئة كاملة من الأخطاء في وقت الترجمة!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="string-literals-are-slices"></a>
 
-#### String Literals as Slices
+#### السلاسل النصية الحرفية كشرائح
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+تذكر أننا تحدثنا عن تخزين السلاسل النصية الحرفية داخل الملف الثنائي. الآن
+بعد أن نعرف عن الشرائح، يمكننا فهم السلاسل النصية الحرفية بشكل صحيح:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: It’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+نوع `s` هنا هو `&str`: إنها شريحة تشير إلى تلك النقطة المحددة من
+الملف الثنائي. هذا أيضاً لماذا السلاسل النصية الحرفية غير قابلة للتعديل؛ `&str` هو
+مرجع غير قابل للتعديل.
 
-#### String Slices as Parameters
+#### شرائح السلاسل النصية كمعاملات
 
-Knowing that you can take slices of literals and `String` values leads us to
-one more improvement on `first_word`, and that’s its signature:
+معرفة أنه يمكنك أخذ شرائح من الحرفيات وقيم `String` تقودنا إلى
+تحسين آخر على `first_word`، وهو توقيعها:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `&String` values
-and `&str` values.
+سيكتب Rustacean أكثر خبرة التوقيع الموضح في القائمة 4-9
+بدلاً من ذلك لأنه يسمح لنا باستخدام نفس الدالة على قيم `&String`
+وقيم `&str`.
 
-<Listing number="4-9" caption="Improving the `first_word` function by using a string slice for the type of the `s` parameter">
+<Listing number="4-9" caption="تحسين دالة `first_word` باستخدام شريحة سلسلة نصية لنوع معامل `s`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
@@ -274,14 +274,14 @@ and `&str` values.
 
 </Listing>
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of deref coercions, a feature we will cover in
-the [“Using Deref Coercions in Functions and Methods”][deref-coercions]<!--
-ignore --> section of Chapter 15.
+إذا كان لدينا شريحة سلسلة نصية، يمكننا تمريرها مباشرة. إذا كان لدينا `String`، يمكننا
+تمرير شريحة من `String` أو مرجع إلى `String`. تستفيد هذه
+المرونة من إكراهات deref، وهي ميزة سنغطيها في
+قسم [«استخدام إكراهات Deref في الدوال والطرق»][deref-coercions]<!--
+ignore --> من الفصل 15.
 
-Defining a function to take a string slice instead of a reference to a `String`
-makes our API more general and useful without losing any functionality:
+تعريف دالة لأخذ شريحة سلسلة نصية بدلاً من مرجع إلى `String`
+يجعل واجهة برمجة التطبيقات الخاصة بنا أكثر عمومية وفائدة دون فقدان أي وظائف:
 
 <Listing file-name="src/main.rs">
 
@@ -291,17 +291,17 @@ makes our API more general and useful without losing any functionality:
 
 </Listing>
 
-### Other Slices
+### شرائح أخرى
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type too. Consider this array:
+شرائح السلاسل النصية، كما قد تتخيل، خاصة بالسلاسل النصية. ولكن هناك
+نوع شريحة أكثر عمومية أيضاً. اعتبر هذا المصفوفة:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to part of a string, we might want to refer to
-part of an array. We’d do so like this:
+تماماً كما قد نريد الإشارة إلى جزء من سلسلة نصية، قد نريد الإشارة إلى
+جزء من مصفوفة. سنفعل ذلك هكذا:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -311,22 +311,22 @@ let slice = &a[1..3];
 assert_eq!(slice, &[2, 3]);
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+لهذه الشريحة النوع `&[i32]`. تعمل بنفس الطريقة التي تعمل بها شرائح السلاسل النصية، من خلال
+تخزين مرجع إلى العنصر الأول وطول. ستستخدم هذا النوع من
+الشريحة لجميع أنواع المجموعات الأخرى. سنناقش هذه المجموعات في
+التفاصيل عندما نتحدث عن المتجهات في الفصل 8.
 
-## Summary
+## الخلاصة
 
-The concepts of ownership, borrowing, and slices ensure memory safety in Rust
-programs at compile time. The Rust language gives you control over your memory
-usage in the same way as other systems programming languages. But having the
-owner of data automatically clean up that data when the owner goes out of scope
-means you don’t have to write and debug extra code to get this control.
+مفاهيم الملكية والاستعارة والشرائح تضمن أمان الذاكرة في برامج Rust
+في وقت الترجمة. تمنحك لغة Rust السيطرة على استخدامك للذاكرة
+بنفس الطريقة التي تفعلها لغات برمجة الأنظمة الأخرى. ولكن امتلاك
+مالك البيانات يقوم تلقائياً بتنظيف تلك البيانات عندما يخرج المالك عن النطاق
+يعني أنك لست مضطراً لكتابة وتصحيح كود إضافي للحصول على هذه السيطرة.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to
-Chapter 5 and look at grouping pieces of data together in a `struct`.
+تؤثر الملكية على كيفية عمل الكثير من الأجزاء الأخرى في Rust، لذا سنتحدث عن
+هذه المفاهيم أكثر في جميع أنحاء بقية الكتاب. دعنا ننتقل إلى
+الفصل 5 وننظر في تجميع أجزاء من البيانات معاً في `struct`.
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#patterns-that-bind-to-values

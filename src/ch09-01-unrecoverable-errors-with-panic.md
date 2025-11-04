@@ -1,35 +1,19 @@
-## Unrecoverable Errors with `panic!`
+## الأخطاء غير القابلة للاسترداد مع `panic!`
 
-Sometimes bad things happen in your code, and there’s nothing you can do about
-it. In these cases, Rust has the `panic!` macro. There are two ways to cause a
-panic in practice: by taking an action that causes our code to panic (such as
-accessing an array past the end) or by explicitly calling the `panic!` macro.
-In both cases, we cause a panic in our program. By default, these panics will
-print a failure message, unwind, clean up the stack, and quit. Via an
-environment variable, you can also have Rust display the call stack when a
-panic occurs to make it easier to track down the source of the panic.
+في بعض الأحيان تحدث أشياء سيئة في كودك، وليس هناك ما يمكنك فعله حيال ذلك. في هذه الحالات، لدى Rust الماكرو `panic!`. هناك طريقتان للتسبب في حالة panic عمليًا: من خلال اتخاذ إجراء يتسبب في حدوث panic في كودنا (مثل الوصول إلى مصفوفة بعد نهايتها) أو من خلال استدعاء ماكرو `panic!` بشكل صريح. في كلتا الحالتين، نتسبب في حدوث panic في برنامجنا. بشكل افتراضي، سيقوم هذا الـ panic بطباعة رسالة فشل، والإرجاع (unwinding)، وتنظيف الذاكرة المؤقتة (stack)، والإنهاء. من خلال متغير بيئة، يمكنك أيضًا جعل Rust يعرض مكدس الاستدعاءات (call stack) عند حدوث panic لتسهيل تتبع مصدر الـ panic.
 
-> ### Unwinding the Stack or Aborting in Response to a Panic
+> ### إرجاع الذاكرة المؤقتة أو الإنهاء الفوري استجابة للـ Panic
 >
-> By default, when a panic occurs, the program starts _unwinding_, which means
-> Rust walks back up the stack and cleans up the data from each function it
-> encounters. However, walking back and cleaning up is a lot of work. Rust
-> therefore allows you to choose the alternative of immediately _aborting_,
-> which ends the program without cleaning up.
+> بشكل افتراضي، عندما يحدث panic، يبدأ البرنامج في _الإرجاع_ (unwinding)، مما يعني أن Rust يرجع إلى الأعلى في الذاكرة المؤقتة (stack) وينظف البيانات من كل دالة يواجهها. ومع ذلك، فإن الرجوع والتنظيف يتطلبان الكثير من العمل. لذلك يسمح لك Rust باختيار البديل وهو _الإنهاء الفوري_ (aborting)، والذي ينهي البرنامج دون تنظيف.
 >
-> Memory that the program was using will then need to be cleaned up by the
-> operating system. If in your project you need to make the resultant binary as
-> small as possible, you can switch from unwinding to aborting upon a panic by
-> adding `panic = 'abort'` to the appropriate `[profile]` sections in your
-> _Cargo.toml_ file. For example, if you want to abort on panic in release mode,
-> add this:
+> سيحتاج نظام التشغيل بعد ذلك إلى تنظيف الذاكرة التي كان البرنامج يستخدمها. إذا كنت بحاجة في مشروعك إلى جعل الملف الثنائي الناتج صغيرًا قدر الإمكان، يمكنك التبديل من الإرجاع إلى الإنهاء الفوري عند حدوث panic عن طريق إضافة `panic = 'abort'` إلى أقسام `[profile]` المناسبة في ملف _Cargo.toml_ الخاص بك. على سبيل المثال، إذا كنت تريد الإنهاء الفوري عند panic في وضع الإصدار (release mode)، أضف هذا:
 >
 > ```toml
 > [profile.release]
 > panic = 'abort'
 > ```
 
-Let’s try calling `panic!` in a simple program:
+لنجرب استدعاء `panic!` في برنامج بسيط:
 
 <Listing file-name="src/main.rs">
 
@@ -39,35 +23,23 @@ Let’s try calling `panic!` in a simple program:
 
 </Listing>
 
-When you run the program, you’ll see something like this:
+عند تشغيل البرنامج، سترى شيئًا مثل هذا:
 
 ```console
 {{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
-The call to `panic!` causes the error message contained in the last two lines.
-The first line shows our panic message and the place in our source code where
-the panic occurred: _src/main.rs:2:5_ indicates that it’s the second line,
-fifth character of our _src/main.rs_ file.
+يتسبب استدعاء `panic!` في رسالة الخطأ الموجودة في السطرين الأخيرين. يعرض السطر الأول رسالة الـ panic الخاصة بنا والمكان في كود المصدر الخاص بنا حيث حدث الـ panic: _src/main.rs:2:5_ يشير إلى أنه السطر الثاني، الحرف الخامس من ملف _src/main.rs_ الخاص بنا.
 
-In this case, the line indicated is part of our code, and if we go to that
-line, we see the `panic!` macro call. In other cases, the `panic!` call might
-be in code that our code calls, and the filename and line number reported by
-the error message will be someone else’s code where the `panic!` macro is
-called, not the line of our code that eventually led to the `panic!` call.
+في هذه الحالة، السطر المشار إليه هو جزء من كودنا، وإذا ذهبنا إلى ذلك السطر، سنرى استدعاء ماكرو `panic!`. في حالات أخرى، قد يكون استدعاء `panic!` في كود يستدعيه كودنا، واسم الملف ورقم السطر الذي أبلغت عنه رسالة الخطأ سيكون كود شخص آخر حيث يتم استدعاء ماكرو `panic!`، وليس السطر من كودنا الذي أدى في النهاية إلى استدعاء `panic!`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-a-panic-backtrace"></a>
 
-We can use the backtrace of the functions the `panic!` call came from to figure
-out the part of our code that is causing the problem. To understand how to use
-a `panic!` backtrace, let’s look at another example and see what it’s like when
-a `panic!` call comes from a library because of a bug in our code instead of
-from our code calling the macro directly. Listing 9-1 has some code that
-attempts to access an index in a vector beyond the range of valid indexes.
+يمكننا استخدام التتبع الرجعي (backtrace) للدوال التي جاء منها استدعاء `panic!` لمعرفة الجزء من كودنا الذي يتسبب في المشكلة. لفهم كيفية استخدام تتبع رجعي لـ `panic!`، دعنا ننظر إلى مثال آخر ونرى كيف يكون الأمر عندما يأتي استدعاء `panic!` من مكتبة بسبب خطأ في كودنا بدلاً من استدعاء الماكرو مباشرة من كودنا. القائمة 9-1 تحتوي على بعض الكود الذي يحاول الوصول إلى فهرس في متجه (vector) خارج نطاق الفهارس الصالحة.
 
-<Listing number="9-1" file-name="src/main.rs" caption="Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`">
+<Listing number="9-1" file-name="src/main.rs" caption="محاولة الوصول إلى عنصر بعد نهاية متجه، مما سيؤدي إلى استدعاء `panic!`">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
@@ -75,42 +47,19 @@ attempts to access an index in a vector beyond the range of valid indexes.
 
 </Listing>
 
-Here, we’re attempting to access the 100th element of our vector (which is at
-index 99 because indexing starts at zero), but the vector has only three
-elements. In this situation, Rust will panic. Using `[]` is supposed to return
-an element, but if you pass an invalid index, there’s no element that Rust
-could return here that would be correct.
+هنا، نحاول الوصول إلى العنصر رقم 100 من المتجه الخاص بنا (الذي يكون عند الفهرس 99 لأن الفهرسة تبدأ من صفر)، لكن المتجه يحتوي فقط على ثلاثة عناصر. في هذا الموقف، سيحدث panic في Rust. استخدام `[]` من المفترض أن يعيد عنصرًا، ولكن إذا مررت فهرسًا غير صالح، فلا يوجد عنصر يمكن أن يعيده Rust هنا سيكون صحيحًا.
 
-In C, attempting to read beyond the end of a data structure is undefined
-behavior. You might get whatever is at the location in memory that would
-correspond to that element in the data structure, even though the memory
-doesn’t belong to that structure. This is called a _buffer overread_ and can
-lead to security vulnerabilities if an attacker is able to manipulate the index
-in such a way as to read data they shouldn’t be allowed to that is stored after
-the data structure.
+في C، محاولة القراءة بعد نهاية بنية البيانات هي سلوك غير محدد (undefined behavior). قد تحصل على أي شيء موجود في موقع الذاكرة الذي يتوافق مع ذلك العنصر في بنية البيانات، حتى لو كانت الذاكرة لا تنتمي إلى تلك البنية. يُسمى هذا _قراءة تجاوز الحاجز_ (buffer overread) ويمكن أن يؤدي إلى ثغرات أمنية إذا تمكن المهاجم من التلاعب بالفهرس بطريقة تسمح له بقراءة بيانات لا يُفترض أن يُسمح له بها مخزنة بعد بنية البيانات.
 
-To protect your program from this sort of vulnerability, if you try to read an
-element at an index that doesn’t exist, Rust will stop execution and refuse to
-continue. Let’s try it and see:
+لحماية برنامجك من هذا النوع من الثغرات، إذا حاولت قراءة عنصر في فهرس غير موجود، سيوقف Rust التنفيذ ويرفض الاستمرار. لنجرب ذلك ونرى:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
-This error points at line 4 of our _main.rs_ where we attempt to access index
-99 of the vector in `v`.
+يشير هذا الخطأ إلى السطر 4 من ملف _main.rs_ الخاص بنا حيث نحاول الوصول إلى الفهرس 99 من المتجه في `v`.
 
-The `note:` line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. A
-_backtrace_ is a list of all the functions that have been called to get to this
-point. Backtraces in Rust work as they do in other languages: The key to
-reading the backtrace is to start from the top and read until you see files you
-wrote. That’s the spot where the problem originated. The lines above that spot
-are code that your code has called; the lines below are code that called your
-code. These before-and-after lines might include core Rust code, standard
-library code, or crates that you’re using. Let’s try to get a backtrace by
-setting the `RUST_BACKTRACE` environment variable to any value except `0`.
-Listing 9-2 shows output similar to what you’ll see.
+يخبرنا سطر `note:` أنه يمكننا ضبط متغير البيئة `RUST_BACKTRACE` للحصول على تتبع رجعي لما حدث بالضبط للتسبب في الخطأ. _التتبع الرجعي_ (backtrace) هو قائمة بجميع الدوال التي تم استدعاؤها للوصول إلى هذه النقطة. تعمل التتبعات الرجعية في Rust كما تعمل في اللغات الأخرى: المفتاح لقراءة التتبع الرجعي هو البدء من الأعلى والقراءة حتى ترى ملفات كتبتها أنت. هذا هو المكان الذي نشأت فيه المشكلة. الأسطر الموجودة فوق تلك النقطة هي كود استدعاه كودك؛ والأسطر الموجودة أسفلها هي كود استدعى كودك. قد تتضمن هذه الأسطر السابقة واللاحقة كود Rust الأساسي، أو كود المكتبة القياسية، أو الصناديق (crates) التي تستخدمها. دعنا نحاول الحصول على تتبع رجعي عن طريق ضبط متغير البيئة `RUST_BACKTRACE` إلى أي قيمة باستثناء `0`. القائمة 9-2 تظهر ناتجًا مشابهًا لما ستراه.
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/listing-09-01
@@ -119,7 +68,7 @@ copy the backtrace output below
 check the backtrace number mentioned in the text below the listing
 -->
 
-<Listing number="9-2" caption="The backtrace generated by a call to `panic!` displayed when the environment variable `RUST_BACKTRACE` is set">
+<Listing number="9-2" caption="التتبع الرجعي الذي يتم إنشاؤه بواسطة استدعاء `panic!` والمعروض عند ضبط متغير البيئة `RUST_BACKTRACE`">
 
 ```console
 $ RUST_BACKTRACE=1 cargo run
@@ -147,24 +96,10 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 
 </Listing>
 
-That’s a lot of output! The exact output you see might be different depending
-on your operating system and Rust version. In order to get backtraces with this
-information, debug symbols must be enabled. Debug symbols are enabled by
-default when using `cargo build` or `cargo run` without the `--release` flag,
-as we have here.
+هذا ناتج كبير! قد يكون الناتج الدقيق الذي تراه مختلفًا حسب نظام التشغيل الخاص بك وإصدار Rust. للحصول على تتبعات رجعية تحتوي على هذه المعلومات، يجب تمكين رموز التصحيح (debug symbols). يتم تمكين رموز التصحيح بشكل افتراضي عند استخدام `cargo build` أو `cargo run` بدون علامة `--release`، كما لدينا هنا.
 
-In the output in Listing 9-2, line 6 of the backtrace points to the line in our
-project that’s causing the problem: line 4 of _src/main.rs_. If we don’t want
-our program to panic, we should start our investigation at the location pointed
-to by the first line mentioning a file we wrote. In Listing 9-1, where we
-deliberately wrote code that would panic, the way to fix the panic is to not
-request an element beyond the range of the vector indexes. When your code
-panics in the future, you’ll need to figure out what action the code is taking
-with what values to cause the panic and what the code should do instead.
+في الناتج الموجود في القائمة 9-2، يشير السطر 6 من التتبع الرجعي إلى السطر في مشروعنا الذي يسبب المشكلة: السطر 4 من _src/main.rs_. إذا كنا لا نريد أن يحدث panic في برنامجنا، يجب أن نبدأ تحقيقنا في الموقع المشار إليه بالسطر الأول الذي يذكر ملفًا كتبناه نحن. في القائمة 9-1، حيث كتبنا عمدًا كودًا سيتسبب في panic، الطريقة لإصلاح الـ panic هي عدم طلب عنصر خارج نطاق فهارس المتجه. عندما يحدث panic في كودك في المستقبل، ستحتاج إلى معرفة الإجراء الذي يتخذه الكود بأي قيم للتسبب في الـ panic وما الذي يجب على الكود فعله بدلاً من ذلك.
 
-We’ll come back to `panic!` and when we should and should not use `panic!` to
-handle error conditions in the [“To `panic!` or Not to
-`panic!`”][to-panic-or-not-to-panic]<!-- ignore --> section later in this
-chapter. Next, we’ll look at how to recover from an error using `Result`.
+سنعود إلى `panic!` ومتى يجب وينبغي ألا نستخدم `panic!` للتعامل مع حالات الخطأ في قسم ["إلى `panic!` أم لا إلى `panic!`"][to-panic-or-not-to-panic]<!-- ignore --> لاحقًا في هذا الفصل. بعد ذلك، سننظر في كيفية الاسترداد من خطأ باستخدام `Result`.
 
 [to-panic-or-not-to-panic]: ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic

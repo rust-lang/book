@@ -1,48 +1,22 @@
-# Generic Types, Traits, and Lifetimes
+# الأنواع العامة (Generics)، السمات (Traits)، وأعمار المتغيرات (Lifetimes)
 
-Every programming language has tools for effectively handling the duplication
-of concepts. In Rust, one such tool is _generics_: abstract stand-ins for
-concrete types or other properties. We can express the behavior of generics or
-how they relate to other generics without knowing what will be in their place
-when compiling and running the code.
+تمتلك كل لغة برمجة أدوات للتعامل بفعالية مع تكرار المفاهيم. في Rust، إحدى هذه الأدوات هي _الأنواع العامة (generics)_: بدائل مجردة للأنواع الملموسة أو خصائص أخرى. يمكننا التعبير عن سلوك الأنواع العامة أو كيفية ارتباطها بأنواع عامة أخرى دون معرفة ما سيكون في مكانها عند ترجمة وتشغيل الكود.
 
-Functions can take parameters of some generic type, instead of a concrete type
-like `i32` or `String`, in the same way they take parameters with unknown
-values to run the same code on multiple concrete values. In fact, we already
-used generics in Chapter 6 with `Option<T>`, in Chapter 8 with `Vec<T>` and
-`HashMap<K, V>`, and in Chapter 9 with `Result<T, E>`. In this chapter, you’ll
-explore how to define your own types, functions, and methods with generics!
+يمكن للدوال أن تأخذ معاملات من نوع عام، بدلاً من نوع ملموس مثل `i32` أو `String`، بنفس الطريقة التي تأخذ بها معاملات بقيم غير معروفة لتشغيل نفس الكود على قيم ملموسة متعددة. في الواقع، قد استخدمنا بالفعل الأنواع العامة في الفصل 6 مع `Option<T>`، وفي الفصل 8 مع `Vec<T>` و `HashMap<K, V>`، وفي الفصل 9 مع `Result<T, E>`. في هذا الفصل، ستستكشف كيفية تعريف أنواعك ودوالك وتوابعك الخاصة باستخدام الأنواع العامة!
 
-First, we’ll review how to extract a function to reduce code duplication. We’ll
-then use the same technique to make a generic function from two functions that
-differ only in the types of their parameters. We’ll also explain how to use
-generic types in struct and enum definitions.
+أولاً، سنراجع كيفية استخراج دالة لتقليل تكرار الكود. ثم سنستخدم نفس التقنية لإنشاء دالة عامة من دالتين تختلفان فقط في أنواع معاملاتهما. سنشرح أيضاً كيفية استخدام الأنواع العامة في تعريفات الهياكل (structs) والتعدادات (enums).
 
-Then, you’ll learn how to use traits to define behavior in a generic way. You
-can combine traits with generic types to constrain a generic type to accept
-only those types that have a particular behavior, as opposed to just any type.
+بعد ذلك، ستتعلم كيفية استخدام السمات (traits) لتعريف السلوك بطريقة عامة. يمكنك دمج السمات مع الأنواع العامة لتقييد نوع عام لقبول فقط تلك الأنواع التي لها سلوك معين، بدلاً من أي نوع فقط.
 
-Finally, we’ll discuss _lifetimes_: a variety of generics that give the
-compiler information about how references relate to each other. Lifetimes allow
-us to give the compiler enough information about borrowed values so that it can
-ensure that references will be valid in more situations than it could without
-our help.
+أخيراً، سنناقش _أعمار المتغيرات (lifetimes)_: نوع من الأنواع العامة التي تعطي المترجم معلومات حول كيفية ارتباط المراجع (references) ببعضها البعض. تسمح لنا أعمار المتغيرات بإعطاء المترجم معلومات كافية حول القيم المستعارة بحيث يمكنه التأكد من أن المراجع ستكون صالحة في حالات أكثر مما يمكن بدون مساعدتنا.
 
-## Removing Duplication by Extracting a Function
+## إزالة التكرار من خلال استخراج دالة
 
-Generics allow us to replace specific types with a placeholder that represents
-multiple types to remove code duplication. Before diving into generics syntax,
-let’s first look at how to remove duplication in a way that doesn’t involve
-generic types by extracting a function that replaces specific values with a
-placeholder that represents multiple values. Then, we’ll apply the same
-technique to extract a generic function! By looking at how to recognize
-duplicated code you can extract into a function, you’ll start to recognize
-duplicated code that can use generics.
+تسمح لنا الأنواع العامة باستبدال أنواع محددة بعنصر نائب يمثل أنواعاً متعددة لإزالة تكرار الكود. قبل الغوص في صياغة الأنواع العامة، دعنا ننظر أولاً إلى كيفية إزالة التكرار بطريقة لا تتضمن أنواعاً عامة من خلال استخراج دالة تستبدل قيماً محددة بعنصر نائب يمثل قيماً متعددة. ثم سنطبق نفس التقنية لاستخراج دالة عامة! من خلال النظر إلى كيفية التعرف على الكود المكرر الذي يمكنك استخراجه في دالة، ستبدأ في التعرف على الكود المكرر الذي يمكن أن يستخدم الأنواع العامة.
 
-We’ll begin with the short program in Listing 10-1 that finds the largest
-number in a list.
+سنبدأ بالبرنامج القصير في القائمة 10-1 الذي يبحث عن أكبر رقم في قائمة.
 
-<Listing number="10-1" file-name="src/main.rs" caption="Finding the largest number in a list of numbers">
+<Listing number="10-1" file-name="src/main.rs" caption="إيجاد أكبر رقم في قائمة من الأرقام">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
@@ -50,20 +24,11 @@ number in a list.
 
 </Listing>
 
-We store a list of integers in the variable `number_list` and place a reference
-to the first number in the list in a variable named `largest`. We then iterate
-through all the numbers in the list, and if the current number is greater than
-the number stored in `largest`, we replace the reference in that variable.
-However, if the current number is less than or equal to the largest number seen
-so far, the variable doesn’t change, and the code moves on to the next number
-in the list. After considering all the numbers in the list, `largest` should
-refer to the largest number, which in this case is 100.
+نخزن قائمة من الأعداد الصحيحة في المتغير `number_list` ونضع مرجعاً للرقم الأول في القائمة في متغير باسم `largest`. ثم نكرر على جميع الأرقام في القائمة، وإذا كان الرقم الحالي أكبر من الرقم المخزن في `largest`، فإننا نستبدل المرجع في ذلك المتغير. ومع ذلك، إذا كان الرقم الحالي أصغر من أو يساوي أكبر رقم تم رؤيته حتى الآن، فلن يتغير المتغير، وينتقل الكود إلى الرقم التالي في القائمة. بعد النظر في جميع الأرقام في القائمة، يجب أن يشير `largest` إلى أكبر رقم، والذي في هذه الحالة هو 100.
 
-We’ve now been tasked with finding the largest number in two different lists of
-numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
-the same logic at two different places in the program, as shown in Listing 10-2.
+لقد تم تكليفنا الآن بإيجاد أكبر رقم في قائمتين مختلفتين من الأرقام. للقيام بذلك، يمكننا اختيار تكرار الكود في القائمة 10-1 واستخدام نفس المنطق في مكانين مختلفين في البرنامج، كما هو موضح في القائمة 10-2.
 
-<Listing number="10-2" file-name="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
+<Listing number="10-2" file-name="src/main.rs" caption="كود لإيجاد أكبر رقم في *قائمتين* من الأرقام">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
@@ -71,21 +36,13 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 
 </Listing>
 
-Although this code works, duplicating code is tedious and error-prone. We also
-have to remember to update the code in multiple places when we want to change
-it.
+على الرغم من أن هذا الكود يعمل، إلا أن تكرار الكود ممل وعرضة للأخطاء. كما يتعين علينا أن نتذكر تحديث الكود في أماكن متعددة عندما نريد تغييره.
 
-To eliminate this duplication, we’ll create an abstraction by defining a
-function that operates on any list of integers passed in as a parameter. This
-solution makes our code clearer and lets us express the concept of finding the
-largest number in a list abstractly.
+للتخلص من هذا التكرار، سننشئ تجريداً من خلال تعريف دالة تعمل على أي قائمة من الأعداد الصحيحة يتم تمريرها كمعامل. يجعل هذا الحل كودنا أكثر وضوحاً ويتيح لنا التعبير عن مفهوم إيجاد أكبر رقم في قائمة بشكل مجرد.
 
-In Listing 10-3, we extract the code that finds the largest number into a
-function named `largest`. Then, we call the function to find the largest number
-in the two lists from Listing 10-2. We could also use the function on any other
-list of `i32` values we might have in the future.
+في القائمة 10-3، نستخرج الكود الذي يبحث عن أكبر رقم إلى دالة باسم `largest`. ثم نستدعي الدالة لإيجاد أكبر رقم في القائمتين من القائمة 10-2. يمكننا أيضاً استخدام الدالة على أي قائمة أخرى من قيم `i32` قد تكون لدينا في المستقبل.
 
-<Listing number="10-3" file-name="src/main.rs" caption="Abstracted code to find the largest number in two lists">
+<Listing number="10-3" file-name="src/main.rs" caption="كود مجرد لإيجاد أكبر رقم في قائمتين">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
@@ -93,23 +50,14 @@ list of `i32` values we might have in the future.
 
 </Listing>
 
-The `largest` function has a parameter called `list`, which represents any
-concrete slice of `i32` values we might pass into the function. As a result,
-when we call the function, the code runs on the specific values that we pass
-in.
+تحتوي الدالة `largest` على معامل يسمى `list`، والذي يمثل أي شريحة ملموسة من قيم `i32` قد نمررها إلى الدالة. ونتيجة لذلك، عندما نستدعي الدالة، يعمل الكود على القيم المحددة التي نمررها.
 
-In summary, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+باختصار، إليك الخطوات التي اتخذناها لتغيير الكود من القائمة 10-2 إلى القائمة 10-3:
 
-1. Identify duplicate code.
-1. Extract the duplicate code into the body of the function, and specify the
-   inputs and return values of that code in the function signature.
-1. Update the two instances of duplicated code to call the function instead.
+1. تحديد الكود المكرر.
+1. استخراج الكود المكرر إلى جسم الدالة، وتحديد المدخلات والقيم المرجعة لذلك الكود في توقيع الدالة.
+1. تحديث الحالتين من الكود المكرر لاستدعاء الدالة بدلاً من ذلك.
 
-Next, we’ll use these same steps with generics to reduce code duplication. In
-the same way that the function body can operate on an abstract `list` instead
-of specific values, generics allow code to operate on abstract types.
+بعد ذلك، سنستخدم هذه الخطوات نفسها مع الأنواع العامة لتقليل تكرار الكود. بنفس الطريقة التي يمكن بها لجسم الدالة العمل على `list` مجرد بدلاً من قيم محددة، تسمح الأنواع العامة للكود بالعمل على أنواع مجردة.
 
-For example, say we had two functions: one that finds the largest item in a
-slice of `i32` values and one that finds the largest item in a slice of `char`
-values. How would we eliminate that duplication? Let’s find out!
+على سبيل المثال، لنفترض أن لدينا دالتين: واحدة تبحث عن أكبر عنصر في شريحة من قيم `i32` وأخرى تبحث عن أكبر عنصر في شريحة من قيم `char`. كيف يمكننا إزالة هذا التكرار؟ دعنا نكتشف ذلك!

@@ -1,34 +1,21 @@
-## Paths for Referring to an Item in the Module Tree
+## المسارات للإشارة إلى عنصر في شجرة الوحدات
 
-To show Rust where to find an item in a module tree, we use a path in the same
-way we use a path when navigating a filesystem. To call a function, we need to
-know its path.
+لإظهار Rust مكان العثور على عنصر في شجرة الوحدات، نستخدم مسارًا بنفس الطريقة التي نستخدم بها المسار عند التنقل في نظام الملفات. لاستدعاء دالة، نحتاج إلى معرفة مسارها.
 
-A path can take two forms:
+يمكن أن يأخذ المسار شكلين:
 
-- An _absolute path_ is the full path starting from a crate root; for code
-  from an external crate, the absolute path begins with the crate name, and for
-  code from the current crate, it starts with the literal `crate`.
-- A _relative path_ starts from the current module and uses `self`, `super`, or
-  an identifier in the current module.
+- _المسار المطلق_ هو المسار الكامل الذي يبدأ من جذر الصندوق؛ بالنسبة للكود من صندوق خارجي، يبدأ المسار المطلق باسم الصندوق، وبالنسبة للكود من الصندوق الحالي، يبدأ بالكلمة الحرفية `crate`.
+- _المسار النسبي_ يبدأ من الوحدة الحالية ويستخدم `self` أو `super` أو معرّف في الوحدة الحالية.
 
-Both absolute and relative paths are followed by one or more identifiers
-separated by double colons (`::`).
+كل من المسارات المطلقة والنسبية يُتبع بمعرّف واحد أو أكثر مفصولين بنقطتين مزدوجتين (`::`).
 
-Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
-This is the same as asking: What’s the path of the `add_to_waitlist` function?
-Listing 7-3 contains Listing 7-1 with some of the modules and functions removed.
+بالعودة إلى القائمة 7-1، لنفترض أننا نريد استدعاء دالة `add_to_waitlist`. هذا يعادل السؤال: ما هو مسار دالة `add_to_waitlist`؟ تحتوي القائمة 7-3 على القائمة 7-1 مع إزالة بعض الوحدات والدوال.
 
-We’ll show two ways to call the `add_to_waitlist` function from a new function,
-`eat_at_restaurant`, defined in the crate root. These paths are correct, but
-there’s another problem remaining that will prevent this example from compiling
-as is. We’ll explain why in a bit.
+سنعرض طريقتين لاستدعاء دالة `add_to_waitlist` من دالة جديدة `eat_at_restaurant`، محددة في جذر الصندوق. هذه المسارات صحيحة، لكن هناك مشكلة أخرى متبقية ستمنع هذا المثال من الترجمة كما هو. سنشرح السبب بعد قليل.
 
-The `eat_at_restaurant` function is part of our library crate’s public API, so
-we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub`
-Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`.
+دالة `eat_at_restaurant` هي جزء من واجهة برمجة التطبيقات العامة لصندوق المكتبة الخاص بنا، لذا نضع عليها الكلمة المفتاحية `pub`. في قسم [كشف المسارات باستخدام الكلمة المفتاحية `pub`][pub]<!-- ignore -->، سنتعمق أكثر في تفاصيل `pub`.
 
-<Listing number="7-3" file-name="src/lib.rs" caption="Calling the `add_to_waitlist` function using absolute and relative paths">
+<Listing number="7-3" file-name="src/lib.rs" caption="استدعاء دالة `add_to_waitlist` باستخدام المسارات المطلقة والنسبية">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
@@ -36,39 +23,15 @@ Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`
 
 </Listing>
 
-The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
-we use an absolute path. The `add_to_waitlist` function is defined in the same
-crate as `eat_at_restaurant`, which means we can use the `crate` keyword to
-start an absolute path. We then include each of the successive modules until we
-make our way to `add_to_waitlist`. You can imagine a filesystem with the same
-structure: We’d specify the path `/front_of_house/hosting/add_to_waitlist` to
-run the `add_to_waitlist` program; using the `crate` name to start from the
-crate root is like using `/` to start from the filesystem root in your shell.
+في المرة الأولى التي نستدعي فيها دالة `add_to_waitlist` في `eat_at_restaurant`، نستخدم مسارًا مطلقًا. دالة `add_to_waitlist` معرّفة في نفس الصندوق الذي يحتوي على `eat_at_restaurant`، مما يعني أنه يمكننا استخدام الكلمة المفتاحية `crate` لبدء مسار مطلق. نقوم بعد ذلك بتضمين كل وحدة من الوحدات المتعاقبة حتى نصل إلى `add_to_waitlist`. يمكنك تخيل نظام ملفات بنفس البنية: سنحدد المسار `/front_of_house/hosting/add_to_waitlist` لتشغيل برنامج `add_to_waitlist`؛ استخدام اسم `crate` للبدء من جذر الصندوق يشبه استخدام `/` للبدء من جذر نظام الملفات في shell الخاص بك.
 
-The second time we call `add_to_waitlist` in `eat_at_restaurant`, we use a
-relative path. The path starts with `front_of_house`, the name of the module
-defined at the same level of the module tree as `eat_at_restaurant`. Here the
-filesystem equivalent would be using the path
-`front_of_house/hosting/add_to_waitlist`. Starting with a module name means
-that the path is relative.
+في المرة الثانية التي نستدعي فيها `add_to_waitlist` في `eat_at_restaurant`، نستخدم مسارًا نسبيًا. يبدأ المسار بـ `front_of_house`، اسم الوحدة المعرّفة على نفس المستوى من شجرة الوحدات مثل `eat_at_restaurant`. هنا يكون المعادل في نظام الملفات استخدام المسار `front_of_house/hosting/add_to_waitlist`. البدء باسم وحدة يعني أن المسار نسبي.
 
-Choosing whether to use a relative or absolute path is a decision you’ll make
-based on your project, and it depends on whether you’re more likely to move
-item definition code separately from or together with the code that uses the
-item. For example, if we moved the `front_of_house` module and the
-`eat_at_restaurant` function into a module named `customer_experience`, we’d
-need to update the absolute path to `add_to_waitlist`, but the relative path
-would still be valid. However, if we moved the `eat_at_restaurant` function
-separately into a module named `dining`, the absolute path to the
-`add_to_waitlist` call would stay the same, but the relative path would need to
-be updated. Our preference in general is to specify absolute paths because it’s
-more likely we’ll want to move code definitions and item calls independently of
-each other.
+اختيار ما إذا كنت تريد استخدام مسار نسبي أو مطلق هو قرار ستتخذه بناءً على مشروعك، ويعتمد على ما إذا كنت أكثر عرضة لنقل كود تعريف العنصر بشكل منفصل عن أو مع الكود الذي يستخدم العنصر. على سبيل المثال، إذا نقلنا وحدة `front_of_house` ودالة `eat_at_restaurant` إلى وحدة باسم `customer_experience`، سنحتاج إلى تحديث المسار المطلق إلى `add_to_waitlist`، لكن المسار النسبي سيظل صالحًا. ومع ذلك، إذا نقلنا دالة `eat_at_restaurant` بشكل منفصل إلى وحدة باسم `dining`، فسيبقى المسار المطلق إلى استدعاء `add_to_waitlist` كما هو، لكن المسار النسبي سيحتاج إلى التحديث. تفضيلنا بشكل عام هو تحديد المسارات المطلقة لأنه من المرجح أن نرغب في نقل تعريفات الكود واستدعاءات العناصر بشكل مستقل عن بعضها البعض.
 
-Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
-errors we get are shown in Listing 7-4.
+لنحاول ترجمة القائمة 7-3 ونكتشف لماذا لن تُترجم بعد! الأخطاء التي نحصل عليها موضحة في القائمة 7-4.
 
-<Listing number="7-4" caption="Compiler errors from building the code in Listing 7-3">
+<Listing number="7-4" caption="أخطاء المُترجم من بناء الكود في القائمة 7-3">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
@@ -76,35 +39,17 @@ errors we get are shown in Listing 7-4.
 
 </Listing>
 
-The error messages say that module `hosting` is private. In other words, we
-have the correct paths for the `hosting` module and the `add_to_waitlist`
-function, but Rust won’t let us use them because it doesn’t have access to the
-private sections. In Rust, all items (functions, methods, structs, enums,
-modules, and constants) are private to parent modules by default. If you want
-to make an item like a function or struct private, you put it in a module.
+تقول رسائل الخطأ أن وحدة `hosting` خاصة. بمعنى آخر، لدينا المسارات الصحيحة لوحدة `hosting` ودالة `add_to_waitlist`، لكن Rust لن يسمح لنا باستخدامها لأنه ليس لديه وصول إلى الأقسام الخاصة. في Rust، جميع العناصر (الدوال، الأساليب، البنى، التعدادات، الوحدات، والثوابت) خاصة للوحدات الأصل افتراضيًا. إذا كنت تريد جعل عنصر مثل دالة أو بنية خاصًا، فأنت تضعه في وحدة.
 
-Items in a parent module can’t use the private items inside child modules, but
-items in child modules can use the items in their ancestor modules. This is
-because child modules wrap and hide their implementation details, but the child
-modules can see the context in which they’re defined. To continue with our
-metaphor, think of the privacy rules as being like the back office of a
-restaurant: What goes on in there is private to restaurant customers, but
-office managers can see and do everything in the restaurant they operate.
+لا يمكن للعناصر في الوحدة الأصل استخدام العناصر الخاصة داخل الوحدات الفرعية، لكن يمكن للعناصر في الوحدات الفرعية استخدام العناصر في وحداتها الأجداد. هذا لأن الوحدات الفرعية تغلف وتخفي تفاصيل التنفيذ الخاصة بها، لكن الوحدات الفرعية يمكنها رؤية السياق الذي تم تعريفها فيه. لمواصلة استعارتنا، فكر في قواعد الخصوصية كأنها مثل مكتب خلفي في مطعم: ما يحدث هناك خاص بعملاء المطعم، لكن مديري المكتب يمكنهم رؤية وفعل كل شيء في المطعم الذي يديرونه.
 
-Rust chose to have the module system function this way so that hiding inner
-implementation details is the default. That way, you know which parts of the
-inner code you can change without breaking the outer code. However, Rust does
-give you the option to expose inner parts of child modules’ code to outer
-ancestor modules by using the `pub` keyword to make an item public.
+اختار Rust أن يعمل نظام الوحدات بهذه الطريقة بحيث يكون إخفاء تفاصيل التنفيذ الداخلية هو الافتراضي. بهذه الطريقة، تعرف أي أجزاء من الكود الداخلي يمكنك تغييرها دون كسر الكود الخارجي. ومع ذلك، يمنحك Rust خيار كشف أجزاء داخلية من كود الوحدات الفرعية إلى الوحدات الأجداد الخارجية باستخدام الكلمة المفتاحية `pub` لجعل عنصر عامًا.
 
-### Exposing Paths with the `pub` Keyword
+### كشف المسارات باستخدام الكلمة المفتاحية `pub`
 
-Let’s return to the error in Listing 7-4 that told us the `hosting` module is
-private. We want the `eat_at_restaurant` function in the parent module to have
-access to the `add_to_waitlist` function in the child module, so we mark the
-`hosting` module with the `pub` keyword, as shown in Listing 7-5.
+لنعد إلى الخطأ في القائمة 7-4 الذي أخبرنا أن وحدة `hosting` خاصة. نريد أن تكون لدالة `eat_at_restaurant` في الوحدة الأصل إمكانية الوصول إلى دالة `add_to_waitlist` في الوحدة الفرعية، لذا نضع على وحدة `hosting` الكلمة المفتاحية `pub`، كما هو موضح في القائمة 7-5.
 
-<Listing number="7-5" file-name="src/lib.rs" caption="Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`">
+<Listing number="7-5" file-name="src/lib.rs" caption="التصريح عن وحدة `hosting` على أنها `pub` لاستخدامها من `eat_at_restaurant`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs:here}}
@@ -112,10 +57,9 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 
 </Listing>
 
-Unfortunately, the code in Listing 7-5 still results in compiler errors, as
-shown in Listing 7-6.
+لسوء الحظ، الكود في القائمة 7-5 لا يزال ينتج أخطاء المُترجم، كما هو موضح في القائمة 7-6.
 
-<Listing number="7-6" caption="Compiler errors from building the code in Listing 7-5">
+<Listing number="7-6" caption="أخطاء المُترجم من بناء الكود في القائمة 7-5">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
@@ -123,23 +67,13 @@ shown in Listing 7-6.
 
 </Listing>
 
-What happened? Adding the `pub` keyword in front of `mod hosting` makes the
-module public. With this change, if we can access `front_of_house`, we can
-access `hosting`. But the _contents_ of `hosting` are still private; making the
-module public doesn’t make its contents public. The `pub` keyword on a module
-only lets code in its ancestor modules refer to it, not access its inner code.
-Because modules are containers, there’s not much we can do by only making the
-module public; we need to go further and choose to make one or more of the
-items within the module public as well.
+ماذا حدث؟ إضافة الكلمة المفتاحية `pub` أمام `mod hosting` يجعل الوحدة عامة. مع هذا التغيير، إذا كان يمكننا الوصول إلى `front_of_house`، يمكننا الوصول إلى `hosting`. لكن _محتويات_ `hosting` لا تزال خاصة؛ جعل الوحدة عامة لا يجعل محتوياتها عامة. الكلمة المفتاحية `pub` على وحدة تسمح فقط للكود في وحداتها الأجداد بالإشارة إليها، وليس الوصول إلى كودها الداخلي. لأن الوحدات حاويات، لا يوجد الكثير مما يمكننا فعله بمجرد جعل الوحدة عامة؛ نحتاج إلى الذهاب أبعد من ذلك واختيار جعل عنصر واحد أو أكثر داخل الوحدة عامًا أيضًا.
 
-The errors in Listing 7-6 say that the `add_to_waitlist` function is private.
-The privacy rules apply to structs, enums, functions, and methods as well as
-modules.
+الأخطاء في القائمة 7-6 تقول أن دالة `add_to_waitlist` خاصة. قواعد الخصوصية تنطبق على البنى، التعدادات، الدوال، والأساليب وكذلك الوحدات.
 
-Let’s also make the `add_to_waitlist` function public by adding the `pub`
-keyword before its definition, as in Listing 7-7.
+لنجعل أيضًا دالة `add_to_waitlist` عامة بإضافة الكلمة المفتاحية `pub` قبل تعريفها، كما في القائمة 7-7.
 
-<Listing number="7-7" file-name="src/lib.rs" caption="Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call the function from `eat_at_restaurant`.">
+<Listing number="7-7" file-name="src/lib.rs" caption="إضافة الكلمة المفتاحية `pub` إلى `mod hosting` و `fn add_to_waitlist` يسمح لنا باستدعاء الدالة من `eat_at_restaurant`.">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs:here}}
@@ -147,73 +81,29 @@ keyword before its definition, as in Listing 7-7.
 
 </Listing>
 
-Now the code will compile! To see why adding the `pub` keyword lets us use
-these paths in `eat_at_restaurant` with respect to the privacy rules, let’s
-look at the absolute and the relative paths.
+الآن سيُترجم الكود! لمعرفة سبب السماح لنا بإضافة الكلمة المفتاحية `pub` باستخدام هذه المسارات في `eat_at_restaurant` فيما يتعلق بقواعد الخصوصية، لننظر إلى المسارات المطلقة والنسبية.
 
-In the absolute path, we start with `crate`, the root of our crate’s module
-tree. The `front_of_house` module is defined in the crate root. While
-`front_of_house` isn’t public, because the `eat_at_restaurant` function is
-defined in the same module as `front_of_house` (that is, `eat_at_restaurant`
-and `front_of_house` are siblings), we can refer to `front_of_house` from
-`eat_at_restaurant`. Next is the `hosting` module marked with `pub`. We can
-access the parent module of `hosting`, so we can access `hosting`. Finally, the
-`add_to_waitlist` function is marked with `pub`, and we can access its parent
-module, so this function call works!
+في المسار المطلق، نبدأ بـ `crate`، جذر شجرة وحدات صندوقنا. وحدة `front_of_house` معرّفة في جذر الصندوق. بينما `front_of_house` ليست عامة، لأن دالة `eat_at_restaurant` معرّفة في نفس الوحدة التي يوجد فيها `front_of_house` (أي، `eat_at_restaurant` و `front_of_house` أشقاء)، يمكننا الإشارة إلى `front_of_house` من `eat_at_restaurant`. التالي هو وحدة `hosting` الموسومة بـ `pub`. يمكننا الوصول إلى الوحدة الأصل لـ `hosting`، لذا يمكننا الوصول إلى `hosting`. أخيرًا، دالة `add_to_waitlist` موسومة بـ `pub`، ويمكننا الوصول إلى وحدتها الأصل، لذا يعمل استدعاء الدالة هذا!
 
-In the relative path, the logic is the same as the absolute path except for the
-first step: Rather than starting from the crate root, the path starts from
-`front_of_house`. The `front_of_house` module is defined within the same module
-as `eat_at_restaurant`, so the relative path starting from the module in which
-`eat_at_restaurant` is defined works. Then, because `hosting` and
-`add_to_waitlist` are marked with `pub`, the rest of the path works, and this
-function call is valid!
+في المسار النسبي، المنطق هو نفسه المسار المطلق باستثناء الخطوة الأولى: بدلاً من البدء من جذر الصندوق، يبدأ المسار من `front_of_house`. وحدة `front_of_house` معرّفة داخل نفس الوحدة التي يوجد فيها `eat_at_restaurant`، لذا فإن المسار النسبي الذي يبدأ من الوحدة التي تم تعريف `eat_at_restaurant` فيها يعمل. ثم، لأن `hosting` و `add_to_waitlist` موسومة بـ `pub`، باقي المسار يعمل، واستدعاء الدالة هذا صالح!
 
-If you plan to share your library crate so that other projects can use your
-code, your public API is your contract with users of your crate that determines
-how they can interact with your code. There are many considerations around
-managing changes to your public API to make it easier for people to depend on
-your crate. These considerations are beyond the scope of this book; if you’re
-interested in this topic, see [the Rust API Guidelines][api-guidelines].
+إذا كنت تخطط لمشاركة صندوق مكتبتك بحيث يمكن للمشاريع الأخرى استخدام كودك، فإن واجهة برمجة التطبيقات العامة الخاصة بك هي عقدك مع مستخدمي صندوقك والذي يحدد كيف يمكنهم التفاعل مع كودك. هناك العديد من الاعتبارات حول إدارة التغييرات على واجهة برمجة التطبيقات العامة الخاصة بك لتسهيل اعتماد الأشخاص على صندوقك. هذه الاعتبارات خارج نطاق هذا الكتاب؛ إذا كنت مهتمًا بهذا الموضوع، راجع [إرشادات Rust API][api-guidelines].
 
-> #### Best Practices for Packages with a Binary and a Library
+> #### أفضل الممارسات للحزم التي تحتوي على ملف ثنائي ومكتبة
 >
-> We mentioned that a package can contain both a _src/main.rs_ binary crate
-> root as well as a _src/lib.rs_ library crate root, and both crates will have
-> the package name by default. Typically, packages with this pattern of
-> containing both a library and a binary crate will have just enough code in the
-> binary crate to start an executable that calls code defined in the library
-> crate. This lets other projects benefit from the most functionality that the
-> package provides because the library crate’s code can be shared.
+> ذكرنا أن الحزمة يمكن أن تحتوي على كل من جذر صندوق ثنائي _src/main.rs_ بالإضافة إلى جذر صندوق مكتبة _src/lib.rs_، وكلا الصندوقين سيحملان اسم الحزمة افتراضيًا. عادةً، الحزم ذات هذا النمط الذي يحتوي على كل من مكتبة وصندوق ثنائي ستحتوي على كود كافٍ فقط في الصندوق الثنائي لبدء ملف تنفيذي يستدعي الكود المعرّف في صندوق المكتبة. هذا يتيح للمشاريع الأخرى الاستفادة من معظم الوظائف التي توفرها الحزمة لأن كود صندوق المكتبة يمكن مشاركته.
 >
-> The module tree should be defined in _src/lib.rs_. Then, any public items can
-> be used in the binary crate by starting paths with the name of the package.
-> The binary crate becomes a user of the library crate just like a completely
-> external crate would use the library crate: It can only use the public API.
-> This helps you design a good API; not only are you the author, but you’re
-> also a client!
+> يجب تعريف شجرة الوحدات في _src/lib.rs_. بعد ذلك، يمكن استخدام أي عناصر عامة في الصندوق الثنائي عن طريق بدء المسارات باسم الحزمة. يصبح الصندوق الثنائي مستخدمًا لصندوق المكتبة تمامًا كما يستخدم صندوق خارجي تمامًا صندوق المكتبة: يمكنه فقط استخدام واجهة برمجة التطبيقات العامة. هذا يساعدك على تصميم واجهة برمجة تطبيقات جيدة؛ ليس فقط أنت المؤلف، بل أنت أيضًا عميل!
 >
-> In [Chapter 12][ch12]<!-- ignore -->, we’ll demonstrate this organizational
-> practice with a command line program that will contain both a binary crate
-> and a library crate.
+> في [الفصل 12][ch12]<!-- ignore -->، سنوضح هذه الممارسة التنظيمية ببرنامج سطر أوامر سيحتوي على كل من صندوق ثنائي وصندوق مكتبة.
 
-### Starting Relative Paths with `super`
+### بدء المسارات النسبية باستخدام `super`
 
-We can construct relative paths that begin in the parent module, rather than
-the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax that means
-to go to the parent directory. Using `super` allows us to reference an item
-that we know is in the parent module, which can make rearranging the module
-tree easier when the module is closely related to the parent but the parent
-might be moved elsewhere in the module tree someday.
+يمكننا إنشاء مسارات نسبية تبدأ في الوحدة الأصل، بدلاً من الوحدة الحالية أو جذر الصندوق، باستخدام `super` في بداية المسار. هذا مثل بدء مسار نظام ملفات بصياغة `..` التي تعني الانتقال إلى الدليل الأصل. استخدام `super` يسمح لنا بالإشارة إلى عنصر نعلم أنه في الوحدة الأصل، مما يمكن أن يجعل إعادة ترتيب شجرة الوحدات أسهل عندما تكون الوحدة مرتبطة ارتباطًا وثيقًا بالأصل ولكن قد يتم نقل الأصل إلى مكان آخر في شجرة الوحدات في يوم ما.
 
-Consider the code in Listing 7-8 that models the situation in which a chef
-fixes an incorrect order and personally brings it out to the customer. The
-function `fix_incorrect_order` defined in the `back_of_house` module calls the
-function `deliver_order` defined in the parent module by specifying the path to
-`deliver_order`, starting with `super`.
+خذ بعين الاعتبار الكود في القائمة 7-8 الذي ينمذج الموقف الذي يصلح فيه طاهٍ طلبًا غير صحيح ويحضره شخصيًا للعميل. تستدعي دالة `fix_incorrect_order` المعرّفة في وحدة `back_of_house` دالة `deliver_order` المعرّفة في الوحدة الأصل عن طريق تحديد المسار إلى `deliver_order`، بدءًا من `super`.
 
-<Listing number="7-8" file-name="src/lib.rs" caption="Calling a function using a relative path starting with `super`">
+<Listing number="7-8" file-name="src/lib.rs" caption="استدعاء دالة باستخدام مسار نسبي يبدأ بـ `super`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
@@ -221,29 +111,13 @@ function `deliver_order` defined in the parent module by specifying the path to
 
 </Listing>
 
-The `fix_incorrect_order` function is in the `back_of_house` module, so we can
-use `super` to go to the parent module of `back_of_house`, which in this case
-is `crate`, the root. From there, we look for `deliver_order` and find it.
-Success! We think the `back_of_house` module and the `deliver_order` function
-are likely to stay in the same relationship to each other and get moved
-together should we decide to reorganize the crate’s module tree. Therefore, we
-used `super` so that we’ll have fewer places to update code in the future if
-this code gets moved to a different module.
+دالة `fix_incorrect_order` موجودة في وحدة `back_of_house`، لذا يمكننا استخدام `super` للانتقال إلى الوحدة الأصل لـ `back_of_house`، والتي في هذه الحالة هي `crate`، الجذر. من هناك، نبحث عن `deliver_order` ونجدها. نجاح! نعتقد أن وحدة `back_of_house` ودالة `deliver_order` من المرجح أن تبقى في نفس العلاقة مع بعضها البعض وأن يتم نقلها معًا إذا قررنا إعادة تنظيم شجرة وحدات الصندوق. لذلك، استخدمنا `super` بحيث يكون لدينا أماكن أقل لتحديث الكود في المستقبل إذا تم نقل هذا الكود إلى وحدة مختلفة.
 
-### Making Structs and Enums Public
+### جعل البنى والتعدادات عامة
 
-We can also use `pub` to designate structs and enums as public, but there are a
-few extra details to the usage of `pub` with structs and enums. If we use `pub`
-before a struct definition, we make the struct public, but the struct’s fields
-will still be private. We can make each field public or not on a case-by-case
-basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct
-with a public `toast` field but a private `seasonal_fruit` field. This models
-the case in a restaurant where the customer can pick the type of bread that
-comes with a meal, but the chef decides which fruit accompanies the meal based
-on what’s in season and in stock. The available fruit changes quickly, so
-customers can’t choose the fruit or even see which fruit they’ll get.
+يمكننا أيضًا استخدام `pub` لتعيين البنى والتعدادات كعامة، لكن هناك بعض التفاصيل الإضافية لاستخدام `pub` مع البنى والتعدادات. إذا استخدمنا `pub` قبل تعريف بنية، نجعل البنية عامة، لكن حقول البنية ستظل خاصة. يمكننا جعل كل حقل عامًا أو لا حسب كل حالة على حدة. في القائمة 7-9، عرّفنا بنية `back_of_house::Breakfast` عامة مع حقل `toast` عام لكن حقل `seasonal_fruit` خاص. هذا ينمذج الحالة في مطعم حيث يمكن للعميل اختيار نوع الخبز الذي يأتي مع الوجبة، لكن الطاهي يقرر أي فاكهة ترافق الوجبة بناءً على ما هو متوفر في الموسم وفي المخزون. الفواكه المتاحة تتغير بسرعة، لذا لا يمكن للعملاء اختيار الفاكهة أو حتى رؤية أي فاكهة سيحصلون عليها.
 
-<Listing number="7-9" file-name="src/lib.rs" caption="A struct with some public fields and some private fields">
+<Listing number="7-9" file-name="src/lib.rs" caption="بنية مع بعض الحقول العامة وبعض الحقول الخاصة">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
@@ -251,23 +125,13 @@ customers can’t choose the fruit or even see which fruit they’ll get.
 
 </Listing>
 
-Because the `toast` field in the `back_of_house::Breakfast` struct is public,
-in `eat_at_restaurant` we can write and read to the `toast` field using dot
-notation. Notice that we can’t use the `seasonal_fruit` field in
-`eat_at_restaurant`, because `seasonal_fruit` is private. Try uncommenting the
-line modifying the `seasonal_fruit` field value to see what error you get!
+لأن حقل `toast` في بنية `back_of_house::Breakfast` عام، في `eat_at_restaurant` يمكننا الكتابة والقراءة إلى حقل `toast` باستخدام علامة النقطة. لاحظ أننا لا يمكننا استخدام حقل `seasonal_fruit` في `eat_at_restaurant`، لأن `seasonal_fruit` خاص. حاول إلغاء التعليق على السطر الذي يعدل قيمة حقل `seasonal_fruit` لترى أي خطأ تحصل عليه!
 
-Also, note that because `back_of_house::Breakfast` has a private field, the
-struct needs to provide a public associated function that constructs an
-instance of `Breakfast` (we’ve named it `summer` here). If `Breakfast` didn’t
-have such a function, we couldn’t create an instance of `Breakfast` in
-`eat_at_restaurant`, because we couldn’t set the value of the private
-`seasonal_fruit` field in `eat_at_restaurant`.
+أيضًا، لاحظ أنه بسبب أن `back_of_house::Breakfast` لديها حقل خاص، تحتاج البنية إلى توفير دالة مرتبطة عامة تنشئ نسخة من `Breakfast` (سميناها `summer` هنا). إذا لم يكن لدى `Breakfast` مثل هذه الدالة، لم نتمكن من إنشاء نسخة من `Breakfast` في `eat_at_restaurant`، لأننا لم نتمكن من تعيين قيمة حقل `seasonal_fruit` الخاص في `eat_at_restaurant`.
 
-In contrast, if we make an enum public, all of its variants are then public. We
-only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
+على النقيض من ذلك، إذا جعلنا تعداد عامًا، فإن جميع متغيراته تصبح عامة. نحتاج فقط إلى `pub` قبل الكلمة المفتاحية `enum`، كما هو موضح في القائمة 7-10.
 
-<Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as public makes all its variants public.">
+<Listing number="7-10" file-name="src/lib.rs" caption="تعيين تعداد كعام يجعل جميع متغيراته عامة.">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
@@ -275,18 +139,11 @@ only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 
 </Listing>
 
-Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad`
-variants in `eat_at_restaurant`.
+لأننا جعلنا تعداد `Appetizer` عامًا، يمكننا استخدام المتغيرات `Soup` و `Salad` في `eat_at_restaurant`.
 
-Enums aren’t very useful unless their variants are public; it would be annoying
-to have to annotate all enum variants with `pub` in every case, so the default
-for enum variants is to be public. Structs are often useful without their
-fields being public, so struct fields follow the general rule of everything
-being private by default unless annotated with `pub`.
+التعدادات ليست مفيدة جدًا إلا إذا كانت متغيراتها عامة؛ سيكون من المزعج الاضطرار إلى شرح جميع متغيرات التعداد بـ `pub` في كل حالة، لذا فإن الافتراضي لمتغيرات التعداد هو أن تكون عامة. البنى غالبًا ما تكون مفيدة دون أن تكون حقولها عامة، لذا تتبع حقول البنى القاعدة العامة بأن كل شيء خاص افتراضيًا ما لم يُشرح بـ `pub`.
 
-There’s one more situation involving `pub` that we haven’t covered, and that is
-our last module system feature: the `use` keyword. We’ll cover `use` by itself
-first, and then we’ll show how to combine `pub` and `use`.
+هناك موقف آخر يتعلق بـ `pub` لم نغطيه، وهذا هو آخر ميزة في نظام الوحدات لدينا: الكلمة المفتاحية `use`. سنغطي `use` بمفردها أولاً، ثم سنوضح كيفية دمج `pub` و `use`.
 
 [pub]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [api-guidelines]: https://rust-lang.github.io/api-guidelines/

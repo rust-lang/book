@@ -1,126 +1,90 @@
-## Installation
+## التثبيت
 
-The first step is to install Rust. We’ll download Rust through `rustup`, a
-command line tool for managing Rust versions and associated tools. You’ll need
-an internet connection for the download.
+الخطوة الأولى هي تثبيت Rust. سنقوم بتنزيل Rust من خلال `rustup`، وهي أداة سطر أوامر لإدارة إصدارات Rust والأدوات المرتبطة بها. ستحتاج إلى اتصال بالإنترنت للتنزيل.
 
-> Note: If you prefer not to use `rustup` for some reason, please see the
-> [Other Rust Installation Methods page][otherinstall] for more options.
+> ملاحظة: إذا كنت تفضل عدم استخدام `rustup` لسبب ما، يرجى الاطلاع على [صفحة طرق تثبيت Rust الأخرى][otherinstall] لمزيد من الخيارات.
 
-The following steps install the latest stable version of the Rust compiler.
-Rust’s stability guarantees ensure that all the examples in the book that
-compile will continue to compile with newer Rust versions. The output might
-differ slightly between versions because Rust often improves error messages and
-warnings. In other words, any newer, stable version of Rust you install using
-these steps should work as expected with the content of this book.
+تقوم الخطوات التالية بتثبيت أحدث إصدار مستقر من مترجم Rust. تضمن ضمانات الاستقرار في Rust أن جميع الأمثلة في الكتاب التي يتم تجميعها ستستمر في التجميع مع إصدارات Rust الأحدث. قد يختلف الناتج قليلاً بين الإصدارات لأن Rust غالباً ما يحسّن رسائل الأخطاء والتحذيرات. بعبارة أخرى، أي إصدار أحدث ومستقر من Rust تقوم بتثبيته باستخدام هذه الخطوات يجب أن يعمل كما هو متوقع مع محتوى هذا الكتاب.
 
-> ### Command Line Notation
+> ### تدوين سطر الأوامر
 >
-> In this chapter and throughout the book, we’ll show some commands used in the
-> terminal. Lines that you should enter in a terminal all start with `$`. You
-> don’t need to type the `$` character; it’s the command line prompt shown to
-> indicate the start of each command. Lines that don’t start with `$` typically
-> show the output of the previous command. Additionally, PowerShell-specific
-> examples will use `>` rather than `$`.
+> في هذا الفصل وعبر الكتاب، سنعرض بعض الأوامر المستخدمة في الطرفية. الأسطر التي يجب عليك إدخالها في الطرفية تبدأ جميعها بـ `$`. لا تحتاج إلى كتابة حرف `$`؛ إنه موجه سطر الأوامر المعروض للإشارة إلى بداية كل أمر. الأسطر التي لا تبدأ بـ `$` عادةً ما تعرض ناتج الأمر السابق. بالإضافة إلى ذلك، الأمثلة الخاصة بـ PowerShell ستستخدم `>` بدلاً من `$`.
 
-### Installing `rustup` on Linux or macOS
+### تثبيت `rustup` على Linux أو macOS
 
-If you’re using Linux or macOS, open a terminal and enter the following command:
+إذا كنت تستخدم Linux أو macOS، افتح طرفية وأدخل الأمر التالي:
 
 ```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+يقوم الأمر بتنزيل برنامج نصي ويبدأ تثبيت أداة `rustup`، والتي تقوم بتثبيت أحدث إصدار مستقر من Rust. قد يُطلب منك إدخال كلمة المرور الخاصة بك. إذا كان التثبيت ناجحاً، سيظهر السطر التالي:
 
 ```text
 Rust is installed now. Great!
 ```
 
-You will also need a _linker_, which is a program that Rust uses to join its
-compiled outputs into one file. It is likely you already have one. If you get
-linker errors, you should install a C compiler, which will typically include a
-linker. A C compiler is also useful because some common Rust packages depend on
-C code and will need a C compiler.
+ستحتاج أيضاً إلى _رابط (linker)_، وهو برنامج يستخدمه Rust لضم مخرجاته المجمعة في ملف واحد. من المحتمل أن يكون لديك واحد بالفعل. إذا حصلت على أخطاء رابط، يجب عليك تثبيت مترجم C، والذي عادةً ما يتضمن رابطاً. مترجم C مفيد أيضاً لأن بعض حزم Rust الشائعة تعتمد على كود C وستحتاج إلى مترجم C.
 
-On macOS, you can get a C compiler by running:
+على macOS، يمكنك الحصول على مترجم C عن طريق تشغيل:
 
 ```console
 $ xcode-select --install
 ```
 
-Linux users should generally install GCC or Clang, according to their
-distribution’s documentation. For example, if you use Ubuntu, you can install
-the `build-essential` package.
+يجب على مستخدمي Linux عموماً تثبيت GCC أو Clang، وفقاً لوثائق توزيعتهم. على سبيل المثال، إذا كنت تستخدم Ubuntu، يمكنك تثبيت حزمة `build-essential`.
 
-### Installing `rustup` on Windows
+### تثبيت `rustup` على Windows
 
-On Windows, go to [https://www.rust-lang.org/tools/install][install]<!-- ignore
---> and follow the instructions for installing Rust. At some point in the
-installation, you’ll be prompted to install Visual Studio. This provides a
-linker and the native libraries needed to compile programs. If you need more
-help with this step, see
-[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]<!--
-ignore -->.
+على Windows، انتقل إلى [https://www.rust-lang.org/tools/install][install]<!-- ignore --> واتبع التعليمات لتثبيت Rust. في مرحلة ما من التثبيت، سيُطلب منك تثبيت Visual Studio. يوفر هذا رابطاً والمكتبات الأصلية اللازمة لتجميع البرامج. إذا كنت بحاجة إلى مزيد من المساعدة في هذه الخطوة، راجع [https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]<!-- ignore -->.
 
-The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
-If there are specific differences, we’ll explain which to use.
+يستخدم بقية هذا الكتاب أوامر تعمل في كل من _cmd.exe_ و PowerShell. إذا كانت هناك اختلافات محددة، سنوضح أيهما تستخدم.
 
-### Troubleshooting
+### استكشاف الأخطاء وإصلاحها
 
-To check whether you have Rust installed correctly, open a shell and enter this
-line:
+للتحقق من تثبيت Rust بشكل صحيح، افتح shell وأدخل هذا السطر:
 
 ```console
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest
-stable version that has been released, in the following format:
+يجب أن ترى رقم الإصدار وhash الالتزام وتاريخ الالتزام لأحدث إصدار مستقر تم إصداره، بالتنسيق التالي:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information, check that Rust is in your `%PATH%` system variable as
-follows.
+إذا رأيت هذه المعلومات، فقد قمت بتثبيت Rust بنجاح! إذا لم ترَ هذه المعلومات، تحقق من أن Rust موجود في متغير النظام `%PATH%` الخاص بك كما يلي.
 
-In Windows CMD, use:
+في Windows CMD، استخدم:
 
 ```console
 > echo %PATH%
 ```
 
-In PowerShell, use:
+في PowerShell، استخدم:
 
 ```powershell
 > echo $env:Path
 ```
 
-In Linux and macOS, use:
+في Linux و macOS، استخدم:
 
 ```console
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of
-places you can get help. Find out how to get in touch with other Rustaceans (a
-silly nickname we call ourselves) on [the community page][community].
+إذا كان كل ذلك صحيحاً ولا يزال Rust لا يعمل، فهناك عدد من الأماكن التي يمكنك الحصول فيها على المساعدة. اكتشف كيفية التواصل مع Rustaceans الآخرين (لقب سخيف نطلقه على أنفسنا) على [صفحة المجتمع][community].
 
-### Updating and Uninstalling
+### التحديث وإلغاء التثبيت
 
-Once Rust is installed via `rustup`, updating to a newly released version is
-easy. From your shell, run the following update script:
+بمجرد تثبيت Rust عبر `rustup`، يكون التحديث إلى إصدار جديد أمراً سهلاً. من shell الخاص بك، قم بتشغيل البرنامج النصي للتحديث التالي:
 
 ```console
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
+لإلغاء تثبيت Rust و `rustup`، قم بتشغيل البرنامج النصي التالي لإلغاء التثبيت من shell الخاص بك:
 
 ```console
 $ rustup self uninstall
@@ -129,34 +93,22 @@ $ rustup self uninstall
 <!-- Old headings. Do not remove or links may break. -->
 <a id="local-documentation"></a>
 
-### Reading the Local Documentation
+### قراءة التوثيق المحلي
 
-The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup doc` to open the local documentation
-in your browser.
+يتضمن تثبيت Rust أيضاً نسخة محلية من التوثيق حتى تتمكن من قراءته دون اتصال بالإنترنت. قم بتشغيل `rustup doc` لفتح التوثيق المحلي في متصفحك.
 
-Any time a type or function is provided by the standard library and you’re not
-sure what it does or how to use it, use the application programming interface
-(API) documentation to find out!
+في أي وقت يتم توفير نوع أو دالة بواسطة المكتبة القياسية ولست متأكداً مما تفعله أو كيفية استخدامها، استخدم توثيق واجهة برمجة التطبيقات (API) لمعرفة ذلك!
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="text-editors-and-integrated-development-environments"></a>
 
-### Using Text Editors and IDEs
+### استخدام محررات النصوص وبيئات التطوير المتكاملة
 
-This book makes no assumptions about what tools you use to author Rust code.
-Just about any text editor will get the job done! However, many text editors and
-integrated development environments (IDEs) have built-in support for Rust. You
-can always find a fairly current list of many editors and IDEs on [the tools
-page][tools] on the Rust website.
+لا يفترض هذا الكتاب أي شيء حول الأدوات التي تستخدمها لكتابة كود Rust. تقريباً أي محرر نصوص سيؤدي المهمة! ومع ذلك، فإن العديد من محررات النصوص وبيئات التطوير المتكاملة (IDEs) لديها دعم مدمج لـ Rust. يمكنك دائماً العثور على قائمة حديثة إلى حد ما بالعديد من المحررات وبيئات التطوير المتكاملة على [صفحة الأدوات][tools] على موقع Rust.
 
-### Working Offline with This Book
+### العمل دون اتصال بالإنترنت مع هذا الكتاب
 
-In several examples, we will use Rust packages beyond the standard library. To
-work through those examples, you will either need to have an internet connection
-or to have downloaded those dependencies ahead of time. To download the
-dependencies ahead of time, you can run the following commands. (We’ll explain
-what `cargo` is and what each of these commands does in detail later.)
+في العديد من الأمثلة، سنستخدم حزم Rust تتجاوز المكتبة القياسية. للعمل من خلال تلك الأمثلة، ستحتاج إما إلى اتصال بالإنترنت أو تنزيل تلك التبعيات مسبقاً. لتنزيل التبعيات مسبقاً، يمكنك تشغيل الأوامر التالية. (سنشرح ما هو `cargo` وماذا يفعل كل من هذه الأوامر بالتفصيل لاحقاً.)
 
 ```console
 $ cargo new get-dependencies
@@ -164,11 +116,7 @@ $ cd get-dependencies
 $ cargo add rand@0.8.5 trpl@0.2.0
 ```
 
-This will cache the downloads for these packages so you will not need to
-download them later. Once you have run this command, you do not need to keep the
-`get-dependencies` folder. If you have run this command, you can use the
-`--offline` flag with all `cargo` commands in the rest of the book to use these
-cached versions instead of attempting to use the network.
+سيؤدي هذا إلى تخزين التنزيلات مؤقتاً لهذه الحزم حتى لا تحتاج إلى تنزيلها لاحقاً. بمجرد تشغيل هذا الأمر، لا تحتاج إلى الاحتفاظ بمجلد `get-dependencies`. إذا قمت بتشغيل هذا الأمر، يمكنك استخدام العلامة `--offline` مع جميع أوامر `cargo` في بقية الكتاب لاستخدام هذه الإصدارات المخزنة مؤقتاً بدلاً من محاولة استخدام الشبكة.
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install

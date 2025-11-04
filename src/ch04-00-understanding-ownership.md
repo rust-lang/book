@@ -1,7 +1,3 @@
-# Understanding Ownership
+# فهم الملكية
 
-Ownership is Rust’s most unique feature and has deep implications for the rest
-of the language. It enables Rust to make memory safety guarantees without
-needing a garbage collector, so it’s important to understand how ownership
-works. In this chapter, we’ll talk about ownership as well as several related
-features: borrowing, slices, and how Rust lays data out in memory.
+الملكية هي الميزة الأكثر تفرداً في Rust ولها آثار عميقة على بقية اللغة. تُمكّن Rust من تقديم ضمانات أمان الذاكرة دون الحاجة إلى جامع قمامة، لذلك من المهم فهم كيفية عمل الملكية. في هذا الفصل، سنتحدث عن الملكية بالإضافة إلى العديد من الميزات ذات الصلة: الاستعارة، والشرائح، وكيفية ترتيب Rust للبيانات في الذاكرة.

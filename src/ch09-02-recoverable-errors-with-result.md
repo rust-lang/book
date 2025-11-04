@@ -1,14 +1,14 @@
-## Recoverable Errors with `Result`
+## الأخطاء القابلة للاسترداد مع `Result`
 
-Most errors aren’t serious enough to require the program to stop entirely.
-Sometimes when a function fails, it’s for a reason that you can easily interpret
-and respond to. For example, if you try to open a file and that operation fails
-because the file doesn’t exist, you might want to create the file instead of
-terminating the process.
+معظم الأخطاء ليست خطيرة بما يكفي لتتطلب إيقاف البرنامج بالكامل.
+في بعض الأحيان عندما تفشل دالة، يكون ذلك لسبب يمكنك تفسيره بسهولة
+والاستجابة له. على سبيل المثال، إذا حاولت فتح ملف وفشلت تلك العملية
+لأن الملف غير موجود، قد ترغب في إنشاء الملف بدلاً من
+إنهاء العملية.
 
-Recall from [“Handling Potential Failure with `Result`”][handle_failure]<!--
-ignore --> in Chapter 2 that the `Result` enum is defined as having two
-variants, `Ok` and `Err`, as follows:
+تذكر من ["معالجة الفشل المحتمل مع `Result`"][handle_failure]<!--
+ignore --> في الفصل 2 أن enum `Result` معرّف بأن له متغيرين
+هما `Ok` و `Err`، كما يلي:
 
 ```rust
 enum Result<T, E> {
@@ -17,19 +17,19 @@ enum Result<T, E> {
 }
 ```
 
-The `T` and `E` are generic type parameters: We’ll discuss generics in more
-detail in Chapter 10. What you need to know right now is that `T` represents
-the type of the value that will be returned in a success case within the `Ok`
-variant, and `E` represents the type of the error that will be returned in a
-failure case within the `Err` variant. Because `Result` has these generic type
-parameters, we can use the `Result` type and the functions defined on it in
-many different situations where the success value and error value we want to
-return may differ.
+`T` و `E` هما معاملات نوع عامة: سنناقش الأنواع العامة بمزيد من
+التفاصيل في الفصل 10. ما تحتاج إلى معرفته الآن هو أن `T` يمثل
+نوع القيمة التي سيتم إرجاعها في حالة النجاح ضمن متغير `Ok`،
+و `E` يمثل نوع الخطأ الذي سيتم إرجاعه في
+حالة الفشل ضمن متغير `Err`. ولأن `Result` لديه هذه المعاملات
+العامة، يمكننا استخدام نوع `Result` والدوال المعرفة عليه في
+العديد من الحالات المختلفة حيث قد تختلف قيمة النجاح وقيمة الخطأ التي نريد
+إرجاعها.
 
-Let’s call a function that returns a `Result` value because the function could
-fail. In Listing 9-3, we try to open a file.
+لنستدعِ دالة تُرجع قيمة `Result` لأن الدالة قد
+تفشل. في القائمة 9-3، نحاول فتح ملف.
 
-<Listing number="9-3" file-name="src/main.rs" caption="Opening a file">
+<Listing number="9-3" file-name="src/main.rs" caption="فتح ملف">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
@@ -37,29 +37,29 @@ fail. In Listing 9-3, we try to open a file.
 
 </Listing>
 
-The return type of `File::open` is a `Result<T, E>`. The generic parameter `T`
-has been filled in by the implementation of `File::open` with the type of the
-success value, `std::fs::File`, which is a file handle. The type of `E` used in
-the error value is `std::io::Error`. This return type means the call to
-`File::open` might succeed and return a file handle that we can read from or
-write to. The function call also might fail: For example, the file might not
-exist, or we might not have permission to access the file. The `File::open`
-function needs to have a way to tell us whether it succeeded or failed and at
-the same time give us either the file handle or error information. This
-information is exactly what the `Result` enum conveys.
+نوع الإرجاع لـ `File::open` هو `Result<T, E>`. المعامل العام `T`
+تم ملؤه من قبل تطبيق `File::open` بنوع قيمة
+النجاح، وهو `std::fs::File`، الذي يمثل معالج ملف. نوع `E` المستخدم في
+قيمة الخطأ هو `std::io::Error`. يعني نوع الإرجاع هذا أن الاستدعاء لـ
+`File::open` قد ينجح ويُرجع معالج ملف يمكننا القراءة منه أو
+الكتابة إليه. قد تفشل استدعاء الدالة أيضًا: على سبيل المثال، قد لا يكون الملف
+موجودًا، أو قد لا يكون لدينا إذن للوصول إلى الملف. تحتاج دالة `File::open`
+إلى طريقة لإخبارنا بنجاحها أو فشلها وفي
+نفس الوقت تعطينا إما معالج الملف أو معلومات الخطأ. هذه
+المعلومات هي بالضبط ما ينقله enum `Result`.
 
-In the case where `File::open` succeeds, the value in the variable
-`greeting_file_result` will be an instance of `Ok` that contains a file handle.
-In the case where it fails, the value in `greeting_file_result` will be an
-instance of `Err` that contains more information about the kind of error that
-occurred.
+في الحالة التي ينجح فيها `File::open`، ستكون القيمة في المتغير
+`greeting_file_result` نسخة من `Ok` تحتوي على معالج ملف.
+في الحالة التي يفشل فيها، ستكون القيمة في `greeting_file_result`
+نسخة من `Err` تحتوي على مزيد من المعلومات حول نوع الخطأ الذي
+حدث.
 
-We need to add to the code in Listing 9-3 to take different actions depending
-on the value `File::open` returns. Listing 9-4 shows one way to handle the
-`Result` using a basic tool, the `match` expression that we discussed in
-Chapter 6.
+نحتاج إلى إضافة إلى الكود في القائمة 9-3 لاتخاذ إجراءات مختلفة اعتمادًا
+على القيمة التي يُرجعها `File::open`. تُظهر القائمة 9-4 طريقة واحدة للتعامل مع
+`Result` باستخدام أداة أساسية، وهي تعبير `match` الذي ناقشناه في
+الفصل 6.
 
-<Listing number="9-4" file-name="src/main.rs" caption="Using a `match` expression to handle the `Result` variants that might be returned">
+<Listing number="9-4" file-name="src/main.rs" caption="استخدام تعبير `match` للتعامل مع متغيرات `Result` التي قد يتم إرجاعها">
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
@@ -67,37 +67,37 @@ Chapter 6.
 
 </Listing>
 
-Note that, like the `Option` enum, the `Result` enum and its variants have been
-brought into scope by the prelude, so we don’t need to specify `Result::`
-before the `Ok` and `Err` variants in the `match` arms.
+لاحظ أنه، مثل enum `Option`، تم إحضار enum `Result` ومتغيراته
+إلى النطاق بواسطة الprelude، لذا لسنا بحاجة إلى تحديد `Result::`
+قبل متغيري `Ok` و `Err` في أذرع `match`.
 
-When the result is `Ok`, this code will return the inner `file` value out of
-the `Ok` variant, and we then assign that file handle value to the variable
-`greeting_file`. After the `match`, we can use the file handle for reading or
-writing.
+عندما تكون النتيجة `Ok`، سيُرجع هذا الكود قيمة `file` الداخلية من
+متغير `Ok`، ثم نعيّن قيمة معالج الملف تلك إلى المتغير
+`greeting_file`. بعد `match`، يمكننا استخدام معالج الملف للقراءة أو
+الكتابة.
 
-The other arm of the `match` handles the case where we get an `Err` value from
-`File::open`. In this example, we’ve chosen to call the `panic!` macro. If
-there’s no file named _hello.txt_ in our current directory and we run this
-code, we’ll see the following output from the `panic!` macro:
+الذراع الآخر من `match` يتعامل مع الحالة التي نحصل فيها على قيمة `Err` من
+`File::open`. في هذا المثال، اخترنا استدعاء ماكرو `panic!`. إذا
+لم يكن هناك ملف باسم _hello.txt_ في دليلنا الحالي وشغّلنا هذا
+الكود، سنرى المخرجات التالية من ماكرو `panic!`:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-04/output.txt}}
 ```
 
-As usual, this output tells us exactly what has gone wrong.
+كالعادة، يخبرنا هذا المخرج بالضبط بما حدث من خطأ.
 
-### Matching on Different Errors
+### المطابقة على أخطاء مختلفة
 
-The code in Listing 9-4 will `panic!` no matter why `File::open` failed.
-However, we want to take different actions for different failure reasons. If
-`File::open` failed because the file doesn’t exist, we want to create the file
-and return the handle to the new file. If `File::open` failed for any other
-reason—for example, because we didn’t have permission to open the file—we still
-want the code to `panic!` in the same way it did in Listing 9-4. For this, we
-add an inner `match` expression, shown in Listing 9-5.
+الكود في القائمة 9-4 سيستدعي `panic!` بغض النظر عن سبب فشل `File::open`.
+ومع ذلك، نريد اتخاذ إجراءات مختلفة لأسباب فشل مختلفة. إذا
+فشل `File::open` لأن الملف غير موجود، نريد إنشاء الملف
+وإرجاع المعالج إلى الملف الجديد. إذا فشل `File::open` لأي سبب
+آخر—على سبيل المثال، لأننا لم يكن لدينا إذن لفتح الملف—نريد ما زلنا
+أن يستدعي الكود `panic!` بنفس الطريقة التي كان يفعلها في القائمة 9-4. لهذا، نضيف
+تعبير `match` داخلي، كما هو موضح في القائمة 9-5.
 
-<Listing number="9-5" file-name="src/main.rs" caption="Handling different kinds of errors in different ways">
+<Listing number="9-5" file-name="src/main.rs" caption="معالجة أنواع مختلفة من الأخطاء بطرق مختلفة">
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
@@ -108,32 +108,32 @@ tests to fail lol -->
 
 </Listing>
 
-The type of the value that `File::open` returns inside the `Err` variant is
-`io::Error`, which is a struct provided by the standard library. This struct
-has a method, `kind`, that we can call to get an `io::ErrorKind` value. The
-enum `io::ErrorKind` is provided by the standard library and has variants
-representing the different kinds of errors that might result from an `io`
-operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
-the file we’re trying to open doesn’t exist yet. So, we match on
-`greeting_file_result`, but we also have an inner match on `error.kind()`.
+نوع القيمة التي يُرجعها `File::open` داخل متغير `Err` هو
+`io::Error`، وهو struct مقدم من المكتبة القياسية. يحتوي هذا struct
+على method يُسمى `kind`، يمكننا استدعاؤه للحصول على قيمة `io::ErrorKind`. ال
+enum `io::ErrorKind` مقدم من المكتبة القياسية وله متغيرات
+تمثل الأنواع المختلفة من الأخطاء التي قد تنتج عن عملية `io`.
+المتغير الذي نريد استخدامه هو `ErrorKind::NotFound`، الذي يشير إلى
+أن الملف الذي نحاول فتحه غير موجود بعد. لذا، نطابق على
+`greeting_file_result`، ولكن لدينا أيضًا match داخلي على `error.kind()`.
 
-The condition we want to check in the inner match is whether the value returned
-by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
-we try to create the file with `File::create`. However, because `File::create`
-could also fail, we need a second arm in the inner `match` expression. When the
-file can’t be created, a different error message is printed. The second arm of
-the outer `match` stays the same, so the program panics on any error besides
-the missing file error.
+الشرط الذي نريد التحقق منه في ال match الداخلي هو ما إذا كانت القيمة المُرجعة
+من `error.kind()` هي متغير `NotFound` من enum `ErrorKind`. إذا كانت كذلك،
+نحاول إنشاء الملف باستخدام `File::create`. ومع ذلك، لأن `File::create`
+قد يفشل أيضًا، نحتاج إلى ذراع ثانٍ في تعبير `match` الداخلي. عندما لا يمكن
+إنشاء الملف، تُطبع رسالة خطأ مختلفة. الذراع الثاني من
+`match` الخارجي يبقى كما هو، لذا يحدث panic في البرنامج عند أي خطأ بخلاف
+خطأ الملف المفقود.
 
-> #### Alternatives to Using `match` with `Result<T, E>`
+> #### بدائل لاستخدام `match` مع `Result<T, E>`
 >
-> That’s a lot of `match`! The `match` expression is very useful but also very
-> much a primitive. In Chapter 13, you’ll learn about closures, which are used
-> with many of the methods defined on `Result<T, E>`. These methods can be more
-> concise than using `match` when handling `Result<T, E>` values in your code.
+> هذا الكثير من `match`! تعبير `match` مفيد جدًا ولكنه أيضًا
+> بدائي للغاية. في الفصل 13، ستتعلم عن closures، والتي تُستخدم
+> مع العديد من الدوال المعرفة على `Result<T, E>`. يمكن أن تكون هذه الدوال أكثر
+> إيجازًا من استخدام `match` عند التعامل مع قيم `Result<T, E>` في كودك.
 >
-> For example, here’s another way to write the same logic as shown in Listing
-> 9-5, this time using closures and the `unwrap_or_else` method:
+> على سبيل المثال، إليك طريقة أخرى لكتابة نفس المنطق الموضح في القائمة
+> 9-5، هذه المرة باستخدام closures ودالة `unwrap_or_else`:
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >
@@ -154,25 +154,25 @@ the missing file error.
 > }
 > ```
 >
-> Although this code has the same behavior as Listing 9-5, it doesn’t contain
-> any `match` expressions and is cleaner to read. Come back to this example
-> after you’ve read Chapter 13 and look up the `unwrap_or_else` method in the
-> standard library documentation. Many more of these methods can clean up huge,
-> nested `match` expressions when you’re dealing with errors.
+> على الرغم من أن هذا الكود له نفس السلوك مثل القائمة 9-5، إلا أنه لا يحتوي
+> على أي تعبيرات `match` وأنظف للقراءة. عد إلى هذا المثال
+> بعد قراءة الفصل 13 وابحث عن دالة `unwrap_or_else` في
+> وثائق المكتبة القياسية. العديد من هذه الدوال يمكن أن تنظف تعبيرات `match`
+> الكبيرة والمتداخلة عند التعامل مع الأخطاء.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="shortcuts-for-panic-on-error-unwrap-and-expect"></a>
 
-#### Shortcuts for Panic on Error
+### اختصارات لـ Panic عند الخطأ: `unwrap` و `expect`
 
-Using `match` works well enough, but it can be a bit verbose and doesn’t always
-communicate intent well. The `Result<T, E>` type has many helper methods
-defined on it to do various, more specific tasks. The `unwrap` method is a
-shortcut method implemented just like the `match` expression we wrote in
-Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
-the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
-call the `panic!` macro for us. Here is an example of `unwrap` in action:
+استخدام `match` يعمل بشكل جيد، لكنه قد يكون مطولاً بعض الشيء ولا ينقل النية
+دائمًا بشكل جيد. نوع `Result<T, E>` لديه العديد من الدوال المساعدة المعرفة
+عليه للقيام بمهام متنوعة وأكثر تحديدًا. دالة `unwrap` هي دالة
+اختصار تُنفذ تمامًا مثل تعبير `match` الذي كتبناه في القائمة 9-4. إذا كانت
+قيمة `Result` هي متغير `Ok`، سترجع `unwrap` القيمة داخل `Ok`. إذا
+كان `Result` هو متغير `Err`، ستستدعي `unwrap` ماكرو `panic!` لنا.
+إليك مثال على `unwrap` في العمل:
 
 <Listing file-name="src/main.rs">
 
@@ -182,8 +182,8 @@ call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
 </Listing>
 
-If we run this code without a _hello.txt_ file, we’ll see an error message from
-the `panic!` call that the `unwrap` method makes:
+إذا شغّلنا هذا الكود بدون ملف _hello.txt_، سنرى رسالة خطأ من استدعاء `panic!`
+الذي تقوم به دالة `unwrap`:
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-04-unwrap
@@ -196,10 +196,9 @@ thread 'main' panicked at src/main.rs:4:49:
 called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
-Similarly, the `expect` method lets us also choose the `panic!` error message.
-Using `expect` instead of `unwrap` and providing good error messages can convey
-your intent and make tracking down the source of a panic easier. The syntax of
-`expect` looks like this:
+بالمثل، تتيح لنا دالة `expect` أيضًا اختيار رسالة خطأ `panic!`. استخدام
+`expect` بدلاً من `unwrap` وتوفير رسائل خطأ جيدة يمكن أن ينقل نيتك ويجعل
+تتبع مصدر ال panic أسهل. تبدو صياغة `expect` كما يلي:
 
 <Listing file-name="src/main.rs">
 
@@ -209,10 +208,10 @@ your intent and make tracking down the source of a panic easier. The syntax of
 
 </Listing>
 
-We use `expect` in the same way as `unwrap`: to return the file handle or call
-the `panic!` macro. The error message used by `expect` in its call to `panic!`
-will be the parameter that we pass to `expect`, rather than the default
-`panic!` message that `unwrap` uses. Here’s what it looks like:
+نستخدم `expect` بنفس طريقة `unwrap`: لإرجاع معالج الملف أو استدعاء
+ماكرو `panic!`. رسالة الخطأ المستخدمة من قبل `expect` في استدعائها لـ `panic!`
+ستكون المعامل الذي نمرره إلى `expect`، بدلاً من رسالة `panic!` الافتراضية
+التي تستخدمها `unwrap`. إليك كيف تبدو:
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-05-expect
@@ -225,25 +224,23 @@ thread 'main' panicked at src/main.rs:5:10:
 hello.txt should be included in this project: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
-In production-quality code, most Rustaceans choose `expect` rather than
-`unwrap` and give more context about why the operation is expected to always
-succeed. That way, if your assumptions are ever proven wrong, you have more
-information to use in debugging.
+في كود production-quality، يختار معظم Rustaceans `expect` بدلاً من `unwrap`
+ويعطون مزيدًا من السياق حول سبب توقع العملية للنجاح دائمًا. بهذه الطريقة، إذا
+تبين أن افتراضاتك خاطئة، لديك معلومات أكثر لاستخدامها في التصحيح.
 
-### Propagating Errors
+### نشر الأخطاء
 
-When a function’s implementation calls something that might fail, instead of
-handling the error within the function itself, you can return the error to the
-calling code so that it can decide what to do. This is known as _propagating_
-the error and gives more control to the calling code, where there might be more
-information or logic that dictates how the error should be handled than what
-you have available in the context of your code.
+عندما تفشل تطبيق دالة، بدلاً من معالجة الخطأ داخل الدالة
+نفسها، يمكنك إرجاع الخطأ إلى الكود الذي يستدعيها حتى يتمكن من تقرير ما يجب
+فعله. هذا يُعرف بـ *نشر* الخطأ ويعطي مزيدًا من التحكم للكود المستدعي،
+حيث قد يكون هناك معلومات أو منطق أكثر يملي كيفية التعامل مع الخطأ
+مما هو متاح في سياق كودك.
 
-For example, Listing 9-6 shows a function that reads a username from a file. If
-the file doesn’t exist or can’t be read, this function will return those errors
-to the code that called the function.
+على سبيل المثال، القائمة 9-6 توضح دالة تقرأ اسم مستخدم من ملف. إذا
+لم يكن الملف موجودًا أو لا يمكن قراءته، ستُرجع هذه الدالة تلك الأخطاء
+إلى الكود الذي استدعى الدالة.
 
-<Listing number="9-6" file-name="src/main.rs" caption="A function that returns errors to the calling code using `match`">
+<Listing number="9-6" file-name="src/main.rs" caption="دالة تُرجع الأخطاء إلى الكود المستدعي باستخدام `match`">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -255,68 +252,59 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-This function can be written in a much shorter way, but we’re going to start by
-doing a lot of it manually in order to explore error handling; at the end,
-we’ll show the shorter way. Let’s look at the return type of the function
-first: `Result<String, io::Error>`. This means the function is returning a
-value of the type `Result<T, E>`, where the generic parameter `T` has been
-filled in with the concrete type `String` and the generic type `E` has been
-filled in with the concrete type `io::Error`.
+يمكن كتابة هذه الدالة بطريقة أقصر بكثير، لكننا سنبدأ بالقيام بالكثير
+منها يدويًا من أجل استكشاف معالجة الأخطاء؛ في النهاية، سنعرض الطريقة
+الأقصر. لننظر إلى نوع الإرجاع للدالة أولاً: `Result<String,
+io::Error>`. هذا يعني أن الدالة تُرجع قيمة من النوع `Result<T, E>`
+حيث المعامل العام `T` تم ملؤه بالنوع الملموس `String`، والنوع العام
+`E` تم ملؤه بالنوع الملموس `io::Error`.
 
-If this function succeeds without any problems, the code that calls this
-function will receive an `Ok` value that holds a `String`—the `username` that
-this function read from the file. If this function encounters any problems, the
-calling code will receive an `Err` value that holds an instance of `io::Error`
-that contains more information about what the problems were. We chose
-`io::Error` as the return type of this function because that happens to be the
-type of the error value returned from both of the operations we’re calling in
-this function’s body that might fail: the `File::open` function and the
-`read_to_string` method.
+إذا نجحت هذه الدالة بدون أي مشاكل، سيحصل الكود الذي يستدعي هذه
+الدالة على قيمة `Ok` تحتوي على `String`—اسم المستخدم الذي قرأته
+هذه الدالة من الملف. إذا واجهت هذه الدالة أي مشاكل، سيحصل الكود
+المستدعي على قيمة `Err` تحتوي على نسخة من `io::Error` التي تحتوي
+على مزيد من المعلومات حول ماهية المشاكل. اخترنا `io::Error` كنوع
+الإرجاع لهذه الدالة لأنه يصادف أن يكون نوع قيمة الخطأ
+المُرجعة من كلتا العمليتين اللتين نستدعيهما في جسم هذه الدالة والتي قد
+تفشل: دالة `File::open` ودالة `read_to_string`.
 
-The body of the function starts by calling the `File::open` function. Then, we
-handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
-If `File::open` succeeds, the file handle in the pattern variable `file`
-becomes the value in the mutable variable `username_file` and the function
-continues. In the `Err` case, instead of calling `panic!`, we use the `return`
-keyword to return early out of the function entirely and pass the error value
-from `File::open`, now in the pattern variable `e`, back to the calling code as
-this function’s error value.
+يبدأ جسم الدالة باستدعاء دالة `File::open`. ثم نتعامل مع قيمة
+`Result` بـ `match` مشابه لـ `match` في القائمة 9-4. إذا كان `File::open`
+ناجحًا، يصبح معالج الملف في متغير النمط `file` القيمة في
+المتغير القابل للتغيير `username_file`، وتستمر الدالة. في حالة `Err`،
+بدلاً من استدعاء `panic!`، نستخدم الكلمة المفتاحية `return` للخروج من الدالة
+مبكرًا تمامًا ونمرر قيمة الخطأ من `File::open`، الموجودة الآن في متغير النمط
+`e`، مرة أخرى إلى الكود المستدعي كقيمة خطأ لهذه الدالة.
 
-So, if we have a file handle in `username_file`, the function then creates a
-new `String` in variable `username` and calls the `read_to_string` method on
-the file handle in `username_file` to read the contents of the file into
-`username`. The `read_to_string` method also returns a `Result` because it
-might fail, even though `File::open` succeeded. So, we need another `match` to
-handle that `Result`: If `read_to_string` succeeds, then our function has
-succeeded, and we return the username from the file that’s now in `username`
-wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the
-same way that we returned the error value in the `match` that handled the
-return value of `File::open`. However, we don’t need to explicitly say
-`return`, because this is the last expression in the function.
+لذا إذا كان لدينا معالج ملف في `username_file`، تُنشئ الدالة بعد ذلك
+`String` جديد في المتغير `username` وتستدعي دالة `read_to_string` على
+معالج الملف في `username_file` لقراءة محتويات الملف إلى `username`. دالة
+`read_to_string` ترجع أيضًا `Result` لأنها قد تفشل، حتى لو
+نجح `File::open`. لذا نحتاج إلى `match` آخر للتعامل مع ذلك `Result`: إذا
+نجح `read_to_string`، فإن دالتنا نجحت، ونُرجع اسم المستخدم من الملف
+الموجود الآن في `username` مُغلفًا في `Ok`. إذا فشل `read_to_string`، نُرجع
+قيمة الخطأ بنفس الطريقة التي أرجعنا بها قيمة الخطأ في `match` الذي
+عالج قيمة الإرجاع من `File::open`. ومع ذلك، لسنا بحاجة إلى قول `return`
+بشكل صريح، لأن هذا هو التعبير الأخير في الدالة.
 
-The code that calls this code will then handle getting either an `Ok` value
-that contains a username or an `Err` value that contains an `io::Error`. It’s
-up to the calling code to decide what to do with those values. If the calling
-code gets an `Err` value, it could call `panic!` and crash the program, use a
-default username, or look up the username from somewhere other than a file, for
-example. We don’t have enough information on what the calling code is actually
-trying to do, so we propagate all the success or error information upward for
-it to handle appropriately.
+الكود الذي يستدعي هذا الكود سيتعامل بعد ذلك مع الحصول على قيمة `Ok`
+تحتوي على اسم مستخدم أو قيمة `Err` تحتوي على `io::Error`. الأمر متروك
+للكود المستدعي لتقرير ما يجب فعله بتلك القيم. إذا حصل الكود المستدعي على
+قيمة `Err`، فقد يستدعي `panic!` ويتسبب في تعطل البرنامج، أو يستخدم اسم مستخدم
+افتراضي، أو يبحث عن اسم المستخدم من مكان آخر غير ملف، على سبيل المثال. ليس
+لدينا معلومات كافية عما يحاول الكود المستدعي فعله بالفعل، لذا ننشر
+جميع معلومات النجاح أو الخطأ للأعلى ليتعامل معها بشكل مناسب.
 
-This pattern of propagating errors is so common in Rust that Rust provides the
-question mark operator `?` to make this easier.
+نمط نشر الأخطاء هذا شائع جدًا في Rust لدرجة أن Rust توفر
+علامة الاستفهام `?` لجعل هذا أسهل.
 
-<!-- Old headings. Do not remove or links may break. -->
+#### اختصار لنشر الأخطاء: مشغل `?`
 
-<a id="a-shortcut-for-propagating-errors-the--operator"></a>
+القائمة 9-7 توضح تطبيقًا لـ `read_username_from_file` له نفس
+الوظيفة مثل القائمة 9-6، لكن هذا التطبيق يستخدم
+مشغل `?`.
 
-#### The `?` Operator Shortcut
-
-Listing 9-7 shows an implementation of `read_username_from_file` that has the
-same functionality as in Listing 9-6, but this implementation uses the `?`
-operator.
-
-<Listing number="9-7" file-name="src/main.rs" caption="A function that returns errors to the calling code using the `?` operator">
+<Listing number="9-7" file-name="src/main.rs" caption="دالة تُرجع الأخطاء إلى الكود المستدعي باستخدام مشغل `?`">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -328,42 +316,39 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-The `?` placed after a `Result` value is defined to work in almost the same way
-as the `match` expressions that we defined to handle the `Result` values in
-Listing 9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok`
-will get returned from this expression, and the program will continue. If the
-value is an `Err`, the `Err` will be returned from the whole function as if we
-had used the `return` keyword so that the error value gets propagated to the
-calling code.
+علامة `?` الموضوعة بعد قيمة `Result` معرّفة للعمل بنفس
+الطريقة تقريبًا كتعبيرات `match` التي عرّفناها للتعامل مع قيم `Result` في
+القائمة 9-6. إذا كانت قيمة `Result` هي `Ok`، ستُرجع القيمة داخل
+`Ok` من هذا التعبير، وسيستمر البرنامج. إذا كانت القيمة هي `Err`،
+سيتم إرجاع `Err` من الدالة بأكملها كما لو استخدمنا الكلمة المفتاحية
+`return` بحيث تنتشر قيمة الخطأ إلى الكود المستدعي.
 
-There is a difference between what the `match` expression from Listing 9-6 does
-and what the `?` operator does: Error values that have the `?` operator called
-on them go through the `from` function, defined in the `From` trait in the
-standard library, which is used to convert values from one type into another.
-When the `?` operator calls the `from` function, the error type received is
-converted into the error type defined in the return type of the current
-function. This is useful when a function returns one error type to represent
-all the ways a function might fail, even if parts might fail for many different
-reasons.
+هناك فرق بين ما يفعله تعبير `match` من القائمة 9-6 وما
+يفعله مشغل `?`: قيم الخطأ التي يُستدعى عليها مشغل `?` تمر عبر
+دالة `from`، المعرّفة في trait `From` في المكتبة القياسية،
+والتي تُستخدم لتحويل قيم من نوع إلى آخر. عندما يستدعي مشغل `?` دالة
+`from`، يُحوّل نوع الخطأ المُستقبل إلى نوع الخطأ المعرّف في نوع
+الإرجاع للدالة الحالية. هذا مفيد عندما تُرجع دالة نوع خطأ واحد
+لتمثيل جميع الطرق التي قد تفشل بها الدالة، حتى لو كانت الأجزاء قد تفشل
+لعدة أسباب مختلفة.
 
-For example, we could change the `read_username_from_file` function in Listing
-9-7 to return a custom error type named `OurError` that we define. If we also
-define `impl From<io::Error> for OurError` to construct an instance of
-`OurError` from an `io::Error`, then the `?` operator calls in the body of
-`read_username_from_file` will call `from` and convert the error types without
-needing to add any more code to the function.
+على سبيل المثال، يمكننا تغيير دالة `read_username_from_file` في القائمة 9-7
+لإرجاع نوع خطأ مخصص يُسمى `OurError` الذي نعرّفه. إذا عرّفنا أيضًا `impl
+From<io::Error> for OurError` لبناء نسخة من `OurError` من
+`io::Error`، فإن استدعاءات مشغل `?` في جسم `read_username_from_file`
+ستستدعي `from` وتحوّل أنواع الأخطاء دون الحاجة إلى إضافة أي كود
+إضافي إلى الدالة.
 
-In the context of Listing 9-7, the `?` at the end of the `File::open` call will
-return the value inside an `Ok` to the variable `username_file`. If an error
-occurs, the `?` operator will return early out of the whole function and give
-any `Err` value to the calling code. The same thing applies to the `?` at the
-end of the `read_to_string` call.
+في سياق القائمة 9-7، علامة `?` في نهاية استدعاء `File::open` سترجع
+القيمة داخل `Ok` إلى المتغير `username_file`. إذا حدث خطأ، ستُرجع
+علامة `?` مبكرًا من الدالة بأكملها وتعطي أي قيمة `Err` للكود
+المستدعي. نفس الشيء ينطبق على علامة `?` في نهاية استدعاء `read_to_string`.
 
-The `?` operator eliminates a lot of boilerplate and makes this function’s
-implementation simpler. We could even shorten this code further by chaining
-method calls immediately after the `?`, as shown in Listing 9-8.
+مشغل `?` يزيل الكثير من التفاصيل ويجعل تطبيق هذه الدالة
+أبسط. يمكننا حتى تقصير هذا الكود أكثر عن طريق ربط استدعاءات الدوال
+مباشرة بعد علامة `?`، كما هو موضح في القائمة 9-8.
 
-<Listing number="9-8" file-name="src/main.rs" caption="Chaining method calls after the `?` operator">
+<Listing number="9-8" file-name="src/main.rs" caption="ربط استدعاءات الدوال بعد مشغل `?`">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -375,18 +360,17 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-We’ve moved the creation of the new `String` in `username` to the beginning of
-the function; that part hasn’t changed. Instead of creating a variable
-`username_file`, we’ve chained the call to `read_to_string` directly onto the
-result of `File::open("hello.txt")?`. We still have a `?` at the end of the
-`read_to_string` call, and we still return an `Ok` value containing `username`
-when both `File::open` and `read_to_string` succeed rather than returning
-errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
-this is just a different, more ergonomic way to write it.
+نقلنا إنشاء `String` الجديد في `username` إلى بداية
+الدالة؛ هذا الجزء لم يتغير. بدلاً من إنشاء متغير `username_file`، ربطنا
+استدعاء `read_to_string` مباشرة بنتيجة `File::open("hello.txt")?`. ما زلنا
+لدينا علامة `?` في نهاية استدعاء `read_to_string`، وما زلنا نُرجع قيمة `Ok`
+تحتوي على `username` عندما ينجح كل من `File::open` و `read_to_string`
+بدلاً من إرجاع الأخطاء. الوظيفة مرة أخرى هي نفسها الموجودة في القائمة 9-6 والقائمة 9-7؛
+هذه فقط طريقة مختلفة وأكثر سهولة لكتابتها.
 
-Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
+القائمة 9-9 توضح طريقة لجعل هذا أقصر حتى باستخدام `fs::read_to_string`.
 
-<Listing number="9-9" file-name="src/main.rs" caption="Using `fs::read_to_string` instead of opening and then reading the file">
+<Listing number="9-9" file-name="src/main.rs" caption="استخدام `fs::read_to_string` بدلاً من فتح ثم قراءة الملف">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -398,32 +382,32 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-Reading a file into a string is a fairly common operation, so the standard
-library provides the convenient `fs::read_to_string` function that opens the
-file, creates a new `String`, reads the contents of the file, puts the contents
-into that `String`, and returns it. Of course, using `fs::read_to_string`
-doesn’t give us the opportunity to explain all the error handling, so we did it
-the longer way first.
+قراءة ملف إلى string هي عملية شائعة إلى حد ما، لذا توفر المكتبة
+القياسية دالة `fs::read_to_string` الملائمة التي تفتح
+الملف، وتنشئ `String` جديد، وتقرأ محتويات الملف، وتضع المحتويات
+في تلك `String`، وترجعها. بالطبع، استخدام `fs::read_to_string`
+لا يعطينا الفرصة لشرح جميع معالجات الأخطاء، لذا قمنا بذلك
+بالطريقة الأطول أولاً.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="where-the--operator-can-be-used"></a>
 
-#### Where to Use the `?` Operator
+#### أين يمكن استخدام مشغل `?`
 
-The `?` operator can only be used in functions whose return type is compatible
-with the value the `?` is used on. This is because the `?` operator is defined
-to perform an early return of a value out of the function, in the same manner
-as the `match` expression we defined in Listing 9-6. In Listing 9-6, the
-`match` was using a `Result` value, and the early return arm returned an
-`Err(e)` value. The return type of the function has to be a `Result` so that
-it’s compatible with this `return`.
+يمكن استخدام مشغل `?` فقط في الدوال التي نوع إرجاعها متوافق
+مع القيمة التي يُستخدم عليها `?`. هذا لأن مشغل `?` معرّف
+لإجراء إرجاع مبكر لقيمة من الدالة، بنفس الطريقة
+التي استخدمنا بها تعبير `match` الذي عرّفناه في القائمة 9-6. في القائمة 9-6، كان
+`match` يستخدم قيمة `Result`، وذراع الإرجاع المبكر أرجع قيمة
+`Err(e)`. يجب أن يكون نوع الإرجاع للدالة `Result` حتى
+يكون متوافقًا مع هذا `return`.
 
-In Listing 9-10, let’s look at the error we’ll get if we use the `?` operator
-in a `main` function with a return type that is incompatible with the type of
-the value we use `?` on.
+في القائمة 9-10، لننظر إلى الخطأ الذي سنحصل عليه إذا استخدمنا مشغل `?`
+في دالة `main` بنوع إرجاع غير متوافق مع نوع
+القيمة التي نستخدم `?` عليها.
 
-<Listing number="9-10" file-name="src/main.rs" caption="Attempting to use the `?` in the `main` function that returns `()` won’t compile.">
+<Listing number="9-10" file-name="src/main.rs" caption="محاولة استخدام `?` في دالة `main` التي تُرجع `()` لن تُترجم.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
@@ -431,36 +415,36 @@ the value we use `?` on.
 
 </Listing>
 
-This code opens a file, which might fail. The `?` operator follows the `Result`
-value returned by `File::open`, but this `main` function has the return type of
-`()`, not `Result`. When we compile this code, we get the following error
-message:
+هذا الكود يفتح ملفًا، وقد يفشل ذلك. يتبع مشغل `?` قيمة `Result`
+المُرجعة من `File::open`، لكن دالة `main` هذه لها نوع إرجاع
+`()`، وليس `Result`. عندما نترجم هذا الكود، نحصل على رسالة الخطأ
+التالية:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-10/output.txt}}
 ```
 
-This error points out that we’re only allowed to use the `?` operator in a
-function that returns `Result`, `Option`, or another type that implements
+يشير هذا الخطأ إلى أننا مسموح لنا فقط باستخدام مشغل `?` في
+دالة تُرجع `Result` أو `Option` أو نوع آخر ينفذ
 `FromResidual`.
 
-To fix the error, you have two choices. One choice is to change the return type
-of your function to be compatible with the value you’re using the `?` operator
-on as long as you have no restrictions preventing that. The other choice is to
-use a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>`
-in whatever way is appropriate.
+لإصلاح الخطأ، لديك خياران. الخيار الأول هو تغيير نوع الإرجاع
+لدالتك ليكون متوافقًا مع القيمة التي تستخدم مشغل `?` عليها
+طالما ليس لديك قيود تمنع ذلك. الخيار الآخر هو
+استخدام `match` أو إحدى دوال `Result<T, E>` للتعامل مع `Result<T, E>`
+بالطريقة المناسبة.
 
-The error message also mentioned that `?` can be used with `Option<T>` values
-as well. As with using `?` on `Result`, you can only use `?` on `Option` in a
-function that returns an `Option`. The behavior of the `?` operator when called
-on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`:
-If the value is `None`, the `None` will be returned early from the function at
-that point. If the value is `Some`, the value inside the `Some` is the
-resultant value of the expression, and the function continues. Listing 9-11 has
-an example of a function that finds the last character of the first line in the
-given text.
+رسالة الخطأ ذكرت أيضًا أن `?` يمكن استخدامه مع قيم `Option<T>`
+أيضًا. كما هو الحال مع استخدام `?` على `Result`، يمكنك فقط استخدام `?` على `Option` في
+دالة تُرجع `Option`. سلوك مشغل `?` عند استدعائه على
+`Option<T>` مشابه لسلوكه عند استدعائه على `Result<T, E>`:
+إذا كانت القيمة `None`، سيتم إرجاع `None` مبكرًا من الدالة في
+تلك النقطة. إذا كانت القيمة `Some`، فإن القيمة داخل `Some` هي
+القيمة الناتجة من التعبير، وتستمر الدالة. القائمة 9-11 لها
+مثال على دالة تجد آخر حرف من السطر الأول في
+النص المعطى.
 
-<Listing number="9-11" caption="Using the `?` operator on an `Option<T>` value">
+<Listing number="9-11" caption="استخدام مشغل `?` على قيمة `Option<T>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
@@ -468,45 +452,45 @@ given text.
 
 </Listing>
 
-This function returns `Option<char>` because it’s possible that there is a
-character there, but it’s also possible that there isn’t. This code takes the
-`text` string slice argument and calls the `lines` method on it, which returns
-an iterator over the lines in the string. Because this function wants to
-examine the first line, it calls `next` on the iterator to get the first value
-from the iterator. If `text` is the empty string, this call to `next` will
-return `None`, in which case we use `?` to stop and return `None` from
-`last_char_of_first_line`. If `text` is not the empty string, `next` will
-return a `Some` value containing a string slice of the first line in `text`.
+هذه الدالة تُرجع `Option<char>` لأنه من المحتمل أن يكون هناك
+حرف هناك، لكن من المحتمل أيضًا أن لا يكون. هذا الكود يأخذ
+شريحة string `text` كمعامل ويستدعي دالة `lines` عليها، والتي تُرجع
+iterator على الأسطر في ال string. لأن هذه الدالة تريد
+فحص السطر الأول، تستدعي `next` على ال iterator للحصول على القيمة الأولى
+من ال iterator. إذا كان `text` عبارة عن string فارغ، سيُرجع هذا الاستدعاء لـ `next`
+`None`، وفي هذه الحالة نستخدم `?` للإيقاف وإرجاع `None` من
+`last_char_of_first_line`. إذا لم يكن `text` string فارغًا، سيُرجع `next`
+قيمة `Some` تحتوي على شريحة string للسطر الأول في `text`.
 
-The `?` extracts the string slice, and we can call `chars` on that string slice
-to get an iterator of its characters. We’re interested in the last character in
-this first line, so we call `last` to return the last item in the iterator.
-This is an `Option` because it’s possible that the first line is the empty
-string; for example, if `text` starts with a blank line but has characters on
-other lines, as in `"\nhi"`. However, if there is a last character on the first
-line, it will be returned in the `Some` variant. The `?` operator in the middle
-gives us a concise way to express this logic, allowing us to implement the
-function in one line. If we couldn’t use the `?` operator on `Option`, we’d
-have to implement this logic using more method calls or a `match` expression.
+يستخرج `?` شريحة ال string، ويمكننا استدعاء `chars` على تلك الشريحة
+للحصول على iterator لحروفها. نحن مهتمون بآخر حرف في
+هذا السطر الأول، لذا نستدعي `last` لإرجاع العنصر الأخير في ال iterator.
+هذا `Option` لأنه من المحتمل أن يكون السطر الأول عبارة عن string
+فارغ؛ على سبيل المثال، إذا بدأ `text` بسطر فارغ ولكن به حروف على
+أسطر أخرى، كما في `"\nhi"`. ومع ذلك، إذا كان هناك حرف أخير على السطر
+الأول، سيتم إرجاعه في متغير `Some`. يعطينا مشغل `?` في الوسط
+طريقة موجزة للتعبير عن هذا المنطق، مما يسمح لنا بتنفيذ
+الدالة في سطر واحد. إذا لم نتمكن من استخدام مشغل `?` على `Option`، كان سيتعين
+علينا تنفيذ هذا المنطق باستخدام المزيد من استدعاءات الدوال أو تعبير `match`.
 
-Note that you can use the `?` operator on a `Result` in a function that returns
-`Result`, and you can use the `?` operator on an `Option` in a function that
-returns `Option`, but you can’t mix and match. The `?` operator won’t
-automatically convert a `Result` to an `Option` or vice versa; in those cases,
-you can use methods like the `ok` method on `Result` or the `ok_or` method on
-`Option` to do the conversion explicitly.
+لاحظ أنه يمكنك استخدام مشغل `?` على `Result` في دالة تُرجع
+`Result`، ويمكنك استخدام مشغل `?` على `Option` في دالة
+تُرجع `Option`، لكن لا يمكنك المزج والمطابقة. لن يحول مشغل `?`
+تلقائيًا `Result` إلى `Option` أو العكس؛ في تلك الحالات،
+يمكنك استخدام دوال مثل دالة `ok` على `Result` أو دالة `ok_or` على
+`Option` للقيام بالتحويل بشكل صريح.
 
-So far, all the `main` functions we’ve used return `()`. The `main` function is
-special because it’s the entry point and exit point of an executable program,
-and there are restrictions on what its return type can be for the program to
-behave as expected.
+حتى الآن، جميع دوال `main` التي استخدمناها تُرجع `()`. دالة `main` خاصة
+لأنها نقطة الدخول ونقطة الخروج من برنامج قابل للتنفيذ،
+وهناك قيود على ما يمكن أن يكون نوع إرجاعها ليتصرف البرنامج
+كما هو متوقع.
 
-Luckily, `main` can also return a `Result<(), E>`. Listing 9-12 has the code
-from Listing 9-10, but we’ve changed the return type of `main` to be
-`Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
-code will now compile.
+لحسن الحظ، يمكن لـ `main` أيضًا إرجاع `Result<(), E>`. القائمة 9-12 تحتوي على الكود
+من القائمة 9-10، لكننا غيّرنا نوع الإرجاع لـ `main` ليكون
+`Result<(), Box<dyn Error>>` وأضفنا قيمة إرجاع `Ok(())` إلى النهاية. هذا
+الكود سيُترجم الآن.
 
-<Listing number="9-12" file-name="src/main.rs" caption="Changing `main` to return `Result<(), E>` allows the use of the `?` operator on `Result` values.">
+<Listing number="9-12" file-name="src/main.rs" caption="تغيير `main` لإرجاع `Result<(), E>` يسمح باستخدام مشغل `?` على قيم `Result`.">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
@@ -514,32 +498,32 @@ code will now compile.
 
 </Listing>
 
-The `Box<dyn Error>` type is a trait object, which we’ll talk about in [“Using
-Trait Objects to Abstract over Shared Behavior”][trait-objects]<!-- ignore -->
-in Chapter 18. For now, you can read `Box<dyn Error>` to mean “any kind of
-error.” Using `?` on a `Result` value in a `main` function with the error type
-`Box<dyn Error>` is allowed because it allows any `Err` value to be returned
-early. Even though the body of this `main` function will only ever return
-errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this signature
-will continue to be correct even if more code that returns other errors is
-added to the body of `main`.
+نوع `Box<dyn Error>` هو trait object، الذي سنتحدث عنه في ["استخدام
+كائنات Trait لتجريد السلوك المشترك"][trait-objects]<!-- ignore -->
+في الفصل 18. في الوقت الحالي، يمكنك قراءة `Box<dyn Error>` على أنه يعني "أي نوع من
+الأخطاء." استخدام `?` على قيمة `Result` في دالة `main` مع نوع خطأ
+`Box<dyn Error>` مسموح به لأنه يسمح بإرجاع أي قيمة `Err`
+مبكرًا. حتى لو كان جسم دالة `main` هذه سيُرجع فقط
+أخطاء من نوع `std::io::Error`، بتحديد `Box<dyn Error>`، هذا التوقيع
+سيستمر في كونه صحيحًا حتى إذا تمت إضافة المزيد من الكود الذي يُرجع أخطاء أخرى إلى
+جسم `main`.
 
-When a `main` function returns a `Result<(), E>`, the executable will exit with
-a value of `0` if `main` returns `Ok(())` and will exit with a nonzero value if
-`main` returns an `Err` value. Executables written in C return integers when
-they exit: Programs that exit successfully return the integer `0`, and programs
-that error return some integer other than `0`. Rust also returns integers from
-executables to be compatible with this convention.
+عندما تُرجع دالة `main` قيمة `Result<(), E>`، سيخرج البرنامج القابل للتنفيذ بقيمة
+`0` إذا أرجع `main` قيمة `Ok(())` وسيخرج بقيمة غير صفرية إذا
+أرجع `main` قيمة `Err`. البرامج القابلة للتنفيذ المكتوبة بلغة C تُرجع أعدادًا صحيحة عندما
+تخرج: البرامج التي تخرج بنجاح تُرجع العدد الصحيح `0`، والبرامج
+التي تفشل تُرجع عددًا صحيحًا آخر غير `0`. ترجع Rust أيضًا أعدادًا صحيحة من
+البرامج القابلة للتنفيذ لتكون متوافقة مع هذا التقليد.
 
-The `main` function may return any types that implement [the
-`std::process::Termination` trait][termination]<!-- ignore -->, which contains
-a function `report` that returns an `ExitCode`. Consult the standard library
-documentation for more information on implementing the `Termination` trait for
-your own types.
+دالة `main` قد تُرجع أي أنواع تنفذ [trait
+`std::process::Termination`][termination]<!-- ignore -->، والذي يحتوي
+على دالة `report` تُرجع `ExitCode`. راجع وثائق المكتبة القياسية
+لمزيد من المعلومات حول تنفيذ trait `Termination` لأنواعك
+الخاصة.
 
-Now that we’ve discussed the details of calling `panic!` or returning `Result`,
-let’s return to the topic of how to decide which is appropriate to use in which
-cases.
+الآن بعد أن ناقشنا تفاصيل استدعاء `panic!` أو إرجاع `Result`,
+لنعد إلى موضوع كيفية تقرير أيهما مناسب للاستخدام في أي
+الحالات.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
 [trait-objects]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior

@@ -2,57 +2,28 @@
 
 <a id="defining-modules-to-control-scope-and-privacy"></a>
 
-## Control Scope and Privacy with Modules
+## التحكم في النطاق والخصوصية باستخدام الوحدات
 
-In this section, we’ll talk about modules and other parts of the module system,
-namely _paths_, which allow you to name items; the `use` keyword that brings a
-path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator.
+في هذا القسم، سنتحدث عن الوحدات وأجزاء أخرى من نظام الوحدات، وهي _المسارات_ التي تسمح لك بتسمية العناصر؛ والكلمة المفتاحية `use` التي تجلب المسار إلى النطاق؛ والكلمة المفتاحية `pub` لجعل العناصر عامة. سنناقش أيضاً الكلمة المفتاحية `as`، والحزم الخارجية، ومشغل glob.
 
-### Modules Cheat Sheet
+### ورقة غش الوحدات
 
-Before we get to the details of modules and paths, here we provide a quick
-reference on how modules, paths, the `use` keyword, and the `pub` keyword work
-in the compiler, and how most developers organize their code. We’ll be going
-through examples of each of these rules throughout this chapter, but this is a
-great place to refer to as a reminder of how modules work.
+قبل أن نصل إلى تفاصيل الوحدات والمسارات، نقدم هنا مرجعاً سريعاً حول كيفية عمل الوحدات والمسارات والكلمة المفتاحية `use` والكلمة المفتاحية `pub` في المترجم، وكيف ينظم معظم المطورين شيفرتهم. سنستعرض أمثلة على كل من هذه القواعد خلال هذا الفصل، لكن هذا مكان رائع للرجوع إليه كتذكير بكيفية عمل الوحدات.
 
-- **Start from the crate root**: When compiling a crate, the compiler first
-  looks in the crate root file (usually _src/lib.rs_ for a library crate and
-  _src/main.rs_ for a binary crate) for code to compile.
-- **Declaring modules**: In the crate root file, you can declare new modules;
-  say you declare a “garden” module with `mod garden;`. The compiler will look
-  for the module’s code in these places:
-  - Inline, within curly brackets that replace the semicolon following `mod
-    garden`
-  - In the file _src/garden.rs_
-  - In the file _src/garden/mod.rs_
-- **Declaring submodules**: In any file other than the crate root, you can
-  declare submodules. For example, you might declare `mod vegetables;` in
-  _src/garden.rs_. The compiler will look for the submodule’s code within the
-  directory named for the parent module in these places:
-  - Inline, directly following `mod vegetables`, within curly brackets instead
-    of the semicolon
-  - In the file _src/garden/vegetables.rs_
-  - In the file _src/garden/vegetables/mod.rs_
-- **Paths to code in modules**: Once a module is part of your crate, you can
-  refer to code in that module from anywhere else in that same crate, as long
-  as the privacy rules allow, using the path to the code. For example, an
-  `Asparagus` type in the garden vegetables module would be found at
-  `crate::garden::vegetables::Asparagus`.
-- **Private vs. public**: Code within a module is private from its parent
-  modules by default. To make a module public, declare it with `pub mod`
-  instead of `mod`. To make items within a public module public as well, use
-  `pub` before their declarations.
-- **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
-  items to reduce repetition of long paths. In any scope that can refer to
-  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
-  crate::garden::vegetables::Asparagus;`, and from then on you only need to
-  write `Asparagus` to make use of that type in the scope.
+- **ابدأ من جذر الصندوق**: عند ترجمة صندوق، يبحث المترجم أولاً في ملف جذر الصندوق (عادةً _src/lib.rs_ لصندوق مكتبة و _src/main.rs_ لصندوق ثنائي) عن الشيفرة المراد ترجمتها.
+- **تعريف الوحدات**: في ملف جذر الصندوق، يمكنك تعريف وحدات جديدة؛ لنفترض أنك تعرف وحدة "حديقة" بـ `mod garden;`. سيبحث المترجم عن شيفرة الوحدة في هذه الأماكن:
+  - مضمنة، داخل أقواس معقوفة تستبدل الفاصلة المنقوطة التي تتبع `mod garden`
+  - في الملف _src/garden.rs_
+  - في الملف _src/garden/mod.rs_
+- **تعريف الوحدات الفرعية**: في أي ملف آخر غير جذر الصندوق، يمكنك تعريف وحدات فرعية. على سبيل المثال، قد تعرف `mod vegetables;` في _src/garden.rs_. سيبحث المترجم عن شيفرة الوحدة الفرعية ضمن الدليل المسمى بوحدة الأصل في هذه الأماكن:
+  - مضمنة، مباشرة بعد `mod vegetables`، داخل أقواس معقوفة بدلاً من الفاصلة المنقوطة
+  - في الملف _src/garden/vegetables.rs_
+  - في الملف _src/garden/vegetables/mod.rs_
+- **مسارات الشيفرة في الوحدات**: بمجرد أن تصبح الوحدة جزءاً من صندوقك، يمكنك الإشارة إلى الشيفرة في تلك الوحدة من أي مكان آخر في نفس الصندوق، طالما أن قواعد الخصوصية تسمح بذلك، باستخدام المسار إلى الشيفرة. على سبيل المثال، النوع `Asparagus` في وحدة خضروات الحديقة سيكون موجوداً في `crate::garden::vegetables::Asparagus`.
+- **خاص مقابل عام**: الشيفرة داخل الوحدة خاصة من وحدات أصلها بشكل افتراضي. لجعل الوحدة عامة، عرفها بـ `pub mod` بدلاً من `mod`. لجعل العناصر داخل وحدة عامة عامة أيضاً، استخدم `pub` قبل تعريفاتها.
+- **الكلمة المفتاحية `use`**: ضمن نطاق، تنشئ الكلمة المفتاحية `use` اختصارات للعناصر لتقليل تكرار المسارات الطويلة. في أي نطاق يمكن أن يشير إلى `crate::garden::vegetables::Asparagus`، يمكنك إنشاء اختصار بـ `use crate::garden::vegetables::Asparagus;`، ومن ثم تحتاج فقط لكتابة `Asparagus` لاستخدام هذا النوع في النطاق.
 
-Here, we create a binary crate named `backyard` that illustrates these rules.
-The crate’s directory, also named _backyard_, contains these files and
-directories:
+هنا، ننشئ صندوقاً ثنائياً باسم `backyard` يوضح هذه القواعد. دليل الصندوق، المسمى أيضاً _backyard_، يحتوي على هذه الملفات والأدلة:
 
 ```text
 backyard
@@ -60,12 +31,12 @@ backyard
 ├── Cargo.toml
 └── src
     ├── garden
-    │   └── vegetables.rs
+    │   └── vegetables.rs
     ├── garden.rs
     └── main.rs
 ```
 
-The crate root file in this case is _src/main.rs_, and it contains:
+ملف جذر الصندوق في هذه الحالة هو _src/main.rs_، ويحتوي على:
 
 <Listing file-name="src/main.rs">
 
@@ -75,8 +46,7 @@ The crate root file in this case is _src/main.rs_, and it contains:
 
 </Listing>
 
-The `pub mod garden;` line tells the compiler to include the code it finds in
-_src/garden.rs_, which is:
+السطر `pub mod garden;` يخبر المترجم بتضمين الشيفرة التي يجدها في _src/garden.rs_، والتي هي:
 
 <Listing file-name="src/garden.rs">
 
@@ -86,43 +56,25 @@ _src/garden.rs_, which is:
 
 </Listing>
 
-Here, `pub mod vegetables;` means the code in _src/garden/vegetables.rs_ is
-included too. That code is:
+هنا، `pub mod vegetables;` يعني أن الشيفرة في _src/garden/vegetables.rs_ مضمنة أيضاً. تلك الشيفرة هي:
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 
-Now let’s get into the details of these rules and demonstrate them in action!
+الآن لندخل في تفاصيل هذه القواعد ونوضحها عملياً!
 
-### Grouping Related Code in Modules
+### تجميع الشيفرة ذات الصلة في الوحدات
 
-_Modules_ let us organize code within a crate for readability and easy reuse.
-Modules also allow us to control the _privacy_ of items because code within a
-module is private by default. Private items are internal implementation details
-not available for outside use. We can choose to make modules and the items
-within them public, which exposes them to allow external code to use and depend
-on them.
+تتيح لنا _الوحدات_ تنظيم الشيفرة داخل الصندوق من أجل القراءة وسهولة إعادة الاستخدام. تسمح لنا الوحدات أيضاً بالتحكم في _خصوصية_ العناصر لأن الشيفرة داخل الوحدة خاصة بشكل افتراضي. العناصر الخاصة هي تفاصيل تنفيذ داخلية غير متاحة للاستخدام الخارجي. يمكننا اختيار جعل الوحدات والعناصر داخلها عامة، مما يعرضها للسماح للشيفرة الخارجية باستخدامها والاعتماد عليها.
 
-As an example, let’s write a library crate that provides the functionality of a
-restaurant. We’ll define the signatures of functions but leave their bodies
-empty to concentrate on the organization of the code rather than the
-implementation of a restaurant.
+كمثال، لنكتب صندوق مكتبة يوفر وظيفة مطعم. سنعرف توقيعات الدوال لكن سنترك أجسامها فارغة للتركيز على تنظيم الشيفرة بدلاً من تنفيذ المطعم.
 
-In the restaurant industry, some parts of a restaurant are referred to as front
-of house and others as back of house. _Front of house_ is where customers are;
-this encompasses where the hosts seat customers, servers take orders and
-payment, and bartenders make drinks. _Back of house_ is where the chefs and
-cooks work in the kitchen, dishwashers clean up, and managers do administrative
-work.
+في صناعة المطاعم، يُشار إلى بعض أجزاء المطعم بـ front of house والبعض الآخر بـ back of house. _Front of house_ هو حيث يتواجد العملاء؛ وهذا يشمل حيث يجلس المضيفون العملاء، ويأخذ النوادل الطلبات والدفع، ويصنع السقاة المشروبات. _Back of house_ هو حيث يعمل الطهاة والطباخون في المطبخ، وينظف غاسلو الصحون، ويقوم المديرون بالعمل الإداري.
 
-To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`. Then, enter the code in Listing 7-1 into _src/lib.rs_ to
-define some modules and function signatures; this code is the front of house
-section.
+لهيكلة صندوقنا بهذه الطريقة، يمكننا تنظيم دواله في وحدات متداخلة. أنشئ مكتبة جديدة باسم `restaurant` بتشغيل `cargo new restaurant --lib`. ثم، أدخل الشيفرة في القائمة 7-1 في _src/lib.rs_ لتعريف بعض الوحدات وتوقيعات الدوال؛ هذه الشيفرة هي قسم front of house.
 
-<Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module containing other modules that then contain functions">
+<Listing number="7-1" file-name="src/lib.rs" caption="وحدة `front_of_house` تحتوي على وحدات أخرى تحتوي بدورها على دوال">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
@@ -130,27 +82,15 @@ section.
 
 </Listing>
 
-We define a module with the `mod` keyword followed by the name of the module
-(in this case, `front_of_house`). The body of the module then goes inside curly
-brackets. Inside modules, we can place other modules, as in this case with the
-modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and as in Listing 7-1,
-functions.
+نعرف وحدة بالكلمة المفتاحية `mod` متبوعة باسم الوحدة (في هذه الحالة، `front_of_house`). ثم يذهب جسم الوحدة داخل أقواس معقوفة. داخل الوحدات، يمكننا وضع وحدات أخرى، كما في هذه الحالة مع الوحدات `hosting` و`serving`. يمكن أن تحتوي الوحدات أيضاً على تعريفات لعناصر أخرى، مثل البنيات، والعدديات، والثوابت، والخصائص، وكما في القائمة 7-1، الدوال.
 
-By using modules, we can group related definitions together and name why
-they’re related. Programmers using this code can navigate the code based on the
-groups rather than having to read through all the definitions, making it easier
-to find the definitions relevant to them. Programmers adding new functionality
-to this code would know where to place the code to keep the program organized.
+باستخدام الوحدات، يمكننا تجميع التعريفات ذات الصلة معاً وتسمية سبب ترابطها. يمكن للمبرمجين الذين يستخدمون هذه الشيفرة التنقل في الشيفرة بناءً على المجموعات بدلاً من الاضطرار إلى القراءة من خلال جميع التعريفات، مما يسهل العثور على التعريفات ذات الصلة بهم. سيعرف المبرمجون الذين يضيفون وظائف جديدة إلى هذه الشيفرة أين يضعون الشيفرة للحفاظ على تنظيم البرنامج.
 
-Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called _crate
-roots__. The reason for their name is that the contents of either of these two
-files form a module named `crate` at the root of the crate’s module structure,
-known as the _module tree_.
+في وقت سابق، ذكرنا أن _src/main.rs_ و _src/lib.rs_ تُسمى _جذور الصندوق_. سبب تسميتها هو أن محتويات أي من هذين الملفين يشكل وحدة باسم `crate` في جذر بنية وحدة الصندوق، المعروفة باسم _شجرة الوحدات_.
 
-Listing 7-2 shows the module tree for the structure in Listing 7-1.
+تُظهر القائمة 7-2 شجرة الوحدات للبنية في القائمة 7-1.
 
-<Listing number="7-2" caption="The module tree for the code in Listing 7-1">
+<Listing number="7-2" caption="شجرة الوحدات للشيفرة في القائمة 7-1">
 
 ```text
 crate
@@ -166,15 +106,6 @@ crate
 
 </Listing>
 
-This tree shows how some of the modules nest inside other modules; for example,
-`hosting` nests inside `front_of_house`. The tree also shows that some modules
-are _siblings_, meaning they’re defined in the same module; `hosting` and
-`serving` are siblings defined within `front_of_house`. If module A is
-contained inside module B, we say that module A is the _child_ of module B and
-that module B is the _parent_ of module A. Notice that the entire module tree
-is rooted under the implicit module named `crate`.
+تُظهر هذه الشجرة كيف تتداخل بعض الوحدات داخل وحدات أخرى؛ على سبيل المثال، `hosting` تتداخل داخل `front_of_house`. تُظهر الشجرة أيضاً أن بعض الوحدات هي _أشقاء_، مما يعني أنها معرفة في نفس الوحدة؛ `hosting` و`serving` هما أشقاء معرفان ضمن `front_of_house`. إذا كانت الوحدة A موجودة داخل الوحدة B، نقول أن الوحدة A هي _ابن_ للوحدة B وأن الوحدة B هي _أصل_ للوحدة A. لاحظ أن شجرة الوحدات بأكملها متجذرة تحت الوحدة الضمنية باسم `crate`.
 
-The module tree might remind you of the filesystem’s directory tree on your
-computer; this is a very apt comparison! Just like directories in a filesystem,
-you use modules to organize your code. And just like files in a directory, we
-need a way to find our modules.
+قد تذكرك شجرة الوحدات بشجرة دليل نظام الملفات على جهاز الكمبيوتر الخاص بك؛ هذه مقارنة مناسبة جداً! تماماً مثل الأدلة في نظام الملفات، تستخدم الوحدات لتنظيم شيفرتك. وتماماً مثل الملفات في دليل، نحتاج إلى طريقة للعثور على وحداتنا.

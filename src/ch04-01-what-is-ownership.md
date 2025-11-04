@@ -1,120 +1,119 @@
-## What Is Ownership?
+## ما هي الملكية؟
 
-_Ownership_ is a set of rules that govern how a Rust program manages memory.
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that regularly looks for no-longer-used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: Memory is managed
-through a system of ownership with a set of rules that the compiler checks. If
-any of the rules are violated, the program won’t compile. None of the features
-of ownership will slow down your program while it’s running.
+_الملكية_ هي مجموعة من القواعد التي تحكم كيفية إدارة برنامج Rust للذاكرة.
+جميع البرامج يجب أن تدير الطريقة التي تستخدم بها ذاكرة الكمبيوتر أثناء التشغيل.
+بعض اللغات تحتوي على جامع قمامة يبحث بانتظام عن الذاكرة التي لم تعد مستخدمة
+أثناء تشغيل البرنامج؛ في لغات أخرى، يجب على المبرمج تخصيص وتحرير الذاكرة بشكل صريح.
+تستخدم Rust نهجاً ثالثاً: تتم إدارة الذاكرة من خلال نظام ملكية مع مجموعة من القواعد
+التي يفحصها المترجم. إذا تم انتهاك أي من القواعد، فلن يتم تجميع البرنامج. لا تؤدي
+أي من ميزات الملكية إلى إبطاء برنامجك أثناء تشغيله.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the easier you’ll find it to naturally
-develop code that is safe and efficient. Keep at it!
+نظراً لأن الملكية مفهوم جديد للعديد من المبرمجين، فإنها تستغرق بعض الوقت
+للتعود عليها. الخبر السار هو أنه كلما أصبحت أكثر خبرة مع Rust
+وقواعد نظام الملكية، كلما وجدت أنه من الأسهل تطوير كود
+آمن وفعال بشكل طبيعي. استمر في ذلك!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+عندما تفهم الملكية، سيكون لديك أساس قوي لفهم
+الميزات التي تجعل Rust فريدة. في هذا الفصل، ستتعلم الملكية من خلال
+العمل عبر بعض الأمثلة التي تركز على بنية بيانات شائعة جداً:
+السلاسل النصية.
 
-> ### The Stack and the Heap
+> ### المكدس والكومة
 >
-> Many programming languages don’t require you to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap affects how the language behaves and why
-> you have to make certain decisions. Parts of ownership will be described in
-> relation to the stack and the heap later in this chapter, so here is a brief
-> explanation in preparation.
+> العديد من لغات البرمجة لا تتطلب منك التفكير في المكدس والكومة
+> كثيراً. لكن في لغة برمجة أنظمة مثل Rust، سواء كانت
+> قيمة على المكدس أو الكومة تؤثر على كيفية تصرف اللغة ولماذا
+> يجب عليك اتخاذ قرارات معينة. ستتم وصف أجزاء من الملكية في
+> علاقتها بالمكدس والكومة لاحقاً في هذا الفصل، لذا إليك شرح موجز
+> استعداداً لذلك.
 >
-> Both the stack and the heap are parts of memory available to your code to use
-> at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite
-> order. This is referred to as _last in, first out (LIFO)_. Think of a stack of
-> plates: When you add more plates, you put them on top of the pile, and when
-> you need a plate, you take one off the top. Adding or removing plates from
-> the middle or bottom wouldn’t work as well! Adding data is called _pushing
-> onto the stack_, and removing data is called _popping off the stack_. All
-> data stored on the stack must have a known, fixed size. Data with an unknown
-> size at compile time or a size that might change must be stored on the heap
-> instead.
+> كل من المكدس والكومة أجزاء من الذاكرة المتاحة لكودك لاستخدامها
+> في وقت التشغيل، لكنهما منظمان بطرق مختلفة. يخزن المكدس
+> القيم بالترتيب الذي يحصل عليها ويزيل القيم بالترتيب
+> المعاكس. يُشار إلى هذا باسم _الأخير يدخل، الأول يخرج (LIFO)_. فكر في كومة من
+> الأطباق: عندما تضيف المزيد من الأطباق، تضعها في أعلى الكومة، وعندما
+> تحتاج إلى طبق، تأخذ واحداً من الأعلى. إضافة أو إزالة الأطباق من
+> المنتصف أو الأسفل لن تعمل بشكل جيد! إضافة البيانات تسمى _الدفع
+> إلى المكدس_، وإزالة البيانات تسمى _السحب من المكدس_. جميع
+> البيانات المخزنة على المكدس يجب أن يكون لها حجم معروف وثابت. البيانات ذات الحجم
+> غير المعروف في وقت التجميع أو الحجم الذي قد يتغير يجب أن تُخزن على الكومة
+> بدلاً من ذلك.
 >
-> The heap is less organized: When you put data on the heap, you request a
-> certain amount of space. The memory allocator finds an empty spot in the heap
-> that is big enough, marks it as being in use, and returns a _pointer_, which
-> is the address of that location. This process is called _allocating on the
-> heap_ and is sometimes abbreviated as just _allocating_ (pushing values onto
-> the stack is not considered allocating). Because the pointer to the heap is a
-> known, fixed size, you can store the pointer on the stack, but when you want
-> the actual data, you must follow the pointer. Think of being seated at a
-> restaurant. When you enter, you state the number of people in your group, and
-> the host finds an empty table that fits everyone and leads you there. If
-> someone in your group comes late, they can ask where you’ve been seated to
-> find you.
+> الكومة أقل تنظيماً: عندما تضع بيانات على الكومة، تطلب
+> كمية معينة من المساحة. يجد مخصص الذاكرة مكاناً فارغاً في الكومة
+> كبير بما يكفي، يحدده على أنه قيد الاستخدام، ويعيد _مؤشراً_، وهو
+> عنوان ذلك الموقع. تسمى هذه العملية _التخصيص على
+> الكومة_ وأحياناً يتم اختصارها إلى _التخصيص_ فقط (دفع القيم على
+> المكدس لا يُعتبر تخصيصاً). نظراً لأن المؤشر إلى الكومة له
+> حجم معروف وثابت، يمكنك تخزين المؤشر على المكدس، ولكن عندما تريد
+> البيانات الفعلية، يجب عليك اتباع المؤشر. فكر في الجلوس في
+> مطعم. عندما تدخل، تذكر عدد الأشخاص في مجموعتك، و
+> المضيف يجد طاولة فارغة تتسع للجميع ويقودك إلى هناك. إذا
+> جاء شخص من مجموعتك متأخراً، يمكنه أن يسأل أين تم إجلاسكم
+> ليجدك.
 >
-> Pushing to the stack is faster than allocating on the heap because the
-> allocator never has to search for a place to store new data; that location is
-> always at the top of the stack. Comparatively, allocating space on the heap
-> requires more work because the allocator must first find a big enough space
-> to hold the data and then perform bookkeeping to prepare for the next
-> allocation.
+> الدفع إلى المكدس أسرع من التخصيص على الكومة لأن
+> المخصص لا يحتاج أبداً إلى البحث عن مكان لتخزين بيانات جديدة؛ هذا الموقع
+> دائماً في أعلى المكدس. بالمقارنة، يتطلب تخصيص مساحة على الكومة
+> المزيد من العمل لأن المخصص يجب أولاً أن يجد مساحة كبيرة بما يكفي
+> لحمل البيانات ثم يقوم بإجراء المحاسبة للتحضير للتخصيص
+> التالي.
 >
-> Accessing data in the heap is generally slower than accessing data on the
-> stack because you have to follow a pointer to get there. Contemporary
-> processors are faster if they jump around less in memory. Continuing the
-> analogy, consider a server at a restaurant taking orders from many tables.
-> It’s most efficient to get all the orders at one table before moving on to
-> the next table. Taking an order from table A, then an order from table B,
-> then one from A again, and then one from B again would be a much slower
-> process. By the same token, a processor can usually do its job better if it
-> works on data that’s close to other data (as it is on the stack) rather than
-> farther away (as it can be on the heap).
+> الوصول إلى البيانات في الكومة بشكل عام أبطأ من الوصول إلى البيانات على
+> المكدس لأنه يجب عليك اتباع مؤشر للوصول إلى هناك. المعالجات
+> المعاصرة أسرع إذا قفزت حولها أقل في الذاكرة. متابعة
+> التشبيه، ضع في اعتبارك نادلاً في مطعم يأخذ طلبات من طاولات عديدة.
+> إنه الأكثر كفاءة في الحصول على جميع الطلبات في طاولة واحدة قبل الانتقال إلى
+> الطاولة التالية. أخذ طلب من الطاولة A، ثم طلب من الطاولة B،
+> ثم واحد من A مرة أخرى، ثم واحد من B مرة أخرى سيكون عملية أبطأ بكثير.
+> بنفس الطريقة، يمكن للمعالج عادة القيام بعمله بشكل أفضل إذا
+> كان يعمل على بيانات قريبة من بيانات أخرى (كما هو الحال على المكدس) بدلاً من
+> بعيدة (كما يمكن أن تكون على الكومة).
 >
-> When your code calls a function, the values passed into the function
-> (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> عندما يستدعي كودك دالة، القيم الممررة إلى الدالة
+> (بما في ذلك، محتملاً، مؤشرات إلى بيانات على الكومة) والمتغيرات
+> المحلية للدالة تُدفع إلى المكدس. عندما تنتهي الدالة، تلك
+> القيم تُسحب من المكدس.
 >
-> Keeping track of what parts of code are using what data on the heap,
-> minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so that you don’t run out of space are all problems that
-> ownership addresses. Once you understand ownership, you won’t need to think
-> about the stack and the heap very often. But knowing that the main purpose of
-> ownership is to manage heap data can help explain why it works the way it
-> does.
+> تتبع أي أجزاء من الكود تستخدم أي بيانات على الكومة،
+> وتقليل كمية البيانات المكررة على الكومة، وتنظيف البيانات
+> غير المستخدمة على الكومة حتى لا تنفد المساحة كلها مشاكل
+> تعالجها الملكية. بمجرد فهمك للملكية، لن تحتاج إلى التفكير
+> في المكدس والكومة كثيراً. لكن معرفة أن الغرض الرئيسي من
+> الملكية هو إدارة بيانات الكومة يمكن أن يساعد في تفسير سبب عملها بالطريقة
+> التي تعمل بها.
 
-### Ownership Rules
+### قواعد الملكية
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate them:
+أولاً، دعنا نلقي نظرة على قواعد الملكية. ضع هذه القواعد في ذهنك بينما
+نعمل عبر الأمثلة التي توضحها:
 
-- Each value in Rust has an _owner_.
-- There can only be one owner at a time.
-- When the owner goes out of scope, the value will be dropped.
+- كل قيمة في Rust لها _مالك_.
+- يمكن أن يكون هناك مالك واحد فقط في كل مرة.
+- عندما يخرج المالك من النطاق، سيتم إسقاط القيمة.
 
-### Variable Scope
+### نطاق المتغيرات
 
-Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
-code in the examples, so if you’re following along, make sure to put the
-following examples inside a `main` function manually. As a result, our examples
-will be a bit more concise, letting us focus on the actual details rather than
-boilerplate code.
+الآن بعد أن تجاوزنا بناء جملة Rust الأساسي، لن نُضمّن كل كود `fn main() {`
+في الأمثلة، لذا إذا كنت تتابع، تأكد من وضع
+الأمثلة التالية داخل دالة `main` يدوياً. ونتيجة لذلك، ستكون أمثلتنا
+أكثر إيجازاً قليلاً، مما يتيح لنا التركيز على التفاصيل الفعلية بدلاً من
+الكود النموذجي.
 
-As a first example of ownership, we’ll look at the scope of some variables. A
-_scope_ is the range within a program for which an item is valid. Take the
-following variable:
+كمثال أول على الملكية، سننظر إلى نطاق بعض المتغيرات. 
+_النطاق_ هو المدى داخل برنامج حيث يكون العنصر صالحاً. خذ
+المتغير التالي:
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current scope. Listing 4-1 shows a
-program with comments annotating where the variable `s` would be valid.
+يشير المتغير `s` إلى حرف نصي، حيث قيمة السلسلة النصية
+مشفرة بشكل ثابت في نص برنامجنا. المتغير صالح من النقطة التي
+يُعلن فيها حتى نهاية النطاق الحالي. يُظهر القائمة 4-1 
+برنامجاً مع تعليقات توضح أين سيكون المتغير `s` صالحاً.
 
-<Listing number="4-1" caption="A variable and the scope in which it is valid">
+<Listing number="4-1" caption="متغير والنطاق الذي يكون فيه صالحاً">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
@@ -122,127 +121,129 @@ program with comments annotating where the variable `s` would be valid.
 
 </Listing>
 
-In other words, there are two important points in time here:
+بعبارة أخرى، هناك نقطتان زمنيتان مهمتان هنا:
 
-- When `s` comes _into_ scope, it is valid.
-- It remains valid until it goes _out of_ scope.
+- عندما يدخل `s` _إلى_ النطاق، يكون صالحاً.
+- يظل صالحاً حتى يخرج _من_ النطاق.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to that in other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+في هذه المرحلة، العلاقة بين النطاقات ومتى تكون المتغيرات صالحة
+مشابهة لتلك في لغات البرمجة الأخرى. الآن سنبني على هذا
+الفهم بتقديم نوع `String`.
 
-### The `String` Type
+### نوع `String`
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than those we covered in the [“Data Types”][data-types]<!-- ignore --> section
-of Chapter 3. The types covered previously are of a known size, can be stored
-on the stack and popped off the stack when their scope is over, and can be
-quickly and trivially copied to make a new, independent instance if another
-part of code needs to use the same value in a different scope. But we want to
-look at data that is stored on the heap and explore how Rust knows when to
-clean up that data, and the `String` type is a great example.
+لتوضيح قواعد الملكية، نحتاج إلى نوع بيانات أكثر تعقيداً
+من تلك التي غطيناها في قسم [â€œأنواع البياناتâ€][data-types]<!-- ignore -->
+من الفصل 3. الأنواع التي تم تغطيتها سابقاً لها حجم معروف، يمكن تخزينها
+على المكدس وسحبها من المكدس عندما ينتهي نطاقها، ويمكن
+نسخها بسرعة وبشكل تافه لإنشاء نسخة جديدة ومستقلة إذا كان جزء آخر
+من الكود يحتاج إلى استخدام نفس القيمة في نطاق مختلف. لكننا نريد
+النظر إلى البيانات المخزنة على الكومة واستكشاف كيف تعرف Rust متى
+تنظف تلك البيانات، ونوع `String` مثال رائع.
 
-We’ll concentrate on the parts of `String` that relate to ownership. These
-aspects also apply to other complex data types, whether they are provided by
-the standard library or created by you. We’ll discuss non-ownership aspects of
-`String` in [Chapter 8][ch8]<!-- ignore -->.
+سنركز على أجزاء `String` المتعلقة بالملكية. هذه
+الجوانب تنطبق أيضاً على أنواع البيانات المعقدة الأخرى، سواء كانت مقدمة من
+المكتبة القياسية أو أنشأتها أنت. سنناقش جوانب `String` غير المتعلقة بالملكية
+في [الفصل 8][ch8]<!-- ignore -->.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t suitable for every
-situation in which we may want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: For example, what if we want to take user input and store it? It is
-for these situations that Rust has the `String` type. This type manages
-data allocated on the heap and as such is able to store an amount of text that
-is unknown to us at compile time. You can create a `String` from a string
-literal using the `from` function, like so:
+لقد رأينا بالفعل النصوص الحرفية، حيث تكون قيمة السلسلة النصية مشفرة بشكل ثابت في
+برنامجنا. النصوص الحرفية مريحة، لكنها ليست مناسبة لكل
+حالة قد نرغب فيها في استخدام النص. أحد الأسباب هو أنها
+غير قابلة للتغيير. سبب آخر هو أنه ليس كل قيمة نصية يمكن معرفتها عندما نكتب
+كودنا: على سبيل المثال، ماذا لو أردنا أخذ إدخال المستخدم وتخزينه؟ إنه
+لهذه الحالات أن لدى Rust نوع `String`. يدير هذا النوع
+البيانات المخصصة على الكومة وبالتالي قادر على تخزين كمية من النص
+غير معروفة لنا في وقت التجميع. يمكنك إنشاء `String` من نص
+حرفي باستخدام دالة `from`، مثل هذا:
 
 ```rust
 let s = String::from("hello");
 ```
 
-The double colon `::` operator allows us to namespace this particular `from`
-function under the `String` type rather than using some sort of name like
-`string_from`. We’ll discuss this syntax more in the [“Methods”][methods]<!--
-ignore --> section of Chapter 5, and when we talk about namespacing with
-modules in [“Paths for Referring to an Item in the Module
-Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
+يسمح لنا عامل القولون المزدوج `::` بوضع هذه الدالة `from` المحددة
+تحت نوع `String` بدلاً من استخدام نوع من الاسم مثل
+`string_from`. سنناقش هذا البناء أكثر في قسم [â€œبناء جملة الدوالâ€][methods]<!-- ignore -->
+من الفصل 5، وعندما نتحدث عن استخدام الفضاءات الاسمية مع الوحدات في [â€œالمسارات للإشارة إلى عنصر في شجرة الوحدةâ€][paths-module-tree]<!-- ignore -->
+في الفصل 7.
 
-This kind of string _can_ be mutated:
-
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
-```
-
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is in how these two types deal with memory.
-
-### Memory and Allocation
-
-In the case of a string literal, we know the contents at compile time, so the
-text is hardcoded directly into the final executable. This is why string
-literals are fast and efficient. But these properties only come from the string
-literal’s immutability. Unfortunately, we can’t put a blob of memory into the
-binary for each piece of text whose size is unknown at compile time and whose
-size might change while running the program.
-
-With the `String` type, in order to support a mutable, growable piece of text,
-we need to allocate an amount of memory on the heap, unknown at compile time,
-to hold the contents. This means:
-
-- The memory must be requested from the memory allocator at runtime.
-- We need a way of returning this memory to the allocator when we’re done with
-  our `String`.
-
-That first part is done by us: When we call `String::from`, its implementation
-requests the memory it needs. This is pretty much universal in programming
-languages.
-
-However, the second part is different. In languages with a _garbage collector
-(GC)_, the GC keeps track of and cleans up memory that isn’t being used
-anymore, and we don’t need to think about it. In most languages without a GC,
-it’s our responsibility to identify when memory is no longer being used and to
-call code to explicitly free it, just as we did to request it. Doing this
-correctly has historically been a difficult programming problem. If we forget,
-we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
-we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
-exactly one `free`.
-
-Rust takes a different path: The memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+يمكن تحويل هذا النوع من السلاسل النصية:
 
 ```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
+let mut s = String::from("hello");
+
+s.push_str(", world!"); // push_str() يضيف حرفاً نصياً إلى String
+
+println!("{s}"); // سيطبع `hello, world!`
 ```
 
-There is a natural point at which we can return the memory our `String` needs
-to the allocator: when `s` goes out of scope. When a variable goes out of
-scope, Rust calls a special function for us. This function is called
-[`drop`][drop]<!-- ignore -->, and it’s where the author of `String` can put
-the code to return the memory. Rust calls `drop` automatically at the closing
-curly bracket.
+إذن، ما الفرق هنا؟ لماذا يمكن تحويل `String` ولا يمكن تحويل الحروف النصية؟
+الفرق هو كيفية تعامل هذين النوعين مع الذاكرة.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item’s
-> lifetime is sometimes called _Resource Acquisition Is Initialization (RAII)_.
-> The `drop` function in Rust will be familiar to you if you’ve used RAII
-> patterns.
+### الذاكرة والتخصيص
 
-This pattern has a profound impact on the way Rust code is written. It may seem
-simple right now, but the behavior of code can be unexpected in more
-complicated situations when we want to have multiple variables use the data
-we’ve allocated on the heap. Let’s explore some of those situations now.
+في حالة النص الحرفي، نعرف المحتويات في وقت التجميع، لذلك يتم
+تشفير النص بشكل ثابت مباشرة في الملف التنفيذي النهائي. هذا هو السبب في أن النصوص الحرفية
+سريعة وفعالة. لكن هذه الخصائص تأتي فقط من عدم قابلية النص الحرفي للتغيير.
+للأسف، لا يمكننا وضع كتلة من الذاكرة في الملف الثنائي لكل قطعة من النص
+حجمها غير معروف في وقت التجميع وقد يتغير حجمها أثناء تشغيل
+البرنامج.
+
+مع نوع `String`، من أجل دعم قطعة من النص قابلة للتغيير والنمو، نحتاج إلى
+تخصيص كمية من الذاكرة على الكومة، غير معروفة في وقت التجميع، لحمل
+المحتويات. هذا يعني:
+
+- يجب طلب الذاكرة من مخصص الذاكرة في وقت التشغيل.
+- نحتاج إلى طريقة لإعادة هذه الذاكرة إلى المخصص عندما ننتهي من
+  `String` الخاص بنا.
+
+هذا الجزء الأول يتم من قبلنا: عندما نستدعي `String::from`، يطلب تنفيذها
+الذاكرة التي يحتاجها. هذا عالمي إلى حد ما في لغات البرمجة.
+
+ومع ذلك، الجزء الثاني مختلف. في اللغات مع _جامع قمامة (GC)_،
+يتتبع GC وينظف الذاكرة التي لم تعد مستخدمة، ولا نحتاج
+للتفكير فيها. في معظم اللغات بدون GC، من مسؤوليتنا تحديد متى
+لم تعد الذاكرة مستخدمة واستدعاء كود لإعادتها بشكل صريح، تماماً كما فعلنا
+لطلبها. القيام بذلك بشكل صحيح كان تاريخياً مشكلة برمجية صعبة. إذا نسينا، سنضيع
+الذاكرة. إذا فعلنا ذلك مبكراً جداً، سيكون لدينا متغير غير صالح. إذا فعلنا ذلك مرتين، هذا
+أيضاً خطأ. نحتاج إلى إقران بالضبط `allocate` واحد مع `free` واحد بالضبط.
+
+تتخذ Rust مساراً مختلفاً: يتم إعادة الذاكرة تلقائياً بمجرد خروج المتغير
+الذي يملكها من النطاق. هنا نسخة من مثال نطاقنا من القائمة 4-1 باستخدام
+`String` بدلاً من نص حرفي:
+
+```rust
+{
+    let s = String::from("hello"); // s صالح من هذه النقطة فصاعداً
+
+    // افعل أشياء مع s
+}                                  // هذا النطاق انتهى الآن، و s لم يعد
+                                   // صالحاً
+```
+
+هناك نقطة طبيعية يمكننا فيها إعادة الذاكرة التي يحتاجها `String`
+إلى المخصص: عندما يخرج `s` من النطاق. عندما يخرج متغير من النطاق، تستدعي Rust
+دالة خاصة لنا. تسمى هذه الدالة [`drop`][drop]، وهي حيث يمكن لكاتب
+`String` وضع الكود لإعادة الذاكرة. تستدعي Rust `drop` تلقائياً عند القوس
+المغلق.
+
+> ملاحظة: في C++، نمط إلغاء تخصيص الموارد في نهاية عمر عنصر
+> يُسمى أحياناً _اكتساب الموارد هو التهيئة (RAII)_. دالة `drop` في Rust
+> ستكون مألوفة لك إذا كنت قد استخدمت أنماط RAII.
+
+هذا النمط له تأثير عميق على طريقة كتابة كود Rust. قد يبدو بسيطاً الآن،
+لكن سلوك الكود يمكن أن يكون غير متوقع في حالات أكثر تعقيداً عندما
+نريد أن تكون لدينا متغيرات متعددة تستخدم البيانات التي خصصناها على الكومة. دعنا
+نستكشف بعض تلك الحالات الآن.
 
 <!-- Old headings. Do not remove or links may break. -->
-
 <a id="ways-variables-and-data-interact-move"></a>
 
-#### Variables and Data Interacting with Move
+#### المتغيرات والبيانات تتفاعل مع النقل
 
-Multiple variables can interact with the same data in different ways in Rust.
-Listing 4-2 shows an example using an integer.
+يمكن أن تتفاعل متغيرات متعددة مع نفس البيانات بطرق مختلفة في Rust. دعنا
+ننظر إلى مثال باستخدام عدد صحيح في القائمة 4-2.
 
-<Listing number="4-2" caption="Assigning the integer value of variable `x` to `y`">
+<Listing number="4-2" caption="إسناد قيمة العدد الصحيح للمتغير x إلى y">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
@@ -250,219 +251,215 @@ Listing 4-2 shows an example using an integer.
 
 </Listing>
 
-We can probably guess what this is doing: “Bind the value `5` to `x`; then, make
-a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
-and `y`, and both equal `5`. This is indeed what is happening, because integers
-are simple values with a known, fixed size, and these two `5` values are pushed
-onto the stack.
+يمكننا على الأرجح تخمين ما يفعله هذا: "اربط القيمة `5` بـ `x`؛ ثم اصنع نسخة من
+القيمة في `x` واربطها بـ `y`." لدينا الآن متغيران، `x` و `y`، وكلاهما
+يساوي `5`. هذا بالفعل ما يحدث، لأن الأعداد الصحيحة قيم بسيطة ذات حجم
+معروف وثابت، وهاتان القيمتان `5` تُدفعان على المكدس.
 
-Now let’s look at the `String` version:
+الآن دعنا ننظر إلى نسخة `String`:
 
 ```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
+let s1 = String::from("hello");
+let s2 = s1;
 ```
 
-This looks very similar, so we might assume that the way it works would be the
-same: That is, the second line would make a copy of the value in `s1` and bind
-it to `s2`. But this isn’t quite what happens.
+يبدو هذا مشابهاً جداً، لذا قد نفترض أن طريقة عمله ستكون
+نفسها: أي أن السطر الثاني سيصنع نسخة من القيمة في `s1` ويربطها بـ `s2`.
+لكن هذا ليس ما يحدث تماماً.
 
-Take a look at Figure 4-1 to see what is happening to `String` under the
-covers. A `String` is made up of three parts, shown on the left: a pointer to
-the memory that holds the contents of the string, a length, and a capacity.
-This group of data is stored on the stack. On the right is the memory on the
-heap that holds the contents.
+انظر إلى الشكل 4-1 لترى ما يحدث لـ `String` تحت الغطاء. `String`
+يتكون من ثلاثة أجزاء، موضحة على اليسار: مؤشر إلى الذاكرة التي
+تحمل محتويات السلسلة النصية، والطول، والسعة. هذه المجموعة من البيانات
+مخزنة على المكدس. على اليمين توجد الذاكرة على الكومة التي تحمل
+المحتويات.
 
-<img alt="Two tables: the first table contains the representation of s1 on the
-stack, consisting of its length (5), capacity (5), and a pointer to the first
-value in the second table. The second table contains the representation of the
-string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
-style="width: 50%;" />
+<img alt="جدولان: الأول يمثل البيانات المخزنة على المكدس لـ s1، و
+يحتوي على طول (5)، والسعة (5)، ومؤشر إلى القيمة الأولى في
+جدول البيانات الثاني. الجدول الثاني يمثل البيانات المخزنة على الكومة،
+التي تحتوي فقط على قيم السلسلة النصية، في هذه الحالة الحروف الخمسة من h وe وl وl و
+o." src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-1: The representation in memory of a `String`
-holding the value `"hello"` bound to `s1`</span>
+<span class="caption">الشكل 4-1: تمثيل في الذاكرة لـ `String`
+يحمل القيمة `"hello"` مربوطة بـ `s1`</span>
 
-The length is how much memory, in bytes, the contents of the `String` are
-currently using. The capacity is the total amount of memory, in bytes, that the
-`String` has received from the allocator. The difference between length and
-capacity matters, but not in this context, so for now, it’s fine to ignore the
-capacity.
+الطول هو كمية الذاكرة، بالبايتات، التي يستخدمها محتوى `String`
+حالياً. السعة هي الكمية الإجمالية للذاكرة، بالبايتات، التي تلقاها
+`String` من المخصص. الفرق بين الطول والسعة مهم، لكن
+ليس في هذا السياق، لذا في الوقت الحالي، لا بأس من تجاهل السعة.
 
-When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
-pointer, the length, and the capacity that are on the stack. We do not copy the
-data on the heap that the pointer refers to. In other words, the data
-representation in memory looks like Figure 4-2.
+عندما نسند `s1` إلى `s2`، يتم نسخ بيانات `String`. نحن ننسخ المؤشر،
+والطول، والسعة التي على المكدس. نحن لا ننسخ البيانات على الكومة التي
+يشير إليها المؤشر. بعبارة أخرى، تمثيل البيانات في الذاكرة يبدو مثل
+الشكل 4-2.
 
-<img alt="Three tables: tables s1 and s2 representing those strings on the
-stack, respectively, and both pointing to the same string data on the heap."
+<img alt="ثلاثة جداول: الجداول s1 و s2 تمثل تلك السلاسل النصية على
+المكدس، على التوالي، وكلاهما يشير إلى نفس بيانات السلسلة النصية على الكومة."
 src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-2: The representation in memory of the variable
-`s2` that has a copy of the pointer, length, and capacity of `s1`</span>
+<span class="caption">الشكل 4-2: تمثيل في الذاكرة للمتغير `s2`
+الذي لديه نسخة من المؤشر والطول والسعة لـ `s1`</span>
 
-The representation does _not_ look like Figure 4-3, which is what memory would
-look like if Rust instead copied the heap data as well. If Rust did this, the
-operation `s2 = s1` could be very expensive in terms of runtime performance if
-the data on the heap were large.
+التمثيل _لا_ يبدو مثل الشكل 4-3، وهو كيف ستبدو الذاكرة إذا كانت Rust
+بدلاً من ذلك نسخت أيضاً بيانات الكومة. إذا فعلت Rust ذلك، فإن العملية `s2 = s1`
+يمكن أن تكون مكلفة جداً من حيث الأداء في وقت التشغيل إذا كانت البيانات على الكومة
+كبيرة.
 
-<img alt="Four tables: two tables representing the stack data for s1 and s2,
-and each points to its own copy of string data on the heap."
+<img alt="أربعة جداول: جدولان يمثلان بيانات المكدس لـ s1 و s2،
+وكل منهما يشير إلى نسخته الخاصة من بيانات السلسلة النصية على الكومة."
 src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
-do if Rust copied the heap data as well</span>
+<span class="caption">الشكل 4-3: احتمالية أخرى لما قد يفعله `s2 = s1`
+إذا كانت Rust تنسخ بيانات الكومة أيضاً</span>
 
-Earlier, we said that when a variable goes out of scope, Rust automatically
-calls the `drop` function and cleans up the heap memory for that variable. But
-Figure 4-2 shows both data pointers pointing to the same location. This is a
-problem: When `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a _double free_ error and is one of the memory
-safety bugs we mentioned previously. Freeing memory twice can lead to memory
-corruption, which can potentially lead to security vulnerabilities.
+في وقت سابق، قلنا أنه عندما يخرج متغير من النطاق، تستدعي Rust تلقائياً
+دالة `drop` وتنظف ذاكرة الكومة لذلك المتغير. لكن الشكل 4-2 يُظهر
+كلا مؤشري البيانات يشيران إلى نفس الموقع. هذه مشكلة: عندما يخرج `s2` و `s1` من
+النطاق، سيحاولان كلاهما تحرير نفس الذاكرة. هذا يُعرف باسم خطأ _التحرير
+المزدوج_ وهو أحد أخطاء أمان الذاكرة التي ذكرناها سابقاً. تحرير الذاكرة
+مرتين يمكن أن يؤدي إلى تلف الذاكرة، مما قد يؤدي إلى ثغرات أمنية.
 
-To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as
-no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
-out of scope. Check out what happens when you try to use `s1` after `s2` is
-created; it won’t work:
+لضمان أمان الذاكرة، بعد السطر `let s2 = s1;`، تعتبر Rust `s1` على أنه
+لم يعد صالحاً. لذلك، لا تحتاج Rust إلى تحرير أي شيء عندما يخرج `s1` من
+النطاق. تحقق من ما يحدث عندما تحاول استخدام `s1` بعد إنشاء `s2`؛ لن
+يعمل:
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-move-invalidates/src/main.rs:here}}
 ```
 
-You’ll get an error like this because Rust prevents you from using the
-invalidated reference:
+ستحصل على خطأ مثل هذا لأن Rust تمنعك من استخدام المرجع الملغى:
 
 ```console
-{{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
+{{#include ../listings/ch04-understanding-ownership/no-listing-01-move-invalidates/output.txt}}
 ```
 
-If you’ve heard the terms _shallow copy_ and _deep copy_ while working with
-other languages, the concept of copying the pointer, length, and capacity
-without copying the data probably sounds like making a shallow copy. But
-because Rust also invalidates the first variable, instead of being called a
-shallow copy, it’s known as a _move_. In this example, we would say that `s1`
-was _moved_ into `s2`. So, what actually happens is shown in Figure 4-4.
+إذا سمعت المصطلحين _نسخة ضحلة_ و _نسخة عميقة_ أثناء العمل مع لغات
+أخرى، فإن مفهوم نسخ المؤشر والطول والسعة دون نسخ البيانات
+ربما يبدو مثل عمل نسخة ضحلة. لكن نظراً لأن Rust تبطل أيضاً المتغير
+الأول، بدلاً من تسميته نسخة ضحلة، يُعرف باسم _نقل_. في هذا المثال،
+سنقول أن `s1` تم _نقله_ إلى `s2`. إذن ما يحدث فعلياً موضح في
+الشكل 4-4.
 
-<img alt="Three tables: tables s1 and s2 representing those strings on the
-stack, respectively, and both pointing to the same string data on the heap.
-Table s1 is grayed out because s1 is no longer valid; only s2 can be used to
-access the heap data." src="img/trpl04-04.svg" class="center" style="width:
+<img alt="ثلاثة جداول: الجداول s1 و s2 تمثل تلك السلاسل النصية على
+المكدس، على التوالي، وكلاهما يشير إلى نفس بيانات السلسلة النصية على الكومة.
+الجدول s1 رمادي لأن s1 لم يعد صالحاً بعد؛ فقط s2 يمكن استخدامه للوصول إلى
+بيانات الكومة." src="img/trpl04-04.svg" class="center" style="width:
 50%;" />
 
-<span class="caption">Figure 4-4: The representation in memory after `s1` has
-been invalidated</span>
+<span class="caption">الشكل 4-4: تمثيل في الذاكرة بعد إبطال
+`s1`</span>
 
-That solves our problem! With only `s2` valid, when it goes out of scope it
-alone will free the memory, and we’re done.
+هذا يحل مشكلتنا! مع فقط `s2` صالح، عندما يخرج من النطاق، هو
+وحده سيحرر الذاكرة، وانتهينا.
 
-In addition, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any _automatic_
-copying can be assumed to be inexpensive in terms of runtime performance.
+بالإضافة إلى ذلك، هناك اختيار تصميم ضمني في ذلك: لن تقوم Rust أبداً تلقائياً بإنشاء
+نسخ "عميقة" من بياناتك. لذلك، يمكن افتراض أي نسخ _تلقائي_ يكون
+غير مكلف من حيث الأداء في وقت التشغيل.
 
-#### Scope and Assignment
+#### النطاق والإسناد
 
-The inverse of this is true for the relationship between scoping, ownership, and
-memory being freed via the `drop` function as well. When you assign a completely
-new value to an existing variable, Rust will call `drop` and free the original
-value’s memory immediately. Consider this code, for example:
+عكس هذا صحيح أيضاً للعلاقة بين النطاق، والملكية، و
+تحرير الذاكرة عبر دالة `drop` أيضاً. عندما تسند قيمة جديدة تماماً
+إلى متغير موجود، ستستدعي Rust `drop` وتحرر ذاكرة القيمة
+الأصلية على الفور. ضع في اعتبارك هذا الكود، على سبيل المثال:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
 ```
 
-We initially declare a variable `s` and bind it to a `String` with the value
-`"hello"`. Then, we immediately create a new `String` with the value `"ahoy"`
-and assign it to `s`. At this point, nothing is referring to the original value
-on the heap at all. Figure 4-5 illustrates the stack and heap data now:
+في البداية نعلن متغير `s` ونربطه بـ `String` بالقيمة
+`"hello"`. ثم، ننشئ على الفور `String` جديد بالقيمة `"ahoy"`
+ونسنده إلى `s`. في هذه المرحلة، لا شيء يشير إلى القيمة الأصلية
+على الكومة على الإطلاق. يوضح الشكل 4-5 بيانات المكدس والكومة الآن:
 
-<img alt="One table representing the string value on the stack, pointing to
-the second piece of string data (ahoy) on the heap, with the original string
-data (hello) grayed out because it cannot be accessed anymore."
+<img alt="جدول واحد يمثل قيمة السلسلة النصية على المكدس، يشير إلى
+القطعة الثانية من بيانات السلسلة النصية (ahoy) على الكومة، مع بيانات السلسلة النصية الأصلية
+(hello) مظللة باللون الرمادي لأنه لا يمكن الوصول إليها بعد الآن."
 src="img/trpl04-05.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-5: The representation in memory after the initial
-value has been replaced in its entirety</span>
+<span class="caption">الشكل 4-5: التمثيل في الذاكرة بعد استبدال القيمة
+الأولية بالكامل</span>
 
-The original string thus immediately goes out of scope. Rust will run the `drop`
-function on it and its memory will be freed right away. When we print the value
-at the end, it will be `"ahoy, world!"`.
+وبالتالي تخرج السلسلة النصية الأصلية على الفور من النطاق. ستشغل Rust دالة `drop`
+عليها وسيتم تحرير ذاكرتها على الفور. عندما نطبع القيمة
+في النهاية، ستكون `"ahoy, world!"`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="ways-variables-and-data-interact-clone"></a>
 
-#### Variables and Data Interacting with Clone
+#### المتغيرات والبيانات تتفاعل مع الاستنساخ
 
-If we _do_ want to deeply copy the heap data of the `String`, not just the
-stack data, we can use a common method called `clone`. We’ll discuss method
-syntax in Chapter 5, but because methods are a common feature in many
-programming languages, you’ve probably seen them before.
+إذا أردنا _فعلاً_ نسخ بيانات الكومة لـ `String` بعمق، وليس فقط
+بيانات المكدس، يمكننا استخدام دالة شائعة تسمى `clone`. سنناقش بناء جملة الدوال
+في الفصل 5، لكن نظراً لأن الدوال ميزة شائعة في العديد من
+لغات البرمجة، فمن المحتمل أنك رأيتها من قبل.
 
-Here’s an example of the `clone` method in action:
+هنا مثال على دالة `clone` أثناء العمل:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
-This works just fine and explicitly produces the behavior shown in Figure 4-3,
-where the heap data _does_ get copied.
+هذا يعمل بشكل جيد ويُنتج صراحة السلوك الموضح في الشكل 4-3،
+حيث _يتم_ نسخ بيانات الكومة.
 
-When you see a call to `clone`, you know that some arbitrary code is being
-executed and that code may be expensive. It’s a visual indicator that something
-different is going on.
+عندما ترى استدعاءً لـ `clone`، تعرف أن بعض الكود التعسفي يتم
+تنفيذه وأن هذا الكود قد يكون مكلفاً. إنه مؤشر بصري على أن شيئاً
+مختلفاً يحدث.
 
-#### Stack-Only Data: Copy
+#### بيانات المكدس فقط: النسخ
 
-There’s another wrinkle we haven’t talked about yet. This code using
-integers—part of which was shown in Listing 4-2—works and is valid:
+هناك تجعيدة أخرى لم نتحدث عنها بعد. هذا الكود باستخدام
+الأعداد الصحيحة—جزء منه تم عرضه في القائمة 4-2—يعمل وصالح:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
-But this code seems to contradict what we just learned: We don’t have a call to
-`clone`, but `x` is still valid and wasn’t moved into `y`.
+لكن هذا الكود يبدو أنه يتعارض مع ما تعلمناه للتو: ليس لدينا استدعاء لـ
+`clone`، لكن `x` لا يزال صالحاً ولم يُنقل إلى `y`.
 
-The reason is that types such as integers that have a known size at compile
-time are stored entirely on the stack, so copies of the actual values are quick
-to make. That means there’s no reason we would want to prevent `x` from being
-valid after we create the variable `y`. In other words, there’s no difference
-between deep and shallow copying here, so calling `clone` wouldn’t do anything
-different from the usual shallow copying, and we can leave it out.
+السبب هو أن الأنواع مثل الأعداد الصحيحة التي لها حجم معروف في وقت التجميع
+مخزنة بالكامل على المكدس، لذا فإن نسخ القيم الفعلية سريعة
+لصنعها. هذا يعني أنه لا يوجد سبب نرغب في منع `x` من أن يكون
+صالحاً بعد إنشاء المتغير `y`. بعبارة أخرى، لا يوجد فرق
+بين النسخ العميق والنسخ الضحل هنا، لذا فإن استدعاء `clone` لن يفعل أي شيء
+مختلف عن النسخ الضحل المعتاد، ويمكننا تركه.
 
-Rust has a special annotation called the `Copy` trait that we can place on
-types that are stored on the stack, as integers are (we’ll talk more about
-traits in [Chapter 10][traits]<!-- ignore -->). If a type implements the `Copy`
-trait, variables that use it do not move, but rather are trivially copied,
-making them still valid after assignment to another variable.
+لدى Rust تعليق توضيحي خاص يسمى سمة `Copy` يمكننا وضعها على
+الأنواع المخزنة على المكدس، كما هو الحال مع الأعداد الصحيحة (سنتحدث أكثر عن
+السمات في [الفصل 10][traits]<!-- ignore -->). إذا نفذ نوع سمة `Copy`،
+فإن المتغيرات التي تستخدمه لا تنتقل، بل يتم نسخها بشكل تافه،
+مما يجعلها لا تزال صالحة بعد الإسناد إلى متغير آخر.
 
-Rust won’t let us annotate a type with `Copy` if the type, or any of its parts,
-has implemented the `Drop` trait. If the type needs something special to happen
-when the value goes out of scope and we add the `Copy` annotation to that type,
-we’ll get a compile-time error. To learn about how to add the `Copy` annotation
-to your type to implement the trait, see [“Derivable
-Traits”][derivable-traits]<!-- ignore --> in Appendix C.
+لن تسمح لنا Rust بتعليق نوع بـ `Copy` إذا كان النوع، أو أي من أجزائه،
+قد نفذ سمة `Drop`. إذا كان النوع يحتاج إلى شيء خاص يحدث
+عندما تخرج القيمة من النطاق ونضيف التعليق التوضيحي `Copy` إلى ذلك النوع،
+سنحصل على خطأ في وقت التجميع. لمعرفة كيفية إضافة التعليق التوضيحي `Copy`
+إلى نوعك لتنفيذ السمة، راجع [â€œالسمات القابلة للاشتقاقâ€][derivable-traits]<!-- ignore --> في الملحق C.
 
-So, what types implement the `Copy` trait? You can check the documentation for
-the given type to be sure, but as a general rule, any group of simple scalar
-values can implement `Copy`, and nothing that requires allocation or is some
-form of resource can implement `Copy`. Here are some of the types that
-implement `Copy`:
+إذن، ما هي الأنواع التي تنفذ سمة `Copy`؟ يمكنك التحقق من الوثائق لـ
+النوع المعطى للتأكد، لكن كقاعدة عامة، يمكن لأي مجموعة من القيم العددية البسيطة
+تنفيذ `Copy`, ولا شيء يتطلب تخصيصاً أو هو شكل
+من أشكال الموارد يمكن أن ينفذ `Copy`. هنا بعض الأنواع التي
+تنفذ `Copy`:
 
-- All the integer types, such as `u32`.
-- The Boolean type, `bool`, with values `true` and `false`.
-- All the floating-point types, such as `f64`.
-- The character type, `char`.
-- Tuples, if they only contain types that also implement `Copy`. For example,
-  `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
+- جميع أنواع الأعداد الصحيحة، مثل `u32`.
+- النوع المنطقي، `bool`، بالقيم `true` و `false`.
+- جميع أنواع الأعداد العشرية، مثل `f64`.
+- نوع الحرف، `char`.
+- المجموعات، إذا كانت تحتوي فقط على أنواع تنفذ أيضاً `Copy`. على سبيل المثال،
+  `(i32, i32)` ينفذ `Copy`، لكن `(i32, String)` لا.
 
-### Ownership and Functions
+### الملكية والدوال
 
-The mechanics of passing a value to a function are similar to those when
-assigning a value to a variable. Passing a variable to a function will move or
-copy, just as assignment does. Listing 4-3 has an example with some annotations
-showing where variables go into and out of scope.
+آليات تمرير قيمة إلى دالة مشابهة لتلك عند
+إسناد قيمة إلى متغير. سيؤدي تمرير متغير إلى دالة إلى النقل أو
+النسخ، تماماً كما يفعل الإسناد. القائمة 4-3 لديها مثال مع بعض التعليقات التوضيحية
+التي توضح أين تدخل المتغيرات وتخرج من النطاق.
 
-<Listing number="4-3" file-name="src/main.rs" caption="Functions with ownership and scope annotated">
+<Listing number="4-3" file-name="src/main.rs" caption="دوال مع الملكية والنطاق موضحة">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
@@ -470,18 +467,18 @@ showing where variables go into and out of scope.
 
 </Listing>
 
-If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
-compile-time error. These static checks protect us from mistakes. Try adding
-code to `main` that uses `s` and `x` to see where you can use them and where
-the ownership rules prevent you from doing so.
+إذا حاولنا استخدام `s` بعد الاستدعاء لـ `takes_ownership`، ستطرح Rust
+خطأ في وقت التجميع. هذه الفحوصات الثابتة تحمينا من الأخطاء. حاول إضافة
+كود إلى `main` يستخدم `s` و `x` لترى أين يمكنك استخدامها وأين
+قواعد الملكية تمنعك من القيام بذلك.
 
-### Return Values and Scope
+### القيم المُرجعة والنطاق
 
-Returning values can also transfer ownership. Listing 4-4 shows an example of a
-function that returns some value, with similar annotations as those in Listing
+إرجاع القيم يمكن أن ينقل الملكية أيضاً. القائمة 4-4 توضح مثالاً لـ
+دالة ترجع بعض القيمة، مع تعليقات توضيحية مماثلة لتلك في القائمة
 4-3.
 
-<Listing number="4-4" file-name="src/main.rs" caption="Transferring ownership of return values">
+<Listing number="4-4" file-name="src/main.rs" caption="نقل ملكية القيم المُرجعة">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
@@ -489,20 +486,20 @@ function that returns some value, with similar annotations as those in Listing
 
 </Listing>
 
-The ownership of a variable follows the same pattern every time: Assigning a
-value to another variable moves it. When a variable that includes data on the
-heap goes out of scope, the value will be cleaned up by `drop` unless ownership
-of the data has been moved to another variable.
+ملكية المتغير تتبع نفس النمط في كل مرة: إسناد
+قيمة إلى متغير آخر ينقلها. عندما يخرج متغير يتضمن بيانات على
+الكومة من النطاق، سيتم تنظيف القيمة بواسطة `drop` ما لم تكن ملكية
+البيانات قد نُقلت إلى متغير آخر.
 
-While this works, taking ownership and then returning ownership with every
-function is a bit tedious. What if we want to let a function use a value but
-not take ownership? It’s quite annoying that anything we pass in also needs to
-be passed back if we want to use it again, in addition to any data resulting
-from the body of the function that we might want to return as well.
+بينما هذا يعمل، فإن أخذ الملكية ثم إعادة الملكية مع كل
+دالة مملة قليلاً. ماذا لو أردنا السماح لدالة باستخدام قيمة لكن
+دون أخذ الملكية؟ إنه مزعج جداً أن أي شيء نمرره يحتاج أيضاً
+إلى أن يتم تمريره مرة أخرى إذا أردنا استخدامه مرة أخرى، بالإضافة إلى أي بيانات ناتجة
+من جسم الدالة قد نرغب في إعادتها أيضاً.
 
-Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
+تسمح لنا Rust بإرجاع قيم متعددة باستخدام مجموعة، كما هو موضح في القائمة 4-5.
 
-<Listing number="4-5" file-name="src/main.rs" caption="Returning ownership of parameters">
+<Listing number="4-5" file-name="src/main.rs" caption="إعادة ملكية المعاملات">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
@@ -510,9 +507,9 @@ Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
 </Listing>
 
-But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for using a value without
-transferring ownership: references.
+لكن هذا الكثير من الاحتفالات والكثير من العمل لمفهوم يجب أن يكون
+شائعاً. لحسن الحظ بالنسبة لنا، لدى Rust ميزة لاستخدام قيمة دون
+نقل الملكية: المراجع.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html
