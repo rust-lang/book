@@ -1,206 +1,195 @@
-## Appendix B: Operators and Symbols
+## الملحق ب: المعاملات والرموز
 
-This appendix contains a glossary of Rust’s syntax, including operators and
-other symbols that appear by themselves or in the context of paths, generics,
-trait bounds, macros, attributes, comments, tuples, and brackets.
+يحتوي هذا الملحق على مسرد لصيغة Rust، بما في ذلك المعاملات والرموز الأخرى التي تظهر بمفردها أو في سياق المسارات، الأنواع العامة، حدود الخصائص، الماكروهات، السمات، التعليقات، المجموعات، والأقواس.
 
-### Operators
+### المعاملات
 
-Table B-1 contains the operators in Rust, an example of how the operator would
-appear in context, a short explanation, and whether that operator is
-overloadable. If an operator is overloadable, the relevant trait to use to
-overload that operator is listed.
+يحتوي الجدول ب-1 على المعاملات في Rust، مثال على كيفية ظهور المعامل في السياق، شرح موجز، وما إذا كان يمكن تحميل ذلك المعامل زائدًا. إذا كان المعامل قابلاً للتحميل الزائد، فسيتم إدراج الخاصية ذات الصلة لاستخدامها لتحميل ذلك المعامل زائدًا.
 
-<span class="caption">Table B-1: Operators</span>
+<span class="caption">الجدول ب-1: المعاملات</span>
 
-| Operator                  | Example                                                 | Explanation                                                           | Overloadable?  |
+| المعامل                  | مثال                                                    | الشرح                                                              | قابل للتحميل الزائد؟ |
 | ------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- | -------------- |
-| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | Macro expansion                                                       |                |
-| `!`                       | `!expr`                                                 | Bitwise or logical complement                                         | `Not`          |
-| `!=`                      | `expr != expr`                                          | Nonequality comparison                                                | `PartialEq`    |
-| `%`                       | `expr % expr`                                           | Arithmetic remainder                                                  | `Rem`          |
-| `%=`                      | `var %= expr`                                           | Arithmetic remainder and assignment                                   | `RemAssign`    |
-| `&`                       | `&expr`, `&mut expr`                                    | Borrow                                                                |                |
-| `&`                       | `&type`, `&mut type`, `&'a type`, `&'a mut type`        | Borrowed pointer type                                                 |                |
-| `&`                       | `expr & expr`                                           | Bitwise AND                                                           | `BitAnd`       |
-| `&=`                      | `var &= expr`                                           | Bitwise AND and assignment                                            | `BitAndAssign` |
-| `&&`                      | `expr && expr`                                          | Short-circuiting logical AND                                          |                |
-| `*`                       | `expr * expr`                                           | Arithmetic multiplication                                             | `Mul`          |
-| `*=`                      | `var *= expr`                                           | Arithmetic multiplication and assignment                              | `MulAssign`    |
-| `*`                       | `*expr`                                                 | Dereference                                                           | `Deref`        |
-| `*`                       | `*const type`, `*mut type`                              | Raw pointer                                                           |                |
-| `+`                       | `trait + trait`, `'a + trait`                           | Compound type constraint                                              |                |
-| `+`                       | `expr + expr`                                           | Arithmetic addition                                                   | `Add`          |
-| `+=`                      | `var += expr`                                           | Arithmetic addition and assignment                                    | `AddAssign`    |
-| `,`                       | `expr, expr`                                            | Argument and element separator                                        |                |
-| `-`                       | `- expr`                                                | Arithmetic negation                                                   | `Neg`          |
-| `-`                       | `expr - expr`                                           | Arithmetic subtraction                                                | `Sub`          |
-| `-=`                      | `var -= expr`                                           | Arithmetic subtraction and assignment                                 | `SubAssign`    |
-| `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type                                      |                |
-| `.`                       | `expr.ident`                                            | Field access                                                          |                |
-| `.`                       | `expr.ident(expr, ...)`                                 | Method call                                                           |                |
-| `.`                       | `expr.0`, `expr.1`, and so on                           | Tuple indexing                                                        |                |
-| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | Right-exclusive range literal                                         | `PartialOrd`   |
-| `..=`                     | `..=expr`, `expr..=expr`                                | Right-inclusive range literal                                         | `PartialOrd`   |
-| `..`                      | `..expr`                                                | Struct literal update syntax                                          |                |
-| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`               | “And the rest” pattern binding                                        |                |
-| `...`                     | `expr...expr`                                           | (Deprecated, use `..=` instead) In a pattern: inclusive range pattern |                |
-| `/`                       | `expr / expr`                                           | Arithmetic division                                                   | `Div`          |
-| `/=`                      | `var /= expr`                                           | Arithmetic division and assignment                                    | `DivAssign`    |
-| `:`                       | `pat: type`, `ident: type`                              | Constraints                                                           |                |
-| `:`                       | `ident: expr`                                           | Struct field initializer                                              |                |
-| `:`                       | `'a: loop {...}`                                        | Loop label                                                            |                |
-| `;`                       | `expr;`                                                 | Statement and item terminator                                         |                |
-| `;`                       | `[...; len]`                                            | Part of fixed-size array syntax                                       |                |
-| `<<`                      | `expr << expr`                                          | Left-shift                                                            | `Shl`          |
-| `<<=`                     | `var <<= expr`                                          | Left-shift and assignment                                             | `ShlAssign`    |
-| `<`                       | `expr < expr`                                           | Less than comparison                                                  | `PartialOrd`   |
-| `<=`                      | `expr <= expr`                                          | Less than or equal to comparison                                      | `PartialOrd`   |
-| `=`                       | `var = expr`, `ident = type`                            | Assignment/equivalence                                                |                |
-| `==`                      | `expr == expr`                                          | Equality comparison                                                   | `PartialEq`    |
-| `=>`                      | `pat => expr`                                           | Part of match arm syntax                                              |                |
-| `>`                       | `expr > expr`                                           | Greater than comparison                                               | `PartialOrd`   |
-| `>=`                      | `expr >= expr`                                          | Greater than or equal to comparison                                   | `PartialOrd`   |
-| `>>`                      | `expr >> expr`                                          | Right-shift                                                           | `Shr`          |
-| `>>=`                     | `var >>= expr`                                          | Right-shift and assignment                                            | `ShrAssign`    |
-| `@`                       | `ident @ pat`                                           | Pattern binding                                                       |                |
-| `^`                       | `expr ^ expr`                                           | Bitwise exclusive OR                                                  | `BitXor`       |
-| `^=`                      | `var ^= expr`                                           | Bitwise exclusive OR and assignment                                   | `BitXorAssign` |
-| <code>&vert;</code>       | <code>pat &vert; pat</code>                             | Pattern alternatives                                                  |                |
-| <code>&vert;</code>       | <code>expr &vert; expr</code>                           | Bitwise OR                                                            | `BitOr`        |
-| <code>&vert;=</code>      | <code>var &vert;= expr</code>                           | Bitwise OR and assignment                                             | `BitOrAssign`  |
-| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                     | Short-circuiting logical OR                                           |                |
-| `?`                       | `expr?`                                                 | Error propagation                                                     |                |
+| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | توسيع الماكرو                                                       |                |
+| `!`                       | `!expr`                                                 | مكمل البت أو المكمل المنطقي                                         | `Not`          |
+| `!=`                      | `expr != expr`                                          | مقارنة عدم المساواة                                                | `PartialEq`    |
+| `%`                       | `expr % expr`                                           | باقي القسمة الحسابية                                                  | `Rem`          |
+| `%=`                      | `var %= expr`                                           | باقي القسمة الحسابية والإسناد                                   | `RemAssign`    |
+| `&`                       | `&expr`, `&mut expr`                                    | الاستعارة                                                                |                |
+| `&`                       | `&type`, `&mut type`, `&'a type`, `&'a mut type`        | نوع مؤشر مستعار                                                 |                |
+| `&`                       | `expr & expr`                                           | العملية البتية AND                                                           | `BitAnd`       |
+| `&=`                      | `var &= expr`                                           | العملية البتية AND والإسناد                                            | `BitAndAssign` |
+| `&&`                      | `expr && expr`                                          | العملية المنطقية AND مع دائرة قصيرة                                          |                |
+| `*`                       | `expr * expr`                                           | الضرب الحسابي                                             | `Mul`          |
+| `*=`                      | `var *= expr`                                           | الضرب الحسابي والإسناد                              | `MulAssign`    |
+| `*`                       | `*expr`                                                 | إلغاء المرجع                                                           | `Deref`        |
+| `*`                       | `*const type`, `*mut type`                              | مؤشر خام                                                           |                |
+| `+`                       | `trait + trait`, `'a + trait`                           | قيد النوع المركب                                              |                |
+| `+`                       | `expr + expr`                                           | الجمع الحسابي                                                   | `Add`          |
+| `+=`                      | `var += expr`                                           | الجمع الحسابي والإسناد                                    | `AddAssign`    |
+| `,`                       | `expr, expr`                                            | فاصل الوسيطات والعناصر                                        |                |
+| `-`                       | `- expr`                                                | النفي الحسابي                                                   | `Neg`          |
+| `-`                       | `expr - expr`                                           | الطرح الحسابي                                                | `Sub`          |
+| `-=`                      | `var -= expr`                                           | الطرح الحسابي والإسناد                                 | `SubAssign`    |
+| `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | نوع إرجاع الدالة والإغلاق                                      |                |
+| `.`                       | `expr.ident`                                            | الوصول إلى الحقل                                                          |                |
+| `.`                       | `expr.ident(expr, ...)`                                 | استدعاء الطريقة                                                           |                |
+| `.`                       | `expr.0`, `expr.1`, وما إلى ذلك                           | فهرسة المجموعة                                                        |                |
+| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | نطاق حرفي يستثني اليمين                                         | `PartialOrd`   |
+| `..=`                     | `..=expr`, `expr..=expr`                                | نطاق حرفي يشمل اليمين                                         | `PartialOrd`   |
+| `..`                      | `..expr`                                                | صيغة تحديث البنية الحرفية                                          |                |
+| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`               | ربط نمط "والباقي"                                        |                |
+| `...`                     | `expr...expr`                                           | (مهمل، استخدم `..=` بدلاً منه) في نمط: نمط نطاق شامل |                |
+| `/`                       | `expr / expr`                                           | القسمة الحسابية                                                   | `Div`          |
+| `/=`                      | `var /= expr`                                           | القسمة الحسابية والإسناد                                    | `DivAssign`    |
+| `:`                       | `pat: type`, `ident: type`                              | القيود                                                           |                |
+| `:`                       | `ident: expr`                                           | مُهيئ حقل البنية                                              |                |
+| `:`                       | `'a: loop {...}`                                        | تسمية الحلقة                                                            |                |
+| `;`                       | `expr;`                                                 | منهي العبارات والعناصر                                         |                |
+| `;`                       | `[...; len]`                                            | جزء من صيغة المصفوفة ذات الحجم الثابت                                       |                |
+| `<<`                      | `expr << expr`                                          | الإزاحة لليسار                                                            | `Shl`          |
+| `<<=`                     | `var <<= expr`                                          | الإزاحة لليسار والإسناد                                             | `ShlAssign`    |
+| `<`                       | `expr < expr`                                           | مقارنة أصغر من                                                  | `PartialOrd`   |
+| `<=`                      | `expr <= expr`                                          | مقارنة أصغر من أو يساوي                                      | `PartialOrd`   |
+| `=`                       | `var = expr`, `ident = type`                            | الإسناد/التكافؤ                                                |                |
+| `==`                      | `expr == expr`                                          | مقارنة المساواة                                                   | `PartialEq`    |
+| `=>`                      | `pat => expr`                                           | جزء من صيغة ذراع match                                              |                |
+| `>`                       | `expr > expr`                                           | مقارنة أكبر من                                               | `PartialOrd`   |
+| `>=`                      | `expr >= expr`                                          | مقارنة أكبر من أو يساوي                                   | `PartialOrd`   |
+| `>>`                      | `expr >> expr`                                          | الإزاحة لليمين                                                           | `Shr`          |
+| `>>=`                     | `var >>= expr`                                          | الإزاحة لليمين والإسناد                                            | `ShrAssign`    |
+| `@`                       | `ident @ pat`                                           | ربط النمط                                                       |                |
+| `^`                       | `expr ^ expr`                                           | العملية البتية OR الحصرية                                                  | `BitXor`       |
+| `^=`                      | `var ^= expr`                                           | العملية البتية OR الحصرية والإسناد                                   | `BitXorAssign` |
+| <code>&vert;</code>       | <code>pat &vert; pat</code>                             | بدائل الأنماط                                                  |                |
+| <code>&vert;</code>       | <code>expr &vert; expr</code>                           | العملية البتية OR                                                            | `BitOr`        |
+| <code>&vert;=</code>      | <code>var &vert;= expr</code>                           | العملية البتية OR والإسناد                                             | `BitOrAssign`  |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                     | العملية المنطقية OR مع دائرة قصيرة                                           |                |
+| `?`                       | `expr?`                                                 | نشر الخطأ                                                     |                |
 
-### Non-operator Symbols
+### الرموز غير المعاملات
 
-The following tables contain all symbols that don’t function as operators; that
-is, they don’t behave like a function or method call.
+تحتوي الجداول التالية على جميع الرموز التي لا تعمل كمعاملات؛ أي أنها لا تتصرف مثل استدعاء دالة أو طريقة.
 
-Table B-2 shows symbols that appear on their own and are valid in a variety of
-locations.
+يُظهر الجدول ب-2 الرموز التي تظهر بمفردها وهي صالحة في مجموعة متنوعة من المواقع.
 
-<span class="caption">Table B-2: Stand-alone Syntax</span>
+<span class="caption">الجدول ب-2: صيغة مستقلة</span>
 
-| Symbol                                                                 | Explanation                                                            |
+| الرمز                                                                 | الشرح                                                            |
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `'ident`                                                               | Named lifetime or loop label                                           |
-| Digits immediately followed by `u8`, `i32`, `f64`, `usize`, and so on  | Numeric literal of specific type                                       |
-| `"..."`                                                                | String literal                                                         |
-| `r"..."`, `r#"..."#`, `r##"..."##`, and so on                          | Raw string literal; escape characters not processed                    |
-| `b"..."`                                                               | Byte string literal; constructs an array of bytes instead of a string  |
-| `br"..."`, `br#"..."#`, `br##"..."##`, and so on                       | Raw byte string literal; combination of raw and byte string literal    |
-| `'...'`                                                                | Character literal                                                      |
-| `b'...'`                                                               | ASCII byte literal                                                     |
-| <code>&vert;...&vert; expr</code>                                      | Closure                                                                |
-| `!`                                                                    | Always-empty bottom type for diverging functions                       |
-| `_`                                                                    | “Ignored” pattern binding; also used to make integer literals readable |
+| `'ident`                                                               | عمر مسمى أو تسمية حلقة                                           |
+| أرقام متبوعة مباشرة بـ `u8`, `i32`, `f64`, `usize`, وما إلى ذلك  | قيمة رقمية حرفية من نوع محدد                                       |
+| `"..."`                                                                | سلسلة نصية حرفية                                                         |
+| `r"..."`, `r#"..."#`, `r##"..."##`, وما إلى ذلك                          | سلسلة نصية خام حرفية؛ لا تتم معالجة أحرف الهروب                    |
+| `b"..."`                                                               | سلسلة بايتات حرفية؛ ينشئ مصفوفة من البايتات بدلاً من سلسلة نصية  |
+| `br"..."`, `br#"..."#`, `br##"..."##`, وما إلى ذلك                       | سلسلة بايتات خام حرفية؛ مزيج من السلسلة الخام وسلسلة البايتات    |
+| `'...'`                                                                | حرف حرفي                                                      |
+| `b'...'`                                                               | بايت ASCII حرفي                                                     |
+| <code>&vert;...&vert; expr</code>                                      | إغلاق                                                                |
+| `!`                                                                    | نوع القاع الفارغ دائمًا للدوال المتباعدة                       |
+| `_`                                                                    | ربط نمط "متجاهل"؛ يُستخدم أيضًا لجعل القيم الرقمية الحرفية قابلة للقراءة |
 
-Table B-3 shows symbols that appear in the context of a path through the module
-hierarchy to an item.
+يُظهر الجدول ب-3 الرموز التي تظهر في سياق مسار عبر التسلسل الهرمي للوحدات إلى عنصر.
 
-<span class="caption">Table B-3: Path-Related Syntax</span>
+<span class="caption">الجدول ب-3: صيغة متعلقة بالمسار</span>
 
-| Symbol                                  | Explanation                                                                                                  |
+| الرمز                                  | الشرح                                                                                                  |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------|
-| `ident::ident`                          | Namespace path                                                                                               |
-| `::path`                                | Path relative to the crate root (that is, an explicitly absolute path)                                       |
-| `self::path`                            | Path relative to the current module (that is, an explicitly relative path)                                   |
-| `super::path`                           | Path relative to the parent of the current module                                                            |
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                   |
-| `<type>::...`                           | Associated item for a type that cannot be directly named (for example, `<&T>::...`, `<[T]>::...`, and so on) |
-| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                             |
-| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                       |
-| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                    |
+| `ident::ident`                          | مسار مساحة الأسماء                                                                                               |
+| `::path`                                | مسار نسبي إلى جذر الصندوق (أي مسار مطلق صريح)                                       |
+| `self::path`                            | مسار نسبي إلى الوحدة الحالية (أي مسار نسبي صريح)                                   |
+| `super::path`                           | مسار نسبي إلى أب الوحدة الحالية                                                            |
+| `type::ident`, `<type as trait>::ident` | ثوابت مرتبطة، دوال، وأنواع                                                                   |
+| `<type>::...`                           | عنصر مرتبط لنوع لا يمكن تسميته مباشرة (على سبيل المثال، `<&T>::...`, `<[T]>::...`, وما إلى ذلك) |
+| `trait::method(...)`                    | توضيح استدعاء طريقة بتسمية الخاصية التي تعرّفها                                             |
+| `type::method(...)`                     | توضيح استدعاء طريقة بتسمية النوع الذي تُعرَّف له                                       |
+| `<type as trait>::method(...)`          | توضيح استدعاء طريقة بتسمية الخاصية والنوع                                                    |
 
-Table B-4 shows symbols that appear in the context of using generic type
-parameters.
+يُظهر الجدول ب-4 الرموز التي تظهر في سياق استخدام معاملات الأنواع العامة.
 
-<span class="caption">Table B-4: Generics</span>
+<span class="caption">الجدول ب-4: الأنواع العامة</span>
 
-| Symbol                         | Explanation                                                                                                                                         |
+| الرمز                         | الشرح                                                                                                                                         |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `path<...>`                    | Specifies parameters to a generic type in a type (for example, `Vec<u8>`)                                                                           |
-| `path::<...>`, `method::<...>` | Specifies parameters to a generic type, function, or method in an expression; often referred to as _turbofish_ (for example, `"42".parse::<i32>()`) |
-| `fn ident<...> ...`            | Define generic function                                                                                                                             |
-| `struct ident<...> ...`        | Define generic structure                                                                                                                            |
-| `enum ident<...> ...`          | Define generic enumeration                                                                                                                          |
-| `impl<...> ...`                | Define generic implementation                                                                                                                       |
-| `for<...> type`                | Higher ranked lifetime bounds                                                                                                                       |
-| `type<ident=type>`             | A generic type where one or more associated types have specific assignments (for example, `Iterator<Item=T>`)                                       |
+| `path<...>`                    | تحديد معاملات لنوع عام في نوع (على سبيل المثال، `Vec<u8>`)                                                                           |
+| `path::<...>`, `method::<...>` | تحديد معاملات لنوع عام، دالة، أو طريقة في تعبير؛ يُشار إليها غالبًا باسم _turbofish_ (على سبيل المثال، `"42".parse::<i32>()`) |
+| `fn ident<...> ...`            | تعريف دالة عامة                                                                                                                             |
+| `struct ident<...> ...`        | تعريف بنية عامة                                                                                                                            |
+| `enum ident<...> ...`          | تعريف تعداد عام                                                                                                                          |
+| `impl<...> ...`                | تعريف تطبيق عام                                                                                                                       |
+| `for<...> type`                | حدود أعمار مرتبة أعلى                                                                                                                       |
+| `type<ident=type>`             | نوع عام حيث واحد أو أكثر من الأنواع المرتبطة لها تعيينات محددة (على سبيل المثال، `Iterator<Item=T>`)                                       |
 
-Table B-5 shows symbols that appear in the context of constraining generic type
-parameters with trait bounds.
+يُظهر الجدول ب-5 الرموز التي تظهر في سياق تقييد معاملات الأنواع العامة بحدود الخصائص.
 
-<span class="caption">Table B-5: Trait Bound Constraints</span>
+<span class="caption">الجدول ب-5: قيود حدود الخصائص</span>
 
-| Symbol                        | Explanation                                                                                                                                |
+| الرمز                        | الشرح                                                                                                                                |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `T: U`                        | Generic parameter `T` constrained to types that implement `U`                                                                              |
-| `T: 'a`                       | Generic type `T` must outlive lifetime `'a` (meaning the type cannot transitively contain any references with lifetimes shorter than `'a`) |
-| `T: 'static`                  | Generic type `T` contains no borrowed references other than `'static` ones                                                                 |
-| `'b: 'a`                      | Generic lifetime `'b` must outlive lifetime `'a`                                                                                           |
-| `T: ?Sized`                   | Allow generic type parameter to be a dynamically sized type                                                                                |
-| `'a + trait`, `trait + trait` | Compound type constraint                                                                                                                   |
+| `T: U`                        | معامل عام `T` مقيد بالأنواع التي تنفذ `U`                                                                              |
+| `T: 'a`                       | النوع العام `T` يجب أن يعيش أطول من العمر `'a` (بمعنى أن النوع لا يمكن أن يحتوي بشكل انتقالي على أي مراجع بأعمار أقصر من `'a`) |
+| `T: 'static`                  | النوع العام `T` لا يحتوي على أي مراجع مستعارة بخلاف `'static`                                                                 |
+| `'b: 'a`                      | العمر العام `'b` يجب أن يعيش أطول من العمر `'a`                                                                                           |
+| `T: ?Sized`                   | السماح لمعامل النوع العام بأن يكون نوعًا بحجم ديناميكي                                                                                |
+| `'a + trait`, `trait + trait` | قيد نوع مركب                                                                                                                   |
 
-Table B-6 shows symbols that appear in the context of calling or defining
-macros and specifying attributes on an item.
+يُظهر الجدول ب-6 الرموز التي تظهر في سياق استدعاء أو تعريف الماكروهات وتحديد السمات على عنصر.
 
-<span class="caption">Table B-6: Macros and Attributes</span>
+<span class="caption">الجدول ب-6: الماكروهات والسمات</span>
 
-| Symbol                                      | Explanation        |
+| الرمز                                      | الشرح        |
 | ------------------------------------------- | ------------------ |
-| `#[meta]`                                   | Outer attribute    |
-| `#![meta]`                                  | Inner attribute    |
-| `$ident`                                    | Macro substitution |
-| `$ident:kind`                               | Macro metavariable |
-| `$(...)...`                                 | Macro repetition   |
-| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation   |
+| `#[meta]`                                   | سمة خارجية    |
+| `#![meta]`                                  | سمة داخلية    |
+| `$ident`                                    | استبدال الماكرو |
+| `$ident:kind`                               | متغير ميتا للماكرو |
+| `$(...)...`                                 | تكرار الماكرو   |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | استدعاء الماكرو   |
 
-Table B-7 shows symbols that create comments.
+يُظهر الجدول ب-7 الرموز التي تنشئ التعليقات.
 
-<span class="caption">Table B-7: Comments</span>
+<span class="caption">الجدول ب-7: التعليقات</span>
 
-| Symbol     | Explanation             |
+| الرمز     | الشرح             |
 | ---------- | ----------------------- |
-| `//`       | Line comment            |
-| `//!`      | Inner line doc comment  |
-| `///`      | Outer line doc comment  |
-| `/*...*/`  | Block comment           |
-| `/*!...*/` | Inner block doc comment |
-| `/**...*/` | Outer block doc comment |
+| `//`       | تعليق سطر            |
+| `//!`      | تعليق توثيق سطر داخلي  |
+| `///`      | تعليق توثيق سطر خارجي  |
+| `/*...*/`  | تعليق كتلة           |
+| `/*!...*/` | تعليق توثيق كتلة داخلي |
+| `/**...*/` | تعليق توثيق كتلة خارجي |
 
-Table B-8 shows the contexts in which parentheses are used.
+يُظهر الجدول ب-8 السياقات التي تُستخدم فيها الأقواس.
 
-<span class="caption">Table B-8: Parentheses</span>
+<span class="caption">الجدول ب-8: الأقواس</span>
 
-| Symbol                   | Explanation                                                                                 |
+| الرمز                   | الشرح                                                                                 |
 | ------------------------ | ------------------------------------------------------------------------------------------- |
-| `()`                     | Empty tuple (aka unit), both literal and type                                               |
-| `(expr)`                 | Parenthesized expression                                                                    |
-| `(expr,)`                | Single-element tuple expression                                                             |
-| `(type,)`                | Single-element tuple type                                                                   |
-| `(expr, ...)`            | Tuple expression                                                                            |
-| `(type, ...)`            | Tuple type                                                                                  |
-| `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
+| `()`                     | مجموعة فارغة (تُعرف أيضًا بالوحدة)، سواء كانت حرفية أو نوعًا                                               |
+| `(expr)`                 | تعبير بين قوسين                                                                    |
+| `(expr,)`                | تعبير مجموعة أحادي العنصر                                                             |
+| `(type,)`                | نوع مجموعة أحادي العنصر                                                                   |
+| `(expr, ...)`            | تعبير مجموعة                                                                            |
+| `(type, ...)`            | نوع مجموعة                                                                                  |
+| `expr(expr, ...)`        | تعبير استدعاء دالة؛ يُستخدم أيضًا لتهيئة `struct`s من نوع المجموعة ومتغيرات `enum` من نوع المجموعة |
 
-Table B-9 shows the contexts in which curly brackets are used.
+يُظهر الجدول ب-9 السياقات التي تُستخدم فيها الأقواس المعقوفة.
 
-<span class="caption">Table B-9: Curly Brackets</span>
+<span class="caption">الجدول ب-9: الأقواس المعقوفة</span>
 
-| Context      | Explanation      |
+| السياق      | الشرح      |
 | ------------ | ---------------- |
-| `{...}`      | Block expression |
-| `Type {...}` | Struct literal   |
+| `{...}`      | تعبير كتلة |
+| `Type {...}` | بنية حرفية   |
 
-Table B-10 shows the contexts in which square brackets are used.
+يُظهر الجدول ب-10 السياقات التي تُستخدم فيها الأقواس المربعة.
 
-<span class="caption">Table B-10: Square Brackets</span>
+<span class="caption">الجدول ب-10: الأقواس المربعة</span>
 
-| Context                                            | Explanation                                                                                                                   |
+| السياق                                            | الشرح                                                                                                                   |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `[...]`                                            | Array literal                                                                                                                 |
-| `[expr; len]`                                      | Array literal containing `len` copies of `expr`                                                                               |
-| `[type; len]`                                      | Array type containing `len` instances of `type`                                                                               |
-| `expr[expr]`                                       | Collection indexing; overloadable (`Index`, `IndexMut`)                                                                       |
-| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |
+| `[...]`                                            | مصفوفة حرفية                                                                                                                 |
+| `[expr; len]`                                      | مصفوفة حرفية تحتوي على `len` نسخة من `expr`                                                                               |
+| `[type; len]`                                      | نوع مصفوفة يحتوي على `len` مثيل من `type`                                                                               |
+| `expr[expr]`                                       | فهرسة مجموعة؛ قابلة للتحميل الزائد (`Index`, `IndexMut`)                                                                       |
+| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | فهرسة مجموعة تتظاهر بأنها تقطيع مجموعة، باستخدام `Range`, `RangeFrom`, `RangeTo`, أو `RangeFull` كـ "فهرس" |

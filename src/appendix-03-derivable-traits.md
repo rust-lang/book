@@ -1,183 +1,88 @@
-## Appendix C: Derivable Traits
+## الملحق ج: الخصائص القابلة للاشتقاق
 
-In various places in the book, we’ve discussed the `derive` attribute, which
-you can apply to a struct or enum definition. The `derive` attribute generates
-code that will implement a trait with its own default implementation on the
-type you’ve annotated with the `derive` syntax.
+في أماكن مختلفة في الكتاب، ناقشنا سمة `derive`، التي يمكنك تطبيقها على تعريف بنية أو تعداد. تولد سمة `derive` كودًا سينفذ خاصية مع تطبيقها الافتراضي الخاص على النوع الذي قمت بتعليقه بصيغة `derive`.
 
-In this appendix, we provide a reference of all the traits in the standard
-library that you can use with `derive`. Each section covers:
+في هذا الملحق، نقدم مرجعًا لجميع الخصائص في المكتبة القياسية التي يمكنك استخدامها مع `derive`. يغطي كل قسم:
 
-- What operators and methods deriving this trait will enable
-- What the implementation of the trait provided by `derive` does
-- What implementing the trait signifies about the type
-- The conditions in which you’re allowed or not allowed to implement the trait
-- Examples of operations that require the trait
+- ما هي المعاملات والطرق التي سيمكّنها اشتقاق هذه الخاصية
+- ما الذي يفعله تطبيق الخاصية الذي توفره `derive`
+- ما الذي يشير إليه تطبيق الخاصية حول النوع
+- الشروط التي يُسمح فيها أو لا يُسمح بتطبيق الخاصية
+- أمثلة على العمليات التي تتطلب الخاصية
 
-If you want different behavior from that provided by the `derive` attribute,
-consult the [standard library documentation](../std/index.html)<!-- ignore -->
-for each trait for details on how to manually implement them.
+إذا كنت تريد سلوكًا مختلفًا عن ذلك الذي توفره سمة `derive`، استشر [وثائق المكتبة القياسية](../std/index.html)<!-- ignore --> لكل خاصية للحصول على تفاصيل حول كيفية تطبيقها يدويًا.
 
-The traits listed here are the only ones defined by the standard library that
-can be implemented on your types using `derive`. Other traits defined in the
-standard library don’t have sensible default behavior, so it’s up to you to
-implement them in the way that makes sense for what you’re trying to accomplish.
+الخصائص المدرجة هنا هي الوحيدة المعرّفة من قبل المكتبة القياسية التي يمكن تطبيقها على أنواعك باستخدام `derive`. الخصائص الأخرى المعرّفة في المكتبة القياسية ليس لها سلوك افتراضي معقول، لذا الأمر متروك لك لتطبيقها بالطريقة المناسبة لما تحاول تحقيقه.
 
-An example of a trait that can’t be derived is `Display`, which handles
-formatting for end users. You should always consider the appropriate way to
-display a type to an end user. What parts of the type should an end user be
-allowed to see? What parts would they find relevant? What format of the data
-would be most relevant to them? The Rust compiler doesn’t have this insight, so
-it can’t provide appropriate default behavior for you.
+مثال على خاصية لا يمكن اشتقاقها هو `Display`، التي تتعامل مع التنسيق للمستخدمين النهائيين. يجب عليك دائمًا التفكير في الطريقة المناسبة لعرض نوع للمستخدم النهائي. ما هي أجزاء النوع التي يجب السماح للمستخدم النهائي برؤيتها؟ ما هي الأجزاء التي سيجدونها ذات صلة؟ ما هو تنسيق البيانات الأكثر صلة بهم؟ لا يملك مُترجم Rust هذه الرؤية، لذا لا يمكنه توفير سلوك افتراضي مناسب لك.
 
-The list of derivable traits provided in this appendix is not comprehensive:
-Libraries can implement `derive` for their own traits, making the list of
-traits you can use `derive` with truly open ended. Implementing `derive`
-involves using a procedural macro, which is covered in the [“Custom `derive`
-Macros”][custom-derive-macros]<!-- ignore --> section in Chapter 20.
+قائمة الخصائص القابلة للاشتقاق المقدمة في هذا الملحق ليست شاملة: يمكن للمكتبات تطبيق `derive` لخصائصها الخاصة، مما يجعل قائمة الخصائص التي يمكنك استخدام `derive` معها مفتوحة حقًا. يتضمن تطبيق `derive` استخدام ماكرو إجرائي، والذي يتم تغطيته في قسم ["ماكروهات `derive` المخصصة"][custom-derive-macros]<!-- ignore --> في الفصل 20.
 
-### `Debug` for Programmer Output
+### `Debug` لإخراج المبرمج
 
-The `Debug` trait enables debug formatting in format strings, which you
-indicate by adding `:?` within `{}` placeholders.
+تمكّن خاصية `Debug` تنسيق التصحيح في سلاسل التنسيق، والتي تشير إليها بإضافة `:?` داخل عناصر نائبة `{}`.
 
-The `Debug` trait allows you to print instances of a type for debugging
-purposes, so you and other programmers using your type can inspect an instance
-at a particular point in a program’s execution.
+تسمح لك خاصية `Debug` بطباعة مثيلات نوع لأغراض التصحيح، بحيث يمكنك أنت والمبرمجون الآخرون الذين يستخدمون نوعك فحص مثيل في نقطة معينة في تنفيذ البرنامج.
 
-The `Debug` trait is required, for example, in the use of the `assert_eq!`
-macro. This macro prints the values of instances given as arguments if the
-equality assertion fails so that programmers can see why the two instances
-weren’t equal.
+خاصية `Debug` مطلوبة، على سبيل المثال، في استخدام ماكرو `assert_eq!`. يطبع هذا الماكرو قيم المثيلات المعطاة كوسيطات إذا فشلت مقارنة المساواة بحيث يمكن للمبرمجين رؤية سبب عدم تساوي المثيلين.
 
-### `PartialEq` and `Eq` for Equality Comparisons
+### `PartialEq` و `Eq` لمقارنات المساواة
 
-The `PartialEq` trait allows you to compare instances of a type to check for
-equality and enables use of the `==` and `!=` operators.
+تسمح لك خاصية `PartialEq` بمقارنة مثيلات نوع للتحقق من المساواة وتمكّن استخدام معاملات `==` و `!=`.
 
-Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
-structs, two instances are equal only if _all_ fields are equal, and the
-instances are not equal if _any_ fields are not equal. When derived on enums,
-each variant is equal to itself and not equal to the other variants.
+يطبّق اشتقاق `PartialEq` طريقة `eq`. عند اشتقاق `PartialEq` على البنى، يتساوى مثيلان فقط إذا كانت _جميع_ الحقول متساوية، ولا تتساوى المثيلات إذا كانت _أي_ حقول غير متساوية. عند الاشتقاق على التعدادات، كل متغير يساوي نفسه ولا يساوي المتغيرات الأخرى.
 
-The `PartialEq` trait is required, for example, with the use of the
-`assert_eq!` macro, which needs to be able to compare two instances of a type
-for equality.
+خاصية `PartialEq` مطلوبة، على سبيل المثال، مع استخدام ماكرو `assert_eq!`، والذي يحتاج إلى أن يكون قادرًا على مقارنة مثيلين من نوع للمساواة.
 
-The `Eq` trait has no methods. Its purpose is to signal that for every value of
-the annotated type, the value is equal to itself. The `Eq` trait can only be
-applied to types that also implement `PartialEq`, although not all types that
-implement `PartialEq` can implement `Eq`. One example of this is floating-point
-number types: The implementation of floating-point numbers states that two
-instances of the not-a-number (`NaN`) value are not equal to each other.
+خاصية `Eq` ليس لها طرق. الغرض منها هو الإشارة إلى أن كل قيمة من النوع المعلّق تساوي نفسها. يمكن تطبيق خاصية `Eq` فقط على الأنواع التي تطبّق أيضًا `PartialEq`، على الرغم من أنه ليست كل الأنواع التي تطبّق `PartialEq` يمكنها تطبيق `Eq`. مثال على ذلك هو أنواع الأعداد العشرية الكسرية: ينص تطبيق الأعداد العشرية الكسرية على أن مثيلين من قيمة ليست-عددًا (`NaN`) غير متساويين مع بعضهما البعض.
 
-An example of when `Eq` is required is for keys in a `HashMap<K, V>` so that
-the `HashMap<K, V>` can tell whether two keys are the same.
+مثال على متى تكون `Eq` مطلوبة هو للمفاتيح في `HashMap<K, V>` بحيث يمكن لـ `HashMap<K, V>` معرفة ما إذا كان مفتاحان متماثلين.
 
-### `PartialOrd` and `Ord` for Ordering Comparisons
+### `PartialOrd` و `Ord` لمقارنات الترتيب
 
-The `PartialOrd` trait allows you to compare instances of a type for sorting
-purposes. A type that implements `PartialOrd` can be used with the `<`, `>`,
-`<=`, and `>=` operators. You can only apply the `PartialOrd` trait to types
-that also implement `PartialEq`.
+تسمح لك خاصية `PartialOrd` بمقارنة مثيلات نوع لأغراض الترتيب. يمكن استخدام نوع ينفذ `PartialOrd` مع معاملات `<`, `>`, `<=`, و `>=`. يمكنك تطبيق خاصية `PartialOrd` فقط على الأنواع التي تطبّق أيضًا `PartialEq`.
 
-Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
-`Option<Ordering>` that will be `None` when the values given don’t produce an
-ordering. An example of a value that doesn’t produce an ordering, even though
-most values of that type can be compared, is the `NaN` floating point value.
-Calling `partial_cmp` with any floating-point number and the `NaN`
-floating-point value will return `None`.
+يطبّق اشتقاق `PartialOrd` طريقة `partial_cmp`، والتي تُرجع `Option<Ordering>` والتي ستكون `None` عندما لا تنتج القيم المعطاة ترتيبًا. مثال على قيمة لا تنتج ترتيبًا، على الرغم من أن معظم قيم ذلك النوع يمكن مقارنتها، هو قيمة الفاصلة العشرية `NaN`. استدعاء `partial_cmp` مع أي عدد فاصلة عشرية وقيمة الفاصلة العشرية `NaN` سيُرجع `None`.
 
-When derived on structs, `PartialOrd` compares two instances by comparing the
-value in each field in the order in which the fields appear in the struct
-definition. When derived on enums, variants of the enum declared earlier in the
-enum definition are considered less than the variants listed later.
+عند الاشتقاق على البنى، تقارن `PartialOrd` مثيلين بمقارنة القيمة في كل حقل بالترتيب الذي تظهر به الحقول في تعريف البنية. عند الاشتقاق على التعدادات، تُعتبر متغيرات التعداد المعلنة في وقت مبكر في تعريف التعداد أقل من المتغيرات المدرجة لاحقًا.
 
-The `PartialOrd` trait is required, for example, for the `gen_range` method
-from the `rand` crate that generates a random value in the range specified by a
-range expression.
+خاصية `PartialOrd` مطلوبة، على سبيل المثال، لطريقة `gen_range` من صندوق `rand` التي تولد قيمة عشوائية في النطاق المحدد بواسطة تعبير نطاق.
 
-The `Ord` trait allows you to know that for any two values of the annotated
-type, a valid ordering will exist. The `Ord` trait implements the `cmp` method,
-which returns an `Ordering` rather than an `Option<Ordering>` because a valid
-ordering will always be possible. You can only apply the `Ord` trait to types
-that also implement `PartialOrd` and `Eq` (and `Eq` requires `PartialEq`). When
-derived on structs and enums, `cmp` behaves the same way as the derived
-implementation for `partial_cmp` does with `PartialOrd`.
+تسمح لك خاصية `Ord` بمعرفة أنه لأي قيمتين من النوع المعلّق، سيوجد ترتيب صالح. تطبّق خاصية `Ord` طريقة `cmp`، والتي تُرجع `Ordering` بدلاً من `Option<Ordering>` لأن ترتيبًا صالحًا سيكون دائمًا ممكنًا. يمكنك تطبيق خاصية `Ord` فقط على الأنواع التي تطبّق أيضًا `PartialOrd` و `Eq` (و `Eq` تتطلب `PartialEq`). عند الاشتقاق على البنى والتعدادات، يتصرف `cmp` بنفس الطريقة التي يتصرف بها التطبيق المشتق لـ `partial_cmp` مع `PartialOrd`.
 
-An example of when `Ord` is required is when storing values in a `BTreeSet<T>`,
-a data structure that stores data based on the sort order of the values.
+مثال على متى تكون `Ord` مطلوبة هو عند تخزين القيم في `BTreeSet<T>`، وهي بنية بيانات تخزن البيانات بناءً على ترتيب الفرز للقيم.
 
-### `Clone` and `Copy` for Duplicating Values
+### `Clone` و `Copy` لمضاعفة القيم
 
-The `Clone` trait allows you to explicitly create a deep copy of a value, and
-the duplication process might involve running arbitrary code and copying heap
-data. See the [“Variables and Data Interacting with
-Clone”][variables-and-data-interacting-with-clone]<!-- ignore --> section in
-Chapter 4 for more information on `Clone`.
+تسمح لك خاصية `Clone` بإنشاء نسخة عميقة صريحة من قيمة، وقد تتضمن عملية المضاعفة تشغيل كود عشوائي ونسخ بيانات الكومة. راجع قسم ["المتغيرات والبيانات التي تتفاعل مع Clone"][variables-and-data-interacting-with-clone]<!-- ignore --> في الفصل 4 لمزيد من المعلومات حول `Clone`.
 
-Deriving `Clone` implements the `clone` method, which when implemented for the
-whole type, calls `clone` on each of the parts of the type. This means all the
-fields or values in the type must also implement `Clone` to derive `Clone`.
+يطبّق اشتقاق `Clone` طريقة `clone`، والتي عند تطبيقها على النوع بالكامل، تستدعي `clone` على كل جزء من أجزاء النوع. هذا يعني أن جميع الحقول أو القيم في النوع يجب أن تطبّق أيضًا `Clone` لاشتقاق `Clone`.
 
-An example of when `Clone` is required is when calling the `to_vec` method on a
-slice. The slice doesn’t own the type instances it contains, but the vector
-returned from `to_vec` will need to own its instances, so `to_vec` calls
-`clone` on each item. Thus, the type stored in the slice must implement `Clone`.
+مثال على متى تكون `Clone` مطلوبة هو عند استدعاء طريقة `to_vec` على شريحة. لا تملك الشريحة مثيلات النوع التي تحتويها، ولكن المتجه المُرجع من `to_vec` سيحتاج إلى امتلاك مثيلاته، لذا يستدعي `to_vec` `clone` على كل عنصر. وبالتالي، يجب أن ينفذ النوع المخزن في الشريحة `Clone`.
 
-The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See the [“Stack-Only Data:
-Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4 for more
-information on `Copy`.
+تسمح لك خاصية `Copy` بمضاعفة قيمة عن طريق نسخ البتات المخزنة على المكدس فقط؛ لا حاجة لأي كود عشوائي. راجع قسم ["البيانات على المكدس فقط: Copy"][stack-only-data-copy]<!-- ignore --> في الفصل 4 لمزيد من المعلومات حول `Copy`.
 
-The `Copy` trait doesn’t define any methods to prevent programmers from
-overloading those methods and violating the assumption that no arbitrary code
-is being run. That way, all programmers can assume that copying a value will be
-very fast.
+لا تحدد خاصية `Copy` أي طرق لمنع المبرمجين من تحميل تلك الطرق زائدًا وانتهاك الافتراض بأنه لا يتم تشغيل أي كود عشوائي. بهذه الطريقة، يمكن لجميع المبرمجين افتراض أن نسخ قيمة ستكون سريعة جدًا.
 
-You can derive `Copy` on any type whose parts all implement `Copy`. A type that
-implements `Copy` must also implement `Clone` because a type that implements
-`Copy` has a trivial implementation of `Clone` that performs the same task as
-`Copy`.
+يمكنك اشتقاق `Copy` على أي نوع جميع أجزائه تطبّق `Copy`. يجب أن ينفذ النوع الذي يطبّق `Copy` أيضًا `Clone` لأن نوعًا ينفذ `Copy` لديه تطبيق بسيط لـ `Clone` يؤدي نفس المهمة مثل `Copy`.
 
-The `Copy` trait is rarely required; types that implement `Copy` have
-optimizations available, meaning you don’t have to call `clone`, which makes
-the code more concise.
+نادرًا ما تكون خاصية `Copy` مطلوبة؛ الأنواع التي تطبّق `Copy` لديها تحسينات متاحة، مما يعني أنك لست مضطرًا لاستدعاء `clone`، مما يجعل الكود أكثر إيجازًا.
 
-Everything possible with `Copy` you can also accomplish with `Clone`, but the
-code might be slower or have to use `clone` in places.
+كل ما هو ممكن مع `Copy` يمكنك أيضًا تحقيقه مع `Clone`، ولكن الكود قد يكون أبطأ أو يضطر لاستخدام `clone` في الأماكن.
 
-### `Hash` for Mapping a Value to a Value of Fixed Size
+### `Hash` لتعيين قيمة إلى قيمة بحجم ثابت
 
-The `Hash` trait allows you to take an instance of a type of arbitrary size and
-map that instance to a value of fixed size using a hash function. Deriving
-`Hash` implements the `hash` method. The derived implementation of the `hash`
-method combines the result of calling `hash` on each of the parts of the type,
-meaning all fields or values must also implement `Hash` to derive `Hash`.
+تسمح لك خاصية `Hash` بأخذ مثيل من نوع بحجم عشوائي وتعيين ذلك المثيل إلى قيمة بحجم ثابت باستخدام دالة تجزئة. يطبّق اشتقاق `Hash` طريقة `hash`. يجمع التطبيق المشتق لطريقة `hash` نتيجة استدعاء `hash` على كل جزء من أجزاء النوع، مما يعني أن جميع الحقول أو القيم يجب أن تطبّق أيضًا `Hash` لاشتقاق `Hash`.
 
-An example of when `Hash` is required is in storing keys in a `HashMap<K, V>`
-to store data efficiently.
+مثال على متى تكون `Hash` مطلوبة هو في تخزين المفاتيح في `HashMap<K, V>` لتخزين البيانات بكفاءة.
 
-### `Default` for Default Values
+### `Default` للقيم الافتراضية
 
-The `Default` trait allows you to create a default value for a type. Deriving
-`Default` implements the `default` function. The derived implementation of the
-`default` function calls the `default` function on each part of the type,
-meaning all fields or values in the type must also implement `Default` to
-derive `Default`.
+تسمح لك خاصية `Default` بإنشاء قيمة افتراضية لنوع. يطبّق اشتقاق `Default` دالة `default`. يستدعي التطبيق المشتق لدالة `default` دالة `default` على كل جزء من النوع، مما يعني أن جميع الحقول أو القيم في النوع يجب أن تطبّق أيضًا `Default` لاشتقاق `Default`.
 
-The `Default::default` function is commonly used in combination with the struct
-update syntax discussed in the [“Creating Instances from Other Instances with
-Struct Update
-Syntax”][creating-instances-from-other-instances-with-struct-update-syntax]<!--
-ignore --> section in Chapter 5. You can customize a few fields of a struct and
-then set and use a default value for the rest of the fields by using
-`..Default::default()`.
+تُستخدم دالة `Default::default` بشكل شائع مع صيغة تحديث البنية التي تمت مناقشتها في قسم ["إنشاء مثيلات من مثيلات أخرى بصيغة تحديث البنية"][creating-instances-from-other-instances-with-struct-update-syntax]<!-- ignore --> في الفصل 5. يمكنك تخصيص بعض حقول بنية ثم تعيين واستخدام قيمة افتراضية لبقية الحقول باستخدام `..Default::default()`.
 
-The `Default` trait is required when you use the method `unwrap_or_default` on
-`Option<T>` instances, for example. If the `Option<T>` is `None`, the method
-`unwrap_or_default` will return the result of `Default::default` for the type
-`T` stored in the `Option<T>`.
+خاصية `Default` مطلوبة عند استخدام طريقة `unwrap_or_default` على مثيلات `Option<T>`، على سبيل المثال. إذا كانت `Option<T>` هي `None`، فستُرجع طريقة `unwrap_or_default` نتيجة `Default::default` للنوع `T` المخزن في `Option<T>`.
 
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy

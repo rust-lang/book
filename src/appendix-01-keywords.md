@@ -1,70 +1,58 @@
-## Appendix A: Keywords
+## الملحق أ: الكلمات المحجوزة
 
-The following lists contain keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers, as we discuss in the [“Raw
-Identifiers”][raw-identifiers]<!-- ignore --> section). _Identifiers_ are names
-of functions, variables, parameters, struct fields, modules, crates, constants,
-macros, static values, attributes, types, traits, or lifetimes.
+تحتوي القوائم التالية على كلمات محجوزة لاستخدامها الحالي أو المستقبلي من قبل لغة Rust. لذلك، لا يمكن استخدامها كمعرّفات (باستثناء المعرّفات الخام، كما نناقش في قسم ["المعرّفات الخام"][raw-identifiers]<!-- ignore -->). _المعرّفات_ هي أسماء الدوال، المتغيرات، المعاملات، حقول البنى، الوحدات، الصناديق، الثوابت، الماكروهات، القيم الثابتة، السمات، الأنواع، الخصائص، أو الأعمار.
 
 [raw-identifiers]: #raw-identifiers
 
-### Keywords Currently in Use
+### الكلمات المحجوزة المستخدمة حاليًا
 
-The following is a list of keywords currently in use, with their functionality
-described.
+فيما يلي قائمة بالكلمات المحجوزة المستخدمة حاليًا، مع وصف وظائفها.
 
-- **`as`**: Perform primitive casting, disambiguate the specific trait
-  containing an item, or rename items in `use` statements.
-- **`async`**: Return a `Future` instead of blocking the current thread.
-- **`await`**: Suspend execution until the result of a `Future` is ready.
-- **`break`**: Exit a loop immediately.
-- **`const`**: Define constant items or constant raw pointers.
-- **`continue`**: Continue to the next loop iteration.
-- **`crate`**: In a module path, refers to the crate root.
-- **`dyn`**: Dynamic dispatch to a trait object.
-- **`else`**: Fallback for `if` and `if let` control flow constructs.
-- **`enum`**: Define an enumeration.
-- **`extern`**: Link an external function or variable.
-- **`false`**: Boolean false literal.
-- **`fn`**: Define a function or the function pointer type.
-- **`for`**: Loop over items from an iterator, implement a trait, or specify a
-  higher ranked lifetime.
-- **`if`**: Branch based on the result of a conditional expression.
-- **`impl`**: Implement inherent or trait functionality.
-- **`in`**: Part of `for` loop syntax.
-- **`let`**: Bind a variable.
-- **`loop`**: Loop unconditionally.
-- **`match`**: Match a value to patterns.
-- **`mod`**: Define a module.
-- **`move`**: Make a closure take ownership of all its captures.
-- **`mut`**: Denote mutability in references, raw pointers, or pattern bindings.
-- **`pub`**: Denote public visibility in struct fields, `impl` blocks, or
-  modules.
-- **`ref`**: Bind by reference.
-- **`return`**: Return from function.
-- **`Self`**: A type alias for the type we are defining or implementing.
-- **`self`**: Method subject or current module.
-- **`static`**: Global variable or lifetime lasting the entire program
-  execution.
-- **`struct`**: Define a structure.
-- **`super`**: Parent module of the current module.
-- **`trait`**: Define a trait.
-- **`true`**: Boolean true literal.
-- **`type`**: Define a type alias or associated type.
-- **`union`**: Define a [union][union]<!-- ignore -->; is a keyword only when
-  used in a union declaration.
-- **`unsafe`**: Denote unsafe code, functions, traits, or implementations.
-- **`use`**: Bring symbols into scope.
-- **`where`**: Denote clauses that constrain a type.
-- **`while`**: Loop conditionally based on the result of an expression.
+- **`as`**: تنفيذ التحويل البدائي، توضيح الخاصية المحددة التي تحتوي على عنصر، أو إعادة تسمية العناصر في عبارات `use`.
+- **`async`**: إرجاع `Future` بدلاً من حظر الخيط الحالي.
+- **`await`**: إيقاف التنفيذ حتى تصبح نتيجة `Future` جاهزة.
+- **`break`**: الخروج من حلقة فورًا.
+- **`const`**: تعريف عناصر ثابتة أو مؤشرات خام ثابتة.
+- **`continue`**: الاستمرار إلى التكرار التالي للحلقة.
+- **`crate`**: في مسار وحدة، يشير إلى جذر الصندوق.
+- **`dyn`**: التوزيع الديناميكي لكائن خاصية.
+- **`else`**: البديل لبنى التحكم في التدفق `if` و `if let`.
+- **`enum`**: تعريف تعداد.
+- **`extern`**: ربط دالة أو متغير خارجي.
+- **`false`**: قيمة البوليان false الحرفية.
+- **`fn`**: تعريف دالة أو نوع مؤشر الدالة.
+- **`for`**: التكرار عبر عناصر من مكرر، تنفيذ خاصية، أو تحديد عمر مرتب أعلى.
+- **`if`**: التفريع بناءً على نتيجة تعبير شرطي.
+- **`impl`**: تنفيذ وظائف متأصلة أو وظائف خاصية.
+- **`in`**: جزء من صيغة حلقة `for`.
+- **`let`**: ربط متغير.
+- **`loop`**: التكرار دون شرط.
+- **`match`**: مطابقة قيمة مع أنماط.
+- **`mod`**: تعريف وحدة.
+- **`move`**: جعل إغلاق يستحوذ على جميع التقاطاته.
+- **`mut`**: الإشارة إلى القابلية للتغيير في المراجع، المؤشرات الخام، أو ربط الأنماط.
+- **`pub`**: الإشارة إلى الظهور العام في حقول البنى، كتل `impl`, أو الوحدات.
+- **`ref`**: الربط بالمرجع.
+- **`return`**: العودة من دالة.
+- **`Self`**: اسم مستعار للنوع الذي نعرّفه أو ننفذه.
+- **`self`**: موضوع الطريقة أو الوحدة الحالية.
+- **`static`**: متغير عام أو عمر يستمر طوال تنفيذ البرنامج.
+- **`struct`**: تعريف بنية.
+- **`super`**: الوحدة الأم للوحدة الحالية.
+- **`trait`**: تعريف خاصية.
+- **`true`**: قيمة البوليان true الحرفية.
+- **`type`**: تعريف اسم مستعار للنوع أو نوع مرتبط.
+- **`union`**: تعريف [اتحاد][union]<!-- ignore -->؛ هي كلمة محجوزة فقط عند استخدامها في إعلان اتحاد.
+- **`unsafe`**: الإشارة إلى كود غير آمن، دوال، خصائص، أو تطبيقات.
+- **`use`**: إحضار رموز إلى النطاق.
+- **`where`**: الإشارة إلى شروط تقيد نوعًا.
+- **`while`**: التكرار بشكل مشروط بناءً على نتيجة تعبير.
 
 [union]: ../reference/items/unions.html
 
-### Keywords Reserved for Future Use
+### الكلمات المحجوزة للاستخدام المستقبلي
 
-The following keywords do not yet have any functionality but are reserved by
-Rust for potential future use:
+الكلمات المحجوزة التالية ليس لها أي وظائف بعد ولكنها محجوزة من قبل Rust للاستخدام المحتمل في المستقبل:
 
 - `abstract`
 - `become`
@@ -81,15 +69,13 @@ Rust for potential future use:
 - `virtual`
 - `yield`
 
-### Raw Identifiers
+### المعرّفات الخام
 
-_Raw identifiers_ are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+_المعرّفات الخام_ هي الصيغة التي تسمح لك باستخدام الكلمات المحجوزة حيث لا يُسمح بها عادةً. تستخدم معرّفًا خامًا بإضافة `r#` قبل الكلمة المحجوزة.
 
-For example, `match` is a keyword. If you try to compile the following function
-that uses `match` as its name:
+على سبيل المثال، `match` هي كلمة محجوزة. إذا حاولت ترجمة الدالة التالية التي تستخدم `match` كاسمها:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
@@ -97,7 +83,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+ستحصل على هذا الخطأ:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -107,11 +93,9 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function
-identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+يُظهر الخطأ أنه لا يمكنك استخدام الكلمة المحجوزة `match` كمعرّف للدالة. لاستخدام `match` كاسم دالة، تحتاج إلى استخدام صيغة المعرّف الخام، كما يلي:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">اسم الملف: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -123,18 +107,8 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+سيتم ترجمة هذا الكود دون أي أخطاء. لاحظ بادئة `r#` على اسم الدالة في تعريفها وكذلك حيث يتم استدعاء الدالة في `main`.
 
-Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. This gives us more freedom to choose
-identifier names, as well as lets us integrate with programs written in a
-language where these words aren’t keywords. In addition, raw identifiers allow
-you to use libraries written in a different Rust edition than your crate uses.
-For example, `try` isn’t a keyword in the 2015 edition but is in the 2018, 2021,
-and 2024 editions. If you depend on a library that is written using the 2015
-edition and has a `try` function, you’ll need to use the raw identifier syntax,
-`r#try` in this case, to call that function from your code on later editions.
-See [Appendix E][appendix-e]<!-- ignore --> for more information on editions.
+تسمح لك المعرّفات الخام باستخدام أي كلمة تختارها كمعرّف، حتى لو كانت تلك الكلمة كلمة محجوزة. هذا يمنحنا مزيدًا من الحرية لاختيار أسماء المعرّفات، بالإضافة إلى أنه يسمح لنا بالتكامل مع برامج مكتوبة بلغة لا تكون فيها هذه الكلمات محجوزة. بالإضافة إلى ذلك، تسمح لك المعرّفات الخام باستخدام مكتبات مكتوبة بإصدار Rust مختلف عن الذي يستخدمه صندوقك. على سبيل المثال، `try` ليست كلمة محجوزة في إصدار 2015 ولكنها كذلك في إصدارات 2018 و 2021 و 2024. إذا كنت تعتمد على مكتبة مكتوبة باستخدام إصدار 2015 ولديها دالة `try`، فستحتاج إلى استخدام صيغة المعرّف الخام، `r#try` في هذه الحالة، لاستدعاء تلك الدالة من كودك في الإصدارات الأحدث. انظر [الملحق ه][appendix-e]<!-- ignore --> لمزيد من المعلومات حول الإصدارات.
 
 [appendix-e]: appendix-05-editions.html
