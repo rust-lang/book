@@ -1,59 +1,55 @@
-## Appendix E: Editions
+## الملحق هـ: الإصدارات
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
-_Cargo.toml_ file about an edition. This appendix talks about what that means!
+في الفصل 1، رأيت أن `cargo new` يضيف بعض البيانات الوصفية إلى ملف
+_Cargo.toml_ الخاص بك حول الإصدار. يتحدث هذا الملحق عن ما يعنيه ذلك!
 
-The Rust language and compiler have a six-week release cycle, meaning users get
-a constant stream of new features. Other programming languages release larger
-changes less often; Rust releases smaller updates more frequently. After a
-while, all of these tiny changes add up. But from release to release, it can be
-difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
-changed a lot!”
+تتبع لغة Rust والمترجم الخاص بها دورة إصدار مدتها ستة أسابيع، مما يعني أن
+المستخدمين يحصلون على تدفق مستمر من الميزات الجديدة. تُصدر لغات البرمجة الأخرى
+تغييرات أكبر بشكل أقل تكراراً؛ بينما تُصدر Rust تحديثات أصغر بشكل أكثر تكراراً.
+بعد فترة، تتراكم كل هذه التغييرات الصغيرة. ولكن من إصدار إلى آخر، قد يكون من
+الصعب النظر إلى الوراء والقول، "واو، بين Rust 1.10 و Rust 1.31، تغيرت Rust
+كثيراً!"
 
-Every three years or so, the Rust team produces a new Rust _edition_. Each
-edition brings together the features that have landed into a clear package with
-fully updated documentation and tooling. New editions ship as part of the usual
-six-week release process.
+كل ثلاث سنوات تقريباً، ينتج فريق Rust _إصداراً_ جديداً من Rust. يجمع كل إصدار
+الميزات التي تم تقديمها في حزمة واضحة مع وثائق وأدوات محدثة بالكامل. يتم إصدار
+الإصدارات الجديدة كجزء من عملية الإصدار المعتادة كل ستة أسابيع.
 
-Editions serve different purposes for different people:
+تخدم الإصدارات أغراضاً مختلفة لأشخاص مختلفين:
 
-- For active Rust users, a new edition brings together incremental changes into
-  an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
-  project as a whole.
+- بالنسبة لمستخدمي Rust النشطين، يجمع الإصدار الجديد التغييرات التدريجية في
+  حزمة سهلة الفهم.
+- بالنسبة لغير المستخدمين، يشير الإصدار الجديد إلى أن بعض التطورات الكبيرة قد
+  تم تقديمها، مما قد يجعل Rust تستحق نظرة أخرى.
+- بالنسبة لمن يطورون Rust، يوفر الإصدار الجديد نقطة تجمع للمشروع ككل.
 
-At the time of this writing, four Rust editions are available: Rust 2015, Rust
-2018, Rust 2021, and Rust 2024. This book is written using Rust 2024 edition
-idioms.
+في وقت كتابة هذا النص، هناك أربعة إصدارات من Rust متاحة: Rust 2015 و Rust
+2018 و Rust 2021 و Rust 2024. هذا الكتاب مكتوب باستخدام أساليب إصدار Rust
+2024.
 
-The `edition` key in _Cargo.toml_ indicates which edition the compiler should
-use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
-value for backward compatibility reasons.
+يشير مفتاح `edition` في _Cargo.toml_ إلى الإصدار الذي يجب على المترجم استخدامه
+لكودك. إذا لم يكن المفتاح موجوداً، تستخدم Rust `2015` كقيمة للإصدار لأسباب
+التوافق مع الإصدارات السابقة.
 
-Each project can opt in to an edition other than the default 2015 edition.
-Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+يمكن لكل مشروع اختيار إصدار آخر غير الإصدار الافتراضي 2015. يمكن أن تحتوي
+الإصدارات على تغييرات غير متوافقة، مثل تضمين كلمة مفتاحية جديدة تتعارض مع
+المعرفات في الكود. ومع ذلك، ما لم تختار تلك التغييرات، سيستمر كودك في الترجمة
+حتى عندما تقوم بترقية إصدار مترجم Rust الذي تستخدمه.
 
-All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+تدعم جميع إصدارات مترجم Rust أي إصدار كان موجوداً قبل إصدار ذلك المترجم، ويمكنها
+ربط صناديق (crates) من أي إصدارات مدعومة معاً. تؤثر تغييرات الإصدار فقط على
+الطريقة التي يحلل بها المترجم الكود في البداية. لذلك، إذا كنت تستخدم Rust 2015
+وكانت إحدى تبعياتك تستخدم Rust 2018، فسيتم ترجمة مشروعك وستتمكن من استخدام تلك
+التبعية. الموقف المعاكس، حيث يستخدم مشروعك Rust 2018 وتستخدم التبعية Rust
+2015، يعمل أيضاً.
 
-To be clear: Most features will be available on all editions. Developers using
-any Rust edition will continue to see improvements as new stable releases are
-made. However, in some cases, mainly when new keywords are added, some new
-features might only be available in later editions. You will need to switch
-editions if you want to take advantage of such features.
+لنكون واضحين: معظم الميزات ستكون متاحة على جميع الإصدارات. سيستمر المطورون
+الذين يستخدمون أي إصدار من Rust في رؤية التحسينات مع صدور إصدارات مستقرة جديدة.
+ومع ذلك، في بعض الحالات، خاصة عندما تُضاف كلمات مفتاحية جديدة، قد تكون بعض
+الميزات الجديدة متاحة فقط في الإصدارات اللاحقة. ستحتاج إلى تبديل الإصدارات إذا
+كنت تريد الاستفادة من مثل هذه الميزات.
 
-For more details, see [_The Rust Edition Guide_][edition-guide]. This is a
-complete book that enumerates the differences between editions and explains how
-to automatically upgrade your code to a new edition via `cargo fix`.
+لمزيد من التفاصيل، راجع [_دليل إصدارات Rust_][edition-guide]. هذا كتاب كامل
+يعدد الاختلافات بين الإصدارات ويشرح كيفية ترقية كودك تلقائياً إلى إصدار جديد عبر
+`cargo fix`.
 
 [edition-guide]: https://doc.rust-lang.org/stable/edition-guide
