@@ -120,7 +120,7 @@ _العدد الصحيح (integer)_ هو رقم بدون مكون كسري. اس
 
 ### الأنواع المركبة (Compound Types)
 
-يمكن للـ _أنواع المركبة (compound types)_ ترجمة قيم (values) متعددة في نوع (type) واحد. يحتوي Rust على نوعين مركبين (compound types) أوليين: المجموعات (tuples) والمصفوفات (arrays).
+يمكن للـ _أنواع المركبة (compound types)_ تجميع قيم (values) متعددة في نوع (type) واحد. يحتوي Rust على نوعين مركبين (compound types) أوليين: المجموعات (tuples) والمصفوفات (arrays).
 
 #### نوع المجموعة (Tuple Type)
 
