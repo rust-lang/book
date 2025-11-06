@@ -28,7 +28,7 @@
 
 <img alt="ثلاث جداول: جدول s يحتوي فقط على مؤشر إلى جدول
 s1. جدول s1 يحتوي على بيانات المكدس (stack) لـ s1 ويشير إلى بيانات
-السلسلة النصية في الكومة (heap)." src="img/trpl04-06.svg" class="center" />
+السلسلة النصية على الكومة (heap)." src="img/trpl04-06.svg" class="center" />
 
 <span class="caption">الشكل 4-6: مخطط لـ `&String` `s` يشير إلى
 `String` `s1`</span>
