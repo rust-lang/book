@@ -8,3 +8,8 @@ tmp
 .nova
 .vscode
 .zed
+
+# PDF generation outputs
+pdf_output/
+*.pdf
+combined.md

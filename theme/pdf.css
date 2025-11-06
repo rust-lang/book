@@ -1,0 +1,145 @@
+/* PDF-specific styles for Arabic RTL text */
+
+/* Global RTL and font settings */
+* {
+    direction: rtl;
+    text-align: right;
+}
+
+body {
+    font-family: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", "Arial Unicode MS", sans-serif;
+    font-size: 12pt;
+    line-height: 1.8;
+    direction: rtl;
+    text-align: right;
+}
+
+/* Code blocks should remain LTR */
+code, pre, .hljs {
+    direction: ltr;
+    text-align: left;
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", "Arial Unicode MS", sans-serif;
+    direction: rtl;
+    text-align: right;
+    page-break-after: avoid;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 24pt;
+    font-weight: bold;
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+/* Tables */
+table {
+    direction: rtl;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Lists */
+ul, ol {
+    direction: rtl;
+    text-align: right;
+    padding-right: 2em;
+    padding-left: 0;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 80%;
+    color: #666;
+}
+
+/* Blockquotes */
+blockquote {
+    border-right: 4px solid #ccc;
+    border-left: none;
+    margin-right: 0;
+    margin-left: 1em;
+    padding-right: 1em;
+    padding-left: 0;
+    color: #666;
+}
+
+/* Page breaks */
+.page-break {
+    page-break-after: always;
+}
+
+/* Prevent orphans and widows */
+p {
+    orphans: 3;
+    widows: 3;
+}
+
+/* Print-specific adjustments */
+@media print {
+    body {
+        font-size: 11pt;
+    }
+
+    pre, code {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100%;
+        page-break-inside: avoid;
+    }
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+}
+
+/* Ensure proper Arabic typography */
+p, li, td, th {
+    font-variant-ligatures: common-ligatures;
+    font-feature-settings: "liga" 1, "calt" 1;
+}

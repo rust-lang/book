@@ -44,3 +44,17 @@ output-mode = "default"
 
 [rust]
 edition = "2024"
+
+# PDF output configuration
+[output.pdf]
+# Enable PDF generation with proper RTL and Arabic text support
+enable = true
+# Custom CSS for PDF to ensure RTL support
+additional-css = ["theme/pdf.css"]
+# Paper size (A4 is standard)
+paper-size = "a4"
+# Margins in mm
+margin-top = 20
+margin-bottom = 20
+margin-left = 20
+margin-right = 20
