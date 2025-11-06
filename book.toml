@@ -4,11 +4,13 @@
 [book]
 title = "The Rust Programming Language"
 authors = ["Steve Klabnik", "Carol Nichols", "Chris Krycho", "Contributions from the Rust Community"]
+language = "ar"
 
 [output.html]
 additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.css", "theme/listing.css"]
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/rust-lang/book"
+text-direction = "rtl"
 
 [output.html.redirect]
 "ch17-00-oop.html" = "ch18-00-oop.html"
