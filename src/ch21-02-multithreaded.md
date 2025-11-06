@@ -3,7 +3,7 @@
 <a id="turning-our-single-threaded-server-into-a-multithreaded-server"></a>
 <a id="from-single-threaded-to-multithreaded-server"></a>
 
-## من خادوم أحادي الخيط إلى خادوم متعدد الخيوط
+## من خادوم أحادي الخيط إلى خادوم متعدد الخيوط (Turning Our Single-Threaded Server into a Multithreaded Server)
 
 الآن، سيعالج الخادوم server كل طلب request بدوره in turn، مما يعني أنه لن يعالج اتصالاً connection ثانيًا حتى ينتهي معالجة الاتصال connection الأول. إذا تلقى الخادوم server المزيد والمزيد من الطلبات requests، فإن هذا التنفيذ التسلسلي serial execution سيكون أقل وأقل مثاليةً. إذا تلقى الخادوم server طلبًا request يستغرق وقتًا طويلاً لمعالجته، فسيتعين على الطلبات requests اللاحقة الانتظار حتى ينتهي الطلب request الطويل، حتى لو كان من الممكن معالجة الطلبات requests الجديدة بسرعة. سنحتاج إلى إصلاح هذا، ولكن أولاً سننظر في المشكلة أثناء العمل.
 
@@ -35,7 +35,7 @@
 
 ### تحسين الإنتاجية باستخدام مجمع خيوط
 
-_thread pool_ (مجمع خيوط) هو مجموعة من الخيوط threads المولدة spawned التي هي جاهزة وتنتظر معالجة مهمة task. عندما يتلقى البرنامج مهمة جديدة new task، فإنه يعيّن assign أحد الخيوط threads في المجمع pool إلى المهمة task، وسيعالج هذا الخيط thread المهمة task. ستكون الخيوط threads المتبقية في المجمع pool متاحة لمعالجة أي مهام أخرى tasks تأتي بينما يعالج الخيط thread الأول. عندما ينتهي الخيط thread الأول من معالجة مهمته task، يتم إرجاعه إلى مجمع pool الخيوط threads الخاملة idle threads، جاهزًا لمعالجة مهمة جديدة new task. يتيح لك مجمع خيوط thread pool معالجة الاتصالات connections بشكل متزامن concurrently، مما يزيد من إنتاجية throughput خادومك server.
+_thread pool_ (مجمع خيوط) (thread pool) هو مجموعة من الخيوط threads المولدة spawned التي هي جاهزة وتنتظر معالجة مهمة task. عندما يتلقى البرنامج مهمة جديدة new task، فإنه يعيّن assign أحد الخيوط threads في المجمع pool إلى المهمة task، وسيعالج هذا الخيط thread المهمة task. ستكون الخيوط threads المتبقية في المجمع pool متاحة لمعالجة أي مهام أخرى tasks تأتي بينما يعالج الخيط thread الأول. عندما ينتهي الخيط thread الأول من معالجة مهمته task، يتم إرجاعه إلى مجمع pool الخيوط threads الخاملة idle threads، جاهزًا لمعالجة مهمة جديدة new task. يتيح لك مجمع خيوط thread pool معالجة الاتصالات connections بشكل متزامن concurrently، مما يزيد من إنتاجية throughput خادومك server.
 
 سنحد من عدد الخيوط threads في المجمع pool إلى عدد صغير small number لحمايتنا من هجمات DoS attacks؛ إذا كان برنامجنا ينشئ خيطًا thread جديدًا لكل طلب request عند وصوله، فإن شخصًا يقدم 10 ملايين طلب request إلى خادومنا server يمكن أن يحدث فوضى havoc عن طريق استنفاد using up جميع موارد resources خادومنا server ووقف grinding معالجة الطلبات requests إلى حد halt.
 
