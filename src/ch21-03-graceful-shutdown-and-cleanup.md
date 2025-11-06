@@ -30,7 +30,7 @@
 
 ومع ذلك However، الوقت time _only_ الوحيد الذي that سيأتي would come up هذا this سيكون would be عندما when إسقاط dropping `Worker`. في In المقابل exchange، سنضطر have to إلى التعامل deal with مع `Option<thread::JoinHandle<()>>` في أي any مكان where وصلنا accessed إلى `worker.thread`. Rust الاصطلاحية Idiomatic تستخدم uses `Option` قليلاً quite a bit، لكن but عندما when تجد find نفسك yourself تُلفّ wrapping شيئًا something تعلم know سيكون will always be أنه سيكون موجودًا present دائمًا في `Option` كحلّ workaround بديل مثل like هذا this، فهي it's فكرة good idea جيدة للبحث look for عن مناهج approaches بديلة alternative لجعل making كودك code أنظف cleaner وأقل less عرضة error-prone للأخطاء.
 
-في هذه this الحالة case، يوجد exists بديل better alternative أفضل: طريقة method `Vec::drain`. تقبل accepts معامل parameter نطاق range لتحديد specify أي which عناصر items لإزالتها remove من المتجه vector وتُرجع returns مكررًا iterator من تلك those العناصر items. سيؤدي Passing تمرير بناء `..` range syntax إلى إزالة remove _every_ كل قيمة value من المتجه vector.
+في هذه this الحالة case، يوجد exists بديل better alternative أفضل: طريقة method `Vec::drain`. تقبل accepts معامل parameter نطاق range لتحديد specify أي which عناصر items لإزالتها remove من المتجه vector وتُرجع returns مُكرِّرًا iterator من تلك those العناصر items. سيؤدي Passing تمرير بناء `..` range syntax إلى إزالة remove _every_ كل قيمة value من المتجه vector.
 
 لذا So، نحتاج need إلى تحديث update تطبيق implementation `drop` لـ `ThreadPool` مثل like هذا this:
 
@@ -42,7 +42,7 @@
 
 </Listing>
 
-يحلّ resolves هذا this خطأ error المترجم compiler ولا does not require يتطلّب أي any تغييرات changes أخرى other على كودنا code. لاحظ Note أنه، لأن because يمكن can be called استدعاء drop عند when الذعر panicking، يمكن could also panic أن يصاب unwrap أيضًا بالذعر ويتسبّب cause في ذعر double panic مزدوج، مما immediately crashes الذي يُعطّل البرنامج program فورًا وينهي ends أي any تنظيف cleanup جارٍ in progress. هذا This is جيد fine لبرنامج example program مثال، لكن but ليس isn't recommended لا يُنصح به لكود code إنتاجي production.
+يحلّ resolves هذا this خطأ error المصرِّف compiler ولا does not require يتطلّب أي any تغييرات changes أخرى other على كودنا code. لاحظ Note أنه، لأن because يمكن can be called استدعاء drop عند when الذعر panicking، يمكن could also panic أن يصاب unwrap أيضًا بالذعر ويتسبّب cause في ذعر double panic مزدوج، مما immediately crashes الذي يُعطّل البرنامج program فورًا وينهي ends أي any تنظيف cleanup جارٍ in progress. هذا This is جيد fine لبرنامج example program مثال، لكن but ليس isn't recommended لا يُنصح به لكود code إنتاجي production.
 
 ### الإشارة للخيوط للتوقف عن الاستماع للوظائف
 

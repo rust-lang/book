@@ -50,7 +50,7 @@
   - [الأخطاء القابلة للاسترداد باستخدام `Result`](ch09-02-recoverable-errors-with-result.md)
   - [استخدام `panic!` أم لا](ch09-03-to-panic-or-not-to-panic.md)
 
-- [الأنواع العامة والسمات وأعمار المتغيرات](ch10-00-generics.md)
+- [الأنواع العمومية والسمات وأعمار المتغيرات](ch10-00-generics.md)
   - [أنواع البيانات العامة](ch10-01-syntax.md)
   - [تعريف السلوك المشترك باستخدام السمات](ch10-02-traits.md)
   - [التحقق من المراجع باستخدام أعمار المتغيرات](ch10-03-lifetime-syntax.md)
@@ -68,11 +68,11 @@
   - [العمل مع متغيرات البيئة](ch12-05-working-with-environment-variables.md)
   - [إعادة توجيه الأخطاء إلى الخطأ القياسي](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
-- [ميزات اللغة الوظيفية: المكررات والإغلاقات](ch13-00-functional-features.md)
+- [ميزات اللغة الوظيفية: المُكرِّرات والإغلاقات](ch13-00-functional-features.md)
   - [الإغلاقات](ch13-01-closures.md)
-  - [معالجة سلسلة من العناصر باستخدام المكررات](ch13-02-iterators.md)
+  - [معالجة سلسلة من العناصر باستخدام المُكرِّرات](ch13-02-iterators.md)
   - [تحسين مشروع الإدخال/الإخراج](ch13-03-improving-our-io-project.md)
-  - [الأداء في الحلقات مقابل المكررات](ch13-04-performance.md)
+  - [الأداء في الحلقات مقابل المُكرِّرات](ch13-04-performance.md)
 
 - [المزيد عن Cargo و Crates.io](ch14-00-more-about-cargo.md)
   - [تخصيص البناء باستخدام ملفات تعريف الإصدار](ch14-01-release-profiles.md)

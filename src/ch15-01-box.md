@@ -66,7 +66,7 @@ _قائمة cons_ هي هيكل بيانات يأتي من لغة البرمجة
 
 </Listing>
 
-> ملاحظة: نحن ننفذ قائمة cons تحتفظ فقط بقيم `i32` لأغراض هذا المثال. كان يمكننا تنفيذها باستخدام الأنواع العامة (generics)، كما ناقشنا في الفصل 10، لتعريف نوع قائمة cons يمكن أن يخزن قيمًا من أي نوع.
+> ملاحظة: نحن ننفذ قائمة cons تحتفظ فقط بقيم `i32` لأغراض هذا المثال. كان يمكننا تنفيذها باستخدام الأنواع العمومية (generics)، كما ناقشنا في الفصل 10، لتعريف نوع قائمة cons يمكن أن يخزن قيمًا من أي نوع.
 
 استخدام نوع `List` لتخزين القائمة `1, 2, 3` سيبدو مثل الكود في القائمة 15-3.
 
@@ -102,7 +102,7 @@ _قائمة cons_ هي هيكل بيانات يأتي من لغة البرمجة
 
 لتحديد كم من المساحة لتخصيصها لقيمة `Message`، تمر Rust عبر كل من المتغيرات لمعرفة أي متغير يحتاج إلى أكبر مساحة. تجد Rust أن `Message::Quit` لا يحتاج إلى أي مساحة، `Message::Move` يحتاج إلى مساحة كافية لتخزين قيمتين `i32`، وهكذا. لأن متغيرًا واحدًا فقط سيتم استخدامه، فإن أكثر مساحة ستحتاجها قيمة `Message` هي المساحة التي ستستغرقها لتخزين الأكبر من متغيراتها.
 
-قارن هذا مع ما يحدث عندما تحاول Rust تحديد كم من المساحة يحتاجها نوع تكراري مثل enum `List` في القائمة 15-2. يبدأ المترجم بالنظر إلى متغير `Cons`، الذي يحتفظ بقيمة من نوع `i32` وقيمة من نوع `List`. لذلك، يحتاج `Cons` إلى مقدار من المساحة يساوي حجم `i32` بالإضافة إلى حجم `List`. لمعرفة كم من الذاكرة يحتاجها نوع `List`، ينظر المترجم إلى المتغيرات، بدءًا من متغير `Cons`. يحتفظ متغير `Cons` بقيمة من نوع `i32` وقيمة من نوع `List`، وتستمر هذه العملية إلى ما لا نهاية، كما هو موضح في الشكل 15-1.
+قارن هذا مع ما يحدث عندما تحاول Rust تحديد كم من المساحة يحتاجها نوع تكراري مثل enum `List` في القائمة 15-2. يبدأ المصرِّف بالنظر إلى متغير `Cons`، الذي يحتفظ بقيمة من نوع `i32` وقيمة من نوع `List`. لذلك، يحتاج `Cons` إلى مقدار من المساحة يساوي حجم `i32` بالإضافة إلى حجم `List`. لمعرفة كم من الذاكرة يحتاجها نوع `List`، ينظر المصرِّف إلى المتغيرات، بدءًا من متغير `Cons`. يحتفظ متغير `Cons` بقيمة من نوع `i32` وقيمة من نوع `List`، وتستمر هذه العملية إلى ما لا نهاية، كما هو موضح في الشكل 15-1.
 
 <img alt="An infinite Cons list: a rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Cons' and a smaller version of the outer 'Cons' rectangle. The 'Cons' rectangles continue to hold smaller and smaller versions of themselves until the smallest comfortably sized rectangle holds an infinity symbol, indicating that this repetition goes on forever." src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
@@ -114,7 +114,7 @@ _قائمة cons_ هي هيكل بيانات يأتي من لغة البرمجة
 
 #### الحصول على نوع تكراري بحجم معروف
 
-نظرًا لأن Rust لا يمكنها معرفة كم من المساحة لتخصيصها للأنواع المعرّفة بشكل تكراري، يعطي المترجم خطأ مع هذا الاقتراح المفيد:
+نظرًا لأن Rust لا يمكنها معرفة كم من المساحة لتخصيصها للأنواع المعرّفة بشكل تكراري، يعطي المصرِّف خطأ مع هذا الاقتراح المفيد:
 
 <!-- manual-regeneration
 after doing automatic regeneration, look at listings/ch15-smart-pointers/listing-15-03/output.txt and copy the relevant line
@@ -141,7 +141,7 @@ help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
 
 </Listing>
 
-يحتاج متغير `Cons` إلى حجم `i32` بالإضافة إلى المساحة لتخزين بيانات مؤشر الصندوق. متغير `Nil` لا يخزن أي قيم، لذلك يحتاج إلى مساحة أقل على المكدس من متغير `Cons`. نعلم الآن أن أي قيمة `List` ستشغل حجم `i32` بالإضافة إلى حجم بيانات مؤشر الصندوق. باستخدام صندوق، كسرنا السلسلة اللا نهائية التكرارية، حتى يتمكن المترجم من معرفة الحجم الذي يحتاجه لتخزين قيمة `List`. يوضح الشكل 15-2 كيف يبدو متغير `Cons` الآن.
+يحتاج متغير `Cons` إلى حجم `i32` بالإضافة إلى المساحة لتخزين بيانات مؤشر الصندوق. متغير `Nil` لا يخزن أي قيم، لذلك يحتاج إلى مساحة أقل على المكدس من متغير `Cons`. نعلم الآن أن أي قيمة `List` ستشغل حجم `i32` بالإضافة إلى حجم بيانات مؤشر الصندوق. باستخدام صندوق، كسرنا السلسلة اللا نهائية التكرارية، حتى يتمكن المصرِّف من معرفة الحجم الذي يحتاجه لتخزين قيمة `List`. يوضح الشكل 15-2 كيف يبدو متغير `Cons` الآن.
 
 <img alt="A rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Box' with one inner rectangle that contains the label 'usize', representing the finite size of the box's pointer." src="img/trpl15-02.svg" class="center" />
 
