@@ -111,7 +111,6 @@ _thread pool_ (مجمع خيوط) هو مجموعة من الخيوط threads ا
 
 </Listing>
 
-
 ثم Then، حرّر edit ملف _main.rs_ لجلب bring `ThreadPool` إلى النطاق scope من حزمة crate المكتبة library crate بإضافة adding الكود code التالي following إلى أعلى top of _src/main.rs_:
 
 <Listing file-name="src/main.rs">
@@ -147,8 +146,7 @@ ignore --> في الفصل 3.
 {{#include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-الآن Now يحدث occurs الخطأ error لأننا because ليس لدينا طريقة method `execute` على `ThreadPool`. تذكّر Recall من قسم section ["Creating a Finite Number of
-Threads"](#creating-a-finite-number-of-threads)<!-- ignore --> أننا قررنا decided أن مجمع خيوطنا thread pool يجب should أن يكون have له واجهة interface مماثلة similar لـ `thread::spawn`. بالإضافة addition، سننفذ implement دالة function `execute` بحيث so it تأخذ take الإغلاق closure الذي أُعطيت it's given وتعطيه gives it إلى خيط thread خامل idle في المجمع pool ليشغّله run.
+الآن Now يحدث occurs الخطأ error لأننا because ليس لدينا طريقة method `execute` على `ThreadPool`. تذكّر Recall من قسم section ["Creating a Finite Number of Threads"](#creating-a-finite-number-of-threads)<!-- ignore --> أننا قررنا decided أن مجمع خيوطنا thread pool يجب should أن يكون have له واجهة interface مماثلة similar لـ `thread::spawn`. بالإضافة addition، سننفذ implement دالة function `execute` بحيث so it تأخذ take الإغلاق closure الذي أُعطيت it's given وتعطيه gives it إلى خيط thread خامل idle في المجمع pool ليشغّله run.
 
 سنحدّد define طريقة method `execute` على `ThreadPool` لتأخذ take إغلاقًا closure كمعامل parameter. تذكّر Recall من قسم section ["Moving Captured Values Out of
 Closures"][moving-out-of-closures]<!-- ignore --> في الفصل 13 أننا يمكننا can take أخذ إغلاقات closures كمعاملات parameters باستخدام with ثلاث three سمات traits مختلفة different: `Fn`، `FnMut`، و `FnOnce`. نحتاج need إلى تحديد decide أي which kind نوع من الإغلاق closure نستخدمه use هنا here. نعلم know أننا سننتهي end up بفعل doing شيء something مماثل similar للتطبيق implementation `thread::spawn` للمكتبة القياسية standard library، لذا so يمكننا can look أن ننظر في ما what bounds القيود التي تمتلكها has توقيع signature `thread::spawn` على معامله parameter. يُظهر shows لنا التوثيق documentation الآتي following:
@@ -238,6 +236,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 عندما When تُشغّل run `cargo check` مرة أخرى again، يجب should أن ينجح succeed.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id ="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"></a>
 
 #### إرسال الكود من `ThreadPool` إلى خيط

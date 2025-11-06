@@ -77,11 +77,11 @@ Rust موجهة للأشخاص الذين يتوقون للسرعة والاست
 
 جزء مهم من عملية تعلم Rust هو تعلم كيفية قراءة رسائل الخطأ التي يعرضها المترجم: هذه ستوجهك نحو كود عامل. على هذا النحو، سنقدم العديد من الأمثلة التي لا تُجمع مع رسالة الخطأ التي سيعرضها لك المترجم في كل حالة. اعلم أنه إذا أدخلت وشغلت مثالًا عشوائيًا، فقد لا يُجمع! تأكد من قراءة النص المحيط لمعرفة ما إذا كان المثال الذي تحاول تشغيله من المفترض أن يحدث فيه خطأ. في معظم الحالات، سنوجهك إلى الإصدار الصحيح من أي كود لا يُجمع. سيساعدك Ferris أيضًا على تمييز الكود الذي لا يُفترض أن يعمل:
 
-| Ferris                                                                                                           | المعنى                                    |
-| ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | هذا الكود لا يُجمع!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | هذا الكود يتسبب في panic!                |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | هذا الكود لا ينتج السلوك المطلوب.         |
+| Ferris                                                                                                           | المعنى                            |
+| ---------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | هذا الكود لا يُجمع!                |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | هذا الكود يتسبب في panic!         |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | هذا الكود لا ينتج السلوك المطلوب. |
 
 في معظم الحالات، سنوجهك إلى الإصدار الصحيح من أي كود لا يُجمع.
 

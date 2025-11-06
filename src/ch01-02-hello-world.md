@@ -5,6 +5,7 @@
 > ملاحظة: يفترض هذا الكتاب معرفة أساسية بسطر الأوامر. لا يفرض Rust أي متطلبات محددة حول التحرير أو الأدوات أو مكان تواجد الكود الخاص بك، لذلك إذا كنت تفضل استخدام IDE بدلاً من سطر الأوامر، فلا تتردد في استخدام IDE المفضل لديك. تمتلك العديد من IDEs الآن درجة معينة من دعم Rust؛ تحقق من وثائق IDE للحصول على التفاصيل. كان فريق Rust يركز على تمكين دعم رائع لـ IDE عبر `rust-analyzer`. راجع [الملحق D][devtools]<!-- ignore --> للحصول على مزيد من التفاصيل.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="creating-a-project-directory"></a>
 
 ### إعداد دليل المشروع
@@ -32,6 +33,7 @@ $ cd hello_world
 ```
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="writing-and-running-a-rust-program"></a>
 
 ### أساسيات برنامج Rust
@@ -105,6 +107,7 @@ println!("Hello, world!");
 ثالثاً، ننهي السطر بفاصلة منقوطة (`;`)، والتي تشير إلى أن هذا التعبير قد انتهى، والتالي جاهز للبدء. تنتهي معظم أسطر كود Rust بفاصلة منقوطة.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="compiling-and-running-are-separate-steps"></a>
 
 ### التجميع والتنفيذ

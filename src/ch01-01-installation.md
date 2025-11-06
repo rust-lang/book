@@ -91,6 +91,7 @@ $ rustup self uninstall
 ```
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="local-documentation"></a>
 
 ### قراءة التوثيق المحلي
@@ -100,6 +101,7 @@ $ rustup self uninstall
 في أي وقت يتم توفير نوع أو دالة بواسطة المكتبة القياسية ولست متأكداً مما تفعله أو كيفية استخدامها، استخدم توثيق واجهة برمجة التطبيقات (API) لمعرفة ذلك!
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="text-editors-and-integrated-development-environments"></a>
 
 ### استخدام محررات النصوص وبيئات التطوير المتكاملة

@@ -7,6 +7,7 @@
 بحثهم غير حساس لحالة الأحرف في جلسة الطرفية تلك.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="writing-a-failing-test-for-the-case-insensitive-search-function"></a>
 
 ### كتابة اختبار فاشل للبحث غير الحساس لحالة الأحرف
