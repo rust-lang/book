@@ -1,25 +1,36 @@
-# (??Work in progress??)The Rust Programming Language
+# لغة البرمجة Rust (الترجمة العربية)
+
+# The Rust Programming Language (Arabic Translation)
 
 ![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
 
-This repository contains the source of "The Rust Programming Language" book.
+هذا المستودع يحتوي على الترجمة العربية لكتاب "لغة البرمجة Rust".
 
-[The book is available in dead-tree form from No Starch Press][nostarch].
+This repository contains the Arabic translation of "The Rust Programming Language" book.
 
-[nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
+## النسخة الأصلية / Original Version
 
-You can also read the book for free online. Please see the book as shipped with
-the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
-in those versions may have been fixed in this repository already, as those
-releases are updated less frequently.
+النسخة الأصلية الإنجليزية متاحة على: [rust-lang/book](https://github.com/rust-lang/book)
+
+The original English version is available at: [rust-lang/book](https://github.com/rust-lang/book)
+
+يمكنك قراءة الكتاب الأصلي مجاناً عبر الإنترنت في النسخ [المستقرة][stable]، [التجريبية][beta]، أو [الليلية][nightly] من Rust.
+
+You can read the original book for free online in the latest [stable], [beta], or [nightly] Rust releases.
 
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
 
-See the [releases] to download just the code of all the code listings that appear in the book.
+[The original book is also available in dead-tree form from No Starch Press][nostarch].
 
-[releases]: https://github.com/rust-lang/book/releases
+[nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
+
+## قائمة الترجمات / Translations List
+
+هذا المشروع مدرج الآن في [قائمة الترجمات الرسمية](https://doc.rust-lang.org/book/appendix-06-translation.html) في ملحق الكتاب.
+
+This project is now listed in the [official translations list](https://doc.rust-lang.org/book/appendix-06-translation.html) in the book's appendix.
 
 ## Requirements
 
@@ -78,33 +89,25 @@ $ cd packages/trpl
 $ mdbook test --library-path packages/trpl/target/debug/deps
 ```
 
-## Contributing
+## المساهمة / Contributing
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+نرحب بمساعدتك في تحسين الترجمة العربية! إذا وجدت أخطاء في الترجمة أو لديك اقتراحات لتحسينها، يرجى فتح issue أو إرسال pull request.
+
+We'd love your help improving the Arabic translation! If you find translation errors or have suggestions for improvements, please open an issue or submit a pull request.
+
+للمساهمة في النسخة الأصلية الإنجليزية، يرجى زيارة [CONTRIBUTING.md][contrib] في المستودع الأصلي.
+
+For contributing to the original English version, please see [CONTRIBUTING.md][contrib] in the original repository.
 
 [contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+### الترجمات الأخرى / Other Translations
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+للاطلاع على ترجمات أخرى لكتاب Rust، راجع [قائمة الترجمات][translations] في الملحق و من الكتاب.
 
-### Translations
+For other translations of the Rust book, see the [Translations list][translations] in Appendix F of the book.
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
-
-[Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang/mdBook/issues/5
+[translations]: https://doc.rust-lang.org/book/appendix-06-translation.html
 
 ## Spellchecking
 
