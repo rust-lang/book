@@ -87,6 +87,10 @@ Rust موجهة للأشخاص الذين يتوقون للسرعة والاست
 
 ## الكود المصدري
 
-يمكن العثور على الملفات المصدرية التي يُنشأ منها هذا الكتاب على [GitHub][book].
+الملفات المصدرية التي يُنشأ منها هذا الكتاب متاحة على GitHub:
 
-[book]: https://github.com/rust-lang/book/tree/main/src
+- **الترجمة العربية**: [rust-lang-arabic/book][book-ar]
+- **النسخة الأصلية بالإنجليزية**: [rust-lang/book][book-en]
+
+[book-ar]: https://github.com/rust-lang-arabic/book/tree/main/src
+[book-en]: https://github.com/rust-lang/book/tree/main/src
