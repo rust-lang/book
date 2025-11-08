@@ -38,7 +38,7 @@ blocking.
 In Listing 17-15, we use `slow` to emulate doing this kind of CPU-bound work in
 a pair of futures.
 
-<Listing number="17-15" caption="Calling `slow` to simulate running slow operations" file-name="src/main.rs">
+<Listing number="17-15" caption="Calling the `slow` function to simulate slow operations" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:slow-futures}}
