@@ -1,7 +1,7 @@
 $ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0382]: borrow of moved value: `s1`
- --> src/main.rs:5:15
+ --> src/main.rs:5:16
   |
 2 |     let s1 = String::from("hello");
   |         -- move occurs because `s1` has type `String`, which does not implement the `Copy` trait
@@ -9,7 +9,7 @@ error[E0382]: borrow of moved value: `s1`
   |              -- value moved here
 4 |
 5 |     println!("{s1}, world!");
-  |               ^^^^ value borrowed here after move
+  |                ^^ value borrowed here after move
   |
   = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
 help: consider cloning the value if the performance cost is acceptable

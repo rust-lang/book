@@ -62,13 +62,16 @@ the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 To create a `match` expression that compares the values of the outer `x` and
 `y`, rather than introducing a new variable that shadows the existing `y`
 variable, we would need to use a match guard conditional instead. We’ll talk
-about match guards later in [“Extra Conditionals with Match
-Guards”](#extra-conditionals-with-match-guards)<!-- ignore -->.
+about match guards later in the [“Adding Conditionals with Match
+Guards”](#adding-conditionals-with-match-guards)<!-- ignore --> section.
 
-### Multiple Patterns
+<!-- Old headings. Do not remove or links may break. -->
+<a id="multiple-patterns"></a>
+
+### Matching Multiple Patterns
 
 In `match` expressions, you can match multiple patterns using the `|` syntax,
-which is the pattern _or_ operator. For example, in the following code we match
+which is the pattern _or_ operator. For example, in the following code, we match
 the value of `x` against the match arms, the first of which has an _or_ option,
 meaning if the value of `x` matches either of the values in that arm, that
 arm’s code will run:
@@ -114,7 +117,11 @@ ASCII letter`.
 We can also use patterns to destructure structs, enums, and tuples to use
 different parts of these values. Let’s walk through each value.
 
-#### Destructuring Structs
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="destructuring-structs"></a>
+
+#### Structs
 
 Listing 19-12 shows a `Point` struct with two fields, `x` and `y`, that we can
 break apart using a pattern with a `let` statement.
@@ -134,7 +141,7 @@ However, it’s common to match the variable names to the field names to make it
 easier to remember which variables came from which fields. Because of this
 common usage, and because writing `let Point { x: x, y: y } = p;` contains a
 lot of duplication, Rust has a shorthand for patterns that match struct fields:
-you only need to list the name of the struct field, and the variables created
+You only need to list the name of the struct field, and the variables created
 from the pattern will have the same names. Listing 19-13 behaves in the same
 way as the code in Listing 19-12, but the variables created in the `let`
 pattern are `x` and `y` instead of `a` and `b`.
@@ -181,15 +188,19 @@ In this example, the value `p` matches the second arm by virtue of `x`
 containing a `0`, so this code will print `On the y axis at 7`.
 
 Remember that a `match` expression stops checking arms once it has found the
-first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
+first matching pattern, so even though `Point { x: 0, y: 0 }` is on the `x` axis
 and the `y` axis, this code would only print `On the x axis at 0`.
 
-#### Destructuring Enums
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="destructuring-enums"></a>
+
+#### Enums
 
 We’ve destructured enums in this book (for example, Listing 6-5 in Chapter 6),
-but haven’t yet explicitly discussed that the pattern to destructure an enum
+but we haven’t yet explicitly discussed that the pattern to destructure an enum
 corresponds to the way the data stored within the enum is defined. As an
-example, in Listing 19-15 we use the `Message` enum from Listing 6-2 and write
+example, in Listing 19-15, we use the `Message` enum from Listing 6-2 and write
 a `match` with patterns that will destructure each inner value.
 
 <Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">
@@ -209,9 +220,9 @@ and no variables are in that pattern.
 
 For struct-like enum variants, such as `Message::Move`, we can use a pattern
 similar to the pattern we specify to match structs. After the variant name, we
-place curly brackets and then list the fields with variables so we break apart
-the pieces to use in the code for this arm. Here we use the shorthand form as
-we did in Listing 19-13.
+place curly brackets and then list the fields with variables so that we break
+apart the pieces to use in the code for this arm. Here we use the shorthand
+form as we did in Listing 19-13.
 
 For tuple-like enum variants, like `Message::Write` that holds a tuple with one
 element and `Message::ChangeColor` that holds a tuple with three elements, the
@@ -219,7 +230,11 @@ pattern is similar to the pattern we specify to match tuples. The number of
 variables in the pattern must match the number of elements in the variant we’re
 matching.
 
-#### Destructuring Nested Structs and Enums
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="destructuring-nested-structs-and-enums"></a>
+
+#### Nested Structs and Enums
 
 So far, our examples have all been matching structs or enums one level deep,
 but matching can work on nested items too! For example, we can refactor the
@@ -235,13 +250,17 @@ message, as shown in Listing 19-16.
 </Listing>
 
 The pattern of the first arm in the `match` expression matches a
-`Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
+`Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then,
 the pattern binds to the three inner `i32` values. The pattern of the second
 arm also matches a `Message::ChangeColor` enum variant, but the inner enum
 matches `Color::Hsv` instead. We can specify these complex conditions in one
 `match` expression, even though two enums are involved.
 
-#### Destructuring Structs and Tuples
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="destructuring-structs-and-tuples"></a>
+
+#### Structs and Tuples
 
 We can mix, match, and nest destructuring patterns in even more complex ways.
 The following example shows a complicated destructure where we nest structs and
@@ -251,8 +270,8 @@ tuples inside a tuple and destructure all the primitive values out:
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
-This code lets us break complex types into their component parts so we can use
-the values we’re interested in separately.
+This code lets us break complex types into their component parts so that we can
+use the values we’re interested in separately.
 
 Destructuring with patterns is a convenient way to use pieces of values, such
 as the value from each field in a struct, separately from each other.
@@ -267,7 +286,7 @@ pattern (which you’ve seen), using the `_` pattern within another pattern,
 using a name that starts with an underscore, or using `..` to ignore remaining
 parts of a value. Let’s explore how and why to use each of these patterns.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="ignoring-an-entire-value-with-_"></a>
 
@@ -290,12 +309,14 @@ This code will completely ignore the value `3` passed as the first argument,
 and will print `This code only uses the y parameter: 4`.
 
 In most cases when you no longer need a particular function parameter, you
-would change the signature so it doesn’t include the unused parameter. Ignoring
-a function parameter can be especially useful in cases when, for example,
-you’re implementing a trait when you need a certain type signature but the
-function body in your implementation doesn’t need one of the parameters. You
-then avoid getting a compiler warning about unused function parameters, as you
-would if you used a name instead.
+would change the signature so that it doesn’t include the unused parameter.
+Ignoring a function parameter can be especially useful in cases when, for
+example, you’re implementing a trait when you need a certain type signature but
+the function body in your implementation doesn’t need one of the parameters.
+You then avoid getting a compiler warning about unused function parameters, as
+you would if you used a name instead.
+
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="ignoring-parts-of-a-value-with-a-nested-_"></a>
 
@@ -342,7 +363,7 @@ fourth values in a tuple of five items.
 This code will print `Some numbers: 2, 8, 32`, and the values `4` and `16` will
 be ignored.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="ignoring-an-unused-variable-by-starting-its-name-with-_"></a>
 
@@ -461,7 +482,11 @@ ignore thereafter. This code could mean that we want to ignore `2`, bind
 The variable name `second` doesn’t mean anything special to Rust, so we get a
 compiler error because using `..` in two places like this is ambiguous.
 
-### Extra Conditionals with Match Guards
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="extra-conditionals-with-match-guards"></a>
+
+### Adding Conditionals with Match Guards
 
 A _match guard_ is an additional `if` condition, specified after the pattern in
 a `match` arm, that must also match for that arm to be chosen. Match guards are
@@ -482,7 +507,7 @@ guard of `if x % 2 == 0` (which will be `true` if the number is even).
 </Listing>
 
 This example will print `The number 4 is even`. When `num` is compared to the
-pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then
+pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then,
 the match guard checks whether the remainder of dividing `x` by 2 is equal to
 0, and because it is, the first arm is selected.
 
@@ -496,12 +521,12 @@ the match guard gives us the ability to express this logic. The downside of
 this additional expressiveness is that the compiler doesn’t try to check for
 exhaustiveness when match guard expressions are involved.
 
-In Listing 19-11, we mentioned that we could use match guards to solve our
-pattern-shadowing problem. Recall that we created a new variable inside the
-pattern in the `match` expression instead of using the variable outside the
-`match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 19-27 shows how we can use a match guard to fix this
-problem.
+When discussing Listing 19-11, we mentioned that we could use match guards to
+solve our pattern-shadowing problem. Recall that we created a new variable
+inside the pattern in the `match` expression instead of using the variable
+outside the `match`. That new variable meant we couldn’t test against the value
+of the outer variable. Listing 19-27 shows how we can use a match guard to fix
+this problem.
 
 <Listing number="19-27" file-name="src/main.rs" caption="Using a match guard to test for equality with an outer variable">
 
@@ -557,17 +582,21 @@ rather than this:
 4 | 5 | (6 if y) => ...
 ```
 
-After running the code, the precedence behavior is evident: if the match guard
+After running the code, the precedence behavior is evident: If the match guard
 were applied only to the final value in the list of values specified using the
-`|` operator, the arm would have matched and the program would have printed
+`|` operator, the arm would have matched, and the program would have printed
 `yes`.
 
-### `@` Bindings
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="-bindings"></a>
+
+### Using `@` Bindings
 
 The _at_ operator `@` lets us create a variable that holds a value at the same
 time we’re testing that value for a pattern match. In Listing 19-29, we want to
 test that a `Message::Hello` `id` field is within the range `3..=7`. We also
-want to bind the value to the variable `id` so we can use it in the code
+want to bind the value to the variable `id` so that we can use it in the code
 associated with the arm.
 
 <Listing number="19-29" caption="Using `@` to bind to a value in a pattern while also testing it">
@@ -586,24 +615,24 @@ In the second arm, where we only have a range specified in the pattern, the code
 associated with the arm doesn’t have a variable that contains the actual value
 of the `id` field. The `id` field’s value could have been 10, 11, or 12, but
 the code that goes with that pattern doesn’t know which it is. The pattern code
-isn’t able to use the value from the `id` field, because we haven’t saved the
+isn’t able to use the value from the `id` field because we haven’t saved the
 `id` value in a variable.
 
 In the last arm, where we’ve specified a variable without a range, we do have
 the value available to use in the arm’s code in a variable named `id`. The
 reason is that we’ve used the struct field shorthand syntax. But we haven’t
 applied any test to the value in the `id` field in this arm, as we did with the
-first two arms: any value would match this pattern.
+first two arms: Any value would match this pattern.
 
 Using `@` lets us test a value and save it in a variable within one pattern.
 
 ## Summary
 
 Rust’s patterns are very useful in distinguishing between different kinds of
-data. When used in `match` expressions, Rust ensures your patterns cover every
-possible value, or your program won’t compile. Patterns in `let` statements and
-function parameters make those constructs more useful, enabling the
-destructuring of values into smaller parts and assigning those parts to
+data. When used in `match` expressions, Rust ensures that your patterns cover
+every possible value, or your program won’t compile. Patterns in `let`
+statements and function parameters make those constructs more useful, enabling
+the destructuring of values into smaller parts and assigning those parts to
 variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced

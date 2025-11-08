@@ -13,12 +13,12 @@ irrefutable patterns because the program cannot do anything meaningful when
 values don’t match. The `if let` and `while let` expressions and the
 `let...else` statement accept refutable and irrefutable patterns, but the
 compiler warns against irrefutable patterns because, by definition, they’re
-intended to handle possible failure: the functionality of a conditional is in
+intended to handle possible failure: The functionality of a conditional is in
 its ability to perform differently depending on success or failure.
 
 In general, you shouldn’t have to worry about the distinction between refutable
 and irrefutable patterns; however, you do need to be familiar with the concept
-of refutability so you can respond when you see it in an error message. In
+of refutability so that you can respond when you see it in an error message. In
 those cases, you’ll need to change either the pattern or the construct you’re
 using the pattern with, depending on the intended behavior of the code.
 
@@ -49,10 +49,10 @@ Because we didn’t cover (and couldn’t cover!) every valid value with the
 pattern `Some(x)`, Rust rightfully produces a compiler error.
 
 If we have a refutable pattern where an irrefutable pattern is needed, we can
-fix it by changing the code that uses the pattern: instead of using `let`, we
-can use `let else`. Then, if the pattern doesn’t match, the code will just skip
-the code in the curly brackets, giving it a way to continue validly. Listing
-19-9 shows how to fix the code in Listing 19-8.
+fix it by changing the code that uses the pattern: Instead of using `let`, we
+can use `let else`. Then, if the pattern doesn’t match, the code in the curly
+brackets will handle the value. Listing 19-9 shows how to fix the code in
+Listing 19-8.
 
 <Listing number="19-9" caption="Using `let...else` and a block with refutable patterns instead of `let`">
 

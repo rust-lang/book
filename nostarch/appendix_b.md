@@ -46,9 +46,10 @@ type |  |
 | `-` | `- expr` | Arithmetic negation | `Neg` |
 | `-` | `expr - expr` | Arithmetic subtraction | `Sub` |
 | `-=` | `var -= expr` | Arithmetic subtraction and assignment | `SubAssign` |
-| `->` | `fn(...) -> type`, `|…| -> type` | Function and closure return type |
-|
-| `.  | `expr.ident` | Member access |  |
+| `->` | `fn(...) -> type`, `|...| -> type` | Function and closure return type |  |
+| `.`  | `expr.ident` | Field access |  |
+| `.` | `expr.ident(expr, ...)` | Method call |  |
+| `.` | `expr.0`, `expr.1`, and so on | Tuple indexing |  |
 | `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal
 | `PartialOrd` |
 | `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal |
@@ -60,7 +61,7 @@ binding |  |
 inclusive range pattern |  |
 | `/` | `expr / expr` | Arithmetic division | `Div` |
 | `/=` | `var /= expr` | Arithmetic division and assignment | `DivAssign` |
-| `:  | `pat: type`, `ident: type` | Constraints |  |
+| `:`  | `pat: type`, `ident: type` | Constraints |  |
 | `:` | `ident: expr` | Struct field initializer |  |
 | `:` | `'a: loop {...}` | Loop label |  |
 | `;` | `expr;` | Statement and item terminator |  |
@@ -93,13 +94,13 @@ is, they don’t behave like a function or method call.
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
 
-Table B-2: Stand-Alone Syntax
+Table B-2: Stand-alone Syntax
 
 | Symbol | Explanation |
 |---|---|
 | `'ident` | Named lifetime or loop label |
-| `...u8`, `...i32`, `...f64`, `...usize`, and so on | Numeric literal of
-specific type |
+| Digits immediately followed by `u8`, `i32`, `f64`, `usize`, and so on |
+Numeric literal of specific type |
 | `"..."` | String literal |
 | `r"..."`, `r#"..."#`, `r##"..."##`, and so on | Raw string literal; escape
 characters not processed |
@@ -109,7 +110,7 @@ string |
 combination of raw and byte string literal |
 | `'...'` | Character literal |
 | `b'...'` | ASCII byte literal |
-| `|…| expr` | Closure |
+| `|...| expr` | Closure |
 | `!` | Always-empty bottom type for diverging functions |
 | `_` | “Ignored” pattern binding; also used to make integer literals readable |
 
@@ -146,14 +147,14 @@ Table B-4: Generics
 |---|---|
 | `path<...>` | Specifies parameters to a generic type in a type (for example,
 `Vec<u8>`) |
-| `path::<...>, method::<...>` | Specifies parameters to a generic type,
-function, or method in an expression; often referred to as turbofish (for
+| `path::<...>`, `method::<...>` | Specifies parameters to a generic type,
+function, or method in an expression; often referred to as *turbofish* (for
 example, `"42".parse::<i32>()`) |
 | `fn ident<...> ...` | Define generic function |
 | `struct ident<...> ...` | Define generic structure |
 | `enum ident<...> ...` | Define generic enumeration |
 | `impl<...> ...` | Define generic implementation |
-| `for<...> type` | Higher-ranked lifetime bounds |
+| `for<...> type` | Higher ranked lifetime bounds |
 | `type<ident=type>` | A generic type where one or more associated types have
 specific assignments (for example, `Iterator<Item=T>`) |
 
@@ -164,7 +165,7 @@ Table B-5: Trait Bound Constraints
 
 | Symbol | Explanation |
 |---|---|
-| T: U` | Generic parameter `T` constrained to types that implement `U` |
+| `T: U` | Generic parameter `T` constrained to types that implement `U` |
 | `T: 'a` | Generic type `T` must outlive lifetime `'a` (meaning the type
 cannot transitively contain any references with lifetimes shorter than `'a`) |
 | `T: 'static` | Generic type `T` contains no borrowed references other than
@@ -183,8 +184,8 @@ Table B-6: Macros and Attributes
 | `#[meta]` | Outer attribute |
 | `#![meta]` | Inner attribute |
 | `$ident` | Macro substitution |
-| `$ident:kind` | Macro capture |
-| `$(…)…` | Macro repetition |
+| `$ident:kind` | Macro metavariable |
+| `$(...)...` | Macro repetition |
 | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation |
 
 Table B-7 shows symbols that create comments.
@@ -200,9 +201,9 @@ Table B-7: Comments
 | `/*!...*/` | Inner block doc comment |
 | `/**...*/` | Outer block doc comment |
 
-Table B-8 shows symbols that appear in the context of using tuples.
+Table B-8 shows the contexts in which parentheses are used.
 
-Table B-8: Tuples
+Table B-8: Parentheses
 
 | Symbol | Explanation |
 |---|---|
@@ -214,7 +215,6 @@ Table B-8: Tuples
 | `(type, ...)` | Tuple type |
 | `expr(expr, ...)` | Function call expression; also used to initialize tuple
 `struct`s and tuple `enum` variants |
-| `expr.0`, `expr.1`, and so on | Tuple indexing |
 
 Table B-9 shows the contexts in which curly brackets are used.
 
@@ -223,7 +223,7 @@ Table B-9: Curly Brackets
 | Context | Explanation |
 |---|---|
 | `{...}` | Block expression |
-| `Type {...}` | `struct` literal |
+| `Type {...}` | Struct literal |
 
 Table B-10 shows the contexts in which square brackets are used.
 

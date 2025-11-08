@@ -4,7 +4,7 @@ extern crate trpl; // required for mdbook test
 use std::time::Duration;
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         trpl::spawn_task(async {
             for i in 1..10 {
                 println!("hi number {i} from the first task!");

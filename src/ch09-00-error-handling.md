@@ -7,10 +7,10 @@ code will compile. This requirement makes your program more robust by ensuring
 that you’ll discover errors and handle them appropriately before deploying your
 code to production!
 
-Rust groups errors into two major categories: _recoverable_ and _unrecoverable_
-errors. For a recoverable error, such as a _file not found_ error, we most
+Rust groups errors into two major categories: recoverable and unrecoverable
+errors. For a _recoverable error_, such as a _file not found_ error, we most
 likely just want to report the problem to the user and retry the operation.
-Unrecoverable errors are always symptoms of bugs, such as trying to access a
+_Unrecoverable errors_ are always symptoms of bugs, such as trying to access a
 location beyond the end of an array, and so we want to immediately stop the
 program.
 

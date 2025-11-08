@@ -12,8 +12,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.85 -c rust-docs
-        rustup default 1.85
+        rustup toolchain install 1.90 -c rust-docs
+        rustup default 1.90
     - name: Install mdbook
       run: |
         mkdir bin
@@ -47,8 +47,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.85 -c rust-docs
-        rustup default 1.85
+        rustup toolchain install 1.90 -c rust-docs
+        rustup default 1.90
     - name: Run `tools` package tests
       run: |
         cargo test
@@ -99,6 +99,6 @@ jobs:
     - name: Check for broken links
       run: |
         curl -sSLo linkcheck.sh \
-          https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
+          https://raw.githubusercontent.com/rust-lang/rust/HEAD/src/tools/linkchecker/linkcheck.sh
         # Cannot use --all here because of the generated redirect pages aren't available.
         sh linkcheck.sh book

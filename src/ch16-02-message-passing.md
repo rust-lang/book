@@ -1,7 +1,11 @@
-## Using Message Passing to Transfer Data Between Threads
+<!-- Old headings. Do not remove or links may break. -->
 
-One increasingly popular approach to ensuring safe concurrency is _message
-passing_, where threads or actors communicate by sending each other messages
+<a id="using-message-passing-to-transfer-data-between-threads"></a>
+
+## Transfer Data Between Threads with Message Passing
+
+One increasingly popular approach to ensuring safe concurrency is message
+passing, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
@@ -44,7 +48,7 @@ We create a new channel using the `mpsc::channel` function; `mpsc` stands for
 _multiple producer, single consumer_. In short, the way Rust’s standard library
 implements channels means a channel can have multiple _sending_ ends that
 produce values but only one _receiving_ end that consumes those values. Imagine
-multiple streams flowing together into one big river: everything sent down any
+multiple streams flowing together into one big river: Everything sent down any
 of the streams will end up in one river at the end. We’ll start with a single
 producer for now, but we’ll add multiple producers when we get this example
 working.
@@ -60,9 +64,9 @@ pattern that destructures the tuples; we’ll discuss the use of patterns in
 the tuple returned by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
-string so the spawned thread is communicating with the main thread, as shown in
-Listing 16-7. This is like putting a rubber duck in the river upstream or
-sending a chat message from one thread to another.
+string so that the spawned thread is communicating with the main thread, as
+shown in Listing 16-7. This is like putting a rubber duck in the river upstream
+or sending a chat message from one thread to another.
 
 <Listing number="16-7" file-name="src/main.rs" caption='Moving `tx` to a spawned thread and sending `"hi"`'>
 
@@ -73,7 +77,7 @@ sending a chat message from one thread to another.
 </Listing>
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so the spawned thread owns `tx`. The spawned
+to move `tx` into the closure so that the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
 channel.
 
@@ -81,7 +85,7 @@ The transmitter has a `send` method that takes the value we want to send. The
 `send` method returns a `Result<T, E>` type, so if the receiver has already
 been dropped and there’s nowhere to send a value, the send operation will
 return an error. In this example, we’re calling `unwrap` to panic in case of an
-error. But in a real application, we would handle it properly: return to
+error. But in a real application, we would handle it properly: Return to
 Chapter 9 to review strategies for proper error handling.
 
 In Listing 16-8, we’ll get the value from the receiver in the main thread. This
@@ -105,7 +109,7 @@ an error to signal that no more values will be coming.
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available and an `Err`
 value if there aren’t any messages this time. Using `try_recv` is useful if
-this thread has other work to do while waiting for messages: we could write a
+this thread has other work to do while waiting for messages: We could write a
 loop that calls `try_recv` every so often, handles a message if one is
 available, and otherwise does other work for a little while until checking
 again.
@@ -127,13 +131,17 @@ Got: hi
 
 Perfect!
 
-### Channels and Ownership Transference
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="channels-and-ownership-transference"></a>
+
+### Transferring Ownership Through Channels
 
 The ownership rules play a vital role in message sending because they help you
 write safe, concurrent code. Preventing errors in concurrent programming is the
 advantage of thinking about ownership throughout your Rust programs. Let’s do
 an experiment to show how channels and ownership work together to prevent
-problems: we’ll try to use a `val` value in the spawned thread _after_ we’ve
+problems: We’ll try to use a `val` value in the spawned thread _after_ we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
 this code isn’t allowed.
 
@@ -146,7 +154,7 @@ this code isn’t allowed.
 </Listing>
 
 Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
-Allowing this would be a bad idea: once the value has been sent to another
+Allowing this would be a bad idea: Once the value has been sent to another
 thread, that thread could modify or drop it before we try to use the value
 again. Potentially, the other thread’s modifications could cause errors or
 unexpected results due to inconsistent or nonexistent data. However, Rust gives
@@ -161,13 +169,17 @@ takes ownership of its parameter, and when the value is moved the receiver
 takes ownership of it. This stops us from accidentally using the value again
 after sending it; the ownership system checks that everything is okay.
 
-### Sending Multiple Values and Seeing the Receiver Waiting
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="sending-multiple-values-and-seeing-the-receiver-waiting"></a>
+
+### Sending Multiple Values
 
 The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
 two separate threads were talking to each other over the channel.
 
-In Listing 16-10 we’ve made some modifications that will prove the code in
-Listing 16-8 is running concurrently: the spawned thread will now send multiple
+In Listing 16-10, we’ve made some modifications that will prove the code in
+Listing 16-8 is running concurrently: The spawned thread will now send multiple
 messages and pause for a second between each message.
 
 <Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each one">
@@ -184,7 +196,7 @@ between each by calling the `thread::sleep` function with a `Duration` value of
 one second.
 
 In the main thread, we’re not calling the `recv` function explicitly anymore:
-instead, we’re treating `rx` as an iterator. For each value received, we’re
+Instead, we’re treating `rx` as an iterator. For each value received, we’re
 printing it. When the channel is closed, iteration will end.
 
 When running the code in Listing 16-10, you should see the following output
@@ -205,12 +217,16 @@ Because we don’t have any code that pauses or delays in the `for` loop in the
 main thread, we can tell that the main thread is waiting to receive values from
 the spawned thread.
 
-### Creating Multiple Producers by Cloning the Transmitter
+<!-- Old headings. Do not remove or links may break. -->
 
-Earlier we mentioned that `mpsc` was an acronym for _multiple producer,
-single consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10
-to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitter, as shown in Listing 16-11.
+<a id="creating-multiple-producers-by-cloning-the-transmitter"></a>
+
+### Creating Multiple Producers
+
+Earlier we mentioned that `mpsc` was an acronym for _multiple producer, single
+consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10 to
+create multiple threads that all send values to the same receiver. We can do so
+by cloning the transmitter, as shown in Listing 16-11.
 
 <Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
 

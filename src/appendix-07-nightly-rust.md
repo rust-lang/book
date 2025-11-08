@@ -19,7 +19,7 @@ bring you new features, fewer bugs, and faster compile times.
 ### Choo, Choo! Release Channels and Riding the Trains
 
 Rust development operates on a _train schedule_. That is, all development is
-done on the `master` branch of the Rust repository. Releases follow a software
+done in the main branch of the Rust repository. Releases follow a software
 release train model, which has been used by Cisco IOS and other software
 projects. There are three _release channels_ for Rust:
 
@@ -33,7 +33,7 @@ try out experimental new features may use nightly or beta.
 Here’s an example of how the development and release process works: let’s
 assume that the Rust team is working on the release of Rust 1.5. That release
 happened in December of 2015, but it will provide us with realistic version
-numbers. A new feature is added to Rust: a new commit lands on the `master`
+numbers. A new feature is added to Rust: a new commit lands on the main
 branch. Each night, a new nightly version of Rust is produced. Every day is a
 release day, and these releases are created by our release infrastructure
 automatically. So as time passes, our releases look like this, once a night:
@@ -43,7 +43,7 @@ nightly: * - - * - - *
 ```
 
 Every six weeks, it’s time to prepare a new release! The `beta` branch of the
-Rust repository branches off from the `master` branch used by nightly. Now,
+Rust repository branches off from the main branch used by nightly. Now,
 there are two releases:
 
 ```text
@@ -64,8 +64,8 @@ beta:                *
 
 Let’s say a regression is found. Good thing we had some time to test the beta
 release before the regression snuck into a stable release! The fix is applied
-to `master`, so that nightly is fixed, and then the fix is backported to the
-`beta` branch, and a new release of beta is produced:
+to the main branch, so that nightly is fixed, and then the fix is backported to
+the `beta` branch, and a new release of beta is produced:
 
 ```text
 nightly: * - - * - - * - - * - - * - - *
@@ -124,9 +124,9 @@ each version is supported for six weeks.
 
 There’s one more catch with this release model: unstable features. Rust uses a
 technique called “feature flags” to determine what features are enabled in a
-given release. If a new feature is under active development, it lands on
-`master`, and therefore, in nightly, but behind a _feature flag_. If you, as a
-user, wish to try out the work-in-progress feature, you can, but you must be
+given release. If a new feature is under active development, it lands on the
+main branch, and therefore, in nightly, but behind a _feature flag_. If you, as
+a user, wish to try out the work-in-progress feature, you can, but you must be
 using a nightly release of Rust and annotate your source code with the
 appropriate flag to opt in.
 
@@ -195,8 +195,8 @@ there’s consensus to accept or reject the feature.
 If the feature is accepted, an issue is opened on the Rust repository, and
 someone can implement it. The person who implements it very well may not be the
 person who proposed the feature in the first place! When the implementation is
-ready, it lands on the `master` branch behind a feature gate, as we discussed
-in the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
+ready, it lands on the main branch behind a feature gate, as we discussed in
+the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
 
 After some time, once Rust developers who use nightly releases have been able
 to try out the new feature, team members will discuss the feature, how it’s

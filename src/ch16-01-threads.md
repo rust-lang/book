@@ -71,7 +71,7 @@ hi number 5 from the spawned thread!
 
 The calls to `thread::sleep` force a thread to stop its execution for a short
 duration, allowing a different thread to run. The threads will probably take
-turns, but that isn’t guaranteed: it depends on how your operating system
+turns, but that isn’t guaranteed: It depends on how your operating system
 schedules the threads. In this run, the main thread printed first, even though
 the print statement from the spawned thread appears first in the code. And even
 though we told the spawned thread to print until `i` is `9`, it only got to `5`
@@ -81,7 +81,11 @@ If you run this code and only see output from the main thread, or don’t see an
 overlap, try increasing the numbers in the ranges to create more opportunities
 for the operating system to switch between the threads.
 
-### Waiting for All Threads to Finish Using `join` Handles
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="waiting-for-all-threads-to-finish-using-join-handles"></a>
+
+### Waiting for All Threads to Finish
 
 The code in Listing 16-1 not only stops the spawned thread prematurely most of
 the time due to the main thread ending, but because there is no guarantee on
@@ -180,7 +184,7 @@ another. In [“Capturing References or Moving Ownership”][capture]<!-- ignore
 concentrate more on the interaction between `move` and `thread::spawn`.
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
-arguments: we’re not using any data from the main thread in the spawned
+arguments: We’re not using any data from the main thread in the spawned
 thread’s code. To use data from the main thread in the spawned thread, the
 spawned thread’s closure must capture the values it needs. Listing 16-3 shows
 an attempt to create a vector in the main thread and use it in the spawned
