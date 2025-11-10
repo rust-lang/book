@@ -255,7 +255,7 @@ synchronous channel. Rust doesn’t yet have a way to use a `for` loop with an
 _asynchronously produced_ series of items, however, so we need to use a loop we
 haven’t seen before: the `while let` conditional loop. This is the loop version
 of the `if let` construct we saw back in the [“Concise Control Flow with `if
-let` and `let else`”][if-let]<!-- ignore --> section in Chapter 6. The loop
+let` and `let...else`”][if-let]<!-- ignore --> section in Chapter 6. The loop
 will continue executing as long as the pattern it specifies continues to match
 the value.
 
