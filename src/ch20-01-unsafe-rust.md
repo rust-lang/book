@@ -375,7 +375,7 @@ to export without mangling.
 In the following example, we make the `call_from_c` function accessible from C
 code, after it’s compiled to a shared library and linked from C:
 
-```
+```rust
 #[unsafe(no_mangle)]
 pub extern "C" fn call_from_c() {
     println!("Just called a Rust function from C!");
