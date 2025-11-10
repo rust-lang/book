@@ -31,7 +31,7 @@
 - [Enums and Pattern Matching](ch06-00-enums.md)
   - [Defining an Enum](ch06-01-defining-an-enum.md)
   - [The `match` Control Flow Construct](ch06-02-match.md)
-  - [Concise Control Flow with `if let` and `let else`](ch06-03-if-let.md)
+  - [Concise Control Flow with `if let` and `let...else`](ch06-03-if-let.md)
 
 - [Packages, Crates, and Modules](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
   - [Packages and Crates](ch07-01-packages-and-crates.md)

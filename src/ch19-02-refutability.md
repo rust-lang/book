@@ -50,7 +50,7 @@ pattern `Some(x)`, Rust rightfully produces a compiler error.
 
 If we have a refutable pattern where an irrefutable pattern is needed, we can
 fix it by changing the code that uses the pattern: Instead of using `let`, we
-can use `let else`. Then, if the pattern doesn’t match, the code in the curly
+can use `let...else`. Then, if the pattern doesn’t match, the code in the curly
 brackets will handle the value. Listing 19-9 shows how to fix the code in
 Listing 19-8.
 
