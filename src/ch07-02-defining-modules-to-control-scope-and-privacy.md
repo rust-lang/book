@@ -144,7 +144,7 @@ to find the definitions relevant to them. Programmers adding new functionality
 to this code would know where to place the code to keep the program organized.
 
 Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called _crate
-roots__. The reason for their name is that the contents of either of these two
+roots_. The reason for their name is that the contents of either of these two
 files form a module named `crate` at the root of the crate’s module structure,
 known as the _module tree_.
 
