@@ -348,7 +348,7 @@ reasons.
 
 For example, we could change the `read_username_from_file` function in Listing
 9-7 to return a custom error type named `OurError` that we define. If we also
-define `impl From<io::Error> for OurError` to construct an instance of
+define `impl From<io::Error>` for `OurError` to construct an instance of
 `OurError` from an `io::Error`, then the `?` operator calls in the body of
 `read_username_from_file` will call `from` and convert the error types without
 needing to add any more code to the function.
