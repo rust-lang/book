@@ -10,6 +10,9 @@ additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/rust-lang/book"
 
+[output.html.search]
+use-boolean-and = true
+
 [output.html.redirect]
 "ch17-00-oop.html" = "ch18-00-oop.html"
 "ch17-01-what-is-oo.html" = "ch18-01-what-is-oo.html"
