@@ -1,21 +1,21 @@
 use std::io;
 
 use clap::{self, Parser, Subcommand};
-use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
+use mdbook_preprocessor::Preprocessor;
 
 use mdbook_trpl::Listing;
 
 fn main() -> Result<(), String> {
     let cli = Cli::parse();
     if let Some(Command::Supports { renderer }) = cli.command {
-        return if Listing.supports_renderer(&renderer) {
+        return if Listing.supports_renderer(&renderer).unwrap() {
             Ok(())
         } else {
             Err(format!("Renderer '{renderer}' is unsupported"))
         };
     }
 
-    let (ctx, book) = CmdPreprocessor::parse_input(io::stdin())
+    let (ctx, book) = mdbook_preprocessor::parse_input(io::stdin())
         .map_err(|e| format!("{e}"))?;
     let processed = Listing.run(&ctx, book).map_err(|e| format!("{e}"))?;
     serde_json::to_writer(io::stdout(), &processed).map_err(|e| format!("{e}"))

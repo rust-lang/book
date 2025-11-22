@@ -1,8 +1,8 @@
 use anyhow::anyhow;
-use mdbook::{
-    book::Book,
-    preprocess::{Preprocessor, PreprocessorContext},
-    BookItem,
+use mdbook_preprocessor::{
+    book::{Book, BookItem},
+    errors::Result,
+    Preprocessor, PreprocessorContext,
 };
 use pulldown_cmark::{Event, Tag, TagEnd};
 use pulldown_cmark_to_cmark::cmark;
@@ -16,11 +16,7 @@ impl Preprocessor for TrplHeading {
         "trpl-heading"
     }
 
-    fn run(
-        &self,
-        ctx: &PreprocessorContext,
-        mut book: Book,
-    ) -> anyhow::Result<Book> {
+    fn run(&self, ctx: &PreprocessorContext, mut book: Book) -> Result<Book> {
         let mode = Mode::from_context(ctx, self.name())?;
 
         let mut errors = vec![];
@@ -40,8 +36,8 @@ impl Preprocessor for TrplHeading {
         }
     }
 
-    fn supports_renderer(&self, renderer: &str) -> bool {
-        renderer == "html" || renderer == "markdown" || renderer == "test"
+    fn supports_renderer(&self, renderer: &str) -> Result<bool> {
+        Ok(renderer == "html" || renderer == "markdown" || renderer == "test")
     }
 }
 

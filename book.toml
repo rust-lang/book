@@ -39,9 +39,14 @@ use-boolean-and = true
 
 # Do not sync this preprocessor; it is for the HTML renderer only.
 [preprocessor.trpl-note]
+command = "cargo run --manifest-path packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-note"
 
 [preprocessor.trpl-listing]
+command = "cargo run --manifest-path packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-listing"
 output-mode = "default"
 
 [rust]
 edition = "2024"
+
+[build]
+extra-watch-dirs = ["packages/mdbook-trpl"]
