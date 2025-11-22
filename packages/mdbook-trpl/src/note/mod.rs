@@ -1,8 +1,7 @@
-use mdbook::{
-    book::Book,
+use mdbook_preprocessor::{
+    book::{Book, BookItem},
     errors::Result,
-    preprocess::{Preprocessor, PreprocessorContext},
-    BookItem,
+    Preprocessor, PreprocessorContext,
 };
 use pulldown_cmark::{
     Event::{self, *},
@@ -43,8 +42,8 @@ impl Preprocessor for TrplNote {
         Ok(book)
     }
 
-    fn supports_renderer(&self, renderer: &str) -> bool {
-        renderer == "html" || renderer == "markdown" || renderer == "test"
+    fn supports_renderer(&self, renderer: &str) -> Result<bool> {
+        Ok(renderer == "html" || renderer == "markdown" || renderer == "test")
     }
 }
 

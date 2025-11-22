@@ -1,6 +1,9 @@
 name: CI
 on: [push, pull_request]
 
+env:
+  MDBOOK_VERSION: 0.5.1
+
 jobs:
   test:
     name: Run tests
@@ -17,7 +20,7 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.45/mdbook-v0.4.45-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
     - name: Report versions
       run: |
@@ -71,10 +74,8 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.45/mdbook-v0.4.45-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
-    - name: Install mdbook-trpl binaries
-      run: cargo install --path packages/mdbook-trpl
     - name: Install aspell
       run: sudo apt-get install aspell
     - name: Install shellcheck

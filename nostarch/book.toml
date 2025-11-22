@@ -12,14 +12,17 @@ git-repository-url = "https://github.com/rust-lang/book"
 build-dir = "../tmp"
 
 [preprocessor.trpl-listing]
+command = "cargo run --manifest-path ../packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-listing"
 output-mode = "simple"
 
 # Only used in this version, *not* in the root `book.toml`, because its job is
 # to remove `<figure>` and `<figcaption>` markup from the version we send them.
 [preprocessor.trpl-figure]
+command = "cargo run --manifest-path ../packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-figure"
 output-mode = "simple"
 
 [preprocessor.trpl-heading]
+command = "cargo run --manifest-path ../packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-heading"
 output-mode = "simple"
 
 [rust]
