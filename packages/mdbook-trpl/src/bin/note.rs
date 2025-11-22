@@ -1,7 +1,7 @@
 use std::io;
 
 use clap::{self, Parser, Subcommand};
-use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
+use mdbook_preprocessor::Preprocessor;
 
 use mdbook_trpl::Note;
 
@@ -9,14 +9,14 @@ fn main() -> Result<(), String> {
     let cli = Cli::parse();
     let simple_note = Note;
     if let Some(Command::Supports { renderer }) = cli.command {
-        return if simple_note.supports_renderer(&renderer) {
+        return if simple_note.supports_renderer(&renderer).unwrap() {
             Ok(())
         } else {
             Err(format!("Renderer '{renderer}' is unsupported"))
         };
     }
 
-    let (ctx, book) = CmdPreprocessor::parse_input(io::stdin())
+    let (ctx, book) = mdbook_preprocessor::parse_input(io::stdin())
         .map_err(|e| format!("blah: {e}"))?;
     let processed = simple_note.run(&ctx, book).map_err(|e| format!("{e}"))?;
     serde_json::to_writer(io::stdout(), &processed).map_err(|e| format!("{e}"))

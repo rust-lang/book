@@ -4,14 +4,12 @@ set -eu
 
 cargo build --release
 
-cargo install --locked --path ./packages/mdbook-trpl --offline
-
 mkdir -p tmp
 rm -rf tmp/*.md
 rm -rf tmp/markdown
 
 # Render the book as Markdown to include all the code listings
-MDBOOK_OUTPUT__MARKDOWN=1 mdbook build nostarch
+MDBOOK_OUTPUT__MARKDOWN='{}' mdbook build nostarch
 
 # Get all the Markdown files
 # TODO: what was this doing and why?!?
