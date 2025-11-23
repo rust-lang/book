@@ -1,5 +1,5 @@
 [workspace]
-members = ["packages/tools"]
+members = ["listings/ch02-guessing-game-tutorial/listing-02-03", "listings/ch02-guessing-game-tutorial/listing-02-04", "listings/ch02-guessing-game-tutorial/listing-02-05", "listings/ch02-guessing-game-tutorial/listing-02-06","packages/tools"]
 default-members = ["packages/tools"]
 resolver = "2"
 exclude = [

@@ -1,16 +1,9 @@
-$ cargo build
-   Compiling libc v0.2.86
-   Compiling getrandom v0.2.2
-   Compiling cfg-if v1.0.0
-   Compiling ppv-lite86 v0.2.10
-   Compiling rand_core v0.6.2
-   Compiling rand_chacha v0.3.0
-   Compiling rand v0.8.5
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+$cargo build
+   Compiling listing-02-04 v0.1.0 
 error[E0308]: mismatched types
-  --> src/main.rs:23:21
+  --> listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:27:21
    |
-23 |     match guess.cmp(&secret_number) {
+27 |     match guess.cmp(&secret_number) {
    |                 --- ^^^^^^^^^^^^^^ expected `&String`, found `&{integer}`
    |                 |
    |                 arguments to this method are incorrect
@@ -21,4 +14,4 @@ note: method defined here
   --> /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/core/src/cmp.rs:979:8
 
 For more information about this error, try `rustc --explain E0308`.
-error: could not compile `guessing_game` (bin "guessing_game") due to 1 previous error
+error: could not compile `listing-02-04` (bin "listing-02-04") due to 1 previous error
