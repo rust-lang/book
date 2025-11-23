@@ -2,14 +2,14 @@
 use std::io;
 
 // ANCHOR: ch07-04
-use rand::Rng;
+use rand::random_range;
 
 fn main() {
     // ANCHOR_END: ch07-04
     println!("Guess the number!");
 
     // ANCHOR: ch07-04
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let secret_number = random_range(1..=100);
     // ANCHOR_END: ch07-04
 
     println!("The secret number is: {secret_number}");
