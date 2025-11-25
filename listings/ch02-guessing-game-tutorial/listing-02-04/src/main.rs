@@ -2,14 +2,14 @@
 use std::cmp::Ordering;
 use std::io;
 
-use rand::Rng;
+use rand::random_range;
 
 fn main() {
     // --snip--
     // ANCHOR_END: here
     println!("Guess the number!");
 
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let secret_number = random_range(1..=100);
 
     println!("The secret number is: {secret_number}");
 
