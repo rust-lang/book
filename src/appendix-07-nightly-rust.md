@@ -131,10 +131,10 @@ using a nightly release of Rust and annotate your source code with the
 appropriate flag to opt in.
 
 If you’re using a beta or stable release of Rust, you can’t use any feature
-flags. This is the key that allows us to get practical use with new features
-before we declare them stable forever. Those who wish to opt into the bleeding
-edge can do so, and those who want a rock-solid experience can stick with
-stable and know that their code won’t break. Stability without stagnation.
+flags by default. This is the key that allows us to get practical use with new
+features before we declare them stable forever. Those who wish to opt into the
+bleeding edge can do so, and those who want a rock-solid experience can stick
+with stable and know that their code won’t break. Stability without stagnation.
 
 This book only contains information about stable features, as in-progress
 features are still changing, and surely they’ll be different between when this
