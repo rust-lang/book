@@ -326,7 +326,6 @@ isn’t too difficult. Rust doesn’t yet include random number functionality in
 its standard library. However, the Rust team does provide a [`rand`
 crate][randcrate] with said functionality.
 
-<!-- Old headings. Do not remove or links may break. -->
 <a id="using-a-crate-to-get-more-functionality"></a>
 
 ### Increasing Functionality with a Crate
@@ -343,12 +342,6 @@ following line to the bottom, beneath the `[dependencies]` section header that
 Cargo created for you. Be sure to specify `rand` exactly as we have here, with
 this version number, or the code examples in this tutorial may not work:
 
-<!-- When updating the version of `rand` used, also update the version of
-`rand` used in these files so they all match:
-* ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
-* ch14-03-cargo-workspaces.md
--->
-
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
@@ -359,15 +352,15 @@ In the _Cargo.toml_ file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]`, you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
-semantic version specifier `0.8.5`. Cargo understands [Semantic
+semantic version specifier `0.9.2`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called _SemVer_), which is a
-standard for writing version numbers. The specifier `0.8.5` is actually
-shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
-below 0.9.0.
+standard for writing version numbers. The specifier `0.9.2` is actually
+shorthand for `^0.9.2`, which means any version that is at least 0.9.2 but
+below 0.10.0.
 
 Cargo considers these versions to have public APIs compatible with version
-0.8.5, and this specification ensures that you’ll get the latest patch release
-that will still compile with the code in this chapter. Any version 0.9.0 or
+0.9.2, and this specification ensures that you’ll get the latest patch release
+that will still compile with the code in this chapter. Any version 0.10.0 or
 greater is not guaranteed to have the same API as what the following examples
 use.
 
@@ -384,25 +377,16 @@ cargo build -->
 
 ```console
 $ cargo build
-  Updating crates.io index
-   Locking 15 packages to latest Rust 1.85.0 compatible versions
-    Adding rand v0.8.5 (available: v0.9.0)
- Compiling proc-macro2 v1.0.93
- Compiling unicode-ident v1.0.17
- Compiling libc v0.2.170
- Compiling cfg-if v1.0.0
- Compiling byteorder v1.5.0
- Compiling getrandom v0.2.15
- Compiling rand_core v0.6.4
- Compiling quote v1.0.38
- Compiling syn v2.0.98
- Compiling zerocopy-derive v0.7.35
- Compiling zerocopy v0.7.35
- Compiling ppv-lite86 v0.2.20
- Compiling rand_chacha v0.3.1
- Compiling rand v0.8.5
- Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-  Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
+   Compiling libc v0.2.177
+   Compiling zerocopy v0.8.30
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.4
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_core v0.9.3
+   Compiling rand_chacha v0.9.0
+   Compiling rand v0.9.2
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+   Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.66s
 ```
 
 </Listing>
@@ -455,7 +439,7 @@ reuse what it has already downloaded and compiled for those.
 Cargo has a mechanism that ensures that you can rebuild the same artifact every
 time you or anyone else builds your code: Cargo will use only the versions of
 the dependencies you specified until you indicate otherwise. For example, say
-that next week version 0.8.6 of the `rand` crate comes out, and that version
+that next week version 0.9.3 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
 break your code. To handle this, Rust creates the _Cargo.lock_ file the first
 time you run `cargo build`, so we now have this in the _guessing_game_
@@ -467,7 +451,7 @@ _Cargo.lock_ file. When you build your project in the future, Cargo will see
 that the _Cargo.lock_ file exists and will use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at 0.8.5 until you explicitly upgrade, thanks to the _Cargo.lock_ file.
+remain at 0.9.2 until you explicitly upgrade, thanks to the _Cargo.lock_ file.
 Because the _Cargo.lock_ file is important for reproducible builds, it’s often
 checked into source control with the rest of the code in your project.
 
@@ -477,8 +461,8 @@ When you _do_ want to update a crate, Cargo provides the command `update`,
 which will ignore the _Cargo.lock_ file and figure out all the latest versions
 that fit your specifications in _Cargo.toml_. Cargo will then write those
 versions to the _Cargo.lock_ file. Otherwise, by default, Cargo will only look
-for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
-released the two new versions 0.8.6 and 0.999.0, you would see the following if
+for versions greater than 0.9.2 and less than 0.10.0. If the `rand` crate has
+released the two new versions 0.9.3 and 0.10.0, you would see the following if
 you ran `cargo update`:
 
 <!-- manual-regeneration
@@ -491,19 +475,19 @@ as a guide to creating the hypothetical output shown here -->
 $ cargo update
     Updating crates.io index
      Locking 1 package to latest Rust 1.85.0 compatible version
-    Updating rand v0.8.5 -> v0.8.6 (available: v0.999.0)
+    Updating rand v0.9.2 -> v0.9.3 (available: v0.10.0)
 ```
 
-Cargo ignores the 0.999.0 release. At this point, you would also notice a
+Cargo ignores the 0.10.0 release. At this point, you would also notice a
 change in your _Cargo.lock_ file noting that the version of the `rand` crate
-you are now using is 0.8.6. To use `rand` version 0.999.0 or any version in the
-0.999._x_ series, you’d have to update the _Cargo.toml_ file to look like this
+you are now using is 0.9.3. To use `rand` version 0.10.0 or any version in the
+0.10._x_ series, you’d have to update the _Cargo.toml_ file to look like this
 instead (don’t actually make this change because the following examples assume
-you’re using `rand` 0.8):
+you’re using `rand` 0.9.x):
 
 ```toml
 [dependencies]
-rand = "0.999.0"
+rand = "0.10.0"
 ```
 
 The next time you run `cargo build`, Cargo will update the registry of crates
@@ -529,20 +513,9 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 </Listing>
 
-First, we add the line `use rand::Rng;`. The `Rng` trait defines methods that
-random number generators implement, and this trait must be in scope for us to
-use those methods. Chapter 10 will cover traits in detail.
+First, we add the line `use rand::random_range;`. This brings the `random_range` function from the `rand` crate into scope so we can use it.
 
-Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
-generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then, we call the `gen_range`
-method on the random number generator. This method is defined by the `Rng`
-trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
-random number in the range. The kind of range expression we’re using here takes
-the form `start..=end` and is inclusive on the lower and upper bounds, so we
-need to specify `1..=100` to request a number between 1 and 100.
+Next, we add two lines in the middle. In the first line, we call the `random_range` function. This function takes a range expression as an argument and generates a random number within that range. The kind of range expression we’re using here takes the form `start..=end` and is inclusive on the lower and upper bounds, so we need to specify `1..=100` to request a number between 1 and 100.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
