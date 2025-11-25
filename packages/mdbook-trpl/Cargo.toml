@@ -29,9 +29,11 @@ pulldown-cmark-to-cmark = "19"
 serde_json = "1"
 thiserror = "1.0.60"
 toml = "0.8.12"
+rand = "0.9.2"
 
 [dev-dependencies]
 assert_cmd = "2"
+rand = "0.9.2"
 
 # This package is used as a path dependency in `rust-lang/rust`, not published
 # to crates.io, so it cannot be part of the `rust-lang/book` workspace, because
