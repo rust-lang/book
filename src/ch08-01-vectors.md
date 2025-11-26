@@ -110,7 +110,7 @@ end of the vector.
 
 When the `get` method is passed an index that is outside the vector, it returns
 `None` without panicking. You would use this method if accessing an element
-beyond the range of the vector may happen occasionally under normal
+beyond the range of the vector, which may happen occasionally under normal
 circumstances. Your code will then have logic to handle having either
 `Some(&element)` or `None`, as discussed in Chapter 6. For example, the index
 could be coming from a person entering a number. If they accidentally enter a
