@@ -1,30 +1,24 @@
-# The Rust Programming Language
+# A Linguagem de Programação Rust
 
 ![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
 
-This repository contains the source of "The Rust Programming Language" book.
-
-[The book is available in dead-tree form from No Starch Press][nostarch].
+Esse repositório é uma tradução do livro "A linguagem de programação Rust". Você pode encontrar versão impressa (em inglês) em [No Starch Press][nostarch].
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-You can also read the book for free online. Please see the book as shipped with
-the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
-in those versions may have been fixed in this repository already, as those
-releases are updated less frequently.
+Você pode ler o livro de forma grátis _online_. Atenção, o livro pode ser entregue com a última versão [estável], [beta], ou [instavel] das versões do Rust. Os erros dessa versão já pode ter sido corrigida no repositório _online_.
 
-[stable]: https://doc.rust-lang.org/stable/book/
+[estável]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
-[nightly]: https://doc.rust-lang.org/nightly/book/
+[instavel]: https://doc.rust-lang.org/nightly/book/
 
-See the [releases] to download just the code of all the code listings that appear in the book.
+Veja os [lançamentos].
 
-[releases]: https://github.com/rust-lang/book/releases
+[lançamentos]: https://github.com/rust-lang/book/releases
 
-## Requirements
+## Requisitos
 
-Building the book requires [mdBook], ideally the same version that
-rust-lang/rust uses in [this file][rust-mdbook]. To get it:
+Esse livro também precisa do [mdBook], preferencialmente a mesma versão usada pela linguagem Rust [nesse arquivo][rust-mdbook]. Use esse comando:
 
 [mdBook]: https://github.com/rust-lang/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/HEAD/src/tools/rustbook/Cargo.toml
@@ -32,26 +26,19 @@ rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 ```bash
 $ cargo install mdbook --locked --version <version_num>
 ```
-
-The book also uses two mdbook plugins which are part of this repository. If you
-do not install them, you will see warnings when building and the output will not
-look right, but you _will_ still be able to build the book. To use the plugins,
-you should run:
+Este livro também utiliza dois plugins _mdbook_ que faz parte desse repositório. Se você não instalar, você irá receber avisos durante o _build_ e o resultado do _build_ não estara formatado conforme o esperado, mas você ainda poderá fazer o _build_. Para usar os plugins, utilize o comando:
 
 ```bash
 $ cargo install --locked --path packages/mdbook-trpl --force
 ```
 
 ## Building
-
-To build the book, type:
+Para realizar o _build_, utilize o comando:
 
 ```bash
 $ mdbook build
 ```
-
-The output will be in the `book` subdirectory. To check it out, open it in
-your web browser.
+O arquivo será salvo na sub pasta `book`. Para conferir abra no seu navegador.
 
 _Firefox:_
 
@@ -71,46 +58,29 @@ $ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
 $ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
-To run the tests:
+Para realizar teste:
 
 ```bash
 $ cd packages/trpl
 $ mdbook test --library-path packages/trpl/target/debug/deps
 ```
 
-## Contributing
+## Contribuição
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+Adoraríamos receber a sua ajuda. Dê uma olhada em [CONTRIBUTING.md][contrib] para entender as formas de contribuição que estamos procurando.
 
 [contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+Por esse livro ser [impresso][nostarch], e por querermos manter a versão online do livro o mais próximo da versão do livro, possa ser que a sua solicitação de _issue_ ou _pull request_ demore para ser aceita.
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+Além disso, nós temos feito uma extensão revisão para correção de erros. Se a sua _issue_ ou _pull request_ não está relacionada à correção de erros, talvez ela fique para a próxima grande revisão esperada para meses ou anos. Obrigado pela paciência! Confira, [Edições do Rust](https://doc.rust-lang.org/edition-guide/).
 
-### Translations
-
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+### Traduções
+Gostamos da ajuda que recebemos para a tradução desse livro. Veja a etiqueta [Translations] para participar de uma tradução que está ocorrendo. Abra uma _issue_ para começar uma nova tradução. Nós estamos aguardando [mdbook support] para multiplas linguagens antes de unir, mas sinta-se livre para começar!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/rust-lang/mdBook/issues/5
 
-## Spellchecking
+## Gramática
 
-To scan source files for spelling errors, you can use the `spellcheck.sh`
-script available in the `ci` directory. It needs a dictionary of valid words,
-which is provided in `ci/dictionary.txt`. If the script produces a false
-positive (say, you used the word `BTreeMap` which the script considers invalid),
-you need to add this word to `ci/dictionary.txt` (keep the sorted order for
-consistency).
+Para procurar nos arquivos erros de gramática, voce pode usar o comando `spellcheck.sh` disponível na pasta `ci`. É preciso um dicionário válido que pode ser encontrado em `ci/dictionary.txt`. Se o _script_ produzir um falso - positivo você precisa usar `BTreeMap` no script considerado inválido e precisa adicionar a palavra ao `ci/dictionary.txt` (mantenha a ordenado por consistencia).
