@@ -33,7 +33,12 @@ Este livro também utiliza dois plugins _mdbook_ que faz parte desse repositóri
 $ cargo install --locked --path packages/mdbook-trpl --force
 ```
 
-## Building
+## Inicializar e build
+
+Para inicializar o mdbook execute
+```bash
+$ mdbook init
+```
 
 Para realizar o _build_, utilize o comando:
 

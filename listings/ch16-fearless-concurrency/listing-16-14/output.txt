@@ -1,28 +1,34 @@
 $ cargo run
    Compiling shared-state v0.1.0 (file:///projects/shared-state)
 error[E0277]: `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
-  --> src/main.rs:11:36
-   |
-11 |           let handle = thread::spawn(move || {
-   |                        ------------- ^------
-   |                        |             |
-   |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
-   | |                      |
-   | |                      required by a bound introduced by this call
-12 | |             let mut num = counter.lock().unwrap();
-13 | |
-14 | |             *num += 1;
-15 | |         });
-   | |_________^ `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
-   |
-   = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc<std::sync::Mutex<i32>>`
+   --> src/main.rs:11:36
+    |
+ 11 |           let handle = thread::spawn(move || {
+    |                        ------------- ^------
+    |                        |             |
+    |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
+    | |                      |
+    | |                      required by a bound introduced by this call
+ 12 | |             let mut num = counter.lock().unwrap();
+ 13 | |
+ 14 | |             *num += 1;
+ 15 | |         });
+    | |_________^ `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
+    |
+    = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc<std::sync::Mutex<i32>>`
 note: required because it's used within this closure
-  --> src/main.rs:11:36
-   |
-11 |         let handle = thread::spawn(move || {
-   |                                    ^^^^^^^
+   --> src/main.rs:11:36
+    |
+ 11 |         let handle = thread::spawn(move || {
+    |                                    ^^^^^^^
 note: required by a bound in `spawn`
-  --> /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/thread/mod.rs:723:1
+   --> file:///home/.rustup/toolchains/1.90/lib/rustlib/src/rust/library/std/src/thread/mod.rs:726:8
+    |
+723 | pub fn spawn<F, T>(f: F) -> JoinHandle<T>
+    |        ----- required by a bound in this function
+...
+726 |     F: Send + 'static,
+    |        ^^^^ required by this bound in `spawn`
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
