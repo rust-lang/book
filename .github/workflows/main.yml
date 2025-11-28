@@ -53,7 +53,7 @@ jobs:
       run: |
         cargo test
     - name: Run `mdbook-trpl` package tests
-      working-directory: packages/mdbook-trpl
+      working-directory: packages/mdbook-trpl/
       run: |
         cargo test
   lint:
