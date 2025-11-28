@@ -1,10 +1,4 @@
 $ cargo build
- Downloading crates ...
-  Downloaded getrandom v0.2.2
-  Downloaded rand_chacha v0.3.0
-  Downloaded rand_core v0.6.2
-  Downloaded ppv-lite86 v0.2.10
-  Downloaded libc v0.2.86
    Compiling libc v0.2.86
    Compiling getrandom v0.2.2
    Compiling cfg-if v1.0.0

@@ -1,17 +1,3 @@
 $ cargo +nightly miri run
-info: syncing channel updates for 'nightly-aarch64-apple-darwin'
-info: latest update on 2025-11-28, rust version 1.93.0-nightly (c86564c41 2025-11-27)
-info: downloading component 'cargo'
-info: downloading component 'clippy'
-info: downloading component 'rust-docs'
-info: downloading component 'rust-std'
-info: downloading component 'rustc'
-info: downloading component 'rustfmt'
-info: installing component 'cargo'
-info: installing component 'clippy'
-info: installing component 'rust-docs'
-info: installing component 'rust-std'
-info: installing component 'rustc'
-info: installing component 'rustfmt'
 error: 'cargo-miri' is not installed for the toolchain 'nightly-aarch64-apple-darwin'.
 To install, run `rustup component add --toolchain nightly-aarch64-apple-darwin miri`
