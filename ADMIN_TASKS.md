@@ -8,7 +8,7 @@ Essa documentação é para qualquer um que gerencia o repositório para lembrar
 - Mude o número da versão em`.github/workflows/main.yml`.
 - Mude o número da versão em `rust-toolchain`, o que deve mudar o que está usando localmente com `rustup`.
 - Mude o número da versão em `src/title-page.md`
-- Rode `./tools/update-rustc.sh` (verifique o código comentado para mais detalhes do que isso faz).
+- Execute `./tools/update-rustc.sh` (verifique o código comentado para mais detalhes do que isso faz).
 - Verifique as mudanças (olhe os arquivos modificados conforme o indicado pelo git que podem ser vistas em `tmp/book-before` e `tmp/book-after`) e fazer _commit_ é algo bom.
 - Busque por `manual-regeneration` e siga as instruções encontradas para atualizar o _output_ que não pode ser gerado por um script.
 
