@@ -1,101 +1,73 @@
-# Contributing
+# Contribuindo com o projeto
 
-We'd love your help! Thanks for caring about the book.
+Adoraríamos receber a sua ajuda. Obrigado por se importar com esse livro.
 
-## Where to Edit
+## Onde Editar
 
-All edits should be made in the `src` directory.
+Todas as edições devem ser feita na pasta `src`
 
-The `nostarch` directory contains snapshots for sending edits to the publishers
-of the print version. The snapshot files reflect what has been sent or not, so
-they only get updated when edits are sent to No Starch. **Do not submit pull
-requests changing files in the `nostarch` directory, they will be closed.**
+A pasta `nostarch` contém trechos que serão enviadas aos editores e para a publicação da versão impressa. Esses trechos mostram o que devem ser enviados ou não, então quando editados eles serão para o No Starch. **Não envie _pull requests_ com modificações nos arquivos da pasta `nostarch`, os _pull requests_ serão fechados.**
 
-We use [`rustfmt`][rustfmt] to apply standard formatting to Rust code in the
-repo and [`dprint`][dprint] to apply standard formatting to the Markdown source
-and the non-Rust code in the project.
+Nós usamos [`rustfmt`][rustfmt] para usar uma formatação para código Rust em [`dprint`][dprint] aplicando a padronização para Markdown e códigos não Rust nesse projeto.
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 [dprint]: https://dprint.dev
 
-You will normally have `rustfmt` installed if you have a Rust toolchain
-installed; if for some reason you do not have a copy of `rustfmt`, you can add
-it by running the following command:
+Normalmente você tem `rustfmt` instalado se você tem um Rust. Se por algum motivo você não tem uma cópia de`rustfmt`, você pode adicionar usando o seguinte comando:
 
 ```sh
 rustup component add rustfmt
 ```
 
-To install `dprint`, you can run the following command:
+Para instalar o `dprint`, usar o seguinte comando:
 
 ```sh
 cargo install dprint
 ```
 
-Or follow the [instructions][install-dprint] on the `dprint` website.
+Ou seguir as [instruções][install-dprint] no _site_ do `dprint`.
 
 [install-dprint]: https://dprint.dev/install/
 
-To format Rust code, you can run `rustfmt <path to file>`, and to format other
-files, you can pass `dprint fmt <path to file>`. Many text editors also have native
-support or extensions for both `rustfmt` and `dprint`.
+Para formatar o código Rust, você pode utilizar o comando `rustfmt <caminho do arquivo>`, e para formatar outros arquivos, você pode utilizar `dprint fmt <path to file>`. Alguns editores de texto também suporte nativo para `rustfmt` e `dprint`.
 
-## Checking for Fixes
+## Correções
 
-The book rides the Rust release trains. Therefore, if you see a problem on
-https://doc.rust-lang.org/stable/book, it may already be fixed on the `main`
-branch in this repo, but the fix hasn't gone through nightly -> beta -> stable
-yet. Please check the `main` branch in this repo before reporting an issue.
+O livro acompanha o livro de treinamento do Rust. Portanto, se você um problema em https://doc.rust-lang.org/stable/book, deverá ser corrigido na branch `main` desse repositório, mas se
+branch in this repo, mas se a correção não aconteceu entre as versões _nightly_ -> _beta_ -> _stable_. Por favor, verifique a branch `main` nesse repositório antes de informar uma _issue_.
 
-Looking at the history for a particular file can also give more information on
-how or whether an issue has been fixed or not if you're trying to figure that
-out.
+Procurar pelo histórico de erro de um arquivo específico podera te ajudar a entender como um erro foi corrigido.
 
-Please also search open and closed issues and open and closed PRs before
-reporting a new issue or opening a new PR.
+Por favor, também busque por _issues_ aberta e fechada antes de reportar ou abrir um novo _pull request_
 
-## Licensing
+## Licença
 
-This repository is under the same license as Rust itself, MIT/Apache2. You
-can find the full text of each license in the `LICENSE-*` files in this
-repository.
+Este repositório esta sob as mesmas de esse da linguagem Rust, MIT/Apache2. O texto completo da licença você encontra no arquivo `LICENSE-*` neste repositório.
 
-## Code of Conduct
+## Código de conduta
 
-The Rust project has [a code of conduct](http://rust-lang.org/policies/code-of-conduct)
-that governs all sub-projects, including this one. Please respect it!
+O projeto Rust tem [um código de conduta](http://rust-lang.org/policies/code-of-conduct) que governa todos os sub projetos do Rust, incluindo este. Por favor, respeite!
 
-## Expectations
+## Expectativas
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+Como esse livro é [impresso][nostarch], e como queremos manter a versão _online_ deste livro a mais próxima da versão impressa and talvez leve mais tempo que o normal para aprovarmos seu avaliarmos e aprovarmos o seu _pull request_.
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+Estamos em uma longa revisão das [Versões do Rust](https://doc.rust-lang.org/edition-guide/). Entre essas revisões nós iremos corrigir apenas erros. Se a sua _issue_ ou _pull request_ não for somente a correção de um erro, talvez seja corrigida nas próximas vezes em que estamos fazendo uma grande revisão: expectativas de meses ou anos. Obrigado por sua paciência.
 
-## Help wanted
+## Busque ajuda
+
+Se você busca por maneiras que não envolva uma grande quantidade de leitura ou escrita, olhe a
 
 If you're looking for ways to help that don't involve large amounts of
-reading or writing, check out the [open issues with the E-help-wanted
-label][help-wanted]. These might be small fixes to the text, Rust code,
-frontend code, or shell scripts that would help us be more efficient or
-enhance the book in some way!
+reading or writing, check out the [abertura de issues com etiqueta de ajuda online][help-wanted]. Talvez encontre pequenas correções, códigos Rust ou pequenos _scripts shell_ essas pequenas correções pode nos ajudar grandemente ou melhorar esse livro de alguma forma.
 
 [help-wanted]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3AE-help-wanted
 
-## Translations
+## Traduções
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+Nós adoraríamos receber ajuda para traduzir esse livro! Veja as etiquetas de [Translations] e junte-se ao progresso atual de tradução. Abra uma nova _issue_ para começar a trabalhar em uma nova linguagem. Aguardamos um suporte da [mdbook] para multiplas linguagens antes de realizarmos o _merge_, mas sinta-se livre para começar.
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang/mdBook/issues/5
+[mdbook]: https://github.com/rust-lang/mdBook/issues/5
