@@ -36,6 +36,7 @@ $ cargo install --locked --path packages/mdbook-trpl --force
 ## Inicializar e build
 
 Para inicializar o mdbook execute
+
 ```bash
 $ mdbook init
 ```
@@ -92,4 +93,4 @@ Gostamos da ajuda que recebemos para a tradução desse livro. Veja a etiqueta [
 
 ## Gramática
 
-Para procurar nos arquivos erros de gramática, voce pode usar o comando `spellcheck.sh` disponível na pasta `ci`. É preciso um dicionário válido que pode ser encontrado em `ci/dictionary.txt`. Se o _script_ produzir um falso - positivo você precisa usar `BTreeMap` no script considerado inválido e precisa adicionar a palavra ao `ci/dictionary.txt` (mantenha a ordenado por consistencia).
+Para procurar nos arquivos erros de gramática, você pode usar o comando `spellcheck.sh` disponível na pasta `ci`. É preciso um dicionário válido que pode ser encontrado em `ci/dictionary.txt`. Se o _script_ produzir um falso - positivo você precisa usar `BTreeMap` no _script_ considerado inválido e precisa adicionar a palavra ao `ci/dictionary.txt` (mantenha ordenado por consistencia).

@@ -217,6 +217,7 @@ code’s running time, be sure to run `cargo build --release` and benchmark with
 the executable in _target/release_.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="cargo-as-convention"></a>
 
 ### Leveraging Cargo’s Conventions

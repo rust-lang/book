@@ -235,7 +235,7 @@ implement them on any type, including unit-like structs.
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like the following in
-> *src/main.rs*; this won’t work:
+> _src/main.rs_; this won’t work:
 >
 > <Listing file-name="src/main.rs">
 >

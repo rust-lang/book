@@ -11,7 +11,6 @@ This is intended to be a backwards-compatible release.
 - Upgraded Rust, the edition, `ring`, and `quinn-proto`
 - Switched to `rustls`
 
-
 ## 0.2.0
 
 - Added `get`, `Response`, and `Html` to support more examples in chapter 17.

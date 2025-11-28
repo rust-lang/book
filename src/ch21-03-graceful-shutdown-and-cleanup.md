@@ -68,7 +68,7 @@ cleaner and less error-prone.
 
 In this case, a better alternative exists: the `Vec::drain` method. It accepts
 a range parameter to specify which items to remove from the vector and returns
-an iterator of those items. Passing the `..` range syntax will remove *every*
+an iterator of those items. Passing the `..` range syntax will remove _every_
 value from the vector.
 
 So, we need to update the `ThreadPool` `drop` implementation like this:

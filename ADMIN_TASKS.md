@@ -18,7 +18,7 @@ Para atualizar os metadados de `edition = "[year]"` em todas as referências `Ca
 
 ## Atualize a `edition` em mdBook config
 
-Abra `book.toml` e `nostarch/book.toml` e defina o valor em  `edition` no tabela`[rust]` para uma nova edição.
+Abra `book.toml` e `nostarch/book.toml` e defina o valor em `edition` no tabela`[rust]` para uma nova edição.
 
 ## Publicar uma nova versão
 
@@ -38,13 +38,13 @@ Para facilitar execute `rustfmt` para atualizar a saídas de todos os arquivos q
   - Encontrará um subdiretório para cada capítulo.
   - As referências numerada devem usar `listing-[capitulo numero]-[listing numero]` para os nomes das pastas.
   - Referências sem um número deverá começar com `no-listing-` seguido por um número que indica a posição do capítulo quando comparado à outra referência sem número no capítulo e uma breve descrição que alguém poderia encontrar. Por exemplo:
-      -   Nós dizemos "se tivéssemos escrito X ou invés de Y teríamos esse erro no compilador". "Erro: não encontramos códigos para X". Deveria ser nomeado com `output-only-` seguido por um número que indica a posição relativa ao capítulo usado apenas para saída, com uma pequena descrição que os autores ou contribuidores possa ler e encontrar o código que procuram.
-      - **Lembre de ajustar os números de forma apropriada!**
-  - Crie um projeto Cargo na pasta, usando  `cargo new` ou copiando outra referência como ponto de partida.
+    - Nós dizemos "se tivéssemos escrito X ou invés de Y teríamos esse erro no compilador". "Erro: não encontramos códigos para X". Deveria ser nomeado com `output-only-` seguido por um número que indica a posição relativa ao capítulo usado apenas para saída, com uma pequena descrição que os autores ou contribuidores possa ler e encontrar o código que procuram.
+    - **Lembre de ajustar os números de forma apropriada!**
+  - Crie um projeto Cargo na pasta, usando `cargo new` ou copiando outra referência como ponto de partida.
 - Adicione o código e para criar um exemplo de como funciona. Exemplo:
-    Se você apenas quiser mostrar parte de um código dentro do arquivo, use um _anchor comment_ (`// ANCHOR: some_tag` and `// ANCHOR_END: some_tag`) para destacar portes do arquivo que quer mostrar.
-- Para código Rust, utilize o `{{#rustdoc_include [filename:some_tag]}}` 
-para incluir o bloco no texto. A diretiva `rustdoc_include` fornece código que não será mostrado para o `rustdoc` e `mdbook test`.
+  Se você apenas quiser mostrar parte de um código dentro do arquivo, use um _anchor comment_ (`// ANCHOR: some_tag` and `// ANCHOR_END: some_tag`) para destacar portes do arquivo que quer mostrar.
+- Para código Rust, utilize o `{{#rustdoc_include [filename:some_tag]}}`
+  para incluir o bloco no texto. A diretiva `rustdoc_include` fornece código que não será mostrado para o `rustdoc` e `mdbook test`.
 - Para qualquer outra coisa use `{{#include [filename:some_tag]}}`.
 - Se você deseja mostrar a saída de um comando no texto crie um `output.txt` na lista de diretórios.
   - Execute código como `cargo run` ou `cargo test`, e copie as saídas geradas.
@@ -78,12 +78,12 @@ Para verificar a atualização do `mdbook` ou mudanças de arquivos inclusos:
 - No editor de texto vá para revisão e "Aceite todas as mudanças e parar o rastreamento".
 - salve o arquivo `.docx` e feche o editor de texto.
 - Execute `./tools/doc-to-md.sh`
-- Deverá ter a saída `nostarch/chapterXX.md`. Ajustada como .`.XSL` em 
+- Deverá ter a saída `nostarch/chapterXX.md`. Ajustada como .`.XSL` em
   `tools/doc-to-md.xsl` e execute `./tools/doc-to-md.sh` novamente se precisar.
 
 ## Gerar visualização gráfica (Graphviz)
 
-Usamos [Graphviz](http://graphviz.org/) para alguns diagramas no livro. O código-fonte desses arquivos está na pasta `dot` directory. Para transformar o `dot` em arquivo, por exemplo, `dot/trpl04-01.dot` em um  `svg`, execute:
+Usamos [Graphviz](http://graphviz.org/) para alguns diagramas no livro. O código-fonte desses arquivos está na pasta `dot` directory. Para transformar o `dot` em arquivo, por exemplo, `dot/trpl04-01.dot` em um `svg`, execute:
 
 ```bash
 $ dot dot/trpl04-01.dot -Tsvg > src/img/trpl04-01.svg

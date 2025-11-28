@@ -305,8 +305,7 @@ as a definition of yours in the same scope, for example.
 The glob operator is often used when testing to bring everything under test into
 the `tests` module; we’ll talk about that in [“How to Write
 Tests”][writing-tests]<!-- ignore --> in Chapter 11. The glob operator is also
-sometimes used as part of the prelude pattern: See [the standard library
-documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for more
+sometimes used as part of the prelude pattern: See [the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for more
 information on that pattern.
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api

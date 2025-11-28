@@ -13,6 +13,7 @@ prints the text `Hello, world!` to the screen, so we’ll do the same here!
 > for more details.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="creating-a-project-directory"></a>
 
 ### Project Directory Setup
@@ -44,6 +45,7 @@ For Windows CMD, enter this:
 ```
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="writing-and-running-a-rust-program"></a>
 
 ### Rust Program Basics
@@ -146,6 +148,7 @@ expression is over, and the next one is ready to begin. Most lines of Rust code
 end with a semicolon.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="compiling-and-running-are-separate-steps"></a>
 
 ### Compilation and Execution

@@ -183,8 +183,8 @@ shows one way to define a `Guess` type that will only create an instance of
 
 </Listing>
 
-Note that this code in *src/guessing_game.rs* depends on adding a module
-declaration `mod guessing_game;` in *src/lib.rs* that we haven’t shown here.
+Note that this code in _src/guessing_game.rs_ depends on adding a module
+declaration `mod guessing_game;` in _src/lib.rs_ that we haven’t shown here.
 Within this new module’s file, we define a struct named `Guess` that has a
 field named `value` that holds an `i32`. This is where the number will be
 stored.

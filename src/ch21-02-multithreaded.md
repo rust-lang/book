@@ -195,7 +195,6 @@ definition of a `ThreadPool` struct that we can have for now:
 
 </Listing>
 
-
 Then, edit the _main.rs_ file to bring `ThreadPool` into scope from the library
 crate by adding the following code to the top of _src/main.rs_:
 
@@ -397,6 +396,7 @@ which resizes itself as elements are inserted.
 When you run `cargo check` again, it should succeed.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id ="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"></a>
 
 #### Sending Code from the `ThreadPool` to a Thread

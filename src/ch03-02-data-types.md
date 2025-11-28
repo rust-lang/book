@@ -43,13 +43,13 @@ the type of an integer value.
 
 <span class="caption">Table 3-1: Integer Types in Rust</span>
 
-| Length  | Signed  | Unsigned |
-| ------- | ------- | -------- |
-| 8-bit   | `i8`    | `u8`     |
-| 16-bit  | `i16`   | `u16`    |
-| 32-bit  | `i32`   | `u32`    |
-| 64-bit  | `i64`   | `u64`    |
-| 128-bit | `i128`  | `u128`   |
+| Length                 | Signed  | Unsigned |
+| ---------------------- | ------- | -------- |
+| 8-bit                  | `i8`    | `u8`     |
+| 16-bit                 | `i16`   | `u16`    |
+| 32-bit                 | `i32`   | `u32`    |
+| 64-bit                 | `i64`   | `u64`    |
+| 128-bit                | `i128`  | `u128`   |
 | Architecture-dependent | `isize` | `usize`  |
 
 Each variant can be either signed or unsigned and has an explicit size.
@@ -312,6 +312,7 @@ The array named `a` will contain `5` elements that will all be set to the value
 more concise way.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="accessing-array-elements"></a>
 
 #### Array Element Access

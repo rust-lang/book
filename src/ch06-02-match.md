@@ -113,7 +113,6 @@ state value out of the `Coin` enum variant for `Quarter`.
 
 ### The `Option<T>` `match` Pattern
 
-
 In the previous section, we wanted to get the inner `T` value out of the `Some`
 case when using `Option<T>`; we can also handle `Option<T>` using `match`, as
 we did with the `Coin` enum! Instead of comparing coins, we’ll compare the

@@ -8,6 +8,7 @@ environment variable, we allow our users to set the environment variable once
 and have all their searches be case insensitive in that terminal session.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="writing-a-failing-test-for-the-case-insensitive-search-function"></a>
 
 ### Writing a Failing Test for Case-Insensitive Search

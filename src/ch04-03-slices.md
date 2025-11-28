@@ -25,7 +25,7 @@ The `first_word` function has a parameter of type `&String`. We don’t need
 ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
 of their arguments unless they need to, and the reasons for that will become
 clear as we keep going.) But what should we return? We don’t really have a way
-to talk about *part* of a string. However, we could return the index of the end
+to talk about _part_ of a string. However, we could return the index of the end
 of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 <Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">

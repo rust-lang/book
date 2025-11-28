@@ -81,7 +81,6 @@ effectively means “bind everything to the variable `x`, whatever the value is.
 To see the pattern-matching aspect of `let` more clearly, consider Listing
 19-1, which uses a pattern with `let` to destructure a tuple.
 
-
 <Listing number="19-1" caption="Using a pattern to destructure a tuple and create three variables at once">
 
 ```rust
@@ -202,7 +201,6 @@ pattern. For example, in `for x in y`, the `x` is the pattern. Listing 19-5
 demonstrates how to use a pattern in a `for` loop to destructure, or break
 apart, a tuple as part of the `for` loop.
 
-
 <Listing number="19-5" caption="Using a pattern in a `for` loop to destructure a tuple">
 
 ```rust
@@ -213,7 +211,6 @@ apart, a tuple as part of the `for` loop.
 
 The code in Listing 19-5 will print the following:
 
-
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-05/output.txt}}
 ```
@@ -223,7 +220,6 @@ and the index for that value, placed into a tuple. The first value produced is
 the tuple `(0, 'a')`. When this value is matched to the pattern `(index,
 value)`, index will be `0` and value will be `'a'`, printing the first line of
 the output.
-
 
 ### Function Parameters
 

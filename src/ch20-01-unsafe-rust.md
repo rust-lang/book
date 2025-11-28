@@ -337,7 +337,7 @@ is the most common and follows the C programming language’s ABI. Information
 about all the ABIs Rust supports is available in [the Rust Reference][ABI].
 
 Every item declared within an `unsafe extern` block is implicitly unsafe.
-However, some FFI functions *are* safe to call. For example, the `abs` function
+However, some FFI functions _are_ safe to call. For example, the `abs` function
 from C’s standard library does not have any memory safety considerations, and we
 know it can be called with any `i32`. In cases like this, we can use the `safe`
 keyword to say that this specific function is safe to call even though it is in
@@ -491,7 +491,7 @@ with `unsafe`.
 ### Accessing Fields of a Union
 
 The final action that works only with `unsafe` is accessing fields of a union.
-A *union* is similar to a `struct`, but only one declared field is used in a
+A _union_ is similar to a `struct`, but only one declared field is used in a
 particular instance at one time. Unions are primarily used to interface with
 unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
 the type of the data currently being stored in the union instance. You can

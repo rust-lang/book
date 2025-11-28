@@ -127,6 +127,7 @@ $ rustup self uninstall
 ```
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="local-documentation"></a>
 
 ### Reading the Local Documentation
@@ -140,6 +141,7 @@ sure what it does or how to use it, use the application programming interface
 (API) documentation to find out!
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="text-editors-and-integrated-development-environments"></a>
 
 ### Using Text Editors and IDEs

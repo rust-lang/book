@@ -10,7 +10,7 @@ source communities and catalyzed wide-scale adoption across industries.
 
 At this point in time, it is easy to point to the wonderful features that Rust
 has to offer to explain this explosion in interest and adoption. Who doesn’t
-want memory safety, *and* fast performance, *and* a friendly compiler, *and*
+want memory safety, _and_ fast performance, _and_ a friendly compiler, _and_
 great tooling, among a host of other wonderful features? The Rust language you
 see today combines years of research in systems programming with the practical
 wisdom of a vibrant and passionate community. This language was designed with
@@ -26,7 +26,7 @@ language. The Rust Project is now robustly supported by the Rust Foundation,
 which also invests in key initiatives to ensure that Rust is secure, stable,
 and sustainable.
 
-This edition of *The Rust Programming Language* is a comprehensive update,
+This edition of _The Rust Programming Language_ is a comprehensive update,
 reflecting the language’s evolution over the years and providing valuable new
 information. But it is not just a guide to syntax and libraries—it’s an
 invitation to join a community that values quality, performance, and thoughtful

@@ -340,7 +340,7 @@ we specify the arguments matters. However, in Rust, they’re called `left` and
 `right`, and the order in which we specify the value we expect and the value
 the code produces doesn’t matter. We could write the assertion in this test as
 `assert_eq!(4, result)`, which would result in the same failure message that
-displays `` assertion `left == right` failed ``.
+displays ``assertion `left == right` failed``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
 will fail if they are equal. This macro is most useful for cases when we’re not
