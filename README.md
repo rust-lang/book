@@ -26,6 +26,7 @@ Esse livro também precisa do [mdBook], preferencialmente a mesma versão usada 
 ```bash
 $ cargo install mdbook --locked --version <version_num>
 ```
+
 Este livro também utiliza dois plugins _mdbook_ que faz parte desse repositório. Se você não instalar, você irá receber avisos durante o _build_ e o resultado do _build_ não estara formatado conforme o esperado, mas você ainda poderá fazer o _build_. Para usar os plugins, utilize o comando:
 
 ```bash
@@ -33,11 +34,13 @@ $ cargo install --locked --path packages/mdbook-trpl --force
 ```
 
 ## Building
+
 Para realizar o _build_, utilize o comando:
 
 ```bash
 $ mdbook build
 ```
+
 O arquivo será salvo na sub pasta `book`. Para conferir abra no seu navegador.
 
 _Firefox:_
@@ -76,6 +79,7 @@ Por esse livro ser [impresso][nostarch], e por querermos manter a versão online
 Além disso, nós temos feito uma extensão revisão para correção de erros. Se a sua _issue_ ou _pull request_ não está relacionada à correção de erros, talvez ela fique para a próxima grande revisão esperada para meses ou anos. Obrigado pela paciência! Confira, [Edições do Rust](https://doc.rust-lang.org/edition-guide/).
 
 ### Traduções
+
 Gostamos da ajuda que recebemos para a tradução desse livro. Veja a etiqueta [Translations] para participar de uma tradução que está ocorrendo. Abra uma _issue_ para começar uma nova tradução. Nós estamos aguardando [mdbook support] para multiplas linguagens antes de unir, mas sinta-se livre para começar!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
