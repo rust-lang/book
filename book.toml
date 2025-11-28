@@ -1,4 +1,47 @@
+# Sync any changes to this *other than where explicitly specified* with the copy
+# in `nostarch/book.toml`!
+
 [book]
-title = "A Linguagem de Programação Rust"
-authors = ["Willian Goncalves"]
-language = "en"
+title = "The Rust Programming Language"
+authors = ["Steve Klabnik", "Carol Nichols", "Chris Krycho", "Contributions from the Rust Community"]
+
+[output.html]
+additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.css", "theme/listing.css"]
+additional-js = ["ferris.js"]
+git-repository-url = "https://github.com/rust-lang/book"
+
+[output.html.search]
+use-boolean-and = true
+
+[output.html.redirect]
+"ch17-00-oop.html" = "ch18-00-oop.html"
+"ch17-01-what-is-oo.html" = "ch18-01-what-is-oo.html"
+"ch17-02-trait-objects.html" = "ch18-02-trait-objects.html"
+"ch17-03-oo-design-patterns.html" = "ch18-03-oo-design-patterns.html"
+"ch18-00-patterns.html" = "ch19-00-patterns.html"
+"ch18-01-all-the-places-for-patterns.html" = "ch19-01-all-the-places-for-patterns.html"
+"ch18-02-refutability.html" = "ch19-02-refutability.html"
+"ch18-03-pattern-syntax.html" = "ch19-03-pattern-syntax.html"
+"ch19-00-advanced-features.html" = "ch20-00-advanced-features.html"
+"ch19-01-unsafe-rust.html" = "ch20-01-unsafe-rust.html"
+"ch19-03-advanced-traits.html" = "ch20-02-advanced-traits.html"
+"ch20-03-advanced-traits.html" = "ch20-02-advanced-traits.html"
+"ch19-04-advanced-types.html" = "ch20-03-advanced-types.html"
+"ch20-04-advanced-types.html" = "ch20-03-advanced-types.html"
+"ch19-05-advanced-functions-and-closures.html" = "ch20-04-advanced-functions-and-closures.html"
+"ch20-05-advanced-functions-and-closures.html" = "ch20-04-advanced-functions-and-closures.html"
+"ch19-06-macros.html" = "ch20-05-macros.html"
+"ch20-06-macros.html" = "ch20-05-macros.html"
+"ch20-00-final-project-a-web-server.html" = "ch21-00-final-project-a-web-server.html"
+"ch20-01-single-threaded.html" = "ch21-01-single-threaded.html"
+"ch20-02-multithreaded.html" = "ch21-02-multithreaded.html"
+"ch20-03-graceful-shutdown-and-cleanup.html" = "ch21-03-graceful-shutdown-and-cleanup.html"
+
+# Do not sync this preprocessor; it is for the HTML renderer only.
+[preprocessor.trpl-note]
+
+[preprocessor.trpl-listing]
+output-mode = "default"
+
+[rust]
+edition = "2024"
