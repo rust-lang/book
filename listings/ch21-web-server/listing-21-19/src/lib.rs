@@ -61,7 +61,7 @@ struct Worker {
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(|| {
-            receiver;
+            drop(receiver);
         });
 
         Worker { id, thread }

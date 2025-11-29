@@ -13,7 +13,7 @@ fn main() {
     }
 }
 
-fn handle_connection(mut stream: TcpStream) {
+fn handle_connection(stream: TcpStream) {
     let buf_reader = BufReader::new(&stream);
     let http_request: Vec<_> = buf_reader
         .lines()

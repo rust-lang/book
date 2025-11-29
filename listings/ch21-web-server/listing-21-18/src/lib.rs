@@ -66,7 +66,7 @@ impl Worker {
         // --snip--
         // ANCHOR_END: here
         let thread = thread::spawn(|| {
-            receiver;
+            drop(receiver);
         });
 
         Worker { id, thread }

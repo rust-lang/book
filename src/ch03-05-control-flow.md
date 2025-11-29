@@ -254,6 +254,7 @@ You can also `return` from inside a loop. While `break` only exits the current
 loop, `return` always exits the current function.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="loop-labels-to-disambiguate-between-multiple-loops"></a>
 
 #### Disambiguating with Loop Labels
@@ -278,6 +279,7 @@ doesn’t specify a label will exit the inner loop only. The `break
 ```
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="conditional-loops-with-while"></a>
 
 #### Streamlining Conditional Loops with while

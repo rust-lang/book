@@ -1,4 +1,3 @@
-
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="yielding"></a>

@@ -327,6 +327,7 @@ its standard library. However, the Rust team does provide a [`rand`
 crate][randcrate] with said functionality.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="using-a-crate-to-get-more-functionality"></a>
 
 ### Increasing Functionality with a Crate
@@ -448,6 +449,7 @@ _src/main.rs_ file. Your dependencies haven’t changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="ensuring-reproducible-builds-with-the-cargo-lock-file"></a>
 
 #### Ensuring Reproducible Builds

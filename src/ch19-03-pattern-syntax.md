@@ -66,6 +66,7 @@ about match guards later in the [“Adding Conditionals with Match
 Guards”](#adding-conditionals-with-match-guards)<!-- ignore --> section.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="multiple-patterns"></a>
 
 ### Matching Multiple Patterns
@@ -75,7 +76,6 @@ which is the pattern _or_ operator. For example, in the following code, we match
 the value of `x` against the match arms, the first of which has an _or_ option,
 meaning if the value of `x` matches either of the values in that arm, that
 arm’s code will run:
-
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}

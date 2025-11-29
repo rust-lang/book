@@ -8,6 +8,11 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
   |
   = help: the trait `PartialEq<&{integer}>` is not implemented for `{integer}`
   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider dereferencing here
+ --> file:///home/.rustup/toolchains/1.90/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:35
+  |
+46|                 if !(*left_val == **right_val) {
+  |                                   +
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `deref-example` (bin "deref-example") due to 1 previous error

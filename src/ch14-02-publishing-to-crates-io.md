@@ -108,8 +108,8 @@ catch that the example and the code are out of sync with each other!
 
 #### Contained Item Comments
 
-The style of doc comment `//!` adds documentation to the item that *contains*
-the comments rather than to the items *following* the comments. We typically
+The style of doc comment `//!` adds documentation to the item that _contains_
+the comments rather than to the items _following_ the comments. We typically
 use these doc comments inside the crate root file (_src/lib.rs_ by convention)
 or inside a module to document the crate or the module as a whole.
 
@@ -169,7 +169,7 @@ my_crate::UsefulType;`.
 The good news is that if the structure _isn’t_ convenient for others to use
 from another library, you don’t have to rearrange your internal organization:
 Instead, you can re-export items to make a public structure that’s different
-from your private structure by using `pub use`. *Re-exporting* takes a public
+from your private structure by using `pub use`. _Re-exporting_ takes a public
 item in one location and makes it public in another location, as if it were
 defined in the other location instead.
 

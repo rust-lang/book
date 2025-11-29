@@ -82,19 +82,19 @@ locations.
 
 <span class="caption">Table B-2: Stand-alone Syntax</span>
 
-| Symbol                                                                 | Explanation                                                            |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `'ident`                                                               | Named lifetime or loop label                                           |
-| Digits immediately followed by `u8`, `i32`, `f64`, `usize`, and so on  | Numeric literal of specific type                                       |
-| `"..."`                                                                | String literal                                                         |
-| `r"..."`, `r#"..."#`, `r##"..."##`, and so on                          | Raw string literal; escape characters not processed                    |
-| `b"..."`                                                               | Byte string literal; constructs an array of bytes instead of a string  |
-| `br"..."`, `br#"..."#`, `br##"..."##`, and so on                       | Raw byte string literal; combination of raw and byte string literal    |
-| `'...'`                                                                | Character literal                                                      |
-| `b'...'`                                                               | ASCII byte literal                                                     |
-| <code>&vert;...&vert; expr</code>                                      | Closure                                                                |
-| `!`                                                                    | Always-empty bottom type for diverging functions                       |
-| `_`                                                                    | “Ignored” pattern binding; also used to make integer literals readable |
+| Symbol                                                                | Explanation                                                            |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `'ident`                                                              | Named lifetime or loop label                                           |
+| Digits immediately followed by `u8`, `i32`, `f64`, `usize`, and so on | Numeric literal of specific type                                       |
+| `"..."`                                                               | String literal                                                         |
+| `r"..."`, `r#"..."#`, `r##"..."##`, and so on                         | Raw string literal; escape characters not processed                    |
+| `b"..."`                                                              | Byte string literal; constructs an array of bytes instead of a string  |
+| `br"..."`, `br#"..."#`, `br##"..."##`, and so on                      | Raw byte string literal; combination of raw and byte string literal    |
+| `'...'`                                                               | Character literal                                                      |
+| `b'...'`                                                              | ASCII byte literal                                                     |
+| <code>&vert;...&vert; expr</code>                                     | Closure                                                                |
+| `!`                                                                   | Always-empty bottom type for diverging functions                       |
+| `_`                                                                   | “Ignored” pattern binding; also used to make integer literals readable |
 
 Table B-3 shows symbols that appear in the context of a path through the module
 hierarchy to an item.
@@ -102,7 +102,7 @@ hierarchy to an item.
 <span class="caption">Table B-3: Path-Related Syntax</span>
 
 | Symbol                                  | Explanation                                                                                                  |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------|
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `ident::ident`                          | Namespace path                                                                                               |
 | `::path`                                | Path relative to the crate root (that is, an explicitly absolute path)                                       |
 | `self::path`                            | Path relative to the current module (that is, an explicitly relative path)                                   |
@@ -174,15 +174,15 @@ Table B-8 shows the contexts in which parentheses are used.
 
 <span class="caption">Table B-8: Parentheses</span>
 
-| Symbol                   | Explanation                                                                                 |
-| ------------------------ | ------------------------------------------------------------------------------------------- |
-| `()`                     | Empty tuple (aka unit), both literal and type                                               |
-| `(expr)`                 | Parenthesized expression                                                                    |
-| `(expr,)`                | Single-element tuple expression                                                             |
-| `(type,)`                | Single-element tuple type                                                                   |
-| `(expr, ...)`            | Tuple expression                                                                            |
-| `(type, ...)`            | Tuple type                                                                                  |
-| `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
+| Symbol            | Explanation                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `()`              | Empty tuple (aka unit), both literal and type                                               |
+| `(expr)`          | Parenthesized expression                                                                    |
+| `(expr,)`         | Single-element tuple expression                                                             |
+| `(type,)`         | Single-element tuple type                                                                   |
+| `(expr, ...)`     | Tuple expression                                                                            |
+| `(type, ...)`     | Tuple type                                                                                  |
+| `expr(expr, ...)` | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
 
 Table B-9 shows the contexts in which curly brackets are used.
 

@@ -72,6 +72,7 @@ used. Ultimately, deciding whether to use mutability or not is up to you and
 depends on what you think is clearest in that particular situation.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="constants"></a>
 
 ### Declaring Constants

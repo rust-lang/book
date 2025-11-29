@@ -1,4 +1,4 @@
-# In each chapter
+# Em cada capítulo
 
 - [ ] Manual regeneration
 - [ ] Check for upstream changes from last snapshot

@@ -109,7 +109,7 @@ part of the `drop` implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary.
 
 Browsers also sometimes open multiple connections to the server without sending
-any requests so that if they *do* later send requests, those requests can
+any requests so that if they _do_ later send requests, those requests can
 happen more quickly. When this occurs, our server will see each connection,
 regardless of whether there are any requests over that connection. Many
 versions of Chrome-based browsers do this, for example; you can disable that
