@@ -8,3 +8,6 @@ tmp
 .nova
 .vscode
 .zed
+
+book.toml
+listings

@@ -1,30 +1,23 @@
-# The Rust Programming Language
+# A linguagem de Programação Rust
 
-_by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
-Rust Community_
+_por Steve Klabnik, Carol Nichols, and Chris Krycho, e contribuidores da comunidade Rust_
 
-This version of the text assumes you’re using Rust 1.90.0 (released 2025-09-18)
-or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2024 Edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> for instructions on installing or
-updating Rust, and see [Appendix E][appendix-e]<!-- ignore --> for information
-on editions.
+As orientações que serão passadas aqui assume que você esta usando Rust na versão 1.90.0 (lançamento 2025-09-18) ou superior com edição `edição = "2024"` no arquivo *Cargo.toml* configurado em todo o projeto. Veja a See the [Secção de Instalação Cap. 1][install]<!-- ignore --> para acessar o tutorial de instalação ou atualização do Rust e veja [Apêndice E][appendix-e]<!-- ignore --> para informações sobre as versões.
 
-The HTML format is available online at
+Também tem a versão ‘online’ desse livro disponível em:
 [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+e ‘offline’ depois da instalação do Rust com `rustup` execute  
+```console
+rustup doc --book
+```
 
-Several community [translations] are also available.
+Veja [traduções][translations] para encontrar esse livro em outras linguas.
 
-This text is available in [paperback and ebook format from No Starch
-Press][nsprust].
+Versão impressa [disponível aqui][nsprust].
 
 [install]: ch01-01-installation.html
 [appendix-e]: appendix-05-editions.html
 [nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
 [translations]: appendix-06-translation.html
 
-> **🚨 Want a more interactive learning experience? Try out a different version
-> of the Rust Book, featuring: quizzes, highlighting, visualizations, and
-> more**: <https://rust-book.cs.brown.edu>
+> **🚨 Quer um aprendizado mais interativo? Experimente uma versão diferente do livro de Rust com quizzes, marcações, visualizações e mais**: <https://rust-book.cs.brown.edu>
