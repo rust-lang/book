@@ -2,7 +2,7 @@
 
 _por Steve Klabnik, Carol Nichols, and Chris Krycho, e contribuidores da comunidade Rust_
 
-As orientações que serão passadas aqui assume que você esta usando Rust na versão 1.90.0 (lançamento 2025-09-18) ou superior com edição `edição = "2024"` no arquivo *Cargo.toml* configurado em todo o projeto. Veja a See the [Secção de Instalação Cap. 1][install]<!-- ignore --> para acessar o tutorial de instalação ou atualização do Rust e veja [Apêndice E][appendix-e]<!-- ignore --> para informações sobre as versões.
+As orientações que serão passadas aqui assume que você esta usando Rust na versão 1.90.0 (lançamento 2025-09-18) ou superior com a edição `edição = "2024"` no arquivo *Cargo.toml* do projeto. Veja a [Secção de Instalação Cap. 1][install]<!-- ignore --> para acessar o tutorial de instalação ou atualização do Rust, e veja [Apêndice E][appendix-e]<!-- ignore --> para informações sobre as versões.
 
 Também tem a versão ‘online’ desse livro disponível em:
 [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
