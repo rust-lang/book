@@ -1,8 +1,6 @@
-# Getting Started
+# Primeiros passos
 
-Let’s start your Rust journey! There’s a lot to learn, but every journey starts
-somewhere. In this chapter, we’ll discuss:
-
-- Installing Rust on Linux, macOS, and Windows
-- Writing a program that prints `Hello, world!`
-- Using `cargo`, Rust’s package manager and build system
+Vamos começar a nossa jornada de aprendizado de Rust! Há muito para aprender, mas toda jornada começa de algum lugar. Nesse capítulo abordaremos:
+- Instalando Rust no Linux, macOS e Windows
+- Escrever um programa que mostra `Hello, world`
+- Usando o gerenciador de pacotes e compilador `cargo`
