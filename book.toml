@@ -41,6 +41,7 @@ use-boolean-and = true
 [preprocessor.trpl-note]
 
 [preprocessor.trpl-listing]
+[preprocessor.trpl-listing-link]
 output-mode = "default"
 
 [rust]
