@@ -60,12 +60,11 @@ called, not the line of our code that eventually led to the `panic!` call.
 
 <a id="using-a-panic-backtrace"></a>
 
-We can use the backtrace of the functions the `panic!` call came from to figure
-out the part of our code that is causing the problem. To understand how to use
-a `panic!` backtrace, let’s look at another example and see what it’s like when
-a `panic!` call comes from a library because of a bug in our code instead of
-from our code calling the macro directly. Listing 9-1 has some code that
-attempts to access an index in a vector beyond the range of valid indexes.
+We can use the backtrace showing which functions led to the `panic!` call to figure out the
+part of our code that is causing the problem. To understand how to use a `panic!` backtrace,
+let's look at another example and see what it's like when a `panic!` call comes from a library
+because of a bug in our code, rather than from our code calling the macro directly. Listing 9-1
+has some code that attempts to access an index in a vector beyond the range of valid indexes.
 
 <Listing number="9-1" file-name="src/main.rs" caption="Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`">
 
