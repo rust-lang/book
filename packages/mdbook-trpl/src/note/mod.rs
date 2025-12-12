@@ -30,7 +30,7 @@ pub struct TrplNote;
 
 impl Preprocessor for TrplNote {
     fn name(&self) -> &str {
-        "simple-note-preprocessor"
+        "trpl-note"
     }
 
     fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book> {
