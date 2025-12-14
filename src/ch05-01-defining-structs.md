@@ -100,6 +100,37 @@ named `email`. We want to set the `email` field’s value to the value in the
 the `email` parameter have the same name, we only need to write `email` rather
 than `email: email`.
 
+### Defining default values for fields
+
+Some structs will have fields where there is a reasonable default value that
+doesn't necessarily need to be specified every time the struct is created. Rust
+lets you define _default field values_ for these cases. For the `User` struct,
+this would make sense to apply to the `active` and `sign_in_count` field like
+so:
+
+<Listing file-name="src/main.rs" >
+
+```rust
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-07-default-field-value/src/main.rs:here}}
+```
+
+</Listing>
+
+To apply the defaults, we use the `..` syntax. It specifies that the remaining
+fields not explicitly set should use the default value from the struct definition.
+
+<Listing file-name="src/main.rs" >
+
+```rust
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-08-applying-defaults/src/main.rs:here}}
+```
+
+</Listing>
+
+Fields that don't have a default value still have to be explicitly set. When not
+using the `..` syntax, the defaults are not used, and every field has to be set
+explicitly.
+
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-instances-from-other-instances-with-struct-update-syntax"></a>
@@ -123,8 +154,9 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 </Listing>
 
 Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
-explicitly set should have the same value as the fields in the given instance.
+shown in Listing 5-7. When followed by a struct instance, the `..` syntax
+specifies that the remaining fields should have the same value as the fields in
+the given instance.
 
 <Listing number="5-7" file-name="src/main.rs" caption="Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`">
 
