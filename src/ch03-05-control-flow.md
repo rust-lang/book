@@ -242,16 +242,9 @@ can use it, as shown here:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
-Before the loop, we declare a variable named `counter` and initialize it to
-`0`. Then, we declare a variable named `result` to hold the value returned from
-the loop. On every iteration of the loop, we add `1` to the `counter` variable,
-and then check whether the `counter` is equal to `10`. When it is, we use the
-`break` keyword with the value `counter * 2`. After the loop, we use a
-semicolon to end the statement that assigns the value to `result`. Finally, we
-print the value in `result`, which in this case is `20`.
+Before the loop, we declare a variable named counter and initialize it to 0. Then, we declare a variable named result to hold the value returned from the loop. On every iteration of the loop, we add 1 to the counter variable, and then check whether the counter is equal to 10. When it is, we use the break keyword with the value counter * 2, which exits the loop and supplies that value as the result of the loop expression. The break statement can be written with or without a trailing semicolon because it immediately transfers control flow out of the loop, so the semicolon does not affect the value being returned. After the loop, we use a semicolon to end the statement that assigns the value to result. Finally, we print the value in result, which in this case is 20.
 
-You can also `return` from inside a loop. While `break` only exits the current
-loop, `return` always exits the current function.
+You can also return from inside a loop. While break only exits the current loop, return always exits the current function.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="loop-labels-to-disambiguate-between-multiple-loops"></a>
