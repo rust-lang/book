@@ -126,7 +126,7 @@ each other at runtime if they share certain characteristics.
 
 > ### Polymorphism
 >
-> To many people, polymorphism is synonymous with inheritance. But it’s
+> Too many people think polymorphism is synonymous with inheritance. But it’s
 > actually a more general concept that refers to code that can work with data of
 > multiple types. For inheritance, those types are generally subclasses.
 >
