@@ -20,7 +20,7 @@ three collections that are used very often in Rust programs:
 
 * A *vector* allows you to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter we’ll talk about it in depth.
+  previously, but in this chapter, we’ll talk about it in depth.
 * A *hash map* allows you to associate a value with a specific key. It’s a
   particular implementation of the more general data structure called a *map*.
 
@@ -32,7 +32,7 @@ as what makes each special.
 
 ## Storing Lists of Values with Vectors
 
-The first collection type we’ll look at is `Vec<T>`, also known as a *vector*.
+The first collection type we’ll look at is `Vec<T>`, also known as a vector.
 Vectors allow you to store more than one value in a single data structure that
 puts all the values next to each other in memory. Vectors can only store values
 of the same type. They are useful when you have a list of items, such as the
@@ -40,7 +40,7 @@ lines of text in a file or the prices of items in a shopping cart.
 
 ### Creating a New Vector
 
-To create a new empty vector, we call the `Vec::new` function, as shown in
+To create a new, empty vector, we call the `Vec::new` function, as shown in
 Listing 8-1.
 
 
@@ -59,7 +59,7 @@ When we create a vector to hold a specific type, we can specify the type within
 angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
 hold elements of the `i32` type.
 
-More often, you’ll create a `Vec<T>` with initial values and Rust will infer
+More often, you’ll create a `Vec<T>` with initial values, and Rust will infer
 the type of value you want to store, so you rarely need to do this type
 annotation. Rust conveniently provides the `vec!` macro, which will create a
 new vector that holds the values you give it. Listing 8-2 creates a new
@@ -131,8 +131,8 @@ gives us a reference to the element at the index value. When we use the `get`
 method with the index passed as an argument, we get an `Option<&T>` that we can
 use with `match`.
 
-Rust provides these two ways to reference an element so you can choose how the
-program behaves when you try to use an index value outside the range of
+Rust provides these two ways to reference an element so that you can choose how
+the program behaves when you try to use an index value outside the range of
 existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.
@@ -164,13 +164,13 @@ enter a valid value. That would be more user-friendly than crashing the program
 due to a typo!
 
 When the program has a valid reference, the borrow checker enforces the
-ownership and borrowing rules (covered in Chapter 4) to ensure this reference
-and any other references to the contents of the vector remain valid. Recall the
-rule that states you can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-6, where we hold an immutable reference
-to the first element in a vector and try to add an element to the end. This
-program won’t work if we also try to refer to that element later in the
-function.
+ownership and borrowing rules (covered in Chapter 4) to ensure that this
+reference and any other references to the contents of the vector remain valid.
+Recall the rule that states you can’t have mutable and immutable references in
+the same scope. That rule applies in Listing 8-6, where we hold an immutable
+reference to the first element in a vector and try to add an element to the
+end. This program won’t work if we also try to refer to that element later in
+the function.
 
 
 ```
@@ -206,9 +206,9 @@ For more information about this error, try `rustc --explain E0502`.
 error: could not compile `collections` (bin "collections") due to 1 previous error
 ```
 
-The code in Listing 8-6 might look like it should work: why should a reference
+The code in Listing 8-6 might look like it should work: Why should a reference
 to the first element care about changes at the end of the vector? This error is
-due to the way vectors work: because vectors put the values next to each other
+due to the way vectors work: Because vectors put the values next to each other
 in memory, adding a new element onto the end of the vector might require
 allocating new memory and copying the old elements to the new space, if there
 isn’t enough room to put all the elements next to each other where the vector
@@ -253,7 +253,7 @@ Listing 8-8: Iterating over mutable references to elements in a vector
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
 operator. We’ll talk more about the dereference operator in the “Following the
-Pointer to the Value” section of Chapter 15.
+Reference to the Value” section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker’s rules. If we attempted to insert or remove items in the `for`
@@ -274,7 +274,7 @@ For example, say we want to get values from a row in a spreadsheet in which
 some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
-of the enum. Then we can create a vector to hold that enum and so, ultimately,
+of the enum. Then, we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.
 
 
@@ -292,11 +292,11 @@ hold different types. We’ve demonstrated this in Listing 8-9.
     ];
 ```
 
-Listing 8-9: Defining an `enum` to store values of different types in one vector
+Listing 8-9: Defining an enum to store values of different types in one vector
 
-Rust needs to know what types will be in the vector at compile time so it knows
-exactly how much memory on the heap will be needed to store each element. We
-must also be explicit about what types are allowed in this vector. If Rust
+Rust needs to know what types will be in the vector at compile time so that it
+knows exactly how much memory on the heap will be needed to store each element.
+We must also be explicit about what types are allowed in this vector. If Rust
 allowed a vector to hold any type, there would be a chance that one or more of
 the types would cause errors with the operations performed on the elements of
 the vector. Using an enum plus a `match` expression means that Rust will ensure
@@ -348,15 +348,19 @@ implemented as a collection of bytes, plus some methods to provide useful
 functionality when those bytes are interpreted as text. In this section, we’ll
 talk about the operations on `String` that every collection type has, such as
 creating, updating, and reading. We’ll also discuss the ways in which `String`
-is different from the other collections, namely how indexing into a `String` is
+is different from the other collections, namely, how indexing into a `String` is
 complicated by the differences between how people and computers interpret
 `String` data.
 
-### What Is a String?
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="what-is-a-string"></a>
+
+### Defining Strings
 
 We’ll first define what we mean by the term *string*. Rust has only one string
 type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about *string slices*,
+in its borrowed form, `&str`. In Chapter 4, we talked about string slices,
 which are references to some UTF-8 encoded string data stored elsewhere. String
 literals, for example, are stored in the program’s binary and are therefore
 string slices.
@@ -449,7 +453,11 @@ A `String` can grow in size and its contents can change, just like the contents
 of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
 use the `+` operator or the `format!` macro to concatenate `String` values.
 
-#### Appending to a String with push_str and push
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="appending-to-a-string-with-push_str-and-push"></a>
+
+#### Appending with push_str or push
 
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15.
@@ -494,7 +502,11 @@ Listing 8-17: Adding one character to a `String` value using `push`
 
 As a result, `s` will contain `lol`.
 
-#### Concatenation with the + Operator or the format! Macro
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="concatenation-with-the--operator-or-the-format-macro"></a>
+
+#### Concatenating with + or format!
 
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
@@ -524,18 +536,19 @@ call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need in order to understand the tricky
 bits of the `+` operator.
 
-First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
+First, `s2` has an `&`, meaning that we’re adding a reference of the second
 string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&str` to a `String`; we can’t add two `String`
-values together. But wait—the type of `&s2` is `&String`, not `&str`, as
-specified in the second parameter to `add`. So why does Listing 8-18 compile?
+function: We can only add a string slice to a `String`; we can’t add two
+`String` values together. But wait—the type of `&s2` is `&String`, not `&str`,
+as specified in the second parameter to `add`. So, why does Listing 8-18
+compile?
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can *coerce* the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a *deref coercion*, which here turns `&s2` into `&s2[..]`.
-We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
-not take ownership of the `s` parameter, `s2` will still be a valid `String`
-after this operation.
+can coerce the `&String` argument into a `&str`. When we call the `add` method,
+Rust uses a deref coercion, which here turns `&s2` into `&s2[..]`. We’ll
+discuss deref coercion in more depth in Chapter 15. Because `add` does not take
+ownership of the `s` parameter, `s2` will still be a valid `String` after this
+operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`
 because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
@@ -584,11 +597,11 @@ get an error. Consider the invalid code in Listing 8-19.
 
 
 ```
-    let s1 = String::from("hello");
+    let s1 = String::from("hi");
     let h = s1[0];
 ```
 
-Listing 8-19: Attempting to use indexing syntax with a String
+Listing 8-19: Attempting to use indexing syntax with a `String`
 
 This code will result in the following error:
 
@@ -601,10 +614,10 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
 3 |     let h = s1[0];
   |                ^ string indices are ranges of `usize`
   |
-  = help: the trait `SliceIndex<str>` is not implemented for `{integer}`, which is required by `String: Index<_>`
   = note: you can use `.chars().nth()` or `.bytes().nth()`
           for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
-  = help: the trait `SliceIndex<[_]>` is implemented for `usize`
+  = help: the trait `SliceIndex<str>` is not implemented for `{integer}`
+          but trait `SliceIndex<[_]>` is implemented for `usize`
   = help: for that trait implementation, expected `[_]`, found `str`
   = note: required for `String` to implement `Index<{integer}>`
 
@@ -612,9 +625,8 @@ For more information about this error, try `rustc --explain E0277`.
 error: could not compile `collections` (bin "collections") due to 1 previous error
 ```
 
-The error and the note tell the story: Rust strings don’t support indexing. But
-why not? To answer that question, we need to discuss how Rust stores strings in
-memory.
+The error tells the story: Rust strings don’t support indexing. But why not? To
+answer that question, we need to discuss how Rust stores strings in memory.
 
 #### Internal Representation
 
@@ -626,7 +638,7 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:
 ```
 
 In this case, `len` will be `4`, which means the vector storing the string
-`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
+`"Hola"` is 4 bytes long. Each of these letters takes 1 byte when encoded in
 UTF-8. The following line, however, may surprise you (note that this string
 begins with the capital Cyrillic letter *Ze*, not the number 3):
 
@@ -635,7 +647,7 @@ begins with the capital Cyrillic letter *Ze*, not the number 3):
 ```
 
 If you were asked how long the string is, you might say 12. In fact, Rust’s
-answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
+answer is 24: That’s the number of bytes it takes to encode “Здравствуйте” in
 UTF-8, because each Unicode scalar value in that string takes 2 bytes of
 storage. Therefore, an index into the string’s bytes will not always correlate
 to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
@@ -652,14 +664,18 @@ seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
 has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hi"[0]` were valid code that
+if the string contains only Latin letters: If `&"hi"[0]` were valid code that
 returned the byte value, it would return `104`, not `h`.
 
 The answer, then, is that to avoid returning an unexpected value and causing
 bugs that might not be discovered immediately, Rust doesn’t compile this code
 at all and prevents misunderstandings early in the development process.
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="bytes-and-scalar-values-and-grapheme-clusters-oh-my"></a>
+
+#### Bytes, Scalar Values, and Grapheme Clusters
 
 Another point about UTF-8 is that there are actually three relevant ways to
 look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
@@ -682,7 +698,7 @@ bytes look like this:
 ```
 
 There are six `char` values here, but the fourth and sixth are not letters:
-they’re diacritics that don’t make sense on their own. Finally, if we look at
+They’re diacritics that don’t make sense on their own. Finally, if we look at
 them as grapheme clusters, we’d get what a person would call the four letters
 that make up the Hindi word:
 
@@ -716,8 +732,8 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first four bytes of the string.
-Earlier, we mentioned that each of these characters was two bytes, which means
+Here, `s` will be a `&str` that contains the first 4 bytes of the string.
+Earlier, we mentioned that each of these characters was 2 bytes, which means
 `s` will be `Зд`.
 
 If we were to try to slice only part of a character’s bytes with something like
@@ -729,6 +745,7 @@ $ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
      Running `target/debug/collections`
+
 thread 'main' panicked at src/main.rs:4:19:
 byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -737,7 +754,11 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 You should use caution when creating string slices with ranges, because doing
 so can crash your program.
 
-### Methods for Iterating Over Strings
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="methods-for-iterating-over-strings"></a>
+
+### Iterating Over Strings
 
 The best way to operate on pieces of strings is to be explicit about whether
 you want characters or bytes. For individual Unicode scalar values, use the
@@ -766,7 +787,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this string:
+This code will print the 4 bytes that make up this string:
 
 ```
 208
@@ -776,14 +797,18 @@ This code will print the four bytes that make up this string:
 ```
 
 But be sure to remember that valid Unicode scalar values may be made up of more
-than one byte.
+than 1 byte.
 
 Getting grapheme clusters from strings, as with the Devanagari script, is
 complex, so this functionality is not provided by the standard library. Crates
 are available on crates.io if this is the
 functionality you need.
 
-### Strings Are Not So Simple
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="strings-are-not-so-simple"></a>
+
+### Handling the Complexities of Strings
 
 To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust
@@ -804,7 +829,7 @@ Let’s switch to something a bit less complex: hash maps!
 
 ## Storing Keys with Associated Values in Hash Maps
 
-The last of our common collections is the *hash map*. The type `HashMap<K, V>`
+The last of our common collections is the hash map. The type `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V` using a *hashing
 function*, which determines how it places these keys and values into memory.
 Many programming languages support this kind of data structure, but they often
@@ -848,7 +873,7 @@ standard library; there’s no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
+homogeneous: All of the keys must have the same type, and all of the values
 must have the same type.
 
 ### Accessing Values in a Hash Map
@@ -901,7 +926,11 @@ Yellow: 50
 Blue: 10
 ```
 
-### Hash Maps and Ownership
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="hash-maps-and-ownership"></a>
+
+### Managing Ownership in Hash Maps
 
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
@@ -934,7 +963,7 @@ Lifetimes” in Chapter 10.
 ### Updating a Hash Map
 
 Although the number of key and value pairs is growable, each unique key can
-only have one value associated with it at a time (but not vice versa: for
+only have one value associated with it at a time (but not vice versa: For
 example, both the Blue team and the Yellow team could have the value `10`
 stored in the `scores` hash map).
 
@@ -977,7 +1006,7 @@ overwritten.
 #### Adding a Key and Value Only If a Key Isn’t Present
 
 It’s common to check whether a particular key already exists in the hash map
-with a value and then to take the following actions: if the key does exist in
+with a value and then to take the following actions: If the key does exist in
 the hash map, the existing value should remain the way it is; if the key
 doesn’t exist, insert it and a value for it.
 
@@ -1012,7 +1041,7 @@ logic ourselves and, in addition, plays more nicely with the borrow checker.
 Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
 first call to `entry` will insert the key for the Yellow team with the value
 `50` because the Yellow team doesn’t have a value already. The second call to
-`entry` will not change the hash map because the Blue team already has the
+`entry` will not change the hash map, because the Blue team already has the
 value `10`.
 
 #### Updating a Value Based on the Old Value
@@ -1043,7 +1072,7 @@ the value `0`.
 Listing 8-25: Counting occurrences of words using a hash map that stores words and counts
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key-value pairs printed in a different order: recall from “Accessing
+the same key-value pairs printed in a different order: Recall from “Accessing
 Values in a Hash Map” that iterating over a hash map
 happens in an arbitrary order.
 
@@ -1080,14 +1109,14 @@ some exercises you should now be equipped to solve:
 1. Given a list of integers, use a vector and return the median (when sorted,
    the value in the middle position) and mode (the value that occurs most
    often; a hash map will be helpful here) of the list.
-1. Convert strings to pig latin. The first consonant of each word is moved to
+1. Convert strings to Pig Latin. The first consonant of each word is moved to
    the end of the word and *ay* is added, so *first* becomes *irst-fay*. Words
    that start with a vowel have *hay* added to the end instead (*apple* becomes
    *apple-hay*). Keep in mind the details about UTF-8 encoding!
 1. Using a hash map and vectors, create a text interface to allow a user to add
    employee names to a department in a company; for example, “Add Sally to
-   Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
-   people in a department or all people in the company by department, sorted
+   Engineering” or “Add Amir to Sales.” Then, let the user retrieve a list of
+   all people in a department or all people in the company by department, sorted
    alphabetically.
 
 The standard library API documentation describes methods that vectors, strings,

@@ -4,7 +4,7 @@ Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
 ignore --> section, in that both hold multiple related values. Like tuples, the
 pieces of a struct can be different types. Unlike with tuples, in a struct
 you’ll name each piece of data so it’s clear what the values mean. Adding these
-names means that structs are more flexible than tuples: you don’t have to rely
+names means that structs are more flexible than tuples: You don’t have to rely
 on the order of the data to specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
@@ -59,8 +59,8 @@ instance of the struct as the last expression in the function body to
 implicitly return that new instance.
 
 Listing 5-4 shows a `build_user` function that returns a `User` instance with
-the given email and username. The `active` field gets the value of `true`, and
-the `sign_in_count` gets a value of `1`.
+the given email and username. The `active` field gets the value `true`, and the
+`sign_in_count` gets a value of `1`.
 
 <Listing number="5-4" file-name="src/main.rs" caption="A `build_user` function that takes an email and username and returns a `User` instance">
 
@@ -75,7 +75,7 @@ fields, but having to repeat the `email` and `username` field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
 would get even more annoying. Luckily, there’s a convenient shorthand!
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
@@ -83,8 +83,8 @@ would get even more annoying. Luckily, there’s a convenient shorthand!
 
 Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
-`build_user` so it behaves exactly the same but doesn’t have the repetition of
-`username` and `email`, as shown in Listing 5-5.
+`build_user` so that it behaves exactly the same but doesn’t have the
+repetition of `username` and `email`, as shown in Listing 5-5.
 
 <Listing number="5-5" file-name="src/main.rs" caption="A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields">
 
@@ -100,14 +100,18 @@ named `email`. We want to set the `email` field’s value to the value in the
 the `email` parameter have the same name, we only need to write `email` rather
 than `email: email`.
 
-### Creating Instances from Other Instances with Struct Update Syntax
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="creating-instances-from-other-instances-with-struct-update-syntax"></a>
+
+### Creating Instances with Struct Update Syntax
 
 It’s often useful to create a new instance of a struct that includes most of
-the values from another instance, but changes some. You can do this using
-_struct update syntax_.
+the values from another instance of the same type, but changes some of them.
+You can do this using struct update syntax.
 
-First, in Listing 5-6 we show how to create a new `User` instance in `user2`
-regularly, without the update syntax. We set a new value for `email` but
+First, in Listing 5-6 we show how to create a new `User` instance in `user2` in
+the regular way, without the update syntax. We set a new value for `email` but
 otherwise use the same values from `user1` that we created in Listing 5-2.
 
 <Listing number="5-6" file-name="src/main.rs" caption="Creating a new `User` instance using all but one of the values from `user1`">
@@ -147,10 +151,14 @@ both `email` and `username`, and thus only used the `active` and `sign_in_count`
 values from `user1`, then `user1` would still be valid after creating `user2`.
 Both `active` and `sign_in_count` are types that implement the `Copy` trait, so
 the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore -->
-section would apply. We can still use `user1.email` in this example, because its
-value was _not_ moved out.
+section would apply. We can also still use `user1.email` in this example,
+because its value was not moved out of `user1`.
 
-### Using Tuple Structs Without Named Fields to Create Different Types
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-tuple-structs-without-named-fields-to-create-different-types"></a>
+
+### Creating Different Types with Tuple Structs
 
 Rust also supports structs that look similar to tuples, called _tuple structs_.
 Tuple structs have the added meaning the struct name provides but don’t have
@@ -180,9 +188,14 @@ values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a `.` followed
 by the index to access an individual value. Unlike tuples, tuple structs
 require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = point`.
+example, we would write `let Point(x, y, z) = origin;` to destructure the
+values in the `origin` point into variables named `x`, `y`, and `z`.
 
-### Unit-Like Structs Without Any Fields
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="unit-like-structs-without-any-fields"></a>
+
+### Defining Unit-Like Structs
 
 You can also define structs that don’t have any fields! These are called
 _unit-like structs_ because they behave similarly to `()`, the unit type that
@@ -201,10 +214,10 @@ named `AlwaysEqual`:
 </Listing>
 
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
-then a semicolon. No need for curly brackets or parentheses! Then we can get an
-instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
-name we defined, without any curly brackets or parentheses. Imagine that later
-we’ll implement behavior for this type such that every instance of
+then a semicolon. No need for curly brackets or parentheses! Then, we can get
+an instance of `AlwaysEqual` in the `subject` variable in a similar way: using
+the name we defined, without any curly brackets or parentheses. Imagine that
+later we’ll implement behavior for this type such that every instance of
 `AlwaysEqual` is always equal to every instance of any other type, perhaps to
 have a known result for testing purposes. We wouldn’t need any data to
 implement that behavior! You’ll see in Chapter 10 how to define traits and
@@ -221,7 +234,8 @@ implement them on any type, including unit-like structs.
 > else, but to do so requires the use of _lifetimes_, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like the following; this won’t work:
+> in a struct without specifying lifetimes, like the following in
+> *src/main.rs*; this won’t work:
 >
 > <Listing file-name="src/main.rs">
 >
@@ -283,7 +297,7 @@ implement them on any type, including unit-like structs.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so you can store
+> In Chapter 10, we’ll discuss how to fix these errors so that you can store
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
 

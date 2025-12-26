@@ -3,7 +3,7 @@
 We use generics to create definitions for items like function signatures or
 structs, which we can then use with many different concrete data types. Let’s
 first look at how to define functions, structs, enums, and methods using
-generics. Then we’ll discuss how generics affect code performance.
+generics. Then, we’ll discuss how generics affect code performance.
 
 ### In Function Definitions
 
@@ -33,13 +33,13 @@ To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
 convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is CamelCase. Short for _type_, `T` is the default
-choice of most Rust programmers.
+Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
+default choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
-parameter name in the signature so the compiler knows what that name means.
-Similarly, when we use a type parameter name in a function signature, we have
-to declare the type parameter name before we use it. To define the generic
+parameter name in the signature so that the compiler knows what that name
+means. Similarly, when we use a type parameter name in a function signature, we
+have to declare the type parameter name before we use it. To define the generic
 `largest` function, we place type name declarations inside angle brackets,
 `<>`, between the name of the function and the parameter list, like this:
 
@@ -47,8 +47,8 @@ to declare the type parameter name before we use it. To define the generic
 fn largest<T>(list: &[T]) -> &T {
 ```
 
-We read this definition as: the function `largest` is generic over some type
-`T`. This function has one parameter named `list`, which is a slice of values
+We read this definition as “The function `largest` is generic over some type
+`T`.” This function has one parameter named `list`, which is a slice of values
 of type `T`. The `largest` function will return a reference to a value of the
 same type `T`.
 
@@ -71,16 +71,16 @@ If we compile this code right now, we’ll get this error:
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a _trait_, and we’re
+The help text mentions `std::cmp::PartialOrd`, which is a trait, and we’re
 going to talk about traits in the next section. For now, know that this error
 states that the body of `largest` won’t work for all possible types that `T`
 could be. Because we want to compare values of type `T` in the body, we can
 only use types whose values can be ordered. To enable comparisons, the standard
 library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). To fix the example code above, we would
-need to follow the help text's suggestions and restrict the types valid for `T`
-to only those that implement `PartialOrd`. The example would then compile, because
-the standard library implements `PartialOrd` on both `i32` and `char`.
+(see Appendix C for more on this trait). To fix Listing 10-5, we can follow the
+help text’s suggestion and restrict the types valid for `T` to only those that
+implement `PartialOrd`. The listing will then compile, because the standard
+library implements `PartialOrd` on both `i32` and `char`.
 
 ### In Struct Definitions
 
@@ -97,10 +97,9 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 </Listing>
 
 The syntax for using generics in struct definitions is similar to that used in
-function definitions. First we declare the name of the type parameter inside
-angle brackets just after the name of the struct. Then we use the generic
-type in the struct definition where we would otherwise specify concrete data
-types.
+function definitions. First, we declare the name of the type parameter inside
+angle brackets just after the name of the struct. Then, we use the generic type
+in the struct definition where we would otherwise specify concrete data types.
 
 Note that because we’ve used only one generic type to define `Point<T>`, this
 definition says that the `Point<T>` struct is generic over some type `T`, and
@@ -118,8 +117,8 @@ Listing 10-7, our code won’t compile.
 
 In this example, when we assign the integer value `5` to `x`, we let the
 compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
-same type as `x`, we’ll get a type mismatch error like this:
+`Point<T>`. Then, when we specify `4.0` for `y`, which we’ve defined to have
+the same type as `x`, we’ll get a type mismatch error like this:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
@@ -204,11 +203,11 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
 to the data in the field `x`.
 
-Note that we have to declare `T` just after `impl` so we can use `T` to specify
-that we’re implementing methods on the type `Point<T>`. By declaring `T` as a
-generic type after `impl`, Rust can identify that the type in the angle
-brackets in `Point` is a generic type rather than a concrete type. We could
-have chosen a different name for this generic parameter than the generic
+Note that we have to declare `T` just after `impl` so that we can use `T` to
+specify that we’re implementing methods on the type `Point<T>`. By declaring
+`T` as a generic type after `impl`, Rust can identify that the type in the
+angle brackets in `Point` is a generic type rather than a concrete type. We
+could have chosen a different name for this generic parameter than the generic
 parameter declared in the struct definition, but using the same name is
 conventional. If you write a method within an `impl` that declares a generic
 type, that method will be defined on any instance of the type, no matter what
@@ -216,7 +215,7 @@ concrete type ends up substituting for the generic type.
 
 We can also specify constraints on generic types when defining methods on the
 type. We could, for example, implement methods only on `Point<f32>` instances
-rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
+rather than on `Point<T>` instances with any generic type. In Listing 10-10, we
 use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 <Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
@@ -235,12 +234,12 @@ available only for floating-point types.
 
 Generic type parameters in a struct definition aren’t always the same as those
 you use in that same struct’s method signatures. Listing 10-11 uses the generic
-types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
-signature to make the example clearer. The method creates a new `Point`
+types `X1` and `Y1` for the `Point` struct and `X2` and `Y2` for the `mixup`
+method signature to make the example clearer. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
 value from the passed-in `Point` (of type `Y2`).
 
-<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types different from its struct’s definition">
+<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types that are different from its struct’s definition">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
@@ -273,7 +272,7 @@ Rust accomplishes this by performing monomorphization of the code using
 generics at compile time. _Monomorphization_ is the process of turning generic
 code into specific code by filling in the concrete types that are used when
 compiled. In this process, the compiler does the opposite of the steps we used
-to create the generic function in Listing 10-5: the compiler looks at all the
+to create the generic function in Listing 10-5: The compiler looks at all the
 places where generic code is called and generates code for the concrete types
 the generic code is called with.
 
@@ -287,7 +286,7 @@ let float = Some(5.0);
 
 When Rust compiles this code, it performs monomorphization. During that
 process, the compiler reads the values that have been used in `Option<T>`
-instances and identifies two kinds of `Option<T>`: one is `i32` and the other
+instances and identifies two kinds of `Option<T>`: One is `i32` and the other
 is `f64`. As such, it expands the generic definition of `Option<T>` into two
 definitions specialized to `i32` and `f64`, thereby replacing the generic
 definition with the specific ones.

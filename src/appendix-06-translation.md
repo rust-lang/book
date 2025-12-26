@@ -27,3 +27,7 @@ For resources in languages other than English. Most are still in progress; see
 - [ไทย](https://github.com/rust-lang-th/book-th)
 - [Danske](https://github.com/DanKHansen/book-dk)
 - [Türkçe](https://github.com/mustafaekici/book-tr)
+- [O'zbek](https://github.com/rust-lang-uz/book)
+- [Tiếng Việt](https://github.com/tuanemdev/rust-book-vn)
+- [Italiano](https://nixxo.github.io/rust-lang-book-it/)
+- [বাংলা](https://github.com/IsmailHosenIsmailJames/rust-book-bn)

@@ -1,6 +1,9 @@
 name: CI
 on: [push, pull_request]
 
+env:
+  MDBOOK_VERSION: 0.5.1
+
 jobs:
   test:
     name: Run tests
@@ -12,12 +15,12 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.85 -c rust-docs
-        rustup default 1.85
+        rustup toolchain install 1.90 -c rust-docs
+        rustup default 1.90
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.45/mdbook-v0.4.45-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
     - name: Report versions
       run: |
@@ -47,8 +50,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.85 -c rust-docs
-        rustup default 1.85
+        rustup toolchain install 1.90 -c rust-docs
+        rustup default 1.90
     - name: Run `tools` package tests
       run: |
         cargo test
@@ -71,10 +74,8 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.45/mdbook-v0.4.45-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
-    - name: Install mdbook-trpl binaries
-      run: cargo install --path packages/mdbook-trpl
     - name: Install aspell
       run: sudo apt-get install aspell
     - name: Install shellcheck
@@ -99,6 +100,6 @@ jobs:
     - name: Check for broken links
       run: |
         curl -sSLo linkcheck.sh \
-          https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
+          https://raw.githubusercontent.com/rust-lang/rust/HEAD/src/tools/linkchecker/linkcheck.sh
         # Cannot use --all here because of the generated redirect pages aren't available.
         sh linkcheck.sh book

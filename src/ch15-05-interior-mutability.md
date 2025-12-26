@@ -16,10 +16,14 @@ safe API, and the outer type is still immutable.
 Let’s explore this concept by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
 
-### Enforcing Borrowing Rules at Runtime with `RefCell<T>`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="enforcing-borrowing-rules-at-runtime-with-refcellt"></a>
+
+### Enforcing Borrowing Rules at Runtime
 
 Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
-it holds. So what makes `RefCell<T>` different from a type like `Box<T>`?
+it holds. So, what makes `RefCell<T>` different from a type like `Box<T>`?
 Recall the borrowing rules you learned in Chapter 4:
 
 - At any given time, you can have _either_ one mutable reference or any number
@@ -41,14 +45,14 @@ The advantage of checking the borrowing rules at runtime instead is that
 certain memory-safe scenarios are then allowed, where they would’ve been
 disallowed by the compile-time checks. Static analysis, like the Rust compiler,
 is inherently conservative. Some properties of code are impossible to detect by
-analyzing the code: the most famous example is the Halting Problem, which is
+analyzing the code: The most famous example is the Halting Problem, which is
 beyond the scope of this book but is an interesting topic to research.
 
 Because some analysis is impossible, if the Rust compiler can’t be sure the
 code complies with the ownership rules, it might reject a correct program; in
 this way, it’s conservative. If Rust accepted an incorrect program, users
-wouldn’t be able to trust in the guarantees Rust makes. However, if Rust
-rejects a correct program, the programmer will be inconvenienced, but nothing
+wouldn’t be able to trust the guarantees Rust makes. However, if Rust rejects a
+correct program, the programmer will be inconvenienced, but nothing
 catastrophic can occur. The `RefCell<T>` type is useful when you’re sure your
 code follows the borrowing rules but the compiler is unable to understand and
 guarantee that.
@@ -69,11 +73,15 @@ Here is a recap of the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
   mutate the value inside the `RefCell<T>` even when the `RefCell<T>` is
   immutable.
 
-Mutating the value inside an immutable value is the _interior mutability_
+Mutating the value inside an immutable value is the interior mutability
 pattern. Let’s look at a situation in which interior mutability is useful and
 examine how it’s possible.
 
-### Interior Mutability: A Mutable Borrow to an Immutable Value
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="interior-mutability-a-mutable-borrow-to-an-immutable-value"></a>
+
+### Using Interior Mutability
 
 A consequence of the borrowing rules is that when you have an immutable value,
 you can’t borrow it mutably. For example, this code won’t compile:
@@ -92,7 +100,7 @@ However, there are situations in which it would be useful for a value to mutate
 itself in its methods but appear immutable to other code. Code outside the
 value’s methods would not be able to mutate the value. Using `RefCell<T>` is
 one way to get the ability to have interior mutability, but `RefCell<T>`
-doesn’t get around the borrowing rules completely: the borrow checker in the
+doesn’t get around the borrowing rules completely: The borrow checker in the
 compiler allows this interior mutability, and the borrowing rules are checked
 at runtime instead. If you violate the rules, you’ll get a `panic!` instead of
 a compiler error.
@@ -100,7 +108,11 @@ a compiler error.
 Let’s work through a practical example where we can use `RefCell<T>` to mutate
 an immutable value and see why that is useful.
 
-#### A Use Case for Interior Mutability: Mock Objects
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-use-case-for-interior-mutability-mock-objects"></a>
+
+#### Testing with Mock Objects
 
 Sometimes during testing a programmer will use a type in place of another type,
 in order to observe particular behavior and assert that it’s implemented
@@ -108,7 +120,7 @@ correctly. This placeholder type is called a _test double_. Think of it in the
 sense of a stunt double in filmmaking, where a person steps in and substitutes
 for an actor to do a particularly tricky scene. Test doubles stand in for other
 types when we’re running tests. _Mock objects_ are specific types of test
-doubles that record what happens during a test so you can assert that the
+doubles that record what happens during a test so that you can assert that the
 correct actions took place.
 
 Rust doesn’t have objects in the same sense as other languages have objects,
@@ -116,7 +128,7 @@ and Rust doesn’t have mock object functionality built into the standard librar
 as some other languages do. However, you can definitely create a struct that
 will serve the same purposes as a mock object.
 
-Here’s the scenario we’ll test: we’ll create a library that tracks a value
+Here’s the scenario we’ll test: We’ll create a library that tracks a value
 against a maximum value and sends messages based on how close to the maximum
 value the current value is. This library could be used to keep track of a
 user’s quota for the number of API calls they’re allowed to make, for example.
@@ -124,10 +136,10 @@ user’s quota for the number of API calls they’re allowed to make, for exampl
 Our library will only provide the functionality of tracking how close to the
 maximum a value is and what the messages should be at what times. Applications
 that use our library will be expected to provide the mechanism for sending the
-messages: the application could put a message in the application, send an email,
-send a text message, or do something else. The library doesn’t need to know that
-detail. All it needs is something that implements a trait we’ll provide called
-`Messenger`. Listing 15-20 shows the library code.
+messages: The application could show the message to the user directly, send an
+email, send a text message, or do something else. The library doesn’t need to
+know that detail. All it needs is something that implements a trait we’ll
+provide, called `Messenger`. Listing 15-20 shows the library code.
 
 <Listing number="15-20" file-name="src/lib.rs" caption="A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels">
 
@@ -145,8 +157,8 @@ is that we want to test the behavior of the `set_value` method on the
 `LimitTracker`. We can change what we pass in for the `value` parameter, but
 `set_value` doesn’t return anything for us to make assertions on. We want to be
 able to say that if we create a `LimitTracker` with something that implements
-the `Messenger` trait and a particular value for `max`, when we pass different
-numbers for `value`, the messenger is told to send the appropriate messages.
+the `Messenger` trait and a particular value for `max`, the messenger is told
+to send the appropriate messages when we pass different numbers for `value`.
 
 We need a mock object that, instead of sending an email or text message when we
 call `send`, will only keep track of the messages it’s told to send. We can
@@ -167,7 +179,7 @@ This test code defines a `MockMessenger` struct that has a `sent_messages`
 field with a `Vec` of `String` values to keep track of the messages it’s told
 to send. We also define an associated function `new` to make it convenient to
 create new `MockMessenger` values that start with an empty list of messages. We
-then implement the `Messenger` trait for `MockMessenger` so we can give a
+then implement the `Messenger` trait for `MockMessenger` so that we can give a
 `MockMessenger` to a `LimitTracker`. In the definition of the `send` method, we
 take the message passed in as a parameter and store it in the `MockMessenger`
 list of `sent_messages`.
@@ -175,10 +187,10 @@ list of `sent_messages`.
 In the test, we’re testing what happens when the `LimitTracker` is told to set
 `value` to something that is more than 75 percent of the `max` value. First, we
 create a new `MockMessenger`, which will start with an empty list of messages.
-Then we create a new `LimitTracker` and give it a reference to the new
+Then, we create a new `LimitTracker` and give it a reference to the new
 `MockMessenger` and a `max` value of `100`. We call the `set_value` method on
 the `LimitTracker` with a value of `80`, which is more than 75 percent of 100.
-Then we assert that the list of messages that the `MockMessenger` is keeping
+Then, we assert that the list of messages that the `MockMessenger` is keeping
 track of should now have one message in it.
 
 However, there’s one problem with this test, as shown here:
@@ -190,14 +202,14 @@ However, there’s one problem with this test, as shown here:
 We can’t modify the `MockMessenger` to keep track of the messages, because the
 `send` method takes an immutable reference to `self`. We also can’t take the
 suggestion from the error text to use `&mut self` in both the `impl` method and
-the `trait` definition. We do not want to change the `Messenger` trait solely
-for the sake of testing. Instead, we need to find a way to make our test code
-work correctly with our existing design.
+the trait definition. We do not want to change the `Messenger` trait solely for
+the sake of testing. Instead, we need to find a way to make our test code work
+correctly with our existing design.
 
 This is a situation in which interior mutability can help! We’ll store the
-`sent_messages` within a `RefCell<T>`, and then the `send` method will be
-able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
-shows what that looks like.
+`sent_messages` within a `RefCell<T>`, and then the `send` method will be able
+to modify `sent_messages` to store the messages we’ve seen. Listing 15-22 shows
+what that looks like.
 
 <Listing number="15-22" file-name="src/lib.rs" caption="Using `RefCell<T>` to mutate an inner value while the outer value is considered immutable">
 
@@ -215,16 +227,20 @@ For the implementation of the `send` method, the first parameter is still an
 immutable borrow of `self`, which matches the trait definition. We call
 `borrow_mut` on the `RefCell<Vec<String>>` in `self.sent_messages` to get a
 mutable reference to the value inside the `RefCell<Vec<String>>`, which is the
-vector. Then we can call `push` on the mutable reference to the vector to keep
+vector. Then, we can call `push` on the mutable reference to the vector to keep
 track of the messages sent during the test.
 
-The last change we have to make is in the assertion: to see how many items are
+The last change we have to make is in the assertion: To see how many items are
 in the inner vector, we call `borrow` on the `RefCell<Vec<String>>` to get an
 immutable reference to the vector.
 
 Now that you’ve seen how to use `RefCell<T>`, let’s dig into how it works!
 
-#### Keeping Track of Borrows at Runtime with `RefCell<T>`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="keeping-track-of-borrows-at-runtime-with-refcellt"></a>
+
+#### Tracking Borrows at Runtime
 
 When creating immutable and mutable references, we use the `&` and `&mut`
 syntax, respectively. With `RefCell<T>`, we use the `borrow` and `borrow_mut`
@@ -256,8 +272,8 @@ at runtime.
 </Listing>
 
 We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
-from `borrow_mut`. Then we create another mutable borrow in the same way in the
-variable `two_borrow`. This makes two mutable references in the same scope,
+from `borrow_mut`. Then, we create another mutable borrow in the same way in
+the variable `two_borrow`. This makes two mutable references in the same scope,
 which isn’t allowed. When we run the tests for our library, the code in Listing
 15-23 will compile without any errors, but the test will fail:
 
@@ -280,23 +296,25 @@ in a context where only immutable values are allowed. You can use `RefCell<T>`
 despite its trade-offs to get more functionality than regular references
 provide.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="having-multiple-owners-of-mutable-data-by-combining-rc-t-and-ref-cell-t"></a>
+<a id="allowing-multiple-owners-of-mutable-data-with-rct-and-refcellt"></a>
 
-### Allowing Multiple Owners of Mutable Data with `Rc<T>` and `RefCell<T>`
+### Allowing Multiple Owners of Mutable Data
 
 A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 `Rc<T>` lets you have multiple owners of some data, but it only gives immutable
 access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
 get a value that can have multiple owners _and_ that you can mutate!
 
-For example, recall the cons list example in Listing 15-18 where we used `Rc<T>`
-to allow multiple lists to share ownership of another list. Because `Rc<T>`
-holds only immutable values, we can’t change any of the values in the list once
-we’ve created them. Let’s add in `RefCell<T>` for its ability to change the
-values in the lists. Listing 15-24 shows that by using a `RefCell<T>` in the
-`Cons` definition, we can modify the value stored in all the lists.
+For example, recall the cons list example in Listing 15-18 where we used
+`Rc<T>` to allow multiple lists to share ownership of another list. Because
+`Rc<T>` holds only immutable values, we can’t change any of the values in the
+list once we’ve created them. Let’s add in `RefCell<T>` for its ability to
+change the values in the lists. Listing 15-24 shows that by using a
+`RefCell<T>` in the `Cons` definition, we can modify the value stored in all
+the lists.
 
 <Listing number="15-24" file-name="src/main.rs" caption="Using `Rc<RefCell<i32>>` to create a `List` that we can mutate">
 
@@ -307,11 +325,11 @@ values in the lists. Listing 15-24 shows that by using a `RefCell<T>` in the
 </Listing>
 
 We create a value that is an instance of `Rc<RefCell<i32>>` and store it in a
-variable named `value` so we can access it directly later. Then we create a
-`List` in `a` with a `Cons` variant that holds `value`. We need to clone
-`value` so both `a` and `value` have ownership of the inner `5` value rather
-than transferring ownership from `value` to `a` or having `a` borrow from
-`value`.
+variable named `value` so that we can access it directly later. Then, we create
+a `List` in `a` with a `Cons` variant that holds `value`. We need to clone
+`value` so that both `a` and `value` have ownership of the inner `5` value
+rather than transferring ownership from `value` to `a` or having `a` borrow
+from `value`.
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and `c`,
 they can both refer to `a`, which is what we did in Listing 15-18.
@@ -319,7 +337,7 @@ they can both refer to `a`, which is what we did in Listing 15-18.
 After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
 value in `value`. We do this by calling `borrow_mut` on `value`, which uses the
 automatic dereferencing feature we discussed in [“Where’s the `->`
-Operator?”][wheres-the---operator]<!-- ignore -->) in Chapter 5 to dereference
+Operator?”][wheres-the---operator]<!-- ignore --> in Chapter 5 to dereference
 the `Rc<T>` to the inner `RefCell<T>` value. The `borrow_mut` method returns a
 `RefMut<T>` smart pointer, and we use the dereference operator on it and change
 the inner value.
@@ -333,9 +351,9 @@ value of `15` rather than `5`:
 
 This technique is pretty neat! By using `RefCell<T>`, we have an outwardly
 immutable `List` value. But we can use the methods on `RefCell<T>` that provide
-access to its interior mutability so we can modify our data when we need to.
-The runtime checks of the borrowing rules protect us from data races, and it’s
-sometimes worth trading a bit of speed for this flexibility in our data
+access to its interior mutability so that we can modify our data when we need
+to. The runtime checks of the borrowing rules protect us from data races, and
+it’s sometimes worth trading a bit of speed for this flexibility in our data
 structures. Note that `RefCell<T>` does not work for multithreaded code!
 `Mutex<T>` is the thread-safe version of `RefCell<T>`, and we’ll discuss
 `Mutex<T>` in Chapter 16.

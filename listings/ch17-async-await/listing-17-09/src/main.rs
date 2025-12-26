@@ -1,7 +1,7 @@
 extern crate trpl; // required for mdbook test
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         // ANCHOR: channel
         let (tx, mut rx) = trpl::channel();
 
@@ -9,7 +9,7 @@ fn main() {
         tx.send(val).unwrap();
 
         let received = rx.recv().await.unwrap();
-        println!("Got: {received}");
+        println!("received '{received}'");
         // ANCHOR_END: channel
     });
 }

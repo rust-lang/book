@@ -1,7 +1,7 @@
 ## Recoverable Errors with `Result`
 
 Most errors aren’t serious enough to require the program to stop entirely.
-Sometimes when a function fails it’s for a reason that you can easily interpret
+Sometimes when a function fails, it’s for a reason that you can easily interpret
 and respond to. For example, if you try to open a file and that operation fails
 because the file doesn’t exist, you might want to create the file instead of
 terminating the process.
@@ -17,7 +17,7 @@ enum Result<T, E> {
 }
 ```
 
-The `T` and `E` are generic type parameters: we’ll discuss generics in more
+The `T` and `E` are generic type parameters: We’ll discuss generics in more
 detail in Chapter 10. What you need to know right now is that `T` represents
 the type of the value that will be returned in a success case within the `Ok`
 variant, and `E` represents the type of the error that will be returned in a
@@ -27,7 +27,7 @@ many different situations where the success value and error value we want to
 return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
-fail. In Listing 9-3 we try to open a file.
+fail. In Listing 9-3, we try to open a file.
 
 <Listing number="9-3" file-name="src/main.rs" caption="Opening a file">
 
@@ -42,7 +42,7 @@ has been filled in by the implementation of `File::open` with the type of the
 success value, `std::fs::File`, which is a file handle. The type of `E` used in
 the error value is `std::io::Error`. This return type means the call to
 `File::open` might succeed and return a file handle that we can read from or
-write to. The function call also might fail: for example, the file might not
+write to. The function call also might fail: For example, the file might not
 exist, or we might not have permission to access the file. The `File::open`
 function needs to have a way to tell us whether it succeeded or failed and at
 the same time give us either the file handle or error information. This
@@ -110,11 +110,11 @@ tests to fail lol -->
 
 The type of the value that `File::open` returns inside the `Err` variant is
 `io::Error`, which is a struct provided by the standard library. This struct
-has a method `kind` that we can call to get an `io::ErrorKind` value. The enum
-`io::ErrorKind` is provided by the standard library and has variants
+has a method, `kind`, that we can call to get an `io::ErrorKind` value. The
+enum `io::ErrorKind` is provided by the standard library and has variants
 representing the different kinds of errors that might result from an `io`
 operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
-the file we’re trying to open doesn’t exist yet. So we match on
+the file we’re trying to open doesn’t exist yet. So, we match on
 `greeting_file_result`, but we also have an inner match on `error.kind()`.
 
 The condition we want to check in the inner match is whether the value returned
@@ -156,11 +156,15 @@ the missing file error.
 >
 > Although this code has the same behavior as Listing 9-5, it doesn’t contain
 > any `match` expressions and is cleaner to read. Come back to this example
-> after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the
-> standard library documentation. Many more of these methods can clean up huge
+> after you’ve read Chapter 13 and look up the `unwrap_or_else` method in the
+> standard library documentation. Many more of these methods can clean up huge,
 > nested `match` expressions when you’re dealing with errors.
 
-#### Shortcuts for Panic on Error: `unwrap` and `expect`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="shortcuts-for-panic-on-error-unwrap-and-expect"></a>
+
+#### Shortcuts for Panic on Error
 
 Using `match` works well enough, but it can be a bit verbose and doesn’t always
 communicate intent well. The `Result<T, E>` type has many helper methods
@@ -229,7 +233,7 @@ information to use in debugging.
 ### Propagating Errors
 
 When a function’s implementation calls something that might fail, instead of
-handling the error within the function itself you can return the error to the
+handling the error within the function itself, you can return the error to the
 calling code so that it can decide what to do. This is known as _propagating_
 the error and gives more control to the calling code, where there might be more
 information or logic that dictates how the error should be handled than what
@@ -269,7 +273,7 @@ type of the error value returned from both of the operations we’re calling in
 this function’s body that might fail: the `File::open` function and the
 `read_to_string` method.
 
-The body of the function starts by calling the `File::open` function. Then we
+The body of the function starts by calling the `File::open` function. Then, we
 handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
 If `File::open` succeeds, the file handle in the pattern variable `file`
 becomes the value in the mutable variable `username_file` and the function
@@ -282,8 +286,8 @@ So, if we have a file handle in `username_file`, the function then creates a
 new `String` in variable `username` and calls the `read_to_string` method on
 the file handle in `username_file` to read the contents of the file into
 `username`. The `read_to_string` method also returns a `Result` because it
-might fail, even though `File::open` succeeded. So we need another `match` to
-handle that `Result`: if `read_to_string` succeeds, then our function has
+might fail, even though `File::open` succeeded. So, we need another `match` to
+handle that `Result`: If `read_to_string` succeeds, then our function has
 succeeded, and we return the username from the file that’s now in `username`
 wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the
 same way that we returned the error value in the `match` that handled the
@@ -302,7 +306,11 @@ it to handle appropriately.
 This pattern of propagating errors is so common in Rust that Rust provides the
 question mark operator `?` to make this easier.
 
-#### A Shortcut for Propagating Errors: the `?` Operator
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-shortcut-for-propagating-errors-the--operator"></a>
+
+#### The `?` Operator Shortcut
 
 Listing 9-7 shows an implementation of `read_username_from_file` that has the
 same functionality as in Listing 9-6, but this implementation uses the `?`
@@ -321,15 +329,15 @@ don't want to include it for rustdoc testing purposes. -->
 </Listing>
 
 The `?` placed after a `Result` value is defined to work in almost the same way
-as the `match` expressions we defined to handle the `Result` values in Listing
-9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
-get returned from this expression, and the program will continue. If the value
-is an `Err`, the `Err` will be returned from the whole function as if we had
-used the `return` keyword so the error value gets propagated to the calling
-code.
+as the `match` expressions that we defined to handle the `Result` values in
+Listing 9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok`
+will get returned from this expression, and the program will continue. If the
+value is an `Err`, the `Err` will be returned from the whole function as if we
+had used the `return` keyword so that the error value gets propagated to the
+calling code.
 
 There is a difference between what the `match` expression from Listing 9-6 does
-and what the `?` operator does: error values that have the `?` operator called
+and what the `?` operator does: Error values that have the `?` operator called
 on them go through the `from` function, defined in the `From` trait in the
 standard library, which is used to convert values from one type into another.
 When the `?` operator calls the `from` function, the error type received is
@@ -397,7 +405,11 @@ into that `String`, and returns it. Of course, using `fs::read_to_string`
 doesn’t give us the opportunity to explain all the error handling, so we did it
 the longer way first.
 
-#### Where The `?` Operator Can Be Used
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="where-the--operator-can-be-used"></a>
+
+#### Where to Use the `?` Operator
 
 The `?` operator can only be used in functions whose return type is compatible
 with the value the `?` is used on. This is because the `?` operator is defined
@@ -442,7 +454,7 @@ The error message also mentioned that `?` can be used with `Option<T>` values
 as well. As with using `?` on `Result`, you can only use `?` on `Option` in a
 function that returns an `Option`. The behavior of the `?` operator when called
 on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`:
-if the value is `None`, the `None` will be returned early from the function at
+If the value is `None`, the `None` will be returned early from the function at
 that point. If the value is `Some`, the value inside the `Some` is the
 resultant value of the expression, and the function continues. Listing 9-11 has
 an example of a function that finds the last character of the first line in the
@@ -502,20 +514,20 @@ code will now compile.
 
 </Listing>
 
-The `Box<dyn Error>` type is a _trait object_, which we’ll talk about in [“Using
-Trait Objects That Allow for Values of Different Types”][trait-objects]<!--
-ignore --> in Chapter 18. For now, you can read `Box<dyn Error>` to mean “any
-kind of error.” Using `?` on a `Result` value in a `main` function with the
-error type `Box<dyn Error>` is allowed because it allows any `Err` value to be
-returned early. Even though the body of this `main` function will only ever
-return errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this
-signature will continue to be correct even if more code that returns other
-errors is added to the body of `main`.
+The `Box<dyn Error>` type is a trait object, which we’ll talk about in [“Using
+Trait Objects to Abstract over Shared Behavior”][trait-objects]<!-- ignore -->
+in Chapter 18. For now, you can read `Box<dyn Error>` to mean “any kind of
+error.” Using `?` on a `Result` value in a `main` function with the error type
+`Box<dyn Error>` is allowed because it allows any `Err` value to be returned
+early. Even though the body of this `main` function will only ever return
+errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this signature
+will continue to be correct even if more code that returns other errors is
+added to the body of `main`.
 
 When a `main` function returns a `Result<(), E>`, the executable will exit with
 a value of `0` if `main` returns `Ok(())` and will exit with a nonzero value if
 `main` returns an `Err` value. Executables written in C return integers when
-they exit: programs that exit successfully return the integer `0`, and programs
+they exit: Programs that exit successfully return the integer `0`, and programs
 that error return some integer other than `0`. Rust also returns integers from
 executables to be compatible with this convention.
 
@@ -530,5 +542,5 @@ let’s return to the topic of how to decide which is appropriate to use in whic
 cases.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
-[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
 [termination]: ../std/process/trait.Termination.html

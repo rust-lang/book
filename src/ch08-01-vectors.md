@@ -1,6 +1,6 @@
 ## Storing Lists of Values with Vectors
 
-The first collection type we’ll look at is `Vec<T>`, also known as a _vector_.
+The first collection type we’ll look at is `Vec<T>`, also known as a vector.
 Vectors allow you to store more than one value in a single data structure that
 puts all the values next to each other in memory. Vectors can only store values
 of the same type. They are useful when you have a list of items, such as the
@@ -8,7 +8,7 @@ lines of text in a file or the prices of items in a shopping cart.
 
 ### Creating a New Vector
 
-To create a new empty vector, we call the `Vec::new` function, as shown in
+To create a new, empty vector, we call the `Vec::new` function, as shown in
 Listing 8-1.
 
 <Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
@@ -28,7 +28,7 @@ When we create a vector to hold a specific type, we can specify the type within
 angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
 hold elements of the `i32` type.
 
-More often, you’ll create a `Vec<T>` with initial values and Rust will infer
+More often, you’ll create a `Vec<T>` with initial values, and Rust will infer
 the type of value you want to store, so you rarely need to do this type
 annotation. Rust conveniently provides the `vec!` macro, which will create a
 new vector that holds the values you give it. Listing 8-2 creates a new
@@ -89,8 +89,8 @@ gives us a reference to the element at the index value. When we use the `get`
 method with the index passed as an argument, we get an `Option<&T>` that we can
 use with `match`.
 
-Rust provides these two ways to reference an element so you can choose how the
-program behaves when you try to use an index value outside the range of
+Rust provides these two ways to reference an element so that you can choose how
+the program behaves when you try to use an index value outside the range of
 existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.
@@ -120,13 +120,13 @@ enter a valid value. That would be more user-friendly than crashing the program
 due to a typo!
 
 When the program has a valid reference, the borrow checker enforces the
-ownership and borrowing rules (covered in Chapter 4) to ensure this reference
-and any other references to the contents of the vector remain valid. Recall the
-rule that states you can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-6, where we hold an immutable reference
-to the first element in a vector and try to add an element to the end. This
-program won’t work if we also try to refer to that element later in the
-function.
+ownership and borrowing rules (covered in Chapter 4) to ensure that this
+reference and any other references to the contents of the vector remain valid.
+Recall the rule that states you can’t have mutable and immutable references in
+the same scope. That rule applies in Listing 8-6, where we hold an immutable
+reference to the first element in a vector and try to add an element to the
+end. This program won’t work if we also try to refer to that element later in
+the function.
 
 <Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
 
@@ -142,9 +142,9 @@ Compiling this code will result in this error:
 {{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
 ```
 
-The code in Listing 8-6 might look like it should work: why should a reference
+The code in Listing 8-6 might look like it should work: Why should a reference
 to the first element care about changes at the end of the vector? This error is
-due to the way vectors work: because vectors put the values next to each other
+due to the way vectors work: Because vectors put the values next to each other
 in memory, adding a new element onto the end of the vector might require
 allocating new memory and copying the old elements to the new space, if there
 isn’t enough room to put all the elements next to each other where the vector
@@ -185,7 +185,7 @@ will add `50` to each element.
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
 operator. We’ll talk more about the dereference operator in the [“Following the
-Pointer to the Value”][deref]<!-- ignore --> section of Chapter 15.
+Reference to the Value”][deref]<!-- ignore --> section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker’s rules. If we attempted to insert or remove items in the `for`
@@ -206,10 +206,10 @@ For example, say we want to get values from a row in a spreadsheet in which
 some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
-of the enum. Then we can create a vector to hold that enum and so, ultimately,
+of the enum. Then, we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.
 
-<Listing number="8-9" caption="Defining an `enum` to store values of different types in one vector">
+<Listing number="8-9" caption="Defining an enum to store values of different types in one vector">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
@@ -217,9 +217,9 @@ hold different types. We’ve demonstrated this in Listing 8-9.
 
 </Listing>
 
-Rust needs to know what types will be in the vector at compile time so it knows
-exactly how much memory on the heap will be needed to store each element. We
-must also be explicit about what types are allowed in this vector. If Rust
+Rust needs to know what types will be in the vector at compile time so that it
+knows exactly how much memory on the heap will be needed to store each element.
+We must also be explicit about what types are allowed in this vector. If Rust
 allowed a vector to hold any type, there would be a chance that one or more of
 the types would cause errors with the operations performed on the elements of
 the vector. Using an enum plus a `match` expression means that Rust will ensure

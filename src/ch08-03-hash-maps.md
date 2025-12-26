@@ -1,6 +1,6 @@
 ## Storing Keys with Associated Values in Hash Maps
 
-The last of our common collections is the _hash map_. The type `HashMap<K, V>`
+The last of our common collections is the hash map. The type `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V` using a _hashing
 function_, which determines how it places these keys and values into memory.
 Many programming languages support this kind of data structure, but they often
@@ -40,7 +40,7 @@ standard library; there’s no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
+homogeneous: All of the keys must have the same type, and all of the values
 must have the same type.
 
 ### Accessing Values in a Hash Map
@@ -77,7 +77,11 @@ Yellow: 50
 Blue: 10
 ```
 
-### Hash Maps and Ownership
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="hash-maps-and-ownership"></a>
+
+### Managing Ownership in Hash Maps
 
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
@@ -103,7 +107,7 @@ Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> in Chapter 10
 ### Updating a Hash Map
 
 Although the number of key and value pairs is growable, each unique key can
-only have one value associated with it at a time (but not vice versa: for
+only have one value associated with it at a time (but not vice versa: For
 example, both the Blue team and the Yellow team could have the value `10`
 stored in the `scores` hash map).
 
@@ -140,7 +144,7 @@ overwritten.
 #### Adding a Key and Value Only If a Key Isn’t Present
 
 It’s common to check whether a particular key already exists in the hash map
-with a value and then to take the following actions: if the key does exist in
+with a value and then to take the following actions: If the key does exist in
 the hash map, the existing value should remain the way it is; if the key
 doesn’t exist, insert it and a value for it.
 
@@ -168,7 +172,7 @@ logic ourselves and, in addition, plays more nicely with the borrow checker.
 Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
 first call to `entry` will insert the key for the Yellow team with the value
 `50` because the Yellow team doesn’t have a value already. The second call to
-`entry` will not change the hash map because the Blue team already has the
+`entry` will not change the hash map, because the Blue team already has the
 value `10`.
 
 #### Updating a Value Based on the Old Value
@@ -189,7 +193,7 @@ the value `0`.
 </Listing>
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key-value pairs printed in a different order: recall from [“Accessing
+the same key-value pairs printed in a different order: Recall from [“Accessing
 Values in a Hash Map”][access]<!-- ignore --> that iterating over a hash map
 happens in an arbitrary order.
 
@@ -227,14 +231,14 @@ some exercises you should now be equipped to solve:
 1. Given a list of integers, use a vector and return the median (when sorted,
    the value in the middle position) and mode (the value that occurs most
    often; a hash map will be helpful here) of the list.
-1. Convert strings to pig latin. The first consonant of each word is moved to
+1. Convert strings to Pig Latin. The first consonant of each word is moved to
    the end of the word and _ay_ is added, so _first_ becomes _irst-fay_. Words
    that start with a vowel have _hay_ added to the end instead (_apple_ becomes
    _apple-hay_). Keep in mind the details about UTF-8 encoding!
 1. Using a hash map and vectors, create a text interface to allow a user to add
    employee names to a department in a company; for example, “Add Sally to
-   Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
-   people in a department or all people in the company by department, sorted
+   Engineering” or “Add Amir to Sales.” Then, let the user retrieve a list of
+   all people in a department or all people in the company by department, sorted
    alphabetically.
 
 The standard library API documentation describes methods that vectors, strings,

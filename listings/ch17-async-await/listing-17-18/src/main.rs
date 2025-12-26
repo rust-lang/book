@@ -1,57 +1,21 @@
 extern crate trpl; // required for mdbook test
 
-// ANCHOR: here
-use std::pin::Pin;
-
-// -- snip --
-
-// ANCHOR_END: here
 use std::time::Duration;
 
 fn main() {
-    trpl::run(async {
-        let (tx, mut rx) = trpl::channel();
-
-        let tx1 = tx.clone();
-        let tx1_fut = async move {
-            let vals = vec![
-                String::from("hi"),
-                String::from("from"),
-                String::from("the"),
-                String::from("future"),
-            ];
-
-            for val in vals {
-                tx1.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-        };
-
-        let rx_fut = async {
-            while let Some(value) = rx.recv().await {
-                println!("received '{value}'");
-            }
-        };
-
-        let tx_fut = async move {
-            let vals = vec![
-                String::from("more"),
-                String::from("messages"),
-                String::from("for"),
-                String::from("you"),
-            ];
-
-            for val in vals {
-                tx.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-        };
-
+    trpl::block_on(async {
         // ANCHOR: here
-        let futures: Vec<Pin<Box<dyn Future<Output = ()>>>> =
-            vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
-        // ANCHOR_END: here
+        let slow = async {
+            trpl::sleep(Duration::from_secs(5)).await;
+            "Finally finished"
+        };
 
-        trpl::join_all(futures).await;
+        match timeout(slow, Duration::from_secs(2)).await {
+            Ok(message) => println!("Succeeded with '{message}'"),
+            Err(duration) => {
+                println!("Failed after {} seconds", duration.as_secs())
+            }
+        }
+        // ANCHOR_END: here
     });
 }

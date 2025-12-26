@@ -144,7 +144,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword' or @w:val = 'BodyA']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
@@ -246,11 +246,7 @@
         <xsl:text>-</xsl:text>
         <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption' or @w:val = 'CodeListingCaptionWide']]" />
         <xsl:text>: </xsl:text>
-        <!-- Skip the "Listing X-X: " prefix from the content -->
-        <xsl:variable name="content">
-            <xsl:apply-templates select="*"/>
-        </xsl:variable>
-        <xsl:value-of select="substring-after($content, ': ')"/>
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
@@ -416,13 +412,13 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
                 <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL') and not(w:rPr/w:rStyle/@w:val = 'ItalicBox')and not(w:rPr/w:rStyle/@w:val = 'ItalicInNote')]">
                     <xsl:text>*</xsl:text>
                 </xsl:if>
-    
+
                 <xsl:value-of select="normalize-space(w:t)" />
-    
+
                 <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL') and not(w:rPr/w:rStyle/@w:val = 'ItalicBox')and not(w:rPr/w:rStyle/@w:val = 'ItalicInNote')]">
                     <xsl:text>*</xsl:text>
                 </xsl:if>
-    
+
                 <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
                     <xsl:text> </xsl:text>
                 </xsl:if>

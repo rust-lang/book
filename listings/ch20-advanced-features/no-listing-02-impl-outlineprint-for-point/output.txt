@@ -4,30 +4,26 @@ error[E0277]: `Point` doesn't implement `std::fmt::Display`
   --> src/main.rs:20:23
    |
 20 | impl OutlinePrint for Point {}
-   |                       ^^^^^ `Point` cannot be formatted with the default formatter
+   |                       ^^^^^ the trait `std::fmt::Display` is not implemented for `Point`
    |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
-   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 note: required by a bound in `OutlinePrint`
   --> src/main.rs:3:21
    |
-3  | trait OutlinePrint: fmt::Display {
+ 3 | trait OutlinePrint: fmt::Display {
    |                     ^^^^^^^^^^^^ required by this bound in `OutlinePrint`
 
 error[E0277]: `Point` doesn't implement `std::fmt::Display`
   --> src/main.rs:24:7
    |
 24 |     p.outline_print();
-   |       ^^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter
+   |       ^^^^^^^^^^^^^ the trait `std::fmt::Display` is not implemented for `Point`
    |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
-   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 note: required by a bound in `OutlinePrint::outline_print`
   --> src/main.rs:3:21
    |
-3  | trait OutlinePrint: fmt::Display {
+ 3 | trait OutlinePrint: fmt::Display {
    |                     ^^^^^^^^^^^^ required by this bound in `OutlinePrint::outline_print`
-4  |     fn outline_print(&self) {
+ 4 |     fn outline_print(&self) {
    |        ------------- required by a bound in this associated function
 
 For more information about this error, try `rustc --explain E0277`.

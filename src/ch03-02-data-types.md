@@ -1,8 +1,8 @@
 ## Data Types
 
 Every value in Rust is of a certain _data type_, which tells Rust what kind of
-data is being specified so it knows how to work with that data. We’ll look at
-two data type subsets: scalar and compound.
+data is being specified so that it knows how to work with that data. We’ll look
+at two data type subsets: scalar and compound.
 
 Keep in mind that Rust is a _statically typed_ language, which means that it
 must know the types of all variables at compile time. The compiler can usually
@@ -50,28 +50,27 @@ the type of an integer value.
 | 32-bit  | `i32`   | `u32`    |
 | 64-bit  | `i64`   | `u64`    |
 | 128-bit | `i128`  | `u128`   |
-| arch    | `isize` | `usize`  |
+| Architecture-dependent | `isize` | `usize`  |
 
 Each variant can be either signed or unsigned and has an explicit size.
 _Signed_ and _unsigned_ refer to whether it’s possible for the number to be
 negative—in other words, whether the number needs to have a sign with it
 (signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
+represented without a sign (unsigned). It’s like writing numbers on paper: When
 the sign matters, a number is shown with a plus sign or a minus sign; however,
 when it’s safe to assume the number is positive, it’s shown with no sign.
 Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
 --> representation.
 
 Each signed variant can store numbers from −(2<sup>n − 1</sup>) to 2<sup>n −
-1</sup> − 1 inclusive, where _n_ is the number of bits that variant uses. So an
+1</sup> − 1 inclusive, where _n_ is the number of bits that variant uses. So, an
 `i8` can store numbers from −(2<sup>7</sup>) to 2<sup>7</sup> − 1, which equals
 −128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> − 1,
 so a `u8` can store numbers from 0 to 2<sup>8</sup> − 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on, which is denoted in the table as “arch”:
-64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
-architecture.
+computer your program is running on: 64 bits if you’re on a 64-bit architecture
+and 32 bits if you’re on a 32-bit architecture.
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that number literals that can be multiple numeric types allow a type suffix,
@@ -90,7 +89,7 @@ have the same value as if you had specified `1000`.
 | Byte (`u8` only) | `b'A'`        |
 
 So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good places to start: integer types default to `i32`.
+defaults are generally good places to start: Integer types default to `i32`.
 The primary situation in which you’d use `isize` or `usize` is when indexing
 some sort of collection.
 
@@ -188,16 +187,16 @@ some examples of declaring `char` values:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Note that we specify `char` literals with single quotes, as opposed to string
-literals, which use double quotes. Rust’s `char` type is four bytes in size and
-represents a Unicode Scalar Value, which means it can represent a lot more than
-just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
-and zero-width spaces are all valid `char` values in Rust. Unicode Scalar
-Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
-However, a “character” isn’t really a concept in Unicode, so your human
-intuition for what a “character” is may not match up with what a `char` is in
-Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with
-Strings”][strings]<!-- ignore --> in Chapter 8.
+Note that we specify `char` literals with single quotation marks, as opposed to
+string literals, which use double quotation marks. Rust’s `char` type is 4
+bytes in size and represents a Unicode scalar value, which means it can
+represent a lot more than just ASCII. Accented letters; Chinese, Japanese, and
+Korean characters; emojis; and zero-width spaces are all valid `char` values in
+Rust. Unicode scalar values range from `U+0000` to `U+D7FF` and `U+E000` to
+`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
+so your human intuition for what a “character” is may not match up with what a
+`char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
+Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
 
 ### Compound Types
 
@@ -207,7 +206,7 @@ primitive compound types: tuples and arrays.
 #### The Tuple Type
 
 A _tuple_ is a general way of grouping together a number of values with a
-variety of types into one compound type. Tuples have a fixed length: once
+variety of types into one compound type. Tuples have a fixed length: Once
 declared, they cannot grow or shrink in size.
 
 We create a tuple by writing a comma-separated list of values inside
@@ -273,11 +272,12 @@ brackets:
 Arrays are useful when you want your data allocated on the stack, the same as
 the other types we have seen so far, rather than the heap (we will discuss the
 stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->) or when
-you want to ensure you always have a fixed number of elements. An array isn’t as
-flexible as the vector type, though. A _vector_ is a similar collection type
-provided by the standard library that _is_ allowed to grow or shrink in size. If
-you’re unsure whether to use an array or a vector, chances are you should use a
-vector. [Chapter 8][vectors]<!-- ignore --> discusses vectors in more detail.
+you want to ensure that you always have a fixed number of elements. An array
+isn’t as flexible as the vector type, though. A vector is a similar collection
+type provided by the standard library that _is_ allowed to grow or shrink in
+size because its contents live on the heap. If you’re unsure whether to use an
+array or a vector, chances are you should use a vector. [Chapter
+8][vectors]<!-- ignore --> discusses vectors in more detail.
 
 However, arrays are more useful when you know the number of elements will not
 need to change. For example, if you were using the names of the month in a
@@ -311,7 +311,10 @@ The array named `a` will contain `5` elements that will all be set to the value
 `3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
 more concise way.
 
-##### Accessing Array Elements
+<!-- Old headings. Do not remove or links may break. -->
+<a id="accessing-array-elements"></a>
+
+#### Array Element Access
 
 An array is a single chunk of memory of a known, fixed size that can be
 allocated on the stack. You can access elements of an array using indexing,
@@ -327,7 +330,7 @@ In this example, the variable named `first` will get the value `1` because that
 is the value at index `[0]` in the array. The variable named `second` will get
 the value `2` from index `[1]` in the array.
 
-##### Invalid Array Element Access
+#### Invalid Array Element Access
 
 Let’s see what happens if you try to access an element of an array that is past
 the end of the array. Say you run this code, similar to the guessing game in
@@ -356,7 +359,7 @@ index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a _runtime_ error at the point of using an invalid
+The program resulted in a runtime error at the point of using an invalid
 value in the indexing operation. The program exited with an error message and
 didn’t execute the final `println!` statement. When you attempt to access an
 element using indexing, Rust will check that the index you’ve specified is less

@@ -1,45 +1,3 @@
-use std::error::Error;
-use std::fs;
-
-// ANCHOR: here
-pub struct Config {
-    pub query: String,
-    pub file_path: String,
-    pub ignore_case: bool,
-}
-// ANCHOR_END: here
-
-impl Config {
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let file_path = args[2].clone();
-
-        Ok(Config { query, file_path })
-    }
-}
-
-// ANCHOR: there
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.file_path)?;
-
-    let results = if config.ignore_case {
-        search_case_insensitive(&config.query, &contents)
-    } else {
-        search(&config.query, &contents)
-    };
-
-    for line in results {
-        println!("{line}");
-    }
-
-    Ok(())
-}
-// ANCHOR_END: there
-
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
@@ -52,6 +10,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 
+// ANCHOR: here
 pub fn search_case_insensitive<'a>(
     query: &str,
     contents: &'a str,
@@ -67,6 +26,7 @@ pub fn search_case_insensitive<'a>(
 
     results
 }
+// ANCHOR_END: here
 
 #[cfg(test)]
 mod tests {

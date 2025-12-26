@@ -62,9 +62,16 @@ pub use tokio_stream::{
 ///
 /// - Not *that* far off from what Tokio itself does under the hood in its own
 ///   `tokio::main` macro for supporting `async fn main`.
-pub fn run<F: Future>(future: F) -> F::Output {
+pub fn block_on<F: Future>(future: F) -> F::Output {
     let rt = Runtime::new().unwrap();
     rt.block_on(future)
+}
+
+/// This function has been renamed to `block_on`; please see its documentation.
+/// This function remains to maintain compatibility with the online versions
+/// of the book that use the name `run`.
+pub fn run<F: Future>(future: F) -> F::Output {
+    block_on(future)
 }
 
 /// Run two futures, taking whichever finishes first and canceling the other.
@@ -74,9 +81,9 @@ pub fn run<F: Future>(future: F) -> F::Output {
 /// is that you can work with the first result and then later *also* continue
 /// waiting for the second future.
 ///
-/// We use the `race` semantics, where the slower future is simply dropped, for
-/// the sake of simplicity in the examples: no need to deal with the tuple and
-/// intentionally ignore the second future this way!
+/// We drop the slower future for the sake of simplicity in the examples: no
+/// need to deal with the tuple and intentionally ignore the second future this
+/// way!
 ///
 /// Note that this only works as “simply” as it does because:
 ///
@@ -84,7 +91,7 @@ pub fn run<F: Future>(future: F) -> F::Output {
 /// - It internally *pins* the futures.
 /// - It throws away (rather than returning) the unused future (which is why it
 ///   can get away with pinning them).
-pub async fn race<A, B, F1, F2>(f1: F1, f2: F2) -> Either<A, B>
+pub async fn select<A, B, F1, F2>(f1: F1, f2: F2) -> Either<A, B>
 where
     F1: Future<Output = A>,
     F2: Future<Output = B>,
@@ -95,6 +102,17 @@ where
         Either::Left((a, _f2)) => Either::Left(a),
         Either::Right((b, _f1)) => Either::Right(b),
     }
+}
+
+/// This function has been renamed to `select`; please see its documentation.
+/// This function remains to maintain compatibility with the online versions
+/// of the book that use the name `race`.
+pub async fn race<A, B, F1, F2>(f1: F1, f2: F2) -> Either<A, B>
+where
+    F1: Future<Output = A>,
+    F2: Future<Output = B>,
+{
+    select(f1, f2).await
 }
 
 /// Fetch data from a URL. For more convenient use in _The Rust Programming

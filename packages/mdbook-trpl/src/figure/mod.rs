@@ -1,6 +1,9 @@
 use anyhow::{anyhow, Result};
 use html_parser::{Dom, Node};
-use mdbook::{book::Book, preprocess::Preprocessor, BookItem};
+use mdbook_preprocessor::{
+    book::{Book, BookItem},
+    Preprocessor,
+};
 
 use pulldown_cmark::Event;
 use pulldown_cmark_to_cmark::cmark;
@@ -48,7 +51,7 @@ impl Preprocessor for TrplFigure {
 
     fn run(
         &self,
-        ctx: &mdbook::preprocess::PreprocessorContext,
+        ctx: &mdbook_preprocessor::PreprocessorContext,
         mut book: Book,
     ) -> Result<Book> {
         // The `<figure>`-based output is only replaced in the `Simple` mode.

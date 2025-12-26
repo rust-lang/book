@@ -13,12 +13,12 @@ irrefutable patterns because the program cannot do anything meaningful when
 values don’t match. The `if let` and `while let` expressions and the
 `let...else` statement accept refutable and irrefutable patterns, but the
 compiler warns against irrefutable patterns because, by definition, they’re
-intended to handle possible failure: the functionality of a conditional is in
+intended to handle possible failure: The functionality of a conditional is in
 its ability to perform differently depending on success or failure.
 
 In general, you shouldn’t have to worry about the distinction between refutable
 and irrefutable patterns; however, you do need to be familiar with the concept
-of refutability so you can respond when you see it in an error message. In
+of refutability so that you can respond when you see it in an error message. In
 those cases, you’ll need to change either the pattern or the construct you’re
 using the pattern with, depending on the intended behavior of the code.
 
@@ -49,10 +49,10 @@ Because we didn’t cover (and couldn’t cover!) every valid value with the
 pattern `Some(x)`, Rust rightfully produces a compiler error.
 
 If we have a refutable pattern where an irrefutable pattern is needed, we can
-fix it by changing the code that uses the pattern: instead of using `let`, we
-can use `if let`. Then if the pattern doesn’t match, the code will just skip
-the code in the curly brackets, giving it a way to continue validly. Listing
-19-9 shows how to fix the code in Listing 19-8.
+fix it by changing the code that uses the pattern: Instead of using `let`, we
+can use `let...else`. Then, if the pattern doesn’t match, the code in the curly
+brackets will handle the value. Listing 19-9 shows how to fix the code in
+Listing 19-8.
 
 <Listing number="19-9" caption="Using `let...else` and a block with refutable patterns instead of `let`">
 
@@ -62,12 +62,12 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 
 </Listing>
 
-We’ve given the code an out! This code is perfectly valid now. However,
-if we give `if let` an irrefutable pattern (a pattern that will always
-match), such as `x`, as shown in Listing 19-10, the compiler will give a
-warning.
+We’ve given the code an out! This code is perfectly valid, although it means we
+cannot use an irrefutable pattern without receiving a warning. If we give
+`let...else` a pattern that will always match, such as `x`, as shown in Listing
+19-10, the compiler will give a warning.
 
-<Listing number="19-10" caption="Attempting to use an irrefutable pattern with `if let`">
+<Listing number="19-10" caption="Attempting to use an irrefutable pattern with `let...else`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-10/src/main.rs:here}}
@@ -75,8 +75,8 @@ warning.
 
 </Listing>
 
-Rust complains that it doesn’t make sense to use `if let` with an irrefutable
-pattern:
+Rust complains that it doesn’t make sense to use `let...else` with an
+irrefutable pattern:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}
