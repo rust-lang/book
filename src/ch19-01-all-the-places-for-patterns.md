@@ -159,13 +159,22 @@ This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the
 background color`.
 
-You can see that `if let` can also introduce new variables that shadow existing
-variables in the same way that `match` arms can: The line `if let Ok(age) = age`
-introduces a new `age` variable that contains the value inside the `Ok` variant,
-shadowing the existing `age` variable. This means we need to place the `if age >
-30` condition within that block: We can’t combine these two conditions into `if
-let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
-valid until the new scope starts with the curly bracket.
+You can see that `if let` can introduce new variables that shadow existing
+variables in the same way that `match` arms can. In the line `if let Ok(age) = age`,
+a new `age` variable is introduced that contains the value inside the `Ok`
+variant, shadowing the existing age variable of type Result<u8, _>.
+This shadowing is important to understand because the newly bound variable
+is only valid after the pattern has successfully matched, and using it outside
+of its well-defined scope would be unsound. For this reason, older versions of
+Rust required any additional conditions, such as `age > 30`, to be placed inside
+the block, where the new binding was guaranteed to exist. However, modern Rust
+supports `if-let` chains, which allow writing `if let Ok(age) = age && age > 30`.
+This works because the compiler now understands the left-to-right, short-circuiting
+semantics of the condition: the pattern match must succeed before the new `age`
+binding becomes available to the `age > 30` check. Even with this newer syntax,
+the underlying rule remains the same—bindings introduced by patterns are only valid
+once the pattern has matched, and Rust enforces this strictly to avoid accidental
+misuse caused by shadowing.
 
 The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
