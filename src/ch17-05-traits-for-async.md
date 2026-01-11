@@ -536,7 +536,7 @@ fit together!
 [ch-18]: ch18-00-oop.html
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
-[pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
+[pinning]: https://rust-lang.github.io/async-book/part-reference/pinning.html
 [first-async]: ch17-01-futures-and-syntax.html#our-first-async-program
 [any-number-futures]: ch17-03-more-futures.html#working-with-any-number-of-futures
 [streams]: ch17-04-streams.html
