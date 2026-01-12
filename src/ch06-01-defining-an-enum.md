@@ -229,7 +229,19 @@ However, the concept that null is trying to express is still a useful one: A
 null is a value that is currently invalid or absent for some reason.
 
 The problem isn’t really with the concept but with the particular
-implementation. As such, Rust does not have nulls, but it does have an enum
+implementation. A null value can be passed around for a long time before
+something tries to use the null, which then fails. At that point, it's
+often hard to determine the origin and cause of the null value.
+
+Ideally, failure from an unexpected null value should happen as close as
+possible to the place that created the null value. One way to do this
+is to annotate everywhere a value can or can't be null. If this is done
+with the type system, then the compiler can check that whenever a value
+might be null, there will be code that does something with the null,
+such as report an error, before the value is given to code that does
+not expect null.
+
+Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
 as follows:
