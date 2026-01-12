@@ -5,7 +5,7 @@ fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
     let len = values.len();
     let ptr = values.as_mut_ptr();
 
-    assert!(mid <= len);
+    assert!(mid < len);
 
     unsafe {
         (
