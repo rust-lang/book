@@ -51,9 +51,10 @@ It has also initialized a new Git repository along with a _.gitignore_ file.
 Git files won’t be generated if you run `cargo new` within an existing Git
 repository; you can override this behavior by using `cargo new --vcs=git`.
 
-> Note: Git is a common version control system. You can change `cargo new` to
-> use a different version control system or no version control system by using
-> the `--vcs` flag. Run `cargo new --help` to see the available options.
+> Note: Git is a common version control system. You can disable cargo's
+> initialization of version control for a new project with `cargo new --vcs=none`.
+> Additionally, the `--vcs` option supports other version control systems as well.
+> Run `cargo new --help` to see the possible values for this option.
 
 Open _Cargo.toml_ in your text editor of choice. It should look similar to the
 code in Listing 1-2.
