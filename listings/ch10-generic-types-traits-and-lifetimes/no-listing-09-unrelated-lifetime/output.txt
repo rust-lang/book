@@ -3,11 +3,8 @@ $ cargo run
 error[E0515]: cannot return value referencing local variable `result`
   --> src/main.rs:11:5
    |
-11 |     result.as_str()
-   |     ------^^^^^^^^^
-   |     |
-   |     returns a value referencing data owned by the current function
-   |     `result` is borrowed here
+11 |     &result
+   |     ^^^^^^^ returns a reference to data owned by the current function
 
 For more information about this error, try `rustc --explain E0515`.
 error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
