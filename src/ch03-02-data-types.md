@@ -73,20 +73,24 @@ computer your program is running on: 64 bits if you’re on a 64-bit architectur
 and 32 bits if you’re on a 32-bit architecture.
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
-that number literals that can be multiple numeric types allow a type suffix,
-such as `57u8`, to designate the type. Number literals can also use `_` as a
+that numeric literals (both integer and floating-point) allow type suffixes 
+like 57u8 or 3.14f32 to designate their type. Numeric literals can also use _ as a
 visual separator to make the number easier to read, such as `1_000`, which will
-have the same value as if you had specified `1000`.
+have the same value as 1000. These features work for both integer and floating-point literals.
 
 <span class="caption">Table 3-2: Integer Literals in Rust</span>
 
-| Number literals  | Example       |
+| Integer literals  | Example       |
 | ---------------- | ------------- |
 | Decimal          | `98_222`      |
 | Hex              | `0xff`        |
 | Octal            | `0o77`        |
 | Binary           | `0b1111_0000` |
 | Byte (`u8` only) | `b'A'`        |
+
+> Note: While this table shows integer literal formats, many numeric literal features
+> (like type suffixes and `_` separators) also apply to floating-point literals.
+> We'll cover floating-point literals in more detail later in this chapter.
 
 So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good places to start: Integer types default to `i32`.
