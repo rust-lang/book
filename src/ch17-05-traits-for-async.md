@@ -88,7 +88,7 @@ we need a loop:
 let mut page_title_fut = page_title(url);
 loop {
     match page_title_fut.poll() {
-        Ready(value) => match page_title {
+        Ready(value) => match value {
             Some(title) => println!("The title for {url} was {title}"),
             None => println!("{url} had no title"),
         }
