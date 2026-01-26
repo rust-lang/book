@@ -219,7 +219,7 @@ Here’s the error:
 ```
 
 This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
-discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
+discuss [lifetimes in detail][ch10]<!-- ignore --> in Chapter 10. But, if you disregard the parts
 about lifetimes, the message does contain the key to why this code is a problem:
 
 ```text
@@ -261,3 +261,5 @@ Let’s recap what we’ve discussed about references:
 - References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.
+
+[ch10]: ch10-03-lifetime-syntax.html
