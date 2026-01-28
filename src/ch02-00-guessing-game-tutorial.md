@@ -499,7 +499,7 @@ change in your _Cargo.lock_ file noting that the version of the `rand` crate
 you are now using is 0.8.6. To use `rand` version 0.999.0 or any version in the
 0.999._x_ series, you’d have to update the _Cargo.toml_ file to look like this
 instead (don’t actually make this change because the following examples assume
-you’re using `rand` 0.8):
+you’re using `rand` 0.8.5):
 
 ```toml
 [dependencies]
