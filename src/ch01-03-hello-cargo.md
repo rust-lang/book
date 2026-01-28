@@ -1,4 +1,4 @@
-## Hello, Cargo!
+<img width="2320" height="478" alt="image" src="https://github.com/user-attachments/assets/d9a75b79-4152-4579-adc2-a1d099ea01dd" />## Hello, Cargo!
 
 Cargo is Rust’s build system and package manager. Most Rustaceans use this tool
 to manage their Rust projects because Cargo handles a lot of tasks for you,
@@ -126,10 +126,12 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
-This command creates an executable file in _target/debug/hello_cargo_ (or
-_target\debug\hello_cargo.exe_ on Windows) rather than in your current
-directory. Because the default build is a debug build, Cargo puts the binary in
-a directory named _debug_. You can run the executable with this command:
+This command creates an executable file in `target/debug/hello_cargo` (or
+`target\debug\hello_cargo.exe` on Windows) rather than in your current 
+directory. The file is a native executable produced by Rust, which you can
+run directly without needing the Rust toolchain. Because the default build
+is a debug build, Cargo puts the binary in a directory named _debug_. You 
+can run the executable with this command:
 
 ```console
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
