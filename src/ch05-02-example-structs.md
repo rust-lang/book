@@ -154,13 +154,13 @@ we can see its value while we’re debugging our code.
 Compile the code with this change. Drat! We still get an error:
 
 ```text
-{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:3}}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:7}}
 ```
 
 But again, the compiler gives us a helpful note:
 
 ```text
-{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:12}}
 ```
 
 Rust _does_ include functionality to print out debugging information, but we
