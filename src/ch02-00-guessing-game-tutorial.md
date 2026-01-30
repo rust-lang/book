@@ -18,7 +18,7 @@ correct, the game will print a congratulatory message and exit.
 To set up a new project, go to the _projects_ directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
-```console
+```consoleThe gen_range method
 $ cargo new guessing_game
 $ cd guessing_game
 ```
@@ -543,6 +543,13 @@ trait that we brought into scope with the `use rand::Rng;` statement. The
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
 need to specify `1..=100` to request a number between 1 and 100.
+
+> Note: If you are using `rand` version 0.9 or newer, some APIs have been renamed.
+> In that case, the equivalent code looks like this:
+>
+> ```rust
+> let secret_number = rand::rng().random_range(1..=100);
+> ```
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
