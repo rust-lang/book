@@ -19,7 +19,6 @@ To set up a new project, go to the _projects_ directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
 ```console
-The gen_range method
 $ cargo new guessing_game
 $ cd guessing_game
 ```
