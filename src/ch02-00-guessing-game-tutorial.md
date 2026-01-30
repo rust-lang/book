@@ -18,7 +18,8 @@ correct, the game will print a congratulatory message and exit.
 To set up a new project, go to the _projects_ directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
-```consoleThe gen_range method
+```console
+The gen_range method
 $ cargo new guessing_game
 $ cd guessing_game
 ```
@@ -547,7 +548,7 @@ need to specify `1..=100` to request a number between 1 and 100.
 > Note: If you are using `rand` version 0.9 or newer, some APIs have been renamed.
 > In that case, the equivalent code looks like this:
 >
-> ```rust
+> ```rust,ignore
 > let secret_number = rand::rng().random_range(1..=100);
 > ```
 
