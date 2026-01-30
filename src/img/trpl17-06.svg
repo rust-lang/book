@@ -14,20 +14,20 @@
 <g id="clust2" class="cluster">
 <title>cluster_box_internal</title>
 <polygon fill="none" stroke="black" points="82,-88 82,-132 111.5,-132 111.5,-88 82,-88"/>
-<text text-anchor="middle" x="96.75" y="-114.7" font-family="Times,serif" font-size="14.00">b1</text>
+<text text-anchor="middle" x="96.75" y="-114.7" font-family="serif" font-size="14.00">b1</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_deref</title>
 <polygon fill="none" stroke="black" stroke-width="2" points="131.5,-8 131.5,-169 201.5,-169 201.5,-8 131.5,-8"/>
-<text text-anchor="middle" x="166.5" y="-151.7" font-family="Times,serif" font-size="14.00">pinned</text>
+<text text-anchor="middle" x="166.5" y="-151.7" font-family="serif" font-size="14.00">pinned</text>
 </g>
 <!-- pinned_box -->
 <g id="node1" class="node">
 <title>pinned_box</title>
 <polyline fill="none" stroke="black" points="15,-109 39,-109"/>
-<text text-anchor="start" x="18" y="-115.2" font-family="Times,serif" font-size="14.00">Pin</text>
+<text text-anchor="start" x="18" y="-115.2" font-family="serif" font-size="14.00">Pin</text>
 <polygon fill="none" stroke="black" points="15,-86.5 15,-109 39,-109 39,-86.5 15,-86.5"/>
-<text text-anchor="start" x="25.12" y="-92.7" font-family="Times,serif" font-size="14.00"> </text>
+<text text-anchor="start" x="25.12" y="-92.7" font-family="serif" font-size="14.00"> </text>
 </g>
 <!-- pin -->
 <g id="node2" class="node">
@@ -43,15 +43,15 @@
 <g id="node3" class="node">
 <title>box</title>
 <polyline fill="none" stroke="black" points="156,-109.75 177,-109.75"/>
-<text text-anchor="start" x="159" y="-115.95" font-family="Times,serif" font-size="14.00">fut</text>
+<text text-anchor="start" x="159" y="-115.95" font-family="serif" font-size="14.00">fut</text>
 <polygon fill="none" stroke="black" points="156,-87.25 156,-109.75 177,-109.75 177,-87.25 156,-87.25"/>
-<text text-anchor="start" x="163.12" y="-93.45" font-family="Times,serif" font-size="14.00">0</text>
+<text text-anchor="start" x="163.12" y="-93.45" font-family="serif" font-size="14.00">0</text>
 <polygon fill="none" stroke="black" points="156,-64.75 156,-87.25 177,-87.25 177,-64.75 156,-64.75"/>
-<text text-anchor="start" x="164.62" y="-70.95" font-family="Times,serif" font-size="14.00"> </text>
+<text text-anchor="start" x="164.62" y="-70.95" font-family="serif" font-size="14.00"> </text>
 <polygon fill="none" stroke="black" stroke-dasharray="5,2" points="156,-42.25 156,-64.75 177,-64.75 177,-42.25 156,-42.25"/>
-<text text-anchor="start" x="160.88" y="-48.45" font-family="Times,serif" font-size="14.00">...</text>
+<text text-anchor="start" x="160.88" y="-48.45" font-family="serif" font-size="14.00">...</text>
 <polygon fill="none" stroke="black" points="156,-19.75 156,-42.25 177,-42.25 177,-19.75 156,-19.75"/>
-<text text-anchor="start" x="163.12" y="-25.95" font-family="Times,serif" font-size="14.00">1</text>
+<text text-anchor="start" x="163.12" y="-25.95" font-family="serif" font-size="14.00">1</text>
 </g>
 <!-- pin&#45;&gt;box -->
 <g id="edge2" class="edge">
