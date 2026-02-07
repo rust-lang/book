@@ -4,7 +4,7 @@ As mentioned at the start of the chapter, testing is a complex discipline, and
 different people use different terminology and organization. The Rust community
 thinks about tests in terms of two main categories: unit tests and integration
 tests. _Unit tests_ are small and more focused, testing one module in isolation
-at a time, and can test private interfaces. _Integration tests_ are entirely
+at a time, and can test private interfaces. _Integration tests_ are
 external to your library and use your code in the same way any other external
 code would, using only the public interface and potentially exercising multiple
 modules per test.
@@ -80,7 +80,7 @@ will compel you to do so.
 
 ### Integration Tests
 
-In Rust, integration tests are entirely external to your library. They use your
+In Rust, integration tests are external to your library. They use your
 library in the same way any other code would, which means they can only call
 functions that are part of your library’s public API. Their purpose is to test
 whether many parts of your library work together correctly. Units of code that
