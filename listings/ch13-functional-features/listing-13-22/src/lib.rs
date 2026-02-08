@@ -2,7 +2,7 @@
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     contents
         .lines()
-        .filter(|line| line.contains(query))
+        .filter(move |line| line.contains(query))
         .collect()
 }
 // ANCHOR_END: here
