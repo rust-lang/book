@@ -196,7 +196,7 @@ parameters in functions.
 All functions defined within an `impl` block are called _associated functions_
 because they’re associated with the type named after the `impl`. We can define
 associated functions that don’t have `self` as their first parameter (and thus
-are not methods) because they don’t need an instance of the type to work with.
+are not methods); such functions don’t need an instance of the type to work with.
 We’ve already used one function like this: the `String::from` function that’s
 defined on the `String` type.
 
