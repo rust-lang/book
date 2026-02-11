@@ -12,17 +12,17 @@
 <g id="node1" class="node">
 <title>l1</title>
 <polygon fill="none" stroke="black" points="90,-52.59 90,-88.59 144,-88.59 144,-52.59 90,-52.59"/>
-<text text-anchor="middle" x="104" y="-66.89" font-family="Times,serif" font-size="14.00">5</text>
+<text text-anchor="middle" x="104" y="-66.89" font-family="serif" font-size="14.00">5</text>
 <polyline fill="none" stroke="black" points="118,-52.59 118,-88.59 "/>
-<text text-anchor="middle" x="131" y="-66.89" font-family="Times,serif" font-size="14.00"> </text>
+<text text-anchor="middle" x="131" y="-66.89" font-family="serif" font-size="14.00"> </text>
 </g>
 <!-- l2 -->
 <g id="node2" class="node">
 <title>l2</title>
 <polygon fill="none" stroke="black" points="180,-52.59 180,-88.59 234,-88.59 234,-52.59 180,-52.59"/>
-<text text-anchor="middle" x="196" y="-66.89" font-family="Times,serif" font-size="14.00">10</text>
+<text text-anchor="middle" x="196" y="-66.89" font-family="serif" font-size="14.00">10</text>
 <polyline fill="none" stroke="black" points="212,-52.59 212,-88.59 "/>
-<text text-anchor="middle" x="223" y="-66.89" font-family="Times,serif" font-size="14.00"> </text>
+<text text-anchor="middle" x="223" y="-66.89" font-family="serif" font-size="14.00"> </text>
 </g>
 <!-- l1&#45;&gt;l2 -->
 <g id="edge5" class="edge">
@@ -60,7 +60,7 @@
 <g id="node5" class="node">
 <title>a</title>
 <polygon fill="none" stroke="black" points="0,-70.59 0,-106.59 54,-106.59 54,-70.59 0,-70.59"/>
-<text text-anchor="middle" x="27" y="-84.89" font-family="Times,serif" font-size="14.00">a</text>
+<text text-anchor="middle" x="27" y="-84.89" font-family="serif" font-size="14.00">a</text>
 </g>
 <!-- a&#45;&gt;l1 -->
 <g id="edge1" class="edge">
@@ -72,7 +72,7 @@
 <g id="node6" class="node">
 <title>b</title>
 <polygon fill="none" stroke="black" points="90,-107.59 90,-143.59 144,-143.59 144,-107.59 90,-107.59"/>
-<text text-anchor="middle" x="117" y="-121.89" font-family="Times,serif" font-size="14.00">b</text>
+<text text-anchor="middle" x="117" y="-121.89" font-family="serif" font-size="14.00">b</text>
 </g>
 <!-- b&#45;&gt;l2 -->
 <g id="edge2" class="edge">

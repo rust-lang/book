@@ -12,13 +12,13 @@
 <g id="node1" class="node">
 <title>fut1</title>
 <polyline fill="none" stroke="black" points="13.12,-71.5 40.88,-71.5"/>
-<text text-anchor="start" x="16.12" y="-77.7" font-family="Times,serif" font-size="14.00">fut1</text>
+<text text-anchor="start" x="16.12" y="-77.7" font-family="serif" font-size="14.00">fut1</text>
 <polygon fill="none" stroke="black" points="13.12,-49 13.12,-71.5 40.88,-71.5 40.88,-49 13.12,-49"/>
-<text text-anchor="start" x="23.62" y="-55.2" font-family="Times,serif" font-size="14.00">0</text>
+<text text-anchor="start" x="23.62" y="-55.2" font-family="serif" font-size="14.00">0</text>
 <polygon fill="none" stroke="black" points="13.12,-26.5 13.12,-49 40.88,-49 40.88,-26.5 13.12,-26.5"/>
-<text text-anchor="start" x="23.62" y="-32.7" font-family="Times,serif" font-size="14.00">1</text>
+<text text-anchor="start" x="23.62" y="-32.7" font-family="serif" font-size="14.00">1</text>
 <polygon fill="none" stroke="black" points="13.12,-4 13.12,-26.5 40.88,-26.5 40.88,-4 13.12,-4"/>
-<text text-anchor="start" x="23.25" y="-10.2" font-family="Times,serif" font-size="14.00"> &#160;</text>
+<text text-anchor="start" x="23.25" y="-10.2" font-family="serif" font-size="14.00"> &#160;</text>
 </g>
 <!-- fut1&#45;&gt;fut1 -->
 <g id="edge1" class="edge">
