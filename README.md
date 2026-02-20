@@ -48,18 +48,16 @@ _Firefox:_
 
 ```bash
 $ firefox book/index.html                       # Linux
-$ open -a "Firefox" book/index.html             # OS X
-$ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
-$ start firefox.exe .\book\index.html           # Windows (Cmd)
+$ open -a "Firefox" book/index.html             # macOS
+$ start firefox.exe ".\book\index.html"         # Windows
 ```
 
 _Chrome:_
 
 ```bash
 $ google-chrome book/index.html                 # Linux
-$ open -a "Google Chrome" book/index.html       # OS X
-$ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
-$ start chrome.exe .\book\index.html            # Windows (Cmd)
+$ open -a "Google Chrome" book/index.html       # macOS
+$ start chrome.exe ".\book\index.html"          # Windows
 ```
 
 To run the tests:
