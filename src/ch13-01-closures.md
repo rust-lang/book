@@ -227,7 +227,7 @@ Note that there’s no longer a `println!` between the definition and the call o
 the `borrows_mutably` closure: When `borrows_mutably` is defined, it captures a
 mutable reference to `list`. We don’t use the closure again after the closure
 is called, so the mutable borrow ends. Between the closure definition and the
-closure call, an immutable borrow to print isn’t allowed, because no other
+closure call, an immutable borrow to `list` isn’t allowed, because no other
 borrows are allowed when there’s a mutable borrow. Try adding a `println!`
 there to see what error message you get!
 
