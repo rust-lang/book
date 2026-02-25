@@ -68,7 +68,7 @@ fast, productive."`.
 Now let’s discuss why we need to define an explicit lifetime `'a` in the
 signature of `search` and use that lifetime with the `contents` argument and
 the return value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that
-the lifetime parameters specify which argument lifetime is connected to the
+the lifetime parameters specify which argument's lifetime is connected to the
 lifetime of the return value. In this case, we indicate that the returned
 vector should contain string slices that reference slices of the argument
 `contents` (rather than the argument `query`).
