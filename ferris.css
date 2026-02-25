@@ -19,6 +19,11 @@ body.ayu .not_desired_behavior {
   background: #501f21;
 }
 
+:root {
+  --ferris-large-width: 4.5em;
+  --ferris-small-width: 2.3em;
+}
+
 .ferris-container {
   position: absolute;
   z-index: 99;
@@ -33,11 +38,19 @@ body.ayu .not_desired_behavior {
 }
 
 .ferris-large {
-  width: 4.5em;
+  width: var(--ferris-large-width);
 }
 
 .ferris-small {
-  width: 2.3em;
+  width: var(--ferris-small-width);
+}
+
+.ferris-buffer-large {
+  margin-right: calc(var(--ferris-large-width) + 1.0em);
+}
+
+.ferris-buffer-small {
+  margin-right: calc(var(--ferris-small-width) + 0.5em);
 }
 
 .ferris-explain {

@@ -52,7 +52,9 @@ function attachFerrises(type) {
       continue;
     }
 
-    container.appendChild(createFerris(type, size));
+    let ferris = createFerris(type, size)
+    container.appendChild(ferris);
+    giveFerrisSpace(codeBlock, ferris, size);
   }
 }
 
@@ -99,4 +101,73 @@ function createFerris(type, size) {
   a.appendChild(img);
 
   return a;
+}
+
+/**
+ * Put each line ending in a span. For each of those spans,
+ * if Ferris might hide it, give it a safety buffer.
+ * @param {HTMLElement} codeBlock
+ * @param {HTMLAnchorElement} ferris
+ * @param {'small' | 'large'} size
+ */
+function giveFerrisSpace(codeBlock, ferris, size) {
+  // sanity checking + lint awareness
+  const ferrisImage = ferris.firstChild;
+  if (!(ferrisImage instanceof HTMLImageElement)) {
+    console.error("ferris should be <a> containing <img>", ferris);
+    return;
+  }
+
+  /** @type {HTMLSpanElement[]} */
+  const lineEndings = [];  // line endings which might be hidden by Ferris
+
+  const walker = document.createTreeWalker(codeBlock, NodeFilter.SHOW_TEXT);
+  const re = /^(.*?)\n(.*)$/s
+
+  while (walker.nextNode()) {
+    const current = walker.currentNode;
+    const parent = current.parentNode;
+
+    // sanity checking + lint awareness
+    if (!(current instanceof Text) || !parent) {
+      continue;
+    }
+
+    let re_results;
+    while (re_results = current.textContent.match(re)) {
+      // text node contains newline
+      const [_, beforeNewline, afterNewline] = re_results;
+
+      // line ending gets a span
+      const lineEnd = document.createElement("span");
+      lineEnd.textContent = beforeNewline;
+      lineEndings.push(lineEnd);
+      parent.insertBefore(lineEnd, current);
+
+      // newline now stands alone
+      parent.insertBefore(document.createTextNode("\n"), current);
+
+      // rest of the text
+      current.textContent = afterNewline;
+      // current might still contain newlines, so we go again until it doesn't
+    }
+  }
+
+  codeBlock.normalize(); // not strictly necessary, but good practice to leave the DOM normalized
+
+  // setTimeout so getBoundingClientRect returns valid results
+  setTimeout(() => {
+    const f = ferrisImage.getBoundingClientRect();
+    lineEndings.forEach((s) => {
+      const {bottom, top} = s.getBoundingClientRect();
+      if ( // vertical overlap between ferris and span
+        (bottom >= f.top && bottom <= f.bottom)
+        || (top >= f.top && top <= f.bottom)
+        || (f.top >= top && f.top <= bottom)
+      ) {
+        // buffer needed!
+        s.classList.add("ferris-buffer-" + size);
+      }
+    });
+  });
 }
