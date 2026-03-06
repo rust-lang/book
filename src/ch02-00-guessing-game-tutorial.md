@@ -359,15 +359,15 @@ In the _Cargo.toml_ file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]`, you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
-semantic version specifier `0.8.5`. Cargo understands [Semantic
+semantic version specifier `0.10`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called _SemVer_), which is a
-standard for writing version numbers. The specifier `0.8.5` is actually
-shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
-below 0.9.0.
+standard for writing version numbers. The specifier `0.9` is actually
+shorthand for `^0.10.0`, which means any version that is at least 0.10.0 but
+below 1.0.0.
 
-Cargo considers these versions to have public APIs compatible with version
-0.8.5, and this specification ensures that you’ll get the latest patch release
-that will still compile with the code in this chapter. Any version 0.9.0 or
+Cargo considers these versions to have public 
+0.10.0, and this specification ensures that you’ll get the latest patch release
+that will still compile with the code in this chapter. Any version 1.0.0 or
 greater is not guaranteed to have the same API as what the following examples
 use.
 
@@ -386,21 +386,16 @@ cargo build -->
 $ cargo build
   Updating crates.io index
    Locking 15 packages to latest Rust 1.85.0 compatible versions
-    Adding rand v0.8.5 (available: v0.9.0)
  Compiling proc-macro2 v1.0.93
  Compiling unicode-ident v1.0.17
- Compiling libc v0.2.170
  Compiling cfg-if v1.0.0
- Compiling byteorder v1.5.0
- Compiling getrandom v0.2.15
- Compiling rand_core v0.6.4
+ Compiling getrandom v0.3.1
+ Compiling rand_core v0.9.5
  Compiling quote v1.0.38
  Compiling syn v2.0.98
- Compiling zerocopy-derive v0.7.35
- Compiling zerocopy v0.7.35
  Compiling ppv-lite86 v0.2.20
- Compiling rand_chacha v0.3.1
- Compiling rand v0.8.5
+ Compiling rand_chacha v0.10.0
+ Compiling rand v0.10.0
  Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
   Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
 ```
@@ -529,17 +524,17 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 </Listing>
 
-First, we add the line `use rand::Rng;`. The `Rng` trait defines methods that
+First, we add the line `use rand::RngExt;`. The `RngExt` trait defines methods that
 random number generators implement, and this trait must be in scope for us to
 use those methods. Chapter 10 will cover traits in detail.
 
 Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
+`rand::rng` function that gives us the particular random number
 generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then, we call the `gen_range`
+execution and is seeded by the operating system. Then, we call the `random_range`
 method on the random number generator. This method is defined by the `Rng`
-trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
+trait that we brought into scope with the `use rand::RngExt;` statement. The
+`random_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
 need to specify `1..=100` to request a number between 1 and 100.
