@@ -63,8 +63,7 @@ return the values in order to give back ownership, because we never had
 ownership.
 
 We call the action of creating a reference _borrowing_. As in real life, if a
-person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don’t own it.
+person owns something, you can borrow it from them, but you don't own it.
 
 So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: It doesn’t work!
