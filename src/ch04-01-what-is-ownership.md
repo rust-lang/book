@@ -340,7 +340,14 @@ other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like making a shallow copy. But
 because Rust also invalidates the first variable, instead of being called a
 shallow copy, it’s known as a _move_. In this example, we would say that `s1`
-was _moved_ into `s2`. So, what actually happens is shown in Figure 4-4.
+was _moved_ into `s2` as the value's owner has changed from 's1' to 's2'. We
+are not saying the variable itself was moved into another variable, but rather,
+'s2' now owns the value 's1' did, and 's1''s stack struct, which holds its metadata,
+has been copied over into 's2''s stack slot, and that metadata includes the pointer
+to the value that it now owns, and lastly, 's1' is dropped from the stack, and as
+the variable was dropped, so is its stack slot and metadata, all freeing up stack
+memory.
+So, what actually happens is shown in Figure 4-4.
 
 <img alt="Three tables: tables s1 and s2 representing those strings on the
 stack, respectively, and both pointing to the same string data on the heap.
