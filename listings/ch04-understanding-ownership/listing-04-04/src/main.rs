@@ -7,8 +7,17 @@ fn main() {
     let s3 = takes_and_gives_back(s2); // s2 is moved into
                                        // takes_and_gives_back, which also
                                        // moves its return value into s3
-} // Here, s3 goes out of scope and is dropped. s2 goes out of scope and is
-  // dropped but its value was moved, s1 goes out of scope and is dropped.
+}
+  // The variables are stored on the stack and the values are allocated on the heap.
+  // s1 goes out of scope so it and its value are dropped.
+  // This frees both stack and heap memory.
+  // s2 goes out of scope but ownership of its value was moved so only s2
+  // is dropped.
+  // This frees ONLY stack memory (pointer + length + capacity).
+  // s3 goes out of scope so s3 and its value are dropped.
+  // This frees both stack and heap memory.
+
+
 
 fn gives_ownership() -> String {       // gives_ownership will move its
                                        // return value into the function
