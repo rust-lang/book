@@ -88,7 +88,7 @@ allowed to modify something we have a reference to.
 ### Mutable References
 
 We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that use, instead, a _mutable reference_:
+using a _mutable reference_:
 
 <Listing file-name="src/main.rs">
 
