@@ -106,7 +106,10 @@ values that were calculated from data in a particular state but aren’t tied to
 that state at all. We have three unrelated variables floating around that need
 to be kept in sync.
 
-Luckily, Rust has a solution to this problem: string slices.
+Instead of outputting a 'usize', which is not a reference to the value,
+we should use a string slice which is a reference to the value. This prevents
+issues around changing states as references will still point to a value
+even if it is changed, whilst 'usize' can only hold on to its own value.
 
 ### String Slices
 
