@@ -74,7 +74,7 @@ pub fn run<F: Future>(future: F) -> F::Output {
     block_on(future)
 }
 
-/// Run two futures, taking whichever finishes first and canceling the other.
+/// Run two futures, taking whichever finishes first and ignoring the other.
 ///
 /// Notice that this is built on [`futures::future::select`], which has the
 /// same overall semantics but does *not* drop the slower future. The idea there
