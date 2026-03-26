@@ -385,24 +385,35 @@ cargo build -->
 ```console
 $ cargo build
   Updating crates.io index
-   Locking 15 packages to latest Rust 1.85.0 compatible versions
-    Adding rand v0.8.5 (available: v0.9.0)
- Compiling proc-macro2 v1.0.93
- Compiling unicode-ident v1.0.17
- Compiling libc v0.2.170
- Compiling cfg-if v1.0.0
- Compiling byteorder v1.5.0
- Compiling getrandom v0.2.15
- Compiling rand_core v0.6.4
- Compiling quote v1.0.38
- Compiling syn v2.0.98
- Compiling zerocopy-derive v0.7.35
- Compiling zerocopy v0.7.35
- Compiling ppv-lite86 v0.2.20
- Compiling rand_chacha v0.3.1
- Compiling rand v0.8.5
- Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-  Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
+     Locking 14 packages to latest Rust 1.90.0 compatible versions
+      Adding cfg-if v1.0.4
+      Adding getrandom v0.2.17
+      Adding libc v0.2.183
+      Adding ppv-lite86 v0.2.21
+      Adding proc-macro2 v1.0.106
+      Adding quote v1.0.45
+      Adding rand v0.8.5 (available: v0.10.0)
+      Adding rand_chacha v0.3.1
+      Adding rand_core v0.6.4
+      Adding syn v2.0.117
+      Adding unicode-ident v1.0.24
+      Adding wasi v0.11.1+wasi-snapshot-preview1
+      Adding zerocopy v0.8.47
+      Adding zerocopy-derive v0.8.47
+  Downloaded getrandom v0.2.17
+  Downloaded zerocopy v0.8.47
+  Downloaded libc v0.2.183
+  Downloaded 3 crates (1.1MiB) in 0.26s
+   Compiling libc v0.2.183
+   Compiling zerocopy v0.8.47
+   Compiling cfg-if v1.0.4
+   Compiling getrandom v0.2.17
+   Compiling rand_core v0.6.4
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.38s
 ```
 
 </Listing>
