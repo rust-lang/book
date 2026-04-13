@@ -1,4 +1,4 @@
-## Storing Keys with Associated Values in Hash Maps
+ ## Storing Keys with Associated Values in Hash Maps
 
 The last of our common collections is the hash map. The type `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V` using a _hashing
@@ -228,14 +228,14 @@ Vectors, strings, and hash maps will provide a large amount of functionality
 necessary in programs when you need to store, access, and modify data. Here are
 some exercises you should now be equipped to solve:
 
-1. Given a list of integers, use a vector and return the median (when sorted,
+1. **Median and Mode Calculator.** Given a list of integers, use a vector and return the median (when sorted,
    the value in the middle position) and mode (the value that occurs most
    often; a hash map will be helpful here) of the list.
-1. Convert strings to Pig Latin. The first consonant of each word is moved to
-   the end of the word and _ay_ is added, so _first_ becomes _irst-fay_. Words
-   that start with a vowel have _hay_ added to the end instead (_apple_ becomes
-   _apple-hay_). Keep in mind the details about UTF-8 encoding!
-1. Using a hash map and vectors, create a text interface to allow a user to add
+1. **Convert strings to Pig Latin.** If the word starts with a consonant, move the
+   first letter to the end of the word and add "ay" so first becomes "irst-fay".
+   If the word starts with a vowel just add hay onto the end instead so "apple"
+   becomes "apple-hay". Keep in mind the details about UTF-8 encoding!
+1. **Department Management.** Using a hash map and vectors, create a text interface to allow a user to add
    employee names to a department in a company; for example, “Add Sally to
    Engineering” or “Add Amir to Sales.” Then, let the user retrieve a list of
    all people in a department or all people in the company by department, sorted
