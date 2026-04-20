@@ -541,8 +541,8 @@ method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng;` statement. The
 `gen_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
-the form `start..=end` and is inclusive on the lower and upper bounds, so we
-need to specify `1..=100` to request a number between 1 and 100.
+the form `start..=end` and is inclusive of both the lower and upper bounds, so we
+need to specify `1..=100` to request a number from 1 to 100, inclusive.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
