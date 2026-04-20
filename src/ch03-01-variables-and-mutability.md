@@ -183,6 +183,9 @@ The error says we’re not allowed to mutate a variable’s type:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
+> Note: Shadowing is often most useful for short, local transformations.
+> Overusing it across larger or nested scopes can make code harder to read.
+
 Now that we’ve explored how variables work, let’s look at more data types they
 can have.
 
