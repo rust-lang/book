@@ -9,7 +9,7 @@ fn main() {
     println!("Guess the number!");
 
     // ANCHOR: ch07-04
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let secret_number = (rng.next_u32() % 100) as u32 + 1;
     // ANCHOR_END: ch07-04
 
     println!("The secret number is: {secret_number}");
