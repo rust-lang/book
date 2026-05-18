@@ -460,6 +460,7 @@ retweet
 rewordings
 rint
 ripgrep
+RngExt
 Rumbul
 runnable
 runtime
