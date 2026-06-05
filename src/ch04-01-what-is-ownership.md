@@ -454,6 +454,7 @@ implement `Copy`:
 - The character type, `char`.
 - Tuples, if they only contain types that also implement `Copy`. For example,
   `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
+- Arrays of elements whose type implements `Copy`, such as `[f32; 4]`.
 
 ### Ownership and Functions
 
