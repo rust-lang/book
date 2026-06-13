@@ -306,9 +306,9 @@ part of an array. We’d do so like this:
 ```rust
 let a = [1, 2, 3, 4, 5];
 
-let slice = &a[1..3];
+let slice = &a[2..4];
 
-assert_eq!(slice, &[2, 3]);
+assert_eq!(slice, &[3, 4]);
 ```
 
 This slice has the type `&[i32]`. It works the same way as string slices do, by
