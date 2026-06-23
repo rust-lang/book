@@ -115,8 +115,10 @@ here we _do_ need to use an `Option` to be able to move `sender` out of
 </Listing>
 
 Dropping `sender` closes the channel, which indicates no more messages will be
-sent. When that happens, all the calls to `recv` that the `Worker` instances do
-in the infinite loop will return an error. In Listing 21-24, we change the
+sent. Note that any messages already buffered in the channel can still be
+received after the sender is dropped. Once the channel is empty and the
+sender has disconnected, all the calls to `recv` that the `Worker` instances
+do in the infinite loop will return an error. In Listing 21-24, we change the
 `Worker` loop to gracefully exit the loop in that case, which means the threads
 will finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
