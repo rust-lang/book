@@ -55,10 +55,11 @@ the type of an integer value.
 Each variant can be either signed or unsigned and has an explicit size.
 _Signed_ and _unsigned_ refer to whether it’s possible for the number to be
 negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: When
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
+(signed) or whether it's always non-negative (that is, zero or positive), so
+it can be represented without a sign (unsigned). It’s like writing numbers on
+paper: When the sign matters, a number is shown with a plus sign or a minus
+sign; however, when it’s safe to assume the number is positive, it’s shown
+with no sign.
 Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
 --> representation.
 
