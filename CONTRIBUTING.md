@@ -69,7 +69,7 @@ that governs all sub-projects, including this one. Please respect it!
 
 Because the book is [printed][nostarch], and because we want
 to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
+possible, it may take us longer than usual to address your issue
 or pull request.
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
