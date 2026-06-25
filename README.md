@@ -78,7 +78,7 @@ kinds of contributions we're looking for.
 
 Because the book is [printed][nostarch], and because we want
 to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
+possible, it may take us longer than usual to address your issue
 or pull request.
 
 So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
