@@ -163,9 +163,10 @@ reading from the stream. Again, a production program should handle these errors
 more gracefully, but we’re choosing to stop the program in the error case for
 simplicity.
 
-The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines until
-we get a line that is the empty string. Once we’ve collected the lines into the
+The browser signals the end of an HTTP request header by sending a
+carriage return and newline character twice in a row, so to get the
+headers of one request from the stream, we take lines until we get a
+line that is the empty string. Once we’ve collected the lines into the
 vector, we’re printing them out using pretty debug formatting so that we can
 take a look at the instructions the web browser is sending to our server.
 
