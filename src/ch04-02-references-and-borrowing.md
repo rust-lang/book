@@ -260,4 +260,4 @@ Let’s recap what we’ve discussed about references:
   number of immutable references.
 - References must always be valid.
 
-Next, we’ll look at a different kind of reference: slices.
+Next, we’ll look at a different type: slices, which are often used behind a reference.
