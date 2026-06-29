@@ -4,5 +4,5 @@ $ cargo run
      Running `target/debug/collections`
 
 thread 'main' (6017738) panicked at src/main.rs:4:19:
-end byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`
+end byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2 of string)
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
