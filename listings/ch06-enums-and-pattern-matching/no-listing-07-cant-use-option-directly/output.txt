@@ -1,17 +1,23 @@
 $ cargo run
    Compiling enums v0.1.0 (file:///projects/enums)
 error[E0277]: cannot add `Option<i8>` to `i8`
- --> src/main.rs:5:17
-  |
-5 |     let sum = x + y;
-  |                 ^ no implementation for `i8 + Option<i8>`
-  |
-  = help: the trait `Add<Option<i8>>` is not implemented for `i8`
-  = help: the following other types implement trait `Add<Rhs>`:
-            `&i8` implements `Add<i8>`
-            `&i8` implements `Add`
-            `i8` implements `Add<&i8>`
-            `i8` implements `Add`
+   --> src/main.rs:5:17
+    |
+  5 |     let sum = x + y;
+    |                 ^ no implementation for `i8 + Option<i8>`
+    |
+    = help: the trait `Add<Option<i8>>` is not implemented for `i8`
+help: the following other types implement trait `Add<Rhs>`
+   --> file:///home/.rustup/toolchains/1.93/lib/rustlib/src/rust/library/core/src/ops/arith.rs:114:1
+    |
+114 | add_impl! { usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128 f16 f32 f64 f128 }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | |
+    | `&i8` implements `Add<i8>`
+    | `&i8` implements `Add`
+    | `i8` implements `Add<&i8>`
+    | `i8` implements `Add`
+    = note: this error originates in the macro `add_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `enums` (bin "enums") due to 1 previous error
