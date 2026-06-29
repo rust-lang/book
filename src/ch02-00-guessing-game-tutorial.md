@@ -371,6 +371,13 @@ that will still compile with the code in this chapter. Any version 0.9.0 or
 greater is not guaranteed to have the same API as what the following examples
 use.
 
+Instead of manually adding the dependency by editing the *Cargo.toml* file, we
+can ask Cargo to add the dependency for us, using the `cargo add` command:
+
+```console
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-06-cargo-add/output.txt}}
+```
+
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2.
 
