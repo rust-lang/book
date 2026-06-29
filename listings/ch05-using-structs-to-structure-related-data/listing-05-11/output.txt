@@ -1,14 +1,17 @@
 $ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
 error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
-  --> src/main.rs:12:29
+  --> src/main.rs:12:24
    |
-12 |     println!("rect1 is {}", rect1);
-   |                             ^^^^^ `Rectangle` cannot be formatted with the default formatter
+12 |     println!("rect1 is {rect1}");
+   |                        ^^^^^^^ `Rectangle` cannot be formatted with the default formatter
    |
-   = help: the trait `std::fmt::Display` is not implemented for `Rectangle`
+help: the trait `std::fmt::Display` is not implemented for `Rectangle`
+  --> src/main.rs:1:1
+   |
+ 1 | struct Rectangle {
+   | ^^^^^^^^^^^^^^^^
    = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
-   = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `rectangles` due to previous error
+error: could not compile `rectangles` (bin "rectangles") due to 1 previous error

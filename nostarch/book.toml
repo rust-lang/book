@@ -1,0 +1,29 @@
+[book]
+title = "The Rust Programming Language"
+authors = ["Steve Klabnik", "Carol Nichols", "Chris Krycho", "Contributions from the Rust Community"]
+src = "../src" # needs to be explicit (it is implicit in `/book.toml`).
+
+[output.html]
+additional-css = ["../ferris.css", "../theme/2018-edition.css", "../theme/semantic-notes.css"]
+additional-js = ["../ferris.js"]
+git-repository-url = "https://github.com/rust-lang/book"
+
+[build]
+build-dir = "../tmp"
+
+[preprocessor.trpl-listing]
+command = "cargo run --manifest-path ../packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-listing"
+output-mode = "simple"
+
+# Only used in this version, *not* in the root `book.toml`, because its job is
+# to remove `<figure>` and `<figcaption>` markup from the version we send them.
+[preprocessor.trpl-figure]
+command = "cargo run --manifest-path ../packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-figure"
+output-mode = "simple"
+
+[preprocessor.trpl-heading]
+command = "cargo run --manifest-path ../packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-heading"
+output-mode = "simple"
+
+[rust]
+edition = "2024"

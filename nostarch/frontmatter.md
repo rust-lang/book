@@ -3,24 +3,30 @@
 This file is periodically generated from the content in the `/src/`
 directory, so all fixes need to be made in `/src/`.
 -->
+
 ## About the Authors
 
-Carol Nichols is a member of the Rust Crates.io Team and a former member of the
-Rust Core Team. She’s a co-founder of Integer 32, LLC, the world’s first
-Rust-focused software consultancy. Nichols has also organized the Rust Belt
-Rust Conference.
-
-Steve Klabnik was the lead for the Rust documentation team and was one of
+**Steve Klabnik** was the lead for the Rust documentation team and was one of
 Rust’s core developers. A frequent speaker and a prolific open source
 contributor, he previously worked on projects such as Ruby and Ruby on Rails.
 
+**Carol Nichols** is a member of the Rust Crates.io Team and a former member of
+the Rust Core Team. She’s a co-founder of Integer 32, LLC, the world’s first
+Rust-focused software consultancy. She has also organized the Rust Belt Rust
+Conference.
+
+**Chris Krycho** is a software engineering leader with experience in avionics,
+developer tools, web frameworks, and more. In addition to his open source
+software contributions and regular public speaking, he created the *New
+Rustacean* podcast (2015–2019).
+
 ## About the Technical Reviewer
 
-JT is a Rust core team member and the co-creator of the Rust error message
-format, Rust Language Server (RLS), and Nushell. They first started using Rust
-in 2011, and in 2016 joined Mozilla to work on Rust full time, helping to shape
-its direction for widespread use. These days, they are a freelance Rust trainer
-and advocate for safe systems programming.
+**Sophia Turner** has been a long-time advocate of better programming
+languages and tools. She helped create TypeScript and later joined Mozilla to
+work on compiler errors, IDE support, and the larger Rust ergonomics
+initiative. She also served on the Rust core team and helped create the Rust
+Leadership Council.
 
 ## Brief Contents
 
@@ -28,45 +34,78 @@ and advocate for safe systems programming.
 
 ## Foreword
 
-It wasn’t always so clear, but the Rust programming language is fundamentally
-about *empowerment*: no matter what kind of code you are writing now, Rust
-empowers you to reach further, to program with confidence in a wider variety of
-domains than you did before.
+The Rust programming language has come a long way in a few short years, from
+its creation and incubation by a small and nascent community of enthusiasts, to
+becoming one of the most loved and in-demand programming languages in the
+world. Looking back, it was inevitable that the power and promise of Rust would
+turn heads and gain a foothold in systems programming. What was not inevitable
+was the global growth in interest and innovation that permeated through open
+source communities and catalyzed wide-scale adoption across industries.
 
-Take, for example, “systems-level” work that deals with low-level details of
-memory management, data representation, and concurrency. Traditionally, this
-realm of programming is seen as arcane, accessible to only a select few who
-have devoted the necessary years learning it to avoid its infamous pitfalls.
-And even those who practice it do so with caution, lest their code be open to
-exploits, crashes, or corruption.
+At this point in time, it is easy to point to the wonderful features that Rust
+has to offer to explain this explosion in interest and adoption. Who doesn’t
+want memory safety, *and* fast performance, *and* a friendly compiler, *and*
+great tooling, among a host of other wonderful features? The Rust language you
+see today combines years of research in systems programming with the practical
+wisdom of a vibrant and passionate community. This language was designed with
+purpose and crafted with care, offering developers a tool that makes it easier
+to write safe, fast, and reliable code.
 
-Rust breaks down these barriers by eliminating the old pitfalls and providing a
-friendly, polished set of tools to help you along the way. Programmers who need
-to “dip down” into lower-level control can do so with Rust, without taking on
-the customary risk of crashes or security holes and without having to learn the
-fine points of a fickle toolchain. Better yet, the language is designed to
-guide you naturally toward reliable code that is efficient in terms of speed
-and memory usage.
+But what makes Rust truly special is its roots in empowering you, the user, to
+achieve your goals. This is a language that wants you to succeed, and the
+principle of empowerment runs through the core of the community that builds,
+maintains, and advocates for this language. Since the previous edition of this
+definitive text, Rust has further developed into a truly global and trusted
+language. The Rust Project is now robustly supported by the Rust Foundation,
+which also invests in key initiatives to ensure that Rust is secure, stable,
+and sustainable.
 
-Programmers who are already working with low-level code can use Rust to raise
-their ambitions. For example, introducing parallelism in Rust is a relatively
-low-risk operation: the compiler will catch the classical mistakes for you. And
-you can tackle more aggressive optimizations in your code with the confidence
-that you won’t accidentally introduce crashes or vulnerabilities.
+This edition of *The Rust Programming Language* is a comprehensive update,
+reflecting the language’s evolution over the years and providing valuable new
+information. But it is not just a guide to syntax and libraries—it’s an
+invitation to join a community that values quality, performance, and thoughtful
+design. Whether you’re a seasoned developer looking to explore Rust for the
+first time or an experienced Rustacean looking to refine your skills, this
+edition offers something for everyone.
 
-But Rust isn’t limited to low-level systems programming. It’s expressive and
-ergonomic enough to make CLI apps, web servers, and many other kinds of code
-quite pleasant to write—you’ll find simple examples later in the book. Working
-with Rust allows you to build skills that transfer from one domain to another;
-you can learn Rust by writing a web app, then apply those same skills to target
-your Raspberry Pi.
+The Rust journey has been one of collaboration, learning, and iteration. The
+growth of the language and its ecosystem is a direct reflection of the vibrant,
+diverse community behind it. The contributions of thousands of developers, from
+core language designers to casual contributors, are what make Rust such a
+unique and powerful tool. By picking up this book, you’re not just learning a
+new programming language—you’re joining a movement to make software better,
+safer, and more enjoyable to work with.
 
-This book fully embraces the potential of Rust to empower its users. It’s a
-friendly and approachable text intended to help you level up not just your
-knowledge of Rust, but also your reach and confidence as a programmer in
-general. So dive in, get ready to learn—and welcome to the Rust community!
+Welcome to the Rust community!
 
-Nicholas Matsakis and Aaron Turon
+Bec Rumbul, Executive Director of the Rust Foundation
+
+## Preface
+
+This version of the text assumes you’re using Rust 1.85.0 (released 2025-02-17)
+or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
+configure them to use Rust 2024 Edition idioms. See “Installation” on page XX
+for instructions on installing or updating Rust, and see Appendix E for
+information on editions.
+
+The 2024 Edition of the Rust language includes a number of improvements that
+make Rust more ergonomic and that correct some inconsistencies. On top of a
+general update to reflect these improvements, this rendition of the book has a
+number of improvements to address specific feedback:
+
+* A new Chapter 17 introduces async programming in Rust, including `async` and
+`await` along with the `Future` and `Stream` types. Later chapters have been
+lightly adapted and renumbered to account for this update.
+* Chapter 20 (Chapter 19 in previous editions) now includes an introduction to
+Miri, Rust’s dynamic analysis tool for unsafe code. It also includes updates
+for some of the more significant updates to Rust in the 2024 Edition.
+* We fixed a number of small errors and imprecise wording throughout the book.
+Thank you to the readers who reported them!
+
+Note that any code from earlier renditions of this book that compiled will
+continue to compile with the relevant edition in the project’s *Cargo.toml*,
+even as you update the Rust compiler version you’re using. That’s Rust’s
+backward-compatibility guarantee at work!
 
 ## ACKNOWLEDGMENTS
 
@@ -77,39 +116,21 @@ worth welcoming more folks into.
 
 We’re especially thankful for everyone who read early versions of this book
 online and provided feedback, bug reports, and pull requests. Special thanks to
-Eduard-Mihai Burtescu, Alex Crichton, and JT for providing technical review,
-and to Karen Rustad Tölva for the cover art. Thank you to our team at No
-Starch, including Bill Pollock, Liz Chadwick, and Janelle Ludowise, for
-improving this book and bringing it to print.
+Eduard-Mihai Burtescu, Alex Crichton, and Sophia Turner for providing technical
+review, and to Karen Rustad Tölva for the cover art. Thank you to our team at
+No Starch Press, including Bill Pollock, Liz Chadwick, and Janelle Ludowise,
+for improving this book and bringing it to print.
 
 Carol is grateful for the opportunity to work on this book. She thanks her
 family for their constant love and support, especially her husband, Jake
 Goulding, and her daughter, Vivian.
 
-## Preface
-
-This version of the text assumes you’re using Rust 1.62.0 (released 2022-06-30)
-or later with `edition="2021"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2021 edition idioms. See “Installation” on page XX
-for instructions on installing or updating Rust, and see Appendix E for
-information on editions.
-
-The 2021 edition of the Rust language includes a number of improvements that
-make Rust more ergonomic and that correct some inconsistencies. On top of a
-general update to reflect these improvements, this rendition of the book has a
-number of improvements to address specific feedback:
-
-* Chapter 7 contains a new quick reference section on organizing your code into
-multiple files with modules.
-* Chapter 13 has new and improved closure examples that more clearly illustrate
-captures, the `move` keyword, and the `Fn` traits.
-* We fixed a number of small errors and imprecise wording throughout the book.
-Thank you to the readers who reported them!
-
-Note that any code from earlier renditions of this book that compiled will
-continue to compile with the relevant edition in the project’s *Cargo.toml*,
-even as you update the Rust compiler version you’re using. That’s Rust’s
-backward-compatibility guarantees at work!
+Chris is profoundly grateful to Tim McNamara, Will Crichton, James Munns, Nick
+Cameron, and Tyler Mandry for dedicated feedback on the new chapter on async
+programming in Rust. He would also like to thank Integer 32 for making this
+update for the 2024 Edition happen. Finally, and most of all, he is thankful to
+his wife, Jaimie, and his daughters, Elayne and Katherine, for supporting him,
+including many a “How is the book going, daddy?” over family dinners.
 
 ## Introduction
 
@@ -134,7 +155,7 @@ is prone to various subtle bugs, which in most other languages can only be
 caught through extensive testing and careful code review by experienced
 developers. In Rust, the compiler plays a gatekeeper role by refusing to
 compile code with these elusive bugs, including concurrency bugs. By working
-alongside the compiler, the team can spend their time focusing on the program’s
+alongside the compiler, the team can spend its time focusing on the program’s
 logic rather than chasing down bugs.
 
 Rust also brings contemporary developer tools to the systems programming world:
@@ -180,24 +201,25 @@ mean both how quickly Rust code can run and the speed at which Rust lets you
 write programs. The Rust compiler’s checks ensure stability through feature
 additions and refactoring. This is in contrast to the brittle legacy code in
 languages without these checks, which developers are often afraid to modify. By
-striving for zero-cost abstractions, higher-level features that compile to
-lower-level code as fast as code written manually, Rust endeavors to make safe
+striving for zero-cost abstractions—higher-level features that compile to
+lower-level code as fast as code written manually—Rust endeavors to make safe
 code be fast code as well.
 
 The Rust language hopes to support many other users as well; those mentioned
 here are merely some of the biggest stakeholders. Overall, Rust’s greatest
 ambition is to eliminate the trade-offs that programmers have accepted for
 decades by providing safety *and* productivity, speed *and* ergonomics. Give
-Rust a try and see if its choices work for you.
+Rust a try, and see if its choices work for you.
 
 ## Who This Book Is For
 
 This book assumes that you’ve written code in another programming language, but
-doesn’t make any assumptions about which one. We’ve tried to make the material
-broadly accessible to those from a wide variety of programming backgrounds. We
-don’t spend a lot of time talking about what programming *is* or how to think
-about it. If you’re entirely new to programming, you would be better served by
-reading a book that specifically provides an introduction to programming.
+it doesn’t make any assumptions about which one. We’ve tried to make the
+material broadly accessible to those from a wide variety of programming
+backgrounds. We don’t spend a lot of time talking about what programming *is*
+or how to think about it. If you’re entirely new to programming, you would be
+better served by reading a book that specifically provides an introduction to
+programming.
 
 ## How to Use This Book
 
@@ -209,7 +231,7 @@ the topic in a later chapter.
 You’ll find two kinds of chapters in this book: concept chapters and project
 chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
 chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapter 2, Chapter 12, and Chapter 20 are project chapters; the rest are
+far. Chapter 2, Chapter 12, and Chapter 21 are project chapters; the rest are
 concept chapters.
 
 **Chapter 1** explains how to install Rust, how to write a “Hello, world!”
@@ -217,27 +239,28 @@ program, and how to use Cargo, Rust’s package manager and build tool. **Chapte
 2** is a hands-on introduction to writing a program in Rust, having you build
 up a number-guessing game. Here, we cover concepts at a high level, and later
 chapters will provide additional detail. If you want to get your hands dirty
-right away, Chapter 2 is the place for that. **Chapter 3** covers Rust features
-that are similar to those of other programming languages, and in **Chapter 4**
-you’ll learn about Rust’s ownership system. If you’re a particularly meticulous
-learner who prefers to learn every detail before moving on to the next, you
-might want to skip Chapter 2 and go straight to Chapter 3, returning to Chapter
-2 when you’d like to work on a project applying the details you’ve learned.
+right away, Chapter 2 is the place for that. If you’re a particularly
+meticulous learner who prefers to learn every detail before moving on to the
+next, you might want to skip Chapter 2 and go straight to **Chapter 3**, which
+covers Rust features that are similar to those of other programming languages;
+then, you can return to Chapter 2 when you’d like to work on a project applying
+the details you’ve learned.
 
-**Chapter 5** discusses structs and methods, and **Chapter 6** covers enums,
-`match` expressions, and the `if let` control flow construct. You’ll use
-structs and enums to make custom types in Rust.
+In **Chapter 4**, you’ll learn about Rust’s ownership system. **Chapter 5**
+discusses structs and methods. **Chapter 6** covers enums, `match` expressions,
+and the `if let` and `let...else` control flow constructs. You’ll use structs
+and enums to make custom types.
 
 In **Chapter 7**, you’ll learn about Rust’s module system and about privacy
 rules for organizing your code and its public application programming interface
 (API). **Chapter 8** discusses some common collection data structures that the
-standard library provides, such as vectors, strings, and hash maps. **Chapter
-9** explores Rust’s error-handling philosophy and techniques.
+standard library provides: vectors, strings, and hash maps. **Chapter 9**
+explores Rust’s error-handling philosophy and techniques.
 
 **Chapter 10** digs into generics, traits, and lifetimes, which give you the
 power to define code that applies to multiple types. **Chapter 11** is all
 about testing, which even with Rust’s safety guarantees is necessary to ensure
-your program’s logic is correct. In **Chapter 12**, we’ll build our own
+that your program’s logic is correct. In **Chapter 12**, we’ll build our own
 implementation of a subset of functionality from the `grep` command line tool
 that searches for text within files. For this, we’ll use many of the concepts
 we discussed in the previous chapters.
@@ -250,29 +273,32 @@ provides and the traits that enable their functionality.
 
 In **Chapter 16**, we’ll walk through different models of concurrent
 programming and talk about how Rust helps you program in multiple threads
-fearlessly. **Chapter 17** looks at how Rust idioms compare to object-oriented
-programming principles you might be familiar with.
+fearlessly. In **Chapter 17**, we build on that by exploring Rust’s async and
+await syntax, along with tasks, futures, and streams, and the lightweight
+concurrency model they enable.
 
-**Chapter 18** is a reference on patterns and pattern matching, which are
-powerful ways of expressing ideas throughout Rust programs. **Chapter 19**
-contains a smorgasbord of advanced topics of interest, including unsafe Rust,
-macros, and more about lifetimes, traits, types, functions, and closures.
+**Chapter 18** looks at how Rust idioms compare to object-oriented programming
+principles you might be familiar with. **Chapter 19** is a reference on
+patterns and pattern matching, which are powerful ways of expressing ideas
+throughout Rust programs. **Chapter 20** contains a smorgasbord of advanced
+topics of interest, including unsafe Rust, macros, and more about lifetimes,
+traits, types, functions, and closures.
 
-In **Chapter 20**, we’ll complete a project in which we’ll implement a
+In **Chapter 21**, we’ll complete a project in which we’ll implement a
 low-level multithreaded web server!
 
-Finally, some appendices contain useful information about the language in a
-more reference-like format**. Appendix A** covers Rust’s keywords, **Appendix
+Finally, some appendixes contain useful information about the language in a
+more reference-like format. **Appendix A** covers Rust’s keywords, **Appendix
 B** covers Rust’s operators and symbols, **Appendix C** covers derivable traits
 provided by the standard library, **Appendix D** covers some useful development
 tools, and **Appendix E** explains Rust editions.
 
-There is no wrong way to read this book: if you want to skip ahead, go for it!
+There is no wrong way to read this book: If you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any
 confusion. But do whatever works for you.
 
 An important part of the process of learning Rust is learning how to read the
-error messages the compiler displays: these will guide you toward working code.
+error messages the compiler displays: These will guide you toward working code.
 As such, we’ll provide many examples that don’t compile along with the error
 message the compiler will show you in each situation. Know that if you enter
 and run a random example, it may not compile! Make sure you read the
@@ -288,5 +314,5 @@ an issue or send a pull request on GitHub at
 *https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md* for more details.
 
 The source code for the examples in this book, errata, and other information
-are available at *https://www.nostarch.com/Rust2021*.
+are available at *https://nostarch.com/rust-programming-language-3rd-edition*.
 

@@ -17,7 +17,7 @@ fn main() {
     // ANCHOR: here
     let mut count = 0;
     match coin {
-        Coin::Quarter(state) => println!("State quarter from {:?}!", state),
+        Coin::Quarter(state) => println!("State quarter from {state:?}!"),
         _ => count += 1,
     }
     // ANCHOR_END: here

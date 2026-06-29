@@ -12,5 +12,5 @@ fn main() {
     ];
 
     list.sort_by_key(|r| r.width);
-    println!("{:#?}", list);
+    println!("{list:#?}");
 }

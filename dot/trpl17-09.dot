@@ -1,0 +1,62 @@
+digraph {
+   rankdir = LR;
+   overlap = false;
+   dpi = 300.0;
+   splines = false;
+   cluster = true;
+   newrank = true;
+   outputorder = in;
+   compound = true;
+   labelloc = "c";
+   
+   node [shape = "plaintext";];
+   
+   pinned_box [label = <<table border="0" cellborder="1" cellspacing="0">
+      <tr><td sides="B">Pin</td></tr>
+      <tr><td port="source"> </td></tr>
+      </table>>;];
+   
+   subgraph cluster_both {
+      peripheries = 0;
+      
+      
+      
+      string1 [label = <<table border="0" cellborder="1" cellspacing="0" bgcolor="lightgray">
+         <tr><td colspan="8" sides="B">s1</td></tr>
+         <tr>
+         <td port="target">5usize</td>
+         <td>h</td>
+         <td>e</td>
+         <td>l</td>
+         <td>l</td>
+         <td>o</td>
+         </tr>
+         </table>>;];
+      
+      subgraph cluster_deref {
+         style = dashed;
+         label = "String";
+         peripheries = 1;
+         
+         pin [shape = "point";];
+         
+         string2 [label = <<table border="0" cellborder="1" cellspacing="0">
+            <tr><td colspan="8" sides="B">s2</td></tr>
+            <tr>
+            <td port="target">7usize</td>
+            <td>g</td>
+            <td>o</td>
+            <td>o</td>
+            <td>d</td>
+            <td>b</td>
+            <td>y</td>
+            <td>e</td>
+            </tr>
+            </table>>;];
+      }
+   }
+   
+   edge [tailclip = false;];
+   pinned_box -> pin [tailport = "source:c"; arrowhead = "none";];
+   pin -> string2 [headport = "target";];
+}

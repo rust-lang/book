@@ -1,0 +1,22 @@
+$ cargo run
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+warning: irrefutable `let...else` pattern
+ --> src/main.rs:2:5
+  |
+2 |     let x = 5 else {
+  |     ^^^^^^^^^
+  |
+  = note: this pattern always matches, so the else clause is unreachable
+help: remove this `else` block
+ --> src/main.rs:2:20
+  |
+2 |       let x = 5 else {
+  |  ____________________^
+3 | |         return;
+4 | |     };
+  | |_____^
+  = note: `#[warn(irrefutable_let_patterns)]` on by default
+
+warning: `patterns` (bin "patterns") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.39s
+     Running `target/debug/patterns`

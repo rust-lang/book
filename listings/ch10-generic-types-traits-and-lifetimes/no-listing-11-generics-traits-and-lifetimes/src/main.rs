@@ -7,7 +7,7 @@ fn main() {
         string2,
         "Today is someone's birthday!",
     );
-    println!("The longest string is {}", result);
+    println!("The longest string is {result}");
 }
 
 // ANCHOR: here
@@ -21,11 +21,7 @@ fn longest_with_an_announcement<'a, T>(
 where
     T: Display,
 {
-    println!("Announcement! {}", ann);
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
+    println!("Announcement! {ann}");
+    if x.len() > y.len() { x } else { y }
 }
 // ANCHOR_END: here

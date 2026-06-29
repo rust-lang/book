@@ -25,8 +25,16 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightLOC']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective0']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BoxSpacer']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BoxType']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'GraphicSlug']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSpaceAbove']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSpaceAboveWide']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSpaceAboveBox']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSpaceBelow']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSpaceBelowWide']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSpaceBelowBox']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Anchor']" />
 
     <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
 
@@ -130,13 +138,13 @@
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'CodeLabel']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'CodeLabel' or @w:val = 'CodeLabelAnnotated']]">
         <xsl:text>Filename: </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword' or @w:val = 'BodyA']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
@@ -223,22 +231,26 @@
         <xsl:text>-</xsl:text>
         <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'TableTitle']]" />
         <xsl:text>: </xsl:text>
-        <xsl:apply-templates select="*" />
+        <!-- Skip the "Table X-X: " prefix from the content -->
+        <xsl:variable name="content">
+            <xsl:apply-templates select="*"/>
+        </xsl:variable>
+        <xsl:value-of select="substring-after($content, ': ')"/>
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption' or @w:val = 'CodeListingCaptionWide']]">
         <xsl:text>Listing </xsl:text>
         <xsl:value-of select="$chapternumber" />
         <xsl:value-of select="$appendixnumber" />
         <xsl:text>-</xsl:text>
-        <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]" />
+        <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption' or @w:val = 'CodeListingCaptionWide']]" />
         <xsl:text>: </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockQuote' or @w:val = 'QuotePara']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockQuote' or @w:val = 'Blockquote' or @w:val = 'QuotePara']]">
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
     </xsl:template>
@@ -249,11 +261,11 @@
         <xsl:text>&#10;>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockText' or @w:val = 'BoxBody']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockText' or @w:val = 'BoxBody' or @w:val = 'BoxBodyFirst']]">
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:choose>
-            <xsl:when test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val = 'BlockText' or w:pPr/w:pStyle/@w:val = 'BoxBody' or w:pPr/w:pStyle/@w:val = 'BoxListBullet' or w:pPr/w:pStyle/@w:val = 'BoxCode' or w:pPr/w:pStyle/@w:val = 'BoxRunInHead']">
+            <xsl:when test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val = 'BlockText' or w:pPr/w:pStyle/@w:val = 'BoxBody' or w:pPr/w:pStyle/@w:val = 'BoxBodyFirst' or w:pPr/w:pStyle/@w:val = 'BoxListBullet' or w:pPr/w:pStyle/@w:val = 'BoxCode' or w:pPr/w:pStyle/@w:val = 'BoxRunInHead']">
                 <xsl:text>&#10;>&#10;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -304,7 +316,11 @@
         <xsl:text>-</xsl:text>
         <xsl:number level="any" count="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']" />
         <xsl:text>: </xsl:text>
-        <xsl:apply-templates select="*" />
+        <!-- Skip the "Figure X-X: " prefix from the content -->
+        <xsl:variable name="content">
+            <xsl:apply-templates select="*"/>
+        </xsl:variable>
+        <xsl:value-of select="substring-after($content, ': ')"/>
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
@@ -345,17 +361,17 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
 
     <!-- Character styles -->
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold' or @w:val = 'LiteralCaption' or @w:val = 'LiteralBox']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold' or @w:val = 'LiteralCaption' or @w:val = 'LiteralBox' or @w:val = 'LiteralChapterOpener' or @w:val = 'LiteralInNote']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'Literal') and not(w:rPr/w:rStyle/@w:val = 'LiteralBold') and not(w:rPr/w:rStyle/@w:val = 'LiteralCaption') and not(w:rPr/w:rStyle/@w:val = 'LiteralBox')]">
+                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'Literal') and not(w:rPr/w:rStyle/@w:val = 'LiteralBold') and not(w:rPr/w:rStyle/@w:val = 'LiteralCaption') and not(w:rPr/w:rStyle/@w:val = 'LiteralBox') and not(w:rPr/w:rStyle/@w:val = 'LiteralChapterOpener') and not(w:rPr/w:rStyle/@w:val = 'LiteralInNote')]">
                     <xsl:text>`</xsl:text>
                 </xsl:if>
                 <xsl:value-of select="normalize-space(w:t)" />
-                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'Literal') and not(w:rPr/w:rStyle/@w:val = 'LiteralBold') and not(w:rPr/w:rStyle/@w:val = 'LiteralCaption') and not(w:rPr/w:rStyle/@w:val = 'LiteralBox')] or following-sibling::w:r[1][w:rPr/w:rStyle/@w:val = 'Literal' and not(w:t)]">
+                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'Literal') and not(w:rPr/w:rStyle/@w:val = 'LiteralBold') and not(w:rPr/w:rStyle/@w:val = 'LiteralCaption') and not(w:rPr/w:rStyle/@w:val = 'LiteralBox') and not(w:rPr/w:rStyle/@w:val = 'LiteralChapterOpener') and not(w:rPr/w:rStyle/@w:val = 'LiteralInNote')] or following-sibling::w:r[1][w:rPr/w:rStyle/@w:val = 'Literal' and not(w:t)]">
                     <xsl:text>`</xsl:text>
                 </xsl:if>
                 <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
@@ -387,19 +403,19 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption' or @w:val = 'EmphasisRevItal' or @w:val = 'Italic' or @w:val = 'LinkURL']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption' or @w:val = 'EmphasisRevItal' or @w:val = 'Italic' or @w:val = 'LinkURL' or @w:val = 'ItalicBox'or @w:val = 'ItalicInNote']]">
         <xsl:choose>
             <xsl:when test="w:t and normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL')]">
+                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL') and not(w:rPr/w:rStyle/@w:val = 'ItalicBox')and not(w:rPr/w:rStyle/@w:val = 'ItalicInNote')]">
                     <xsl:text>*</xsl:text>
                 </xsl:if>
 
                 <xsl:value-of select="normalize-space(w:t)" />
 
-                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL')]">
+                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL') and not(w:rPr/w:rStyle/@w:val = 'ItalicBox')and not(w:rPr/w:rStyle/@w:val = 'ItalicInNote')]">
                     <xsl:text>*</xsl:text>
                 </xsl:if>
 
@@ -432,8 +448,8 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Superscript']]">
-        <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'Superscript')]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Superscript' or @w:val = 'SuperscriptItalic']]">
+        <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'Superscript') and not(w:rPr/w:rStyle/@w:val = 'SuperscriptItalic')]">
             <xsl:text>&lt;sup></xsl:text>
         </xsl:if>
         <xsl:value-of select="w:t" />

@@ -5,3 +5,6 @@ book/
 target
 tmp
 
+.nova
+.vscode
+.zed

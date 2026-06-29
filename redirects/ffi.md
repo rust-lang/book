@@ -20,4 +20,4 @@ fn main() {
 ---
 
 You can find the latest version of this information
-[here](ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code)
+[here](ch20-01-unsafe-rust.html#using-extern-functions-to-call-external-code)

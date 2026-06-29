@@ -13,8 +13,8 @@ fn main() {
     let c = CustomSmartPointer {
         data: String::from("some data"),
     };
-    println!("CustomSmartPointer created.");
+    println!("CustomSmartPointer created");
     drop(c);
-    println!("CustomSmartPointer dropped before the end of main.");
+    println!("CustomSmartPointer dropped before the end of main");
 }
 // ANCHOR_END: here

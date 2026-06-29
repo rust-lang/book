@@ -1,6 +1,3 @@
 [workspace]
-
-members = [
-    "adder",
-    "add_one",
-]
+resolver = "3"
+members = ["adder", "add_one"]

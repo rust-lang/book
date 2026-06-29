@@ -1,37 +1,40 @@
 ## Controlling How Tests Are Run
 
-Just as `cargo run` compiles your code and then runs the resulting binary,
-`cargo test` compiles your code in test mode and runs the resulting test
+Just as `cargo run` compiles your code and then runs the resultant binary,
+`cargo test` compiles your code in test mode and runs the resultant test
 binary. The default behavior of the binary produced by `cargo test` is to run
 all the tests in parallel and capture output generated during test runs,
 preventing the output from being displayed and making it easier to read the
 output related to the test results. You can, however, specify command line
 options to change this default behavior.
 
-Some command line options go to `cargo test`, and some go to the resulting test
+Some command line options go to `cargo test`, and some go to the resultant test
 binary. To separate these two types of arguments, you list the arguments that
 go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
 with `cargo test`, and running `cargo test -- --help` displays the options you
-can use after the separator.
+can use after the separator. These options are also documented in [the “Tests”
+section of _The `rustc` Book_][tests].
+
+[tests]: https://doc.rust-lang.org/rustc/tests/index.html
 
 ### Running Tests in Parallel or Consecutively
 
 When you run multiple tests, by default they run in parallel using threads,
-meaning they finish running faster and you get feedback quicker. Because the
-tests are running at the same time, you must make sure your tests don’t depend
-on each other or on any shared state, including a shared environment, such as
-the current working directory or environment variables.
+meaning they finish running more quickly and you get feedback sooner. Because
+the tests are running at the same time, you must make sure your tests don’t
+depend on each other or on any shared state, including a shared environment,
+such as the current working directory or environment variables.
 
 For example, say each of your tests runs some code that creates a file on disk
-named *test-output.txt* and writes some data to that file. Then each test reads
-the data in that file and asserts that the file contains a particular value,
-which is different in each test. Because the tests run at the same time, one
-test might overwrite the file in the time between another test writing and
-reading the file. The second test will then fail, not because the code is
-incorrect but because the tests have interfered with each other while running
-in parallel. One solution is to make sure each test writes to a different file;
-another solution is to run the tests one at a time.
+named _test-output.txt_ and writes some data to that file. Then, each test
+reads the data in that file and asserts that the file contains a particular
+value, which is different in each test. Because the tests run at the same time,
+one test might overwrite the file in the time between when another test is
+writing and reading the file. The second test will then fail, not because the
+code is incorrect but because the tests have interfered with each other while
+running in parallel. One solution is to make sure each test writes to a
+different file; another solution is to run the tests one at a time.
 
 If you don’t want to run the tests in parallel or if you want more fine-grained
 control over the number of threads used, you can send the `--test-threads` flag
@@ -58,14 +61,13 @@ printed to standard output with the rest of the failure message.
 As an example, Listing 11-10 has a silly function that prints the value of its
 parameter and returns 10, as well as a test that passes and a test that fails.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-10" file-name="src/lib.rs" caption="Tests for a function that calls `println!`">
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-10/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-10: Tests for a function that calls
-`println!`</span>
+</Listing>
 
 When we run these tests with `cargo test`, we’ll see the following output:
 
@@ -73,13 +75,13 @@ When we run these tests with `cargo test`, we’ll see the following output:
 {{#include ../listings/ch11-writing-automated-tests/listing-11-10/output.txt}}
 ```
 
-Note that nowhere in this output do we see `I got the value 4`, which is what
-is printed when the test that passes runs. That output has been captured. The
+Note that nowhere in this output do we see `I got the value 4`, which is
+printed when the test that passes runs. That output has been captured. The
 output from the test that failed, `I got the value 8`, appears in the section
 of the test summary output, which also shows the cause of the test failure.
 
-If we want to see printed values for passing tests as well, we can tell Rust
-to also show the output of successful tests with `--show-output`.
+If we want to see printed values for passing tests as well, we can tell Rust to
+also show the output of successful tests with `--show-output`:
 
 ```console
 $ cargo test -- --show-output
@@ -94,7 +96,7 @@ see the following output:
 
 ### Running a Subset of Tests by Name
 
-Sometimes, running a full test suite can take a long time. If you’re working on
+Running a full test suite can sometimes take a long time. If you’re working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
@@ -102,14 +104,13 @@ or names of the test(s) you want to run as an argument.
 To demonstrate how to run a subset of tests, we’ll first create three tests for
 our `add_two` function, as shown in Listing 11-11, and choose which ones to run.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-11" file-name="src/lib.rs" caption="Three tests with three different names">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-11/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-11: Three tests with three different
-names</span>
+</Listing>
 
 If we run the tests without passing any arguments, as we saw earlier, all the
 tests will run in parallel:
@@ -148,7 +149,11 @@ named `one_hundred`. Also note that the module in which a test appears becomes
 part of the test’s name, so we can run all the tests in a module by filtering
 on the module’s name.
 
-### Ignoring Some Tests Unless Specifically Requested
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="ignoring-some-tests-unless-specifically-requested"></a>
+
+### Ignoring Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
 might want to exclude them during most runs of `cargo test`. Rather than
@@ -159,11 +164,11 @@ here:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/src/lib.rs}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/src/lib.rs:here}}
 ```
 
-After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now
-when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
+After `#[test]`, we add the `#[ignore]` line to the test we want to exclude.
+Now when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/output.txt}}
@@ -177,7 +182,7 @@ the ignored tests, we can use `cargo test -- --ignored`:
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results
-will be fast. When you’re at a point where it makes sense to check the results
-of the `ignored` tests and you have time to wait for the results, you can run
-`cargo test -- --ignored` instead. If you want to run all tests whether they’re
-ignored or not, you can run `cargo test -- --include-ignored`.
+will be returned quickly. When you’re at a point where it makes sense to check
+the results of the `ignored` tests and you have time to wait for the results,
+you can run `cargo test -- --ignored` instead. If you want to run all tests
+whether they’re ignored or not, you can run `cargo test -- --include-ignored`.

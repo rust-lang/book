@@ -7,9 +7,9 @@ fn main() {
     thread::spawn(move || {
         let val = String::from("hi");
         tx.send(val).unwrap();
-        println!("val is {}", val);
+        println!("val is {val}");
     });
 
     let received = rx.recv().unwrap();
-    println!("Got: {}", received);
+    println!("Got: {received}");
 }

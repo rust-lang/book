@@ -18,7 +18,7 @@ while, all of these tiny changes add up. But from release to release, it can be
 difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
 changed a lot!”
 
-Every two or three years, the Rust team produces a new Rust *edition*. Each
+Every three years or so, the Rust team produces a new Rust *edition*. Each
 edition brings together the features that have landed into a clear package with
 fully updated documentation and tooling. New editions ship as part of the usual
 six-week release process.
@@ -32,8 +32,9 @@ landed, which might make Rust worth another look.
 * For those developing Rust, a new edition provides a rallying point for the
 project as a whole.
 
-At the time of this writing, three Rust editions are available: Rust 2015, Rust
-2018, and Rust 2021. This book is written using Rust 2021 edition idioms.
+At the time of this writing, four Rust editions are available: Rust 2015, Rust
+2018, Rust 2021, and Rust 2024. This book is written using Rust 2024 edition
+idioms.
 
 The `edition` key in *Cargo.toml* indicates which edition the compiler should
 use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
@@ -53,14 +54,14 @@ Rust 2018, your project will compile and be able to use that dependency. The
 opposite situation, where your project uses Rust 2018 and a dependency uses
 Rust 2015, works as well.
 
-To be clear: most features will be available on all editions. Developers using
+To be clear: Most features will be available on all editions. Developers using
 any Rust edition will continue to see improvements as new stable releases are
 made. However, in some cases, mainly when new keywords are added, some new
 features might only be available in later editions. You will need to switch
 editions if you want to take advantage of such features.
 
-For more details, *The* *Edition Guide* at
-*https://doc.rust-lang.org/stable/edition-guide* is a complete book about
-editions that enumerates the differences between editions and explains how to
-automatically upgrade your code to a new edition via `cargo fix`.
+For more details, see *The Rust Edition Guide* at
+*https://doc.rust-lang.org/stable/edition-guide*. This is a complete book that
+enumerates the differences between editions and explains how to automatically
+upgrade your code to a new edition via `cargo fix`.
 
