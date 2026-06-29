@@ -1,13 +1,10 @@
 $ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
 error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
-  --> src/main.rs:12:25
+  --> src/main.rs:12:24
    |
 12 |     println!("rect1 is {rect1}");
-   |                        -^^^^^-
-   |                        ||
-   |                        |`Rectangle` cannot be formatted with the default formatter
-   |                        required by this formatting parameter
+   |                        ^^^^^^^ `Rectangle` cannot be formatted with the default formatter
    |
 help: the trait `std::fmt::Display` is not implemented for `Rectangle`
   --> src/main.rs:1:1
