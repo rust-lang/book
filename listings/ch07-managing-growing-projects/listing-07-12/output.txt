@@ -1,6 +1,6 @@
 $ cargo build
    Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0433]: failed to resolve: use of unresolved module or unlinked crate `hosting`
+error[E0433]: cannot find module or crate `hosting` in this scope
   --> src/lib.rs:11:9
    |
 11 |         hosting::add_to_waitlist();

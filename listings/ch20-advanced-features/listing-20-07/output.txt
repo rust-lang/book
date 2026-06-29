@@ -1,6 +1,6 @@
 $ cargo +nightly miri run
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s
      Running `file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/unsafe-example`
 warning: integer-to-pointer cast
  --> src/main.rs:5:13
@@ -14,7 +14,7 @@ warning: integer-to-pointer cast
   = help: you can then set `MIRIFLAGS=-Zmiri-strict-provenance` to ensure you are not relying on `with_exposed_provenance` semantics
   = help: alternatively, `MIRIFLAGS=-Zmiri-permissive-provenance` disables this warning
 
-error: Undefined Behavior: pointer not dereferenceable: pointer must be dereferenceable for 40000 bytes, but got 0x1234[noalloc] which is a dangling pointer (it has no provenance)
+error: Undefined Behavior: constructing invalid value of type &mut [i32]: encountered a dangling reference (0x1234[noalloc] has no provenance)
  --> src/main.rs:7:35
   |
 7 |     let values: &[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
