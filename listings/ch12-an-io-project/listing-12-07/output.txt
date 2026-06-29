@@ -3,6 +3,6 @@ $ cargo run
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep`
 
-thread 'main' panicked at src/main.rs:27:21:
+thread 'main' (6023615) panicked at src/main.rs:27:21:
 index out of bounds: the len is 1 but the index is 1
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
