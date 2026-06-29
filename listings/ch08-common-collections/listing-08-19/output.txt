@@ -10,12 +10,12 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
     = note: you can use `.chars().nth()` or `.bytes().nth()`
             for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
 help: the following other types implement trait `SliceIndex<T>`
-   --> file:///home/.rustup/toolchains/1.93/lib/rustlib/src/rust/library/core/src/slice/index.rs:214:1
+   --> file:///home/.rustup/toolchains/1.94/lib/rustlib/src/rust/library/core/src/slice/index.rs:214:1
     |
 214 | unsafe impl<T> const SliceIndex<[T]> for usize {
     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `usize` implements `SliceIndex<[T]>`
     |
-   ::: /Users/carolnichols/.rustup/toolchains/1.93-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/bstr/traits.rs:203:1
+   ::: /Users/carolnichols/.rustup/toolchains/1.94-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/bstr/traits.rs:203:1
     |
 203 | unsafe impl SliceIndex<ByteStr> for usize {
     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `usize` implements `SliceIndex<ByteStr>`
