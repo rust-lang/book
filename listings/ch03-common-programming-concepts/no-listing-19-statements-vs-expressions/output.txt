@@ -18,7 +18,7 @@ warning: unnecessary parentheses around assigned value
 help: remove these parentheses
   |
 2 -     let x = (let y = 6);
-2 +     let x = let y = 6;
+2 +     let x = let y = 6 ;
   |
 
 warning: `functions` (bin "functions") generated 1 warning

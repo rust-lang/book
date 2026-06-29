@@ -14,7 +14,7 @@ error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` clos
     |                              ^^^^^ `value` is moved here
     |
 help: `Fn` and `FnMut` closures require captured values to be able to be consumed multiple times, but `FnOnce` closures may consume them only once
-   --> file:///home/.rustup/toolchains/1.91/lib/rustlib/src/rust/library/alloc/src/slice.rs:247:12
+   --> file:///home/.rustup/toolchains/1.92/lib/rustlib/src/rust/library/alloc/src/slice.rs:247:12
     |
 247 |         F: FnMut(&T) -> K,
     |            ^^^^^^^^^^^^^^
