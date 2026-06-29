@@ -8,15 +8,24 @@ error[E0277]: cannot add `Option<i8>` to `i8`
     |
     = help: the trait `Add<Option<i8>>` is not implemented for `i8`
 help: the following other types implement trait `Add<Rhs>`
-   --> file:///home/.rustup/toolchains/1.93/lib/rustlib/src/rust/library/core/src/ops/arith.rs:114:1
+   --> file:///home/.rustup/toolchains/1.94/lib/rustlib/src/rust/library/core/src/ops/arith.rs:99:9
     |
+ 99 |         impl const Add for $t {
+    |         ^^^^^^^^^^^^^^^^^^^^^ `i8` implements `Add`
+...
 114 | add_impl! { usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128 f16 f32 f64 f128 }
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    | |
-    | `&i8` implements `Add<i8>`
-    | `&i8` implements `Add`
-    | `i8` implements `Add<&i8>`
-    | `i8` implements `Add`
+    | ---------------------------------------------------------------------------------- in this macro invocation
+    |
+   ::: /Users/carolnichols/.rustup/toolchains/1.94-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/internal_macros.rs:22:9
+    |
+ 22 |         impl const $imp<$u> for &$t {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ `&i8` implements `Add<i8>`
+...
+ 33 |         impl const $imp<&$u> for $t {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ `i8` implements `Add<&i8>`
+...
+ 44 |         impl const $imp<&$u> for &$t {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `&i8` implements `Add`
     = note: this error originates in the macro `add_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0277`.

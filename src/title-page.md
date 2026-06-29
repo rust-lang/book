@@ -3,7 +3,7 @@
 _by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
 Rust Community_
 
-This version of the text assumes you’re using Rust 1.93.1 (released 2026-02-12)
+This version of the text assumes you’re using Rust 1.94.1 (released 2026-03-26)
 or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
 configure them to use Rust 2024 Edition idioms. See the [“Installation” section
 of Chapter 1][install]<!-- ignore --> for instructions on installing or
