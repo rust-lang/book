@@ -8,19 +8,19 @@ error[E0277]: cannot add `Option<i8>` to `i8`
   |
   = help: the trait `Add<Option<i8>>` is not implemented for `i8`
 help: the following other types implement trait `Add<Rhs>`
- --> /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/ops/arith.rs:99:8
+ --> /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/ops/arith.rs:98:8
   |
   = note: `i8` implements `Add`
- ::: /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/ops/arith.rs:114:0
+ ::: /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/ops/arith.rs:113:0
   |
   = note: in this macro invocation
- --> /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/internal_macros.rs:22:8
+ --> /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/internal_macros.rs:22:8
   |
   = note: `&i8` implements `Add<i8>`
- ::: /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/internal_macros.rs:33:8
+ ::: /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/internal_macros.rs:33:8
   |
   = note: `i8` implements `Add<&i8>`
- ::: /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/internal_macros.rs:44:8
+ ::: /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/internal_macros.rs:44:8
   |
   = note: `&i8` implements `Add`
   = note: this error originates in the macro `add_impl` (in Nightly builds, run with -Z macro-backtrace for more info)

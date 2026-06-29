@@ -6,8 +6,15 @@ warning: irrefutable `let...else` pattern
 2 |     let x = 5 else {
   |     ^^^^^^^^^
   |
-  = note: this pattern will always match, so the `else` clause is useless
-  = help: consider removing the `else` clause
+  = note: this pattern always matches, so the else clause is unreachable
+help: remove this `else` block
+ --> src/main.rs:2:20
+  |
+2 |       let x = 5 else {
+  |  ____________________^
+3 | |         return;
+4 | |     };
+  | |_____^
   = note: `#[warn(irrefutable_let_patterns)]` on by default
 
 warning: `patterns` (bin "patterns") generated 1 warning

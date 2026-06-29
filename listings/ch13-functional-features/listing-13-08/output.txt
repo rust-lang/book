@@ -14,7 +14,7 @@ error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` clos
    |                              ^^^^^ `value` is moved here
    |
 help: `Fn` and `FnMut` closures require captured values to be able to be consumed multiple times, but `FnOnce` closures may consume them only once
-  --> /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/alloc/src/slice.rs:249:11
+  --> /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/alloc/src/slice.rs:249:11
 help: consider cloning the value if the performance cost is acceptable
    |
 18 |         sort_operations.push(value.clone());
