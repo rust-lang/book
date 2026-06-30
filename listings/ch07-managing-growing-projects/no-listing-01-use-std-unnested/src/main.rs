@@ -1,4 +1,4 @@
-use rand::RngExt;
+use rand::prelude::*;
 // ANCHOR: here
 // --snip--
 use std::cmp::Ordering;

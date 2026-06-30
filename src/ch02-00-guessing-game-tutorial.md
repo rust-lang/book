@@ -529,28 +529,29 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 </Listing>
 
-First, we add the line `use rand::RngExt;`. The `RngExt` trait defines methods that
-random number generators implement, and this trait must be in scope for us to
-use those methods. Chapter 10 will cover traits in detail.
+First, we add the line `use rand::prelude::*;`. The `prelude` module contains
+the most commonly used parts of the `rand` crate, and `use` makes those items
+available in our program's scope.
 
 Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::rng` function that gives us the particular random number
-generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then, we call the `random_range`
-method on the random number generator. This method is defined by the `RngExt`
-trait that we brought into scope with the `use rand::RngExt;` statement. The
-`random_range` method takes a range expression as an argument and generates a
-random number in the range. The kind of range expression we’re using here takes
-the form `start..=end` and is inclusive on the lower and upper bounds, so we
-need to specify `1..=100` to request a number between 1 and 100.
+`rand::rng` function that gives us the particular random number generator we’re
+going to use: one that is local to the current thread of execution and is
+seeded by the operating system. Then, we call the `random_range` method on the
+random number generator. This method is defined by the `RngExt` trait that is
+part of the `rand::prelude` module that we brought into scope with the `use
+rand::prelude::*;` statement. The `random_range` method takes a range
+expression as an argument and generates a random number in the range. The kind
+of range expression we’re using here takes the form `start..=end` and is
+inclusive on the lower and upper bounds, so we need to specify `1..=100` to
+request a number between 1 and 100.
 
-> Note: You won’t just know which traits to use and which methods and functions
-> to call from a crate, so each crate has documentation with instructions for
-> using it. Another neat feature of Cargo is that running the `cargo doc
-> --open` command will build documentation provided by all your dependencies
-> locally and open it in your browser. If you’re interested in other
-> functionality in the `rand` crate, for example, run `cargo doc --open` and
-> click `rand` in the sidebar on the left.
+> Note: You won’t just know what to bring into scope and which methods and
+> functions to call from a crate, so each crate has documentation with
+> instructions for using it. Another neat feature of Cargo is that running the
+> `cargo doc --open` command will build documentation provided by all your
+> dependencies locally and open it in your browser. If you’re interested in
+> other functionality in the `rand` crate, for example, run `cargo doc --open`
+> and click `rand` in the sidebar on the left.
 
 The second new line prints the secret number. This is useful while we’re
 developing the program to be able to test it, but we’ll delete it from the

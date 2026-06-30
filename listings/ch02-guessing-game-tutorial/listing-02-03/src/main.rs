@@ -2,7 +2,7 @@
 use std::io;
 
 // ANCHOR: ch07-04
-use rand::RngExt;
+use rand::prelude::*;
 
 fn main() {
     // ANCHOR_END: ch07-04
