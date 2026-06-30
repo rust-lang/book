@@ -590,7 +590,10 @@ You guessed: 5
 ```
 
 You should get different random numbers, and they should all be numbers between
-1 and 100. Great job!
+1 and 100. If you get warnings, they are safe to ignore. If you get errors,
+please check that you have `rand = "0.10.1"` in your *Cargo.toml* as future
+versions of `rand` may have a different API, but any version in the `0.10`
+series should work with the code in this chapter.
 
 ## Comparing the Guess to the Secret Number
 
