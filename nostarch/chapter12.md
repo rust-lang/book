@@ -1454,10 +1454,10 @@ anywhere yet:
 Filename: src/main.rs
 
 ```
-pub struct Config {
-    pub query: String,
-    pub file_path: String,
-    pub ignore_case: bool,
+struct Config {
+    query: String,
+    file_path: String,
+    ignore_case: bool,
 }
 ```
 
