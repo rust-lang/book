@@ -177,7 +177,8 @@ here, we’ll get a compile-time error:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
-The error says we’re not allowed to mutate a variable’s type:
+The error indicates that we can’t assign a value of type `usize` to a
+variable of type `&str` because their types are incompatible:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
