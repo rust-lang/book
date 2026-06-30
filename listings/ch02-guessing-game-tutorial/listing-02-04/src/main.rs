@@ -2,7 +2,7 @@
 use std::cmp::Ordering;
 use std::io;
 
-use rand::RngExt;
+use rand::prelude::*;
 
 fn main() {
     // --snip--

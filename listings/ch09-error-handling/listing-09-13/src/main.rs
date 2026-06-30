@@ -1,7 +1,8 @@
 use guessing_game::Guess;
-use rand::RngExt;
 use std::cmp::Ordering;
 use std::io;
+
+use rand::prelude::*;
 
 mod guessing_game;
 
