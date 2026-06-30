@@ -484,7 +484,7 @@ you ran `cargo update`:
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
 cargo update
-assuming there is a new 0.8.x version of rand; otherwise use another update
+assuming there is a new version of rand; otherwise use another update
 as a guide to creating the hypothetical output shown here -->
 
 ```console
