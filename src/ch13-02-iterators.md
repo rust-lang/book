@@ -129,6 +129,11 @@ test illustrating a use of the `sum` method.
 We aren’t allowed to use `v1_iter` after the call to `sum`, because `sum` takes
 ownership of the iterator we call it on.
 
+Note that calling `sum` consumes the iterator, not the collection it was created from. 
+Because `v1_iter` was created by calling `iter`, it only borrows `v1`. 
+As a result, although `v1_iter` is moved into `sum` and can no longer be used afterward, 
+the original vector `v1` remains valid and can still be used after the call to `sum`.
+
 ### Methods That Produce Other Iterators
 
 _Iterator adapters_ are methods defined on the `Iterator` trait that don’t
