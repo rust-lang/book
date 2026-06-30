@@ -386,25 +386,20 @@ cargo build -->
 
 ```console
 $ cargo build
-  Updating crates.io index
-   Locking 15 packages to latest Rust 1.85.0 compatible versions
-    Adding rand v0.10.1 (available: v0.11.0)
- Compiling proc-macro2 v1.0.93
- Compiling unicode-ident v1.0.17
- Compiling libc v0.2.170
- Compiling cfg-if v1.0.0
- Compiling byteorder v1.5.0
- Compiling getrandom v0.2.15
- Compiling rand_core v0.6.4
- Compiling quote v1.0.38
- Compiling syn v2.0.98
- Compiling zerocopy-derive v0.7.35
- Compiling zerocopy v0.7.35
- Compiling ppv-lite86 v0.2.20
- Compiling rand_chacha v0.3.1
-  Compiling rand v0.10.1
- Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-  Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
+    Updating crates.io index
+     Locking 8 packages to latest Rust 1.96.0 compatible versions
+  Downloaded rand_core v0.10.1
+  Downloaded chacha20 v0.10.1
+  Downloaded rand v0.10.1
+  Downloaded 3 crates (162.9KiB) in 0.59s
+   Compiling libc v0.2.186
+   Compiling rand_core v0.10.1
+   Compiling getrandom v0.4.3
+   Compiling cfg-if v1.0.4
+   Compiling chacha20 v0.10.1
+   Compiling rand v0.10.1
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.03s
 ```
 
 </Listing>
@@ -492,7 +487,7 @@ as a guide to creating the hypothetical output shown here -->
 ```console
 $ cargo update
     Updating crates.io index
-     Locking 1 package to latest Rust 1.85.0 compatible version
+     Locking 1 package to latest Rust 1.96.0 compatible version
     Updating rand v0.10.1 -> v0.10.2 (available: v0.999.0)
 ```
 
@@ -817,7 +812,7 @@ You win!
 Please input your guess.
 quit
 
-thread 'main' panicked at src/main.rs:28:47:
+thread 'main' (6694925) panicked at src/main.rs:28:47:
 Please type a number!: ParseIntError { kind: InvalidDigit }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```

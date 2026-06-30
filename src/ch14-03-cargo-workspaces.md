@@ -251,7 +251,7 @@ warning: unused import: `rand`
 1 | use rand;
   |     ^^^^
   |
-  = note: `#[warn(unused_imports)]` on by default
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
 
 warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` to apply 1 suggestion)
    Compiling adder v0.1.0 (file:///projects/add/adder)
