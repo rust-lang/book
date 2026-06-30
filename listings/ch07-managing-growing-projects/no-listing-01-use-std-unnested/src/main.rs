@@ -1,10 +1,11 @@
-use rand::prelude::*;
 // ANCHOR: here
 // --snip--
 use std::cmp::Ordering;
 use std::io;
 // --snip--
 // ANCHOR_END: here
+
+use rand::prelude::*;
 
 fn main() {
     println!("Guess the number!");
