@@ -312,7 +312,7 @@ assert_eq!(slice, &[3, 4]);
 ```
 
 This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
+storing a reference to its first element and a length. You’ll use this kind of
 slice for all sorts of other collections. We’ll discuss these collections in
 detail when we talk about vectors in Chapter 8.
 
