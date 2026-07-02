@@ -30,7 +30,7 @@ Rust and how to do it.
 ### Performing Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take five actions in unsafe Rust that you
+that holds the unsafe code. You can take several actions in unsafe Rust that you
 can’t in safe Rust, which we call _unsafe superpowers_. Those superpowers
 include the ability to:
 
@@ -39,11 +39,14 @@ include the ability to:
 1. Access or modify a mutable static variable.
 1. Implement an unsafe trait.
 1. Access fields of `union`s.
+1. Call a `target_feature`-annotated function from a context without that feature enabled.
+1. Declare an `extern` block.
+1. Apply an `unsafe` attribute to an item.
 
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any of Rust’s other safety checks: If you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
-these five features that are then not checked by the compiler for memory
+these several features that are then not checked by the compiler for memory
 safety. You’ll still get some degree of safety inside an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
@@ -51,7 +54,7 @@ dangerous or that it will definitely have memory safety problems: The intent is
 that as the programmer, you’ll ensure that the code inside an `unsafe` block
 will access memory in a valid way.
 
-People are fallible and mistakes will happen, but by requiring these five
+People are fallible and mistakes will happen, but by requiring these several
 unsafe operations to be inside blocks annotated with `unsafe`, you’ll know that
 any errors related to memory safety must be within an `unsafe` block. Keep
 `unsafe` blocks small; you’ll be thankful later when you investigate memory
@@ -66,7 +69,7 @@ from leaking out into all the places that you or your users might want to use
 the functionality implemented with `unsafe` code, because using a safe
 abstraction is safe.
 
-Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
+Let’s look at each of the several unsafe superpowers in turn. We’ll also look at
 some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
@@ -549,7 +552,7 @@ You can learn more about Miri at [its GitHub repository][miri].
 
 ### Using Unsafe Code Correctly
 
-Using `unsafe` to use one of the five superpowers just discussed isn’t wrong or
+Using `unsafe` to use one of the several superpowers just discussed isn’t wrong or
 even frowned upon, but it is trickier to get `unsafe` code correct because the
 compiler can’t help uphold memory safety. When you have a reason to use
 `unsafe` code, you can do so, and having the explicit `unsafe` annotation makes
