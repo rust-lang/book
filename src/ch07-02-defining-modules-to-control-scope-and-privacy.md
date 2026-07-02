@@ -27,7 +27,7 @@ great place to refer to as a reminder of how modules work.
     garden`
   - In the file _src/garden.rs_
   - In the file _src/garden/mod.rs_
-- **Declaring submodules**: In any file other than the crate root, you can
+- **Declaring submodules**: In any file, including the crate root, you can
   declare submodules. For example, you might declare `mod vegetables;` in
   _src/garden.rs_. The compiler will look for the submodule’s code within the
   directory named for the parent module in these places:
