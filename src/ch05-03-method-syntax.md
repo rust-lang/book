@@ -220,7 +220,7 @@ is `Rectangle`.
 
 To call this associated function, we use the `::` syntax with the struct name;
 `let sq = Rectangle::square(3);` is an example. This function is namespaced by
-the struct: The `::` syntax is used for both associated functions and
+the struct. The `::` syntax is used for both associated functions and
 namespaces created by modules. We’ll discuss modules in [Chapter
 7][modules]<!-- ignore -->.
 
