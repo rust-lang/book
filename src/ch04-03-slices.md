@@ -5,14 +5,9 @@ _Slices_ let you reference a contiguous sequence of elements in a
 of reference, so it does not have ownership.
 
 Here’s a small programming problem: Write a function that takes a string of
-words separated by spaces and returns the first word it finds in that string.
-If the function doesn’t find a space in the string, the whole string must be
+words separated by whitespaces and returns the first word it finds in that string.
+If the function doesn’t find a whitespace in the string, the whole string must be
 one word, so the entire string should be returned.
-
-> Note: For the purposes of introducing slices, we are assuming ASCII only in
-> this section; a more thorough discussion of UTF-8 handling is in the
-> [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> section
-> of Chapter 8.
 
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
@@ -28,7 +23,7 @@ clear as we keep going.) But what should we return? We don’t really have a way
 to talk about *part* of a string. However, we could return the index of the end
 of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
-<Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
+<Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a char index value into the `String` parameter">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
@@ -36,41 +31,32 @@ of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 </Listing>
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method.
+Because we need to go through the `String` one character at a time and check whether
+the character is a whitespace, we’ll iterator over our `String` using `char_indices` method.
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:char_indices}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+Next, iterate over the `(character, index)` tuples using `char_indices`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
 We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
-For now, know that `iter` is a method that returns each element in a collection
-and that `enumerate` wraps the result of `iter` and returns each element as
-part of a tuple instead. The first element of the tuple returned from
-`enumerate` is the index, and the second element is a reference to the element.
-This is a bit more convenient than calculating the index ourselves.
+For now, know that `char_indices` is an `iterator` over each character in the string and its position. The first element of the tuple returned from `iterator` is the index, and the second element is the character. This is a bit more convenient than calculating the index ourselves.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in [Chapter
-6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
-for the index in the tuple and `&item` for the single byte in the tuple.
-Because we get a reference to the element from `.iter().enumerate()`, we use
-`&` in the pattern.
+Since a tuple is returned, we can use patterns to destructure that tuple. We’ll be discussing patterns more in [Chapter 6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i` for the index in the tuple and `ch` for the character in the tuple.
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`.
+Inside the `for` loop, we search for the char that represents the whitespace by
+using `is_whitespace` method. If we find a whitespace, we return the end of first word.
+Otherwise, we return the string length as end of first word.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
+
 
 We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a `usize` on its own, but it’s
@@ -290,6 +276,20 @@ makes our API more general and useful without losing any functionality:
 ```
 
 </Listing>
+
+#### Solution to getting the Nth word
+
+Here's a solution to get the Nth word within a string slice accounting for multiple whitespaces and leading whitespaces:
+
+<Listing number="4-10" file-name="src/main.rs" caption="Returning the nth word inside a string">
+
+```rust
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-10/src/main.rs:here}}
+```
+
+</Listing>
+
+
 
 ### Other Slices
 
