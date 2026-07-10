@@ -10,10 +10,10 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
   = note: you can use `.chars().nth()` or `.bytes().nth()`
           for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
 help: `usize` implements trait `SliceIndex<T>`
- --> /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/slice/index.rs:214:0
+ --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/slice/index.rs:214:0
   |
   = note: `SliceIndex<[T]>`
- --> /rustc/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96/library/core/src/bstr/traits.rs:197:0
+ --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/bstr/traits.rs:197:0
   |
   = note: `SliceIndex<ByteStr>`
   = note: required for `String` to implement `Index<{integer}>`
