@@ -39,9 +39,9 @@ include the ability to:
 1. Access or modify a mutable static variable.
 1. Implement an unsafe trait.
 1. Access fields of `union`s.
-1. Call a `target_feature`-annotated function from a context without that feature enabled.
-1. Declare an `extern` block.
 1. Apply an `unsafe` attribute to an item.
+1. Declare an `extern` block.
+1. Call a `target_feature`-annotated function from a context without that feature enabled.
 
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any of Rust’s other safety checks: If you use a reference in unsafe
