@@ -54,7 +54,7 @@ dangerous or that it will definitely have memory safety problems: The intent is
 that as the programmer, you’ll ensure that the code inside an `unsafe` block
 will access memory in a valid way.
 
-People are fallible and mistakes will happen, but by requiring these several
+People are fallible and mistakes will happen, but by requiring these
 unsafe operations to be inside blocks annotated with `unsafe`, you’ll know that
 any errors related to memory safety must be within an `unsafe` block. Keep
 `unsafe` blocks small; you’ll be thankful later when you investigate memory
