@@ -552,7 +552,7 @@ You can learn more about Miri at [its GitHub repository][miri].
 
 ### Using Unsafe Code Correctly
 
-Using `unsafe` to use one of the several superpowers just discussed isn’t wrong or
+Using `unsafe` to use one of the superpowers just discussed isn’t wrong or
 even frowned upon, but it is trickier to get `unsafe` code correct because the
 compiler can’t help uphold memory safety. When you have a reason to use
 `unsafe` code, you can do so, and having the explicit `unsafe` annotation makes
