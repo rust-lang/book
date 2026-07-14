@@ -69,7 +69,7 @@ from leaking out into all the places that you or your users might want to use
 the functionality implemented with `unsafe` code, because using a safe
 abstraction is safe.
 
-Let’s look at each of the several unsafe superpowers in turn. We’ll also look at
+Let’s look at each of the unsafe superpowers in turn. We’ll also look at
 some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
