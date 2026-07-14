@@ -169,7 +169,7 @@ value of the `Rhs` type parameter instead of using the default of `Self`.
 
 You’ll use default type parameters in two main ways:
 
-1. To extend a type without breaking existing code
+1. To extend a trait without breaking existing code
 2. To allow customization in specific cases most users won’t need
 
 The standard library’s `Add` trait is an example of the second purpose:
