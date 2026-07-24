@@ -162,10 +162,11 @@ background color`.
 You can see that `if let` can also introduce new variables that shadow existing
 variables in the same way that `match` arms can: The line `if let Ok(age) = age`
 introduces a new `age` variable that contains the value inside the `Ok` variant,
-shadowing the existing `age` variable. This means we need to place the `if age >
-30` condition within that block: We can’t combine these two conditions into `if
-let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
-valid until the new scope starts with the curly bracket.
+shadowing the existing `age` variable. In this example we place the `if age > 30` check inside the `if let
+Ok(age) = age` block, where the shadowed `age` is in scope. Since Rust 1.88,
+in the 2024 edition, *let chains* also let us combine the two conditions
+directly, as in `if let Ok(age) = age && age > 30` — the binding introduced by
+`if let` is available to the conditions that follow it in the chain.
 
 The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
