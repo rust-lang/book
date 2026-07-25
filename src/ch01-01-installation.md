@@ -68,6 +68,16 @@ ignore -->.
 The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
+### Installing `rustup` on Windows using `winget`
+Installing MSVC Pre-Requisite
+```
+winget install Microsoft.VisualStudio.2022.Community --silent --override "--wait --quiet --add ProductLang En-us --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended"
+```
+Installing `rustup`
+```
+$ winget install -e --id Rustlang.Rustup
+```
+
 ### Troubleshooting
 
 To check whether you have Rust installed correctly, open a shell and enter this
