@@ -1,30 +1,18 @@
-# The Rust Programming Language
+# Rust Programlama Dili
 
-_by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
-Rust Community_
+_Steve Klabnik, Carol Nichols ve Chris Krycho tarafından, Rust Topluluğunun
+katkılarıyla_
 
-This version of the text assumes you’re using Rust 1.97.0 (released 2026-07-09)
-or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2024 Edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> for instructions on installing or
-updating Rust, and see [Appendix E][appendix-e]<!-- ignore --> for information
-on editions.
+Çeviri : _Burakhan Ünver ve Rust Kitabı Çeviri Topluluğu_
 
-The HTML format is available online at
-[https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+Bu metin sürümü, tüm projelerin _Cargo.toml_ dosyasındaki `edition = "2024"`
+ayarıyla Rust 2024 Edition deyimlerini kullanacak şekilde yapılandırılmış Rust
+1.97.0 (2026-07-09'da yayımlandı) veya sonraki sürümlerini kullandığınızı
+varsayar. Rust'ı kurma veya güncelleme talimatları için [1. Bölüm'ün "Kurulum"
+bölümüne][install]<!-- ignore --> ve edition'lar hakkında bilgi için [Ek
+E'ye][appendix-e]<!-- ignore --> bakın.
 
-Several community [translations] are also available.
+Birkaç topluluk [çevirisi][translations] de mevcuttur.
 
-This text is available in [paperback and ebook format from No Starch
-Press][nsprust].
-
-[install]: ch01-01-installation.html
-[appendix-e]: appendix-05-editions.html
-[nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
-[translations]: appendix-06-translation.html
-
-> **🚨 Want a more interactive learning experience? Try out a different version
-> of the Rust Book, featuring: quizzes, highlighting, visualizations, and
-> more**: <https://rust-book.cs.brown.edu>
+Bu metin [No Starch Press'ten karton kapak ve e-kitap biçiminde][nsprust]
+edinilebilir.
