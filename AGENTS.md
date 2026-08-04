@@ -11,7 +11,7 @@ sunmak.
 
 - `original/src/*.md` -> Orijinal İngilizce kaynak (ASLA değiştirme)
 - `src/*.md` -> Türkçe çeviri (buraya yazılır, buradan build edilir)
-- `listings/` -> Kod örnekleri (`{{#rustdoc_include}}` ile `src/`'den çekilir). ASLA değiştirme.
+- `listings/` -> Kod örnekleri (`{{#rustdoc_include}}` ile `src/`'den çekilir). SADECE string/yorum çevirisi yapılır (aşağıdaki kurallara bak).
 - `packages/mdbook-trpl/` -> mdBook preprocessor'ları (build için gerekli). ASLA değiştirme.
 - `glossary.json` -> Çeviri sözlüğü. Terim kararları burada.
 - `.github/workflows/deploy.yml` -> main'e push olunca build + GitHub Pages deploy'u.
@@ -25,10 +25,11 @@ sıralama DEĞİŞMEZ).
 
 ### ASLA ÇEVİRME / DOKUNMA
 
-- Kod blokları: ` ``` ` ile çevrili Rust kodu, `{{#rustdoc_include}}`, `{{#include}}`, `{{#playground}}` satırları (BİREBİR korunur)
-- `listings/` içindeki hiçbir dosya (kod örnekleri, `output.txt`)
+- ` ``` ` ile çevrili Rust kodunun YAPISI: satırlar, ifadeler, fonksiyon çağrıları, operatörler BİREBİR korunur
+- `{{#rustdoc_include}}`, `{{#include}}`, `{{#playground}}` satırları (BİREBİR korunur)
 - Teknik adlar: `cargo`, `rustc`, `rustfmt`, `mdbook`, `Cargo.toml`, `main.rs` vb.
-- Kod içindeki string'ler, yorum satırları, fonksiyon/değişken/tür adları, komut çıktıları
+- Değişken adları, fonksiyon adları, tür adları, struct/enum/trait adları, metot adları, alan adları, `let`/`fn`/`impl` gibi anahtar kelimeler
+- Teknik terimler (kod içinde geçse bile): `ownership`, `borrow`, `lifetime`, `trait`, `enum` vb. olduğu gibi kalır
 - İngilizce `CODE_x` / `Listing x-x` etiketleri (çevirme, silme)
 - `<span class="filename">...</span>` içeriği (dosya adı kalır, etiket çevrilebilir)
 - URL'ler ve `[text](hedef)` bağlantılarının hedef kısmı (anchor'ların görünen metni çevrilir, hedef DEĞİŞMEZ)
@@ -39,11 +40,28 @@ sıralama DEĞİŞMEZ).
 - Düz anlatım metinleri, bölüm başlıkları (`#`, `##`), tablo metinleri, `<img alt="...">`
 - `src/SUMMARY.md` başlıkları (Türkçe, ama aynı sıra ve dosya adları)
 
+### KOD İÇİNDEKİ STRING ve YORUM ÇEVİRİSİ
+
+Kod örneklerinde **kodun amacını/çalışma mantığını DEĞİŞTİRMEDEN** şunlar Türkçeye çevrilir:
+
+- String literal'ler ve bunların basıldığı çıktılar: `println!("Sayıyı tahmin et!")`, `println!("Tebrikler, bildin!")` vb.
+- Yorum satırları: `// ...`, `/* ... */`, `/// ...` (dokümantasyon yorumları)
+- `panic!`, `assert!`, `assert_eq!`, `unwrap_or_else`, `expect`, `eprintln!` gibi hata/çıktı mesajlarındaki kullanıcıya görünen metinler
+- Çevrilen string'lerin karşılığı olan komut çıktıları (`output.txt` dosyaları) DA çevrilir ve kodla TUTARLI olur
+
+**ASLA çevrilmeyen (kod davranışını etkilediği için):**
+- Değişken/tür/fonksiyon/alan adları, `let`, `fn`, `impl`, `match` gibi anahtar kelimeler
+- String **karşılaştırmaları** ve girdi olarak kullanılan string'ler (ör. `if guess == "quit"`, `std::env::args`, dosya adları) — bunlar programın davranışını belirler, değiştirilemez
+- İçinde string geçen ama anlamlı olan sabitler (`const MESSAGE: &str = ...`) adı ve kullanımı değişmez
+- Gerçek derleyici/hata çıktıları (`error[E0308]` gibi) İngilizce kalır
+
+Kural özeti: **String/yorum çevirisi kodun davranışını değiştirmemeli; görünen metni Türkçeleştirip teknik tanımlayıcıları (identifier) aynen korumalısın.**
+
 ## TERMİNOLOJİ
 
 - **glossary.json'a %100 uy.** Terim bilinmiyorsa sözlüğe uygun girdi ekleme — önce sor.
 - İlk kullanım: `sahiplik (ownership)` -> sonraki kullanımlarda yalnızca `sahiplik`
-- Kod içinde geçen terimler (ör. `ownership`): olduğu gibi kalır.
+- Kod içinde identifier olarak geçen terimler (ör. `ownership` değişken adı): olduğu gibi kalır. Kod yorumu/string'inde geçiyorsa sözlükteki Türkçe karşılığıyla çevrilir.
 
 ## TON ve STİL
 

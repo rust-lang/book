@@ -13,7 +13,7 @@ additional-css = [
     "theme/listing.css",
 ]
 additional-js = ["ferris.js"]
-git-repository-url = "https://github.com/rust-lang/book"
+git-repository-url = "https://github.com/rust-kitabi-turkce/rust-turkce-kitap"
 
 [output.html.search]
 use-boolean-and = true
