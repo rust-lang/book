@@ -183,11 +183,11 @@ olun. Çoğu durumda, derlenmeyen herhangi bir kodun doğru sürümüne sizi
 yönlendireceğiz. Ferris ayrıca çalışması amaçlanmayan kodu ayırt etmenize
 yardımcı olacaktır:
 
-| Ferris                                                                                                             | Anlamı                                            |
-| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Soru işaretli Ferris"/>                    | Bu kod derlenmiyor!                              |
-| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ellerini kaldırmış Ferris"/>                         | Bu kod panic veriyor!                            |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Bir pençesi kalkık, omuz silken Ferris"/> | Bu kod istenen davranışı üretmiyor.              |
+| Ferris                                                                                                               | Anlamı                              |
+| -------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Soru işaretli Ferris"/>                       | Bu kod derlenmiyor!                 |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ellerini kaldırmış Ferris"/>                            | Bu kod panic veriyor!               |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Bir pençesi kalkık, omuz silken Ferris"/> | Bu kod istenen davranışı üretmiyor. |
 
 Çoğu durumda, derlenmeyen herhangi bir kodun doğru sürümüne sizi
 yönlendireceğiz.
@@ -196,4 +196,4 @@ yönlendireceğiz.
 
 Bu kitabın üretildiği kaynak dosyalar [GitHub'da][book] bulunabilir.
 
-[book]: https://github.com/rust-lang/book/tree/main/src
+[book]: https://github.com/rust-kitabi-turkce/rust-turkce-kitap
