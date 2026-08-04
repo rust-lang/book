@@ -2,8 +2,7 @@
 
 [Rust Programlama Dili](title-page.md)
 [Önsöz](foreword.md)
-[Introduction](ch00-00-introduction.md)
-
+[Giriş](ch00-00-introduction.md)
 - [Başlarken](ch01-00-getting-started.md)
   - [Installation](ch01-01-installation.md)
   - [Hello, World!](ch01-02-hello-world.md)
@@ -125,7 +124,7 @@
   - [From Single-Threaded to Multithreaded Server](ch21-02-multithreaded.md)
   - [Graceful Shutdown and Cleanup](ch21-03-graceful-shutdown-and-cleanup.md)
 
-- [Appendix](appendix-00.md)
+- [Ek](appendix-00.md)
   - [A - Keywords](appendix-01-keywords.md)
   - [B - Operators and Symbols](appendix-02-operators.md)
   - [C - Derivable Traits](appendix-03-derivable-traits.md)
