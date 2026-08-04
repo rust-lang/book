@@ -1,0 +1,21 @@
+{
+  "borrow checker": "ödünç denetleyicisi",
+  "borrowing": "ödünç alma",
+  "closure": "closure",
+  "compiler": "derleyici",
+  "crate": "crate",
+  "enum": "enum",
+  "generic": "generic",
+  "heap": "heap",
+  "immutable": "değiştirilemez",
+  "lifetime": "yaşam süresi",
+  "module": "modül",
+  "mutable": "değiştirilebilir",
+  "ownership": "sahiplik",
+  "reference": "referans",
+  "shadowing": "gölgeleme",
+  "smart pointer": "akıllı işaretçi",
+  "stack": "yığın",
+  "trait": "trait",
+  "NOTE": "Ilk kullanimda: sahiplik (ownership) formatini kullan"
+}
