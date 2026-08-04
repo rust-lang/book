@@ -27,7 +27,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install mdbook
-        run: cargo install mdbook --vers "^0.5.1" --no-default-features
+        run: cargo install mdbook --vers "^0.5.1"
 
       - name: Build Book
         run: mdbook build
