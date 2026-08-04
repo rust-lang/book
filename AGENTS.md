@@ -19,7 +19,7 @@ sunmak.
 
 ## ÇEVİRİ SÜRECİ
 
-- `original/src/chXX-YY-*.md` dosyasını okuyup `src/chXX-YY-*.md`'ye Türkçe çevir.
+- Sadece gerektiğinde `original/src/chXX-YY-*.md` dosyasını okuyup `src/chXX-YY-*.md`'ye Türkçe çevir. Çoğu zaman zaten çevirisi yapılacak dosyanın içinde orjinal metin olur.
   Kritik: `src/SUMMARY.md`'deki başlıkları da Türkçeye çevir (dosya adları ve
   sıralama DEĞİŞMEZ).
 - Her çeviriden sonra, o kısmın çevirisi tamamen bittiğinde `ceviri-durumu.md`'ye ekle
