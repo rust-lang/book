@@ -58,7 +58,3 @@ sıralama DEĞİŞMEZ).
 - main'e her push'ta GitHub Actions kitabı build edip `gh-pages` branch'ine atar.
 - Deploy sonrası kontrol: `https://rust-kitabi-turkce.github.io/rust-turkce-kitap/`
 
-## OPENCODE KOMUTLARI
-
-- `/cevir ch04-01` -> ilgili bölümü çevir
-- `/kontrol ch04-01` -> çeviriyi validate et (orijinalle karşılaştır, kurallara uygunluğu denetle)
