@@ -19,9 +19,11 @@ sunmak.
 
 ## ÇEVİRİ SÜRECİ
 
-`original/src/chXX-YY-*.md` dosyasını okuyup `src/chXX-YY-*.md`'ye Türkçe çevir.
-Kritik: `src/SUMMARY.md`'deki başlıkları da Türkçeye çevir (dosya adları ve
-sıralama DEĞİŞMEZ).
+- `original/src/chXX-YY-*.md` dosyasını okuyup `src/chXX-YY-*.md`'ye Türkçe çevir.
+  Kritik: `src/SUMMARY.md`'deki başlıkları da Türkçeye çevir (dosya adları ve
+  sıralama DEĞİŞMEZ).
+- Her çeviriden sonra, o kısmın çevirisi tamamen bittiğinde `ceviri-durumu.md`'ye ekle
+- Bir bölümü çevirirken onun kod örneklerini de Türkçeye çevir. (listings klasörü altında). Kod örnekleri için kurallar aşağıda.
 
 ### ASLA ÇEVİRME / DOKUNMA
 
@@ -50,6 +52,7 @@ Kod örneklerinde **kodun amacını/çalışma mantığını DEĞİŞTİRMEDEN**
 - Çevrilen string'lerin karşılığı olan komut çıktıları (`output.txt` dosyaları) DA çevrilir ve kodla TUTARLI olur
 
 **ASLA çevrilmeyen (kod davranışını etkilediği için):**
+
 - Değişken/tür/fonksiyon/alan adları, `let`, `fn`, `impl`, `match` gibi anahtar kelimeler
 - String **karşılaştırmaları** ve girdi olarak kullanılan string'ler (ör. `if guess == "quit"`, `std::env::args`, dosya adları) — bunlar programın davranışını belirler, değiştirilemez
 - İçinde string geçen ama anlamlı olan sabitler (`const MESSAGE: &str = ...`) adı ve kullanımı değişmez
@@ -75,4 +78,3 @@ Kural özeti: **String/yorum çevirisi kodun davranışını değiştirmemeli; g
 - Lokal: `mdbook build` (çıktı `book/`)
 - main'e her push'ta GitHub Actions kitabı build edip `gh-pages` branch'ine atar.
 - Deploy sonrası kontrol: `https://rust-kitabi-turkce.github.io/rust-turkce-kitap/`
-
