@@ -42,6 +42,9 @@ sunmak.
 
 - Düz anlatım metinleri, bölüm başlıkları (`#`, `##`), tablo metinleri, `<img alt="...">`
 - `src/SUMMARY.md` başlıkları (Türkçe, ama aynı sıra ve dosya adları)
+- Kitap, eğer kitapla ilgili bir link adresi referans verirse bu adresler ile değiştir
+- Kitap Adresi : https://rust-kitabi-turkce.github.io/rust-turkce-kitap/
+- Kitabın github reposu : https://github.com/rust-kitabi-turkce/rust-turkce-kitap
 
 ### KOD İÇİNDEKİ STRING ve YORUM ÇEVİRİSİ
 
