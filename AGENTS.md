@@ -2,7 +2,10 @@
 
 Bu proje Resmi Rust Kitabı'nın (`The Rust Programming Language`) Türkçe çevirisini
 içerir. Amaç: kitabı Türkçeye çevirip GitHub Pages üzerinden herkese ücretsiz
-sunmak. Orijinal kitap: https://doc.rust-lang.org/book/
+sunmak.
+
+- Orijinal kitap: https://doc.rust-lang.org/book/
+- Çeviri : https://rust-kitabi-turkce.github.io/rust-turkce-kitap/
 
 ## YAPI
 
