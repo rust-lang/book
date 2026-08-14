@@ -78,9 +78,9 @@ uphold them.
 ## Summary
 
 This isn’t the last you’ll see of concurrency in this book: The next chapter
-focuses on async programming, and the project in Chapter 21 will use the
-concepts in this chapter in a more realistic situation than the smaller
-examples discussed here.
+focuses on async programming, and the project in Chapter 21 will use these
+concepts in a more realistic situation than the smaller examples discussed
+here.
 
 As mentioned earlier, because very little of how Rust handles concurrency is
 part of the language, many concurrency solutions are implemented as crates.
