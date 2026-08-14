@@ -137,7 +137,7 @@ series, one task after the other, as in Figure 17-3.
 
 <img src="img/trpl17-03.svg" class="center" alt="A diagram with stacked boxes labeled Task A and Task B, with diamonds in them representing subtasks. In Task A, arrows point from A1 to A2, from A2 to a pair of thick vertical lines like a “pause” symbol, and from that symbol to A3. In task B, arrows point from B1 to B2, from B2 to B3, from B3 to A3, and from B3 to B4." />
 
-<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until Task A3 is blocked on the results of Task B3.</figcaption>
+<figcaption>Figure 17-3: A partially parallel workflow, where work proceeds independently on Task A and Task B until Task A3 must wait for the results of Task B3</figcaption>
 
 </figure>
 
