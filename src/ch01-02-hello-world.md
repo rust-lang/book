@@ -75,11 +75,11 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main` instead of `./main`:
+On Windows, enter the command `.\main.exe` instead of `./main`:
 
 ```powershell
 > rustc main.rs
-> .\main
+> .\main.exe
 Hello, world!
 ```
 
@@ -189,7 +189,7 @@ Windows, a file containing debugging information with the _.pdb_ extension.
 From here, you run the _main_ or _main.exe_ file, like this:
 
 ```console
-$ ./main # or .\main on Windows
+$ ./main # or .\main.exe on Windows
 ```
 
 If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
