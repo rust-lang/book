@@ -201,7 +201,7 @@ Let’s recap what we’ve learned so far about Cargo:
 
 An additional advantage of using Cargo is that the commands are the same no
 matter which operating system you’re working on. So, at this point, we’ll no
-longer provide specific instructions for Linux and macOS versus Windows.
+longer provide specific instructions for GNU/Linux and macOS versus Windows.
 
 ### Building for Release
 

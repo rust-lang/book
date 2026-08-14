@@ -23,9 +23,10 @@ these steps should work as expected with the content of this book.
 > show the output of the previous command. Additionally, PowerShell-specific
 > examples will use `>` rather than `$`.
 
-### Installing `rustup` on Linux or macOS
+### Installing `rustup` on GNU/Linux or macOS
 
-If you’re using Linux or macOS, open a terminal and enter the following command:
+If you’re using GNU/Linux or macOS, open a terminal and enter the following
+command:
 
 ```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
@@ -51,7 +52,7 @@ On macOS, you can get a C compiler by running:
 $ xcode-select --install
 ```
 
-Linux users should generally install GCC or Clang, according to their
+GNU/Linux users should generally install GCC or Clang, according to their
 distribution’s documentation. For example, if you use Ubuntu, you can install
 the `build-essential` package.
 
@@ -100,7 +101,7 @@ In PowerShell, use:
 > echo $env:Path
 ```
 
-In Linux and macOS, use:
+In GNU/Linux and macOS, use:
 
 ```console
 $ echo $PATH
