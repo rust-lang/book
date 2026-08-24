@@ -58,10 +58,18 @@ the `build-essential` package.
 ### Installing `rustup` on Windows
 
 On Windows, go to [https://www.rust-lang.org/tools/install][install]<!-- ignore
---> and follow the instructions for installing Rust. At some point in the
-installation, you’ll be prompted to install Visual Studio. This provides a
-linker and the native libraries needed to compile programs. If you need more
-help with this step, see
+--> and follow the instructions for installing Rust.
+
+Alternatively, you can install Rust using winget (Windows Package Manager) by running
+the following command in PowerShell:
+
+```powershell
+winget install --id Rustlang.Rustup --exact --source winget
+```
+
+At some point in the installation, you’ll be prompted to install Visual Studio.
+This provides a linker and the native libraries needed to compile programs. If
+you need more help with this step, see
 [https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]<!--
 ignore -->.
 
