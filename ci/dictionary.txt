@@ -474,6 +474,7 @@ RUSTFLAGS
 Rustonomicon
 rustfix
 rustfmt
+Rustlang
 RustLangES
 rustup
 sampleproject
