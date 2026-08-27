@@ -64,7 +64,7 @@ Alternatively, you can install Rust using winget (Windows Package Manager) by ru
 the following command in PowerShell:
 
 ```powershell
-winget install --id Rustlang.Rustup --exact --source winget
+> winget install --id Rustlang.Rustup --exact --source winget
 ```
 
 At some point in the installation, you’ll be prompted to install Visual Studio.
