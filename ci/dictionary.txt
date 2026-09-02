@@ -16,6 +16,7 @@ allocator
 AlwaysEqual
 Amir
 anotherusername
+anugrahzeputra
 APIs
 app's
 aren
@@ -33,6 +34,7 @@ backtrace
 backtraces
 BACKTRACE
 Backtraces
+bahasa
 Baz's
 beefeb
 benchmarking
@@ -248,6 +250,7 @@ ImportantExcerpt
 incrementing
 IndexMut
 indices
+indonesia
 init
 initializer
 initializers
