@@ -83,7 +83,7 @@ _src/main.rs_.
 
 This code contains a lot of information, so let’s go over it line by line. To
 obtain user input and then print the result as output, we need to bring the
-`io` input/output library into scope. The `io` library comes from the standard
+`io` input/output module into scope. The `io` module comes from the standard
 library, known as `std`:
 
 ```rust,ignore
@@ -95,7 +95,7 @@ brings into the scope of every program. This set is called the _prelude_, and
 you can see everything in it [in the standard library documentation][prelude].
 
 If a type you want to use isn’t in the prelude, you have to bring that type
-into scope explicitly with a `use` statement. Using the `std::io` library
+into scope explicitly with a `use` statement. Using the `std::io` module
 provides you with a number of useful features, including the ability to accept
 user input.
 
