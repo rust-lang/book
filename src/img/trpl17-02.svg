@@ -11,24 +11,24 @@
 <g id="clust1" class="cluster">
 <title>cluster_ColleagueB</title>
 <polygon fill="none" stroke="black" points="8.72,-8 8.72,-85 382.2,-85 382.2,-8 8.72,-8"/>
-<text text-anchor="middle" x="195.46" y="-67.7" font-family="Times,serif" font-size="14.00">Task B</text>
+<text text-anchor="middle" x="195.46" y="-67.7" font-family="serif" font-size="14.00">Task B</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_ColleagueA</title>
 <polygon fill="none" stroke="black" points="8,-93 8,-170 382.92,-170 382.92,-93 8,-93"/>
-<text text-anchor="middle" x="195.46" y="-152.7" font-family="Times,serif" font-size="14.00">Task A</text>
+<text text-anchor="middle" x="195.46" y="-152.7" font-family="serif" font-size="14.00">Task A</text>
 </g>
 <!-- B1 -->
 <g id="node1" class="node">
 <title>B1</title>
 <polygon fill="none" stroke="black" points="47.36,-52 16.72,-34 47.36,-16 78.01,-34 47.36,-52"/>
-<text text-anchor="middle" x="47.36" y="-28.95" font-family="Times,serif" font-size="14.00">B1</text>
+<text text-anchor="middle" x="47.36" y="-28.95" font-family="serif" font-size="14.00">B1</text>
 </g>
 <!-- B2 -->
 <g id="node2" class="node">
 <title>B2</title>
 <polygon fill="none" stroke="black" points="146.09,-52 115.45,-34 146.09,-16 176.74,-34 146.09,-52"/>
-<text text-anchor="middle" x="146.09" y="-28.95" font-family="Times,serif" font-size="14.00">B2</text>
+<text text-anchor="middle" x="146.09" y="-28.95" font-family="serif" font-size="14.00">B2</text>
 </g>
 <!-- B1&#45;&gt;B2 -->
 <g id="edge1" class="edge">
@@ -40,7 +40,7 @@
 <g id="node3" class="node">
 <title>B3</title>
 <polygon fill="none" stroke="black" points="244.82,-52 214.18,-34 244.82,-16 275.47,-34 244.82,-52"/>
-<text text-anchor="middle" x="244.82" y="-28.95" font-family="Times,serif" font-size="14.00">B3</text>
+<text text-anchor="middle" x="244.82" y="-28.95" font-family="serif" font-size="14.00">B3</text>
 </g>
 <!-- B2&#45;&gt;B3 -->
 <g id="edge2" class="edge">
@@ -54,13 +54,13 @@
 <g id="node5" class="node">
 <title>A1</title>
 <polygon fill="none" stroke="black" points="47.36,-137 16,-119 47.36,-101 78.73,-119 47.36,-137"/>
-<text text-anchor="middle" x="47.36" y="-113.95" font-family="Times,serif" font-size="14.00">A1</text>
+<text text-anchor="middle" x="47.36" y="-113.95" font-family="serif" font-size="14.00">A1</text>
 </g>
 <!-- A2 -->
 <g id="node6" class="node">
 <title>A2</title>
 <polygon fill="none" stroke="black" points="146.09,-137 114.73,-119 146.09,-101 177.46,-119 146.09,-137"/>
-<text text-anchor="middle" x="146.09" y="-113.95" font-family="Times,serif" font-size="14.00">A2</text>
+<text text-anchor="middle" x="146.09" y="-113.95" font-family="serif" font-size="14.00">A2</text>
 </g>
 <!-- A1&#45;&gt;A2 -->
 <g id="edge4" class="edge">
@@ -72,7 +72,7 @@
 <g id="node7" class="node">
 <title>A3</title>
 <polygon fill="none" stroke="black" points="244.82,-137 213.46,-119 244.82,-101 276.19,-119 244.82,-137"/>
-<text text-anchor="middle" x="244.82" y="-113.95" font-family="Times,serif" font-size="14.00">A3</text>
+<text text-anchor="middle" x="244.82" y="-113.95" font-family="serif" font-size="14.00">A3</text>
 </g>
 <!-- A2&#45;&gt;A3 -->
 <g id="edge5" class="edge">
@@ -84,7 +84,7 @@
 <g id="node8" class="node">
 <title>A4</title>
 <polygon fill="none" stroke="black" points="343.55,-137 312.19,-119 343.55,-101 374.92,-119 343.55,-137"/>
-<text text-anchor="middle" x="343.55" y="-113.95" font-family="Times,serif" font-size="14.00">A4</text>
+<text text-anchor="middle" x="343.55" y="-113.95" font-family="serif" font-size="14.00">A4</text>
 </g>
 <!-- A3&#45;&gt;A4 -->
 <g id="edge6" class="edge">

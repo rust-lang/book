@@ -13,14 +13,14 @@
 <g id="node1" class="node">
 <title>table0</title>
 <polyline fill="none" stroke="#000000" points="8.5,-50 71.5,-50 "/>
-<text text-anchor="start" x="25.6069" y="-55.8" font-family="Times,serif" font-size="14.00" fill="#000000">Cons</text>
+<text text-anchor="start" x="25.6069" y="-55.8" font-family="serif" font-size="14.00" fill="#000000">Cons</text>
 <polygon fill="none" stroke="#000000" points="8.5,-4 8.5,-50 31.5,-50 31.5,-4 8.5,-4"/>
-<text text-anchor="start" x="11.0552" y="-22.8" font-family="Times,serif" font-size="14.00" fill="#000000">i32</text>
+<text text-anchor="start" x="11.0552" y="-22.8" font-family="serif" font-size="14.00" fill="#000000">i32</text>
 <polygon fill="none" stroke="#000000" points="31.5,-4 31.5,-50 71.5,-50 71.5,-4 31.5,-4"/>
 <polyline fill="none" stroke="#000000" points="34.5,-27 68.5,-27 "/>
-<text text-anchor="start" x="39.8311" y="-32.8" font-family="Times,serif" font-size="14.00" fill="#000000">Box</text>
+<text text-anchor="start" x="39.8311" y="-32.8" font-family="serif" font-size="14.00" fill="#000000">Box</text>
 <polygon fill="none" stroke="#000000" points="34.5,-7 34.5,-27 68.5,-27 68.5,-7 34.5,-7"/>
-<text text-anchor="start" x="37.1172" y="-12.8" font-family="Times,serif" font-size="14.00" fill="#000000">usize</text>
+<text text-anchor="start" x="37.1172" y="-12.8" font-family="serif" font-size="14.00" fill="#000000">usize</text>
 </g>
 </g>
 </svg>
