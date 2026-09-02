@@ -156,7 +156,7 @@ want to bind something to the variable now. On the right of the equal sign is
 the value that `guess` is bound to, which is the result of calling
 `String::new`, a function that returns a new instance of a `String`.
 [`String`][string]<!-- ignore --> is a string type provided by the standard
-library that is a growable, UTF-8 encoded bit of text.
+library that is a heap-allocated, growable, UTF-8 encoded bit of text.
 
 The `::` syntax in the `::new` line indicates that `new` is an associated
 function of the `String` type. An _associated function_ is a function that’s
