@@ -130,10 +130,10 @@ the stack; no arbitrary code is necessary. See the [“Stack-Only Data:
 Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4 for more
 information on `Copy`.
 
-The `Copy` trait doesn’t define any methods to prevent programmers from
-overloading those methods and violating the assumption that no arbitrary code
-is being run. That way, all programmers can assume that copying a value will be
-very fast.
+The `Copy` trait doesn’t define, on purpose, any methods to prevent programmers
+from overloading those methods and violating the assumption that no arbitrary
+code is being run. That way, all programmers can assume that copying a value
+will be very fast.
 
 You can derive `Copy` on any type whose parts all implement `Copy`. A type that
 implements `Copy` must also implement `Clone` because a type that implements
