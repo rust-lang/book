@@ -305,8 +305,8 @@ point:
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-state-machine/src/lib.rs:enum}}
 ```
 
-Writing the code to transition between each state by hand would be tedious and
-error-prone, however, especially when you need to add more functionality and
+However, writing the code to transition between each state by hand would be tedious and
+error-prone, especially when you need to add more functionality and
 more states to the code later. Fortunately, the Rust compiler creates and
 manages the state machine data structures for async code automatically. The
 normal borrowing and ownership rules around data structures all still apply,
