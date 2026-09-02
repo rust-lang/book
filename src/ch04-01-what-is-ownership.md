@@ -93,6 +93,9 @@ work through the examples that illustrate them:
 - There can only be one owner at a time.
 - When the owner goes out of scope, the value will be dropped.
 
+It is very important to remember that owners and the values they own are different
+things, and if one falls out of scope it does not always mean the other does as well.
+
 ### Variable Scope
 
 Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
