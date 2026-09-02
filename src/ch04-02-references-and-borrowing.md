@@ -63,8 +63,7 @@ return the values in order to give back ownership, because we never had
 ownership.
 
 We call the action of creating a reference _borrowing_. As in real life, if a
-person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don’t own it.
+person owns something, you can borrow it from them, but you don't own it.
 
 So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: It doesn’t work!
@@ -89,7 +88,7 @@ allowed to modify something we have a reference to.
 ### Mutable References
 
 We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that use, instead, a _mutable reference_:
+using a _mutable reference_:
 
 <Listing file-name="src/main.rs">
 
