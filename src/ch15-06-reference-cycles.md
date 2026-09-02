@@ -272,6 +272,16 @@ in Listing 15-29.
 
 </Listing>
 
+Then we will see the output:
+
+```console
+leaf strong = 1, weak = 0
+branch strong = 1, weak = 1
+leaf strong = 2, weak = 0
+leaf parent = None
+leaf strong = 1, weak = 0
+```
+
 After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
 count of 0. In the inner scope, we create `branch` and associate it with
 `leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
