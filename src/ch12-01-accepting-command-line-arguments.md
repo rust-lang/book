@@ -59,9 +59,10 @@ mistaken for a function that’s defined in the current module.
 
 > ### The `args` Function and Invalid Unicode
 >
-> Note that `std::env::args` will panic if any argument contains invalid
-> Unicode. If your program needs to accept arguments containing invalid
-> Unicode, use `std::env::args_os` instead. That function returns an iterator
+> Note that `std::env::args` will panic if any argument can’t be represented as
+> a valid Rust `String`. This includes arguments that aren’t valid UTF-8 on Unix
+> or aren’t valid UTF-16 on Windows. If your program needs to accept such
+> arguments, use `std::env::args_os` instead. That function returns an iterator
 > that produces `OsString` values instead of `String` values. We’ve chosen to
 > use `std::env::args` here for simplicity because `OsString` values differ per
 > platform and are more complex to work with than `String` values.
