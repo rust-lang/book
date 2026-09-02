@@ -48,7 +48,7 @@ The compiler error shows that the shortcut no longer applies within the
 
 Notice there’s also a warning that the `use` is no longer used in its scope! To
 fix this problem, move the `use` within the `customer` module too, or reference
-the shortcut in the parent module with `super::hosting` within the child
+the shortcut in the parent module with `super::front_of_house::hosting` within the child
 `customer` module.
 
 ### Creating Idiomatic `use` Paths
