@@ -74,10 +74,11 @@ error:
 
 The error indicates that Rust expected a `bool` but got an integer. Unlike
 languages such as Ruby and JavaScript, Rust will not automatically try to
-convert non-Boolean types to a Boolean. You must be explicit and always provide
-`if` with a Boolean as its condition. If we want the `if` code block to run
-only when a number is not equal to `0`, for example, we can change the `if`
-expression to the following:
+convert non-Boolean types to a Boolean. In Ruby and JavaScript, an integer not
+being equal to '0' would be converted into a Boolean equaling 'true'. You must
+be explicit and always provide `if` with a Boolean as its condition.
+If we want the `if` code block to run only when a number is not equal to `0`,
+for example, we can change the `if` expression to the following:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -113,8 +114,8 @@ block. That’s because Rust only executes the block for the first `true`
 condition, and once it finds one, it doesn’t even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you have more
-than one, you might want to refactor your code. Chapter 6 describes a powerful
-Rust branching construct called `match` for these cases.
+than one, you might want to refactor your code or use guard clauses. Chapter 6
+describes a powerful Rust branching construct called `match` for these cases.
 
 #### Using `if` in a `let` Statement
 
@@ -138,11 +139,12 @@ expression. Run this code to see what happens:
 
 Remember that blocks of code evaluate to the last expression in them, and
 numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
+whole `if` expression depends on which block of code executes. The
 values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-2, the results of both the `if` arm and the `else`
-arm were `i32` integers. If the types are mismatched, as in the following
-example, we’ll get an error:
+the same type because `number` must have one known type at compile time.;
+in Listing 3-2, the results of both the `if` arm and the `else` arm were
+`i32` integers. If the types are mismatched, as in the following example,
+we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
