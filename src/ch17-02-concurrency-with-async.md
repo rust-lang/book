@@ -212,7 +212,7 @@ Now we can send messages from the sender to the receiver. Notice that we don’t
 have to spawn a separate thread or even a task; we merely need to await the
 `rx.recv` call.
 
-The synchronous `Receiver::recv` method in `std::mpsc::channel` blocks until it
+The synchronous `Receiver::recv` method in `std::sync::mpsc` blocks until it
 receives a message. The `trpl::Receiver::recv` method does not, because it is
 async. Instead of blocking, it hands control back to the runtime until either a
 message is received or the send side of the channel closes. By contrast, we
