@@ -73,8 +73,7 @@ before the `Ok` and `Err` variants in the `match` arms.
 
 When the result is `Ok`, this code will return the inner `file` value out of
 the `Ok` variant, and we then assign that file handle value to the variable
-`greeting_file`. After the `match`, we can use the file handle for reading or
-writing.
+`greeting_file`. After the `match`, we can use the file handle for reading.
 
 The other arm of the `match` handles the case where we get an `Err` value from
 `File::open`. In this example, we’ve chosen to call the `panic!` macro. If
