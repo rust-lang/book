@@ -126,10 +126,12 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
-This command creates an executable file in _target/debug/hello_cargo_ (or
-_target\debug\hello_cargo.exe_ on Windows) rather than in your current
-directory. Because the default build is a debug build, Cargo puts the binary in
-a directory named _debug_. You can run the executable with this command:
+This command creates an executable file in `target/debug/hello_cargo` (or
+`target\debug\hello_cargo.exe` on Windows) rather than in your current 
+directory. Because the default build is a debug build, Cargo puts the 
+binary in a directory named _debug_. The file is a native executable 
+produced by Rust, which you can run directly without needing the Rust 
+toolchain. You can run the executable with this command:
 
 ```console
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
