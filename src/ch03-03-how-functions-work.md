@@ -84,7 +84,7 @@ commas, like this:
 
 This example creates a function named `print_labeled_measurement` with two
 parameters. The first parameter is named `value` and is an `i32`. The second is
-named `unit_label` and is type `char`. The function then prints text containing
+named `unit_label` and is of type `char`. The function then prints text containing
 both the `value` and the `unit_label`.
 
 Let’s try running this code. Replace the program currently in your _functions_
