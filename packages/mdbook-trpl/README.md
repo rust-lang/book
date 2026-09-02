@@ -5,8 +5,8 @@ Programming Language_][trpl].
 
 Supplies the following preprocessor binaries:
 
-- [mdbook-trpl-note](./src/bin/note)
-- [mdbook-trpl-listing](./src/bin/listing)
+- [mdbook-trpl-note](./src/bin/note.rs)
+- [mdbook-trpl-listing](./src/bin/listing.rs)
 
 [mdbook]: https://crates.io/crates/mdbook
 [pre]: https://rust-lang.github.io/mdBook/format/configuration/preprocessors.html
