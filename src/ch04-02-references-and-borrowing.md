@@ -171,8 +171,10 @@ from under them! However, multiple immutable references are allowed because no
 one who is just reading the data has the ability to affect anyone else’s
 reading of the data.
 
-Note that a reference’s scope starts from where it is introduced and continues
-through the last time that reference is used. For instance, this code will
+Note that a reference's scope is different from the variable scope we discussed
+earlier. While a variable's scope extends to the end of the block where it is declared,
+a reference's scope starts from where it is introduced and continues through
+the last time that reference is used. For instance, this code will
 compile because the last usage of the immutable references is in the `println!`,
 before the mutable reference is introduced:
 
