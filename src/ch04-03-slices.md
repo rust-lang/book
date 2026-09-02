@@ -64,9 +64,10 @@ for the index in the tuple and `&item` for the single byte in the tuple.
 Because we get a reference to the element from `.iter().enumerate()`, we use
 `&` in the pattern.
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`.
+Inside the `for` loop, we check whether each byte is an ASCII space character
+by comparing it to the byte literal `b' '`. The `b` prefix creates a byte
+literal of type `u8`. If we find a space, we return the position. Otherwise,
+we return the length of the string by using `s.len()`.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
