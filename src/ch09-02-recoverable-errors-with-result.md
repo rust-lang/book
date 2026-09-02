@@ -291,8 +291,9 @@ handle that `Result`: If `read_to_string` succeeds, then our function has
 succeeded, and we return the username from the file that’s now in `username`
 wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the
 same way that we returned the error value in the `match` that handled the
-return value of `File::open`. However, we don’t need to explicitly say
-`return`, because this is the last expression in the function.
+return value of `File::open`. However, we don’t need to explicitly say `return`
+before the final `match`, because the entire `match` expression is the last
+expression in the function, so its value is returned.
 
 The code that calls this code will then handle getting either an `Ok` value
 that contains a username or an `Err` value that contains an `io::Error`. It’s
