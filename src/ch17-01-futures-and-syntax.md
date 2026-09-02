@@ -256,7 +256,7 @@ other runtime crates’ `block_on` functions). Once the future completes,
 `block_on` returns whatever value the future produced.
 
 We could pass the future returned by `page_title` directly to `block_on` and,
-once it completed, we could match on the resulting `Option<String>` as we tried
+once it is completed, we could match on the resulting `Option<String>` as we tried
 to do in Listing 17-3. However, for most of the examples in the chapter (and
 most async code in the real world), we’ll be doing more than just one async
 function call, so instead we’ll pass an `async` block and explicitly await the
@@ -327,7 +327,7 @@ returned by the `async` block until it’s done.
 
 > Note: Some runtimes provide macros so you _can_ write an async `main`
 > function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
-> main`, which does the same thing we did by hand in Listing 17-4: call a
+main`, which does the same thing we did by hand in Listing 17-4: call a
 > function that runs a future to completion the way `trpl::block_on` does.
 
 Now let’s put these pieces together and see how we can write concurrent code.
