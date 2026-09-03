@@ -346,7 +346,7 @@ changed.
 
 In all other cases (if either `setting_value` or `new_setting_value` is `None`)
 expressed by the `_` pattern in the second arm, we want to allow
-`new_setting_value` to become `setting_value`.
+`setting_value` to become `new_setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
 particular values. Listing 19-19 shows an example of ignoring the second and
