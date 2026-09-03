@@ -65,3 +65,7 @@ pre:hover > .buttons button {
   visibility: visible;
   opacity: 1;
 }
+
+pre > .buttons :hover:not(button) {
+  background-color: transparent;
+}
