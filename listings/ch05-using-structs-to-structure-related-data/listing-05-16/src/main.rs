@@ -4,7 +4,6 @@ struct Rectangle {
     height: u32,
 }
 
-
 // ANCHOR: here
 impl Rectangle {
     fn area(&self) -> u32 {
@@ -12,14 +11,12 @@ impl Rectangle {
     }
 }
 
-
 impl Rectangle {
     fn can_hold(&self, other: &Rectangle) -> bool {
         self.width >= other.width && self.height >= other.height
     }
 }
 // ANCHOR_END: here
-
 
 fn main() {
     let rect1 = Rectangle {
@@ -34,7 +31,6 @@ fn main() {
         width: 60,
         height: 45,
     };
-
 
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
