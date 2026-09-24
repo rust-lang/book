@@ -97,8 +97,8 @@ are and how to designate a field or method as public or private in [Chapter
 > In C and C++, two different operators are used for calling methods: You use
 > `.` if you’re calling a method on the object directly and `->` if you’re
 > calling the method on a pointer to the object and need to dereference the
-> pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
+> pointer first. In other words, if `pObject` is a pointer,
+> `pObject->something()` is similar to `(*pObject).something()`.
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called _automatic referencing and dereferencing_. Calling methods is
