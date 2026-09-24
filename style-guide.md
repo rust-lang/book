@@ -8,7 +8,11 @@
   *associated function* of` rather than `is an ‘associated function’ of`.
 - When talking about a method in prose, DO NOT include the parentheses, ex:
   `read_line` rather than `read_line()`.
-- Hard wrap at 80 chars
+- Hard wrap at 80 chars, means manually breaking lines in prose (not code) so that each line stays within 80 characters, like this:<br>
+  `To read a line of input, we use the read_line method from the stdin handle. This is`<br>
+  `an associated function of the io::stdin module.`<br>
+  Instead of writing everything in a single long line like:<br>
+  `To read a line of input, we use the read_line method from the stdin handle. This is an associated function of the io::stdin module.`
 - Prefer not mixing code and not-code in one word, ex: ``Remember when we wrote
   `use std::io`?`` rather than ``Remember when we `use`d `std::io`?``
 
