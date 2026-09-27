@@ -44,6 +44,15 @@ body.ayu .not_desired_behavior {
   width: 100px;
 }
 
+/* Ensure code can be scrolled past Ferris without being obscured */
+pre:has(.ferris-large) > code {
+  padding-right: calc(4.5em + 1.5rem);
+}
+
+pre:has(.ferris-small) > code {
+  padding-right: calc(2.3em + 1.5rem);
+}
+
 /*
   A bit of a hack to make small Ferris use the existing buttons container but
   only show/hide the buttons on hover over the `pre`. Targeting `.listing`
