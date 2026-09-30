@@ -32,12 +32,17 @@ body.ayu .not_desired_behavior {
   height: auto;
 }
 
+:root {
+  --ferris-large-width: 4.5em;
+  --ferris-small-width: 2.3em;
+}
+
 .ferris-large {
-  width: 4.5em;
+  width: var(--ferris-large-width);
 }
 
 .ferris-small {
-  width: 2.3em;
+  width: var(--ferris-small-width);
 }
 
 .ferris-explain {
@@ -46,11 +51,11 @@ body.ayu .not_desired_behavior {
 
 /* Ensure code can be scrolled past Ferris without being obscured */
 pre:has(.ferris-large) > code {
-  padding-right: calc(4.5em + 1.5rem);
+  padding-right: calc(var(--ferris-large-width) + 1.5rem);
 }
 
 pre:has(.ferris-small) > code {
-  padding-right: calc(2.3em + 1.5rem);
+  padding-right: calc(var(--ferris-small-width) + 1.5rem);
 }
 
 /*
