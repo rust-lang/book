@@ -1,14 +1,12 @@
 [package]
 name = "trpl"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 description = "A support crate for The Rust Programming Language book"
 readme = "README.md"
 repository = "https://github.com/rust-lang/book"
 authors = ["Chris Krycho <hello@chriskrycho.com>"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 futures = "0.3"

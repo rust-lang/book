@@ -15,10 +15,10 @@ More specifically, we’ll cover:
 - _Closures_, a function-like construct you can store in a variable
 - _Iterators_, a way of processing a series of elements
 - How to use closures and iterators to improve the I/O project in Chapter 12
-- The performance of closures and iterators (spoiler alert: they’re faster than
+- The performance of closures and iterators (spoiler alert: They’re faster than
   you might think!)
 
 We’ve already covered some other Rust features, such as pattern matching and
 enums, that are also influenced by the functional style. Because mastering
-closures and iterators is an important part of writing idiomatic, fast Rust
+closures and iterators is an important part of writing fast, idiomatic, Rust
 code, we’ll devote this entire chapter to them.

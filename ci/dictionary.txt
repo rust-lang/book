@@ -58,6 +58,7 @@ booleans
 Bors
 BorrowMutError
 BoxMeUp
+boxt
 BTreeSet
 BufRead
 BufReader
@@ -167,6 +168,7 @@ eprintln
 Erlang
 ErrorKind
 Español
+ETAPS
 eval
 executables
 ExitCode
@@ -310,6 +312,7 @@ memoization
 metadata
 Metadata
 metaprogramming
+metavariable
 mibbit
 Mibbit
 microcontroller
@@ -342,6 +345,7 @@ mutexes
 Mutexes
 MutexGuard
 mutext
+mutextarct
 MyAsyncStateMachine
 MyBox
 myprogram
@@ -375,6 +379,7 @@ OpenGL
 optimizations
 OptionalFloatingPointNumber
 OptionalNumber
+optiont
 OsStr
 OsString
 other's
@@ -438,6 +443,7 @@ refactoring
 refcell
 RefCell
 refcellt
+refcelltrct
 RefMut
 reformats
 refutability
@@ -454,6 +460,8 @@ retweet
 rewordings
 rint
 ripgrep
+RngExt
+Rumbul
 runnable
 runtime
 runtimes
@@ -595,6 +603,7 @@ unsynchronized
 Unyank
 UpperCamelCase
 URIs
+urls
 UsefulType
 username
 USERPROFILE
@@ -618,6 +627,7 @@ wasi
 wasn
 weakt
 WeatherForecast
+webpage
 WebSocket
 whitespace
 wildcard

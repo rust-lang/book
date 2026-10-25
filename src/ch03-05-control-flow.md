@@ -1,9 +1,10 @@
 ## Control Flow
 
-The ability to run some code depending on whether a condition is `true` and to
-run some code repeatedly while a condition is `true` are basic building blocks
-in most programming languages. The most common constructs that let you control
-the flow of execution of Rust code are `if` expressions and loops.
+The ability to run some code depending on whether a condition is `true` and the
+ability to run some code repeatedly while a condition is `true` are basic
+building blocks in most programming languages. The most common constructs that
+let you control the flow of execution of Rust code are `if` expressions and
+loops.
 
 ### `if` Expressions
 
@@ -158,13 +159,13 @@ find the problem in the program:
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
-the `else` block evaluates to a string. This won’t work because variables must
-have a single type, and Rust needs to know at compile time what type the
-`number` variable is, definitively. Knowing the type of `number` lets the
-compiler verify the type is valid everywhere we use `number`. Rust wouldn’t be
-able to do that if the type of `number` was only determined at runtime; the
-compiler would be more complex and would make fewer guarantees about the code
-if it had to keep track of multiple hypothetical types for any variable.
+the `else` block evaluates to a string. This won’t work, because variables must
+have a single type, and Rust needs to know definitively at compile time what
+type the `number` variable is. Knowing the type of `number` lets the compiler
+verify the type is valid everywhere we use `number`. Rust wouldn’t be able to
+do that if the type of `number` was only determined at runtime; the compiler
+would be more complex and would make fewer guarantees about the code if it had
+to keep track of multiple hypothetical types for any variable.
 
 ### Repetition with Loops
 
@@ -178,7 +179,7 @@ Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
 #### Repeating Code with `loop`
 
 The `loop` keyword tells Rust to execute a block of code over and over again
-forever or until you explicitly tell it to stop.
+either forever or until you explicitly tell it to stop.
 
 As an example, change the _src/main.rs_ file in your _loops_ directory to look
 like this:
@@ -191,7 +192,7 @@ like this:
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>c</kbd> to interrupt a program that is stuck in a continual
+<kbd>ctrl</kbd>-<kbd>C</kbd> to interrupt a program that is stuck in a continual
 loop. Give it a try:
 
 <!-- manual-regeneration
@@ -212,7 +213,7 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>.
+The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>C</kbd>.
 
 You may or may not see the word `again!` printed after the `^C`, depending on
 where the code was in the loop when it received the interrupt signal.
@@ -234,15 +235,15 @@ One of the uses of a `loop` is to retry an operation you know might fail, such
 as checking whether a thread has completed its job. You might also need to pass
 the result of that operation out of the loop to the rest of your code. To do
 this, you can add the value you want returned after the `break` expression you
-use to stop the loop; that value will be returned out of the loop so you can
-use it, as shown here:
+use to stop the loop; that value will be returned out of the loop so that you
+can use it, as shown here:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
 Before the loop, we declare a variable named `counter` and initialize it to
-`0`. Then we declare a variable named `result` to hold the value returned from
+`0`. Then, we declare a variable named `result` to hold the value returned from
 the loop. On every iteration of the loop, we add `1` to the `counter` variable,
 and then check whether the `counter` is equal to `10`. When it is, we use the
 `break` keyword with the value `counter * 2`. After the loop, we use a
@@ -252,7 +253,10 @@ print the value in `result`, which in this case is `20`.
 You can also `return` from inside a loop. While `break` only exits the current
 loop, `return` always exits the current function.
 
-#### Loop Labels to Disambiguate Between Multiple Loops
+<!-- Old headings. Do not remove or links may break. -->
+<a id="loop-labels-to-disambiguate-between-multiple-loops"></a>
+
+#### Disambiguating with Loop Labels
 
 If you have loops within loops, `break` and `continue` apply to the innermost
 loop at that point. You can optionally specify a _loop label_ on a loop that
@@ -273,7 +277,10 @@ doesn’t specify a label will exit the inner loop only. The `break
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
 ```
 
-#### Conditional Loops with `while`
+<!-- Old headings. Do not remove or links may break. -->
+<a id="conditional-loops-with-while"></a>
+
+#### Streamlining Conditional Loops with while
 
 A program will often need to evaluate a condition within a loop. While the
 condition is `true`, the loop runs. When the condition ceases to be `true`, the
@@ -282,7 +289,7 @@ like this using a combination of `loop`, `if`, `else`, and `break`; you could
 try that now in a program, if you’d like. However, this pattern is so common
 that Rust has a built-in language construct for it, called a `while` loop. In
 Listing 3-3, we use `while` to loop the program three times, counting down each
-time, and then, after the loop, print a message and exit.
+time, and then, after the loop, to print a message and exit.
 
 <Listing number="3-3" file-name="src/main.rs" caption="Using a `while` loop to run code while a condition evaluates to `true`">
 
@@ -311,7 +318,7 @@ element in the array `a`.
 </Listing>
 
 Here, the code counts up through the elements in the array. It starts at index
-`0`, and then loops until it reaches the final index in the array (that is,
+`0` and then loops until it reaches the final index in the array (that is,
 when `index < 5` is no longer `true`). Running this code will print every
 element in the array:
 
@@ -323,7 +330,7 @@ All five array values appear in the terminal, as expected. Even though `index`
 will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
-However, this approach is error prone; we could cause the program to panic if
+However, this approach is error-prone; we could cause the program to panic if
 the index value or test condition is incorrect. For example, if you changed the
 definition of the `a` array to have four elements but forgot to update the
 condition to `while index < 4`, the code would panic. It’s also slow, because
@@ -345,7 +352,7 @@ When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items. Machine code generated from `for`
-loops can be more efficient as well, because the index doesn’t need to be
+loops can be more efficient as well because the index doesn’t need to be
 compared to the length of the array at every iteration.
 
 Using the `for` loop, you wouldn’t need to remember to change any other code if
@@ -373,7 +380,7 @@ This code is a bit nicer, isn’t it?
 
 ## Summary
 
-You made it! This was a sizable chapter: you learned about variables, scalar
+You made it! This was a sizable chapter: You learned about variables, scalar
 and compound data types, functions, comments, `if` expressions, and loops! To
 practice with the concepts discussed in this chapter, try building programs to
 do the following:

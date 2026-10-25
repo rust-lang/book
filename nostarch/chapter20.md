@@ -9,8 +9,8 @@ directory, so all fixes need to be made in `/src/`.
 # Advanced Features
 
 By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while, but may not
+language. Before we do one more project, in Chapter 21, we’ll look at a few
+aspects of the language you might run into every once in a while but may not
 use every day. You can use this chapter as a reference for when you encounter
 any unknowns. The features covered here are useful in very specific situations.
 Although you might not reach for them often, we want to make sure you have a
@@ -18,14 +18,14 @@ grasp of all the features Rust has to offer.
 
 In this chapter, we’ll cover:
 
-* Unsafe Rust: how to opt out of some of Rust’s guarantees and take
+* Unsafe Rust: How to opt out of some of Rust’s guarantees and take
   responsibility for manually upholding those guarantees
-* Advanced traits: associated types, default type parameters, fully qualified
+* Advanced traits: Associated types, default type parameters, fully qualified
   syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced types: more about the newtype pattern, type aliases, the never type,
+* Advanced types: More about the newtype pattern, type aliases, the never type,
   and dynamically sized types
-* Advanced functions and closures: function pointers and returning closures
-* Macros: ways to define code that defines more code at compile time
+* Advanced functions and closures: Function pointers and returning closures
+* Macros: Ways to define code that defines more code at compile time
 
 It’s a panoply of Rust features with something for everyone! Let’s dive in!
 
@@ -33,8 +33,8 @@ It’s a panoply of Rust features with something for everyone! Let’s dive in!
 
 All the code we’ve discussed so far has had Rust’s memory safety guarantees
 enforced at compile time. However, Rust has a second language hidden inside it
-that doesn’t enforce these memory safety guarantees: it’s called *unsafe Rust*
-and works just like regular Rust, but gives us extra superpowers.
+that doesn’t enforce these memory safety guarantees: It’s called *unsafe Rust*
+and works just like regular Rust but gives us extra superpowers.
 
 Unsafe Rust exists because, by nature, static analysis is conservative. When
 the compiler tries to determine whether or not code upholds the guarantees,
@@ -42,7 +42,7 @@ it’s better for it to reject some valid programs than to accept some invalid
 programs. Although the code *might* be okay, if the Rust compiler doesn’t have
 enough information to be confident, it will reject the code. In these cases,
 you can use unsafe code to tell the compiler, “Trust me, I know what I’m
-doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
+doing.” Be warned, however, that you use unsafe Rust at your own risk: If you
 use unsafe code incorrectly, problems can occur due to memory unsafety, such as
 null pointer dereferencing.
 
@@ -54,37 +54,41 @@ writing your own operating system. Working with low-level systems programming
 is one of the goals of the language. Let’s explore what we can do with unsafe
 Rust and how to do it.
 
-### Unsafe Superpowers
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="unsafe-superpowers"></a>
+
+### Performing Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
 that holds the unsafe code. You can take five actions in unsafe Rust that you
 can’t in safe Rust, which we call *unsafe superpowers*. Those superpowers
 include the ability to:
 
-* Dereference a raw pointer
-* Call an unsafe function or method
-* Access or modify a mutable static variable
-* Implement an unsafe trait
-* Access fields of a `union`
+1. Dereference a raw pointer.
+1. Call an unsafe function or method.
+1. Access or modify a mutable static variable.
+1. Implement an unsafe trait.
+1. Access fields of `union`s.
 
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
-or disable any other of Rust’s safety checks: if you use a reference in unsafe
+or disable any of Rust’s other safety checks: If you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
 these five features that are then not checked by the compiler for memory
-safety. You’ll still get some degree of safety inside of an unsafe block.
+safety. You’ll still get some degree of safety inside an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
-dangerous or that it will definitely have memory safety problems: the intent is
-that as the programmer, you’ll ensure the code inside an `unsafe` block will
-access memory in a valid way.
+dangerous or that it will definitely have memory safety problems: The intent is
+that as the programmer, you’ll ensure that the code inside an `unsafe` block
+will access memory in a valid way.
 
-People are fallible, and mistakes will happen, but by requiring these five
-unsafe operations to be inside blocks annotated with `unsafe` you’ll know that
+People are fallible and mistakes will happen, but by requiring these five
+unsafe operations to be inside blocks annotated with `unsafe`, you’ll know that
 any errors related to memory safety must be within an `unsafe` block. Keep
 `unsafe` blocks small; you’ll be thankful later when you investigate memory
 bugs.
 
-To isolate unsafe code as much as possible, it’s best to enclose unsafe code
+To isolate unsafe code as much as possible, it’s best to enclose such code
 within a safe abstraction and provide a safe API, which we’ll discuss later in
 the chapter when we examine unsafe functions and methods. Parts of the standard
 library are implemented as safe abstractions over unsafe code that has been
@@ -98,12 +102,13 @@ some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
 
-In Chapter 4, in “Dangling References”, we
-mentioned that the compiler ensures references are always valid. Unsafe Rust has
-two new types called *raw pointers* that are similar to references. As with
-references, raw pointers can be immutable or mutable and are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the dereference operator; it’s
-part of the type name. In the context of raw pointers, *immutable* means that
-the pointer can’t be directly assigned to after being dereferenced.
+In Chapter 4, in the “Dangling References” section, we mentioned that the compiler ensures that references are always
+valid. Unsafe Rust has two new types called *raw pointers* that are similar to
+references. As with references, raw pointers can be immutable or mutable and
+are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the
+dereference operator; it’s part of the type name. In the context of raw
+pointers, *immutable* means that the pointer can’t be directly assigned to
+after being dereferenced.
 
 Different from references and smart pointers, raw pointers:
 
@@ -139,13 +144,14 @@ variable, we know these particular raw pointers are valid, but we can’t make
 that assumption about just any raw pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
-so certain of, using `as` to cast a value instead of using the raw reference
-operators. Listing 20-2 shows how to create a raw pointer to an arbitrary
-location in memory. Trying to use arbitrary memory is undefined: there might be
-data at that address or there might not, the compiler might optimize the code so
-there is no memory access, or the program might error with a segmentation fault.
-Usually, there is no good reason to write code like this, especially in cases
-where you can use a raw borrow operator instead, but it is possible.
+so certain of, using the keyword `as` to cast a value instead of using the raw
+borrow operator. Listing 20-2 shows how to create a raw pointer to an arbitrary
+location in memory. Trying to use arbitrary memory is undefined: There might be
+data at that address or there might not, the compiler might optimize the code
+so that there is no memory access, or the program might terminate with a
+segmentation fault. Usually, there is no good reason to write code like this,
+especially in cases where you can use a raw borrow operator instead, but it is
+possible.
 
 
 ```
@@ -155,7 +161,7 @@ where you can use a raw borrow operator instead, but it is possible.
 
 Listing 20-2: Creating a raw pointer to an arbitrary memory address
 
-Recall that we can create raw pointers in safe code, but we can’t *dereference*
+Recall that we can create raw pointers in safe code, but we can’t dereference
 raw pointers and read the data being pointed to. In Listing 20-3, we use the
 dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
@@ -177,8 +183,7 @@ Listing 20-3: Dereferencing raw pointers within an `unsafe` block
 Creating a pointer does no harm; it’s only when we try to access the value that
 it points at that we might end up dealing with an invalid value.
 
-Note also that in Listing 20-1 and 20-3, we created `*const i32` and `*mut i32`
-raw pointers that both pointed to the same memory location, where `num` is
+Note also that in Listings 20-1 and 20-3, we created `*const i32` and `*mut i32` raw pointers that both pointed to the same memory location, where `num` is
 stored. If we instead tried to create an immutable and a mutable reference to
 `num`, the code would not have compiled because Rust’s ownership rules don’t
 allow a mutable reference at the same time as any immutable references. With
@@ -187,12 +192,10 @@ same location and change data through the mutable pointer, potentially creating
 a data race. Be careful!
 
 With all of these dangers, why would you ever use raw pointers? One major use
-case is when interfacing with C code, as you’ll see in the next section,
-“Calling an Unsafe Function or
-Method.” Another case is
-when building up safe abstractions that the borrow checker doesn’t understand.
-We’ll introduce unsafe functions and then look at an example of a safe
-abstraction that uses unsafe code.
+case is when interfacing with C code, as you’ll see in the next section.
+Another case is when building up safe abstractions that the borrow checker
+doesn’t understand. We’ll introduce unsafe functions and then look at an
+example of a safe abstraction that uses unsafe code.
 
 ### Calling an Unsafe Function or Method
 
@@ -203,7 +206,7 @@ definition. The `unsafe` keyword in this context indicates the function has
 requirements we need to uphold when we call this function, because Rust can’t
 guarantee we’ve met these requirements. By calling an unsafe function within an
 `unsafe` block, we’re saying that we’ve read this function’s documentation and
-take responsibility for upholding the function’s contracts.
+we take responsibility for upholding the function’s contracts.
 
 Here is an unsafe function named `dangerous` that doesn’t do anything in its
 body:
@@ -222,7 +225,7 @@ try to call `dangerous` without the `unsafe` block, we’ll get an error:
 ```
 $ cargo run
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
-error[E0133]: call to unsafe function `dangerous` is unsafe and requires unsafe function or block
+error[E0133]: call to unsafe function `dangerous` is unsafe and requires unsafe block
  --> src/main.rs:4:5
   |
 4 |     dangerous();
@@ -238,11 +241,11 @@ With the `unsafe` block, we’re asserting to Rust that we’ve read the functio
 documentation, we understand how to use it properly, and we’ve verified that
 we’re fulfilling the contract of the function.
 
-To perform unsafe operations in the body of an unsafe function, you still need
-to use an `unsafe` block just as within a regular function, and the compiler
-will warn you if you forget. This helps to keep `unsafe` blocks as small as
-possible, as unsafe operations may not be needed across the whole function
-body.
+To perform unsafe operations in the body of an `unsafe` function, you still
+need to use an `unsafe` block, just as within a regular function, and the
+compiler will warn you if you forget. This helps us keep `unsafe` blocks as
+small as possible, as unsafe operations may not be needed across the whole
+function body.
 
 #### Creating a Safe Abstraction over Unsafe Code
 
@@ -250,7 +253,7 @@ Just because a function contains unsafe code doesn’t mean we need to mark the
 entire function as unsafe. In fact, wrapping unsafe code in a safe function is
 a common abstraction. As an example, let’s study the `split_at_mut` function
 from the standard library, which requires some unsafe code. We’ll explore how
-we might implement it. This safe method is defined on mutable slices: it takes
+we might implement it. This safe method is defined on mutable slices: It takes
 one slice and makes it two by splitting the slice at the index given as an
 argument. Listing 20-4 shows how to use `split_at_mut`.
 
@@ -286,17 +289,17 @@ fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 
 Listing 20-5: An attempted implementation of `split_at_mut` using only safe Rust
 
-This function first gets the total length of the slice. Then it asserts that
+This function first gets the total length of the slice. Then, it asserts that
 the index given as a parameter is within the slice by checking whether it’s
 less than or equal to the length. The assertion means that if we pass an index
 that is greater than the length to split the slice at, the function will panic
 before it attempts to use that index.
 
-Then we return two mutable slices in a tuple: one from the start of the
+Then, we return two mutable slices in a tuple: one from the start of the
 original slice to the `mid` index and another from `mid` to the end of the
 slice.
 
-When we try to compile the code in Listing 20-5, we’ll get an error.
+When we try to compile the code in Listing 20-5, we’ll get an error:
 
 ```
 $ cargo run
@@ -350,32 +353,32 @@ fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 
 Listing 20-6: Using unsafe code in the implementation of the `split_at_mut` function
 
-Recall from “The Slice Type” in Chapter 4 that
-slices are a pointer to some data and the length of the slice. We use the `len`
-method to get the length of a slice and the `as_mut_ptr` method to access the
-raw pointer of a slice. In this case, because we have a mutable slice to `i32`
-values, `as_mut_ptr` returns a raw pointer with the type `*mut i32`, which we’ve
-stored in the variable `ptr`.
+Recall from “The Slice Type” section in
+Chapter 4 that a slice is a pointer to some data and the length of the slice.
+We use the `len` method to get the length of a slice and the `as_mut_ptr`
+method to access the raw pointer of a slice. In this case, because we have a
+mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
+`*mut i32`, which we’ve stored in the variable `ptr`.
 
-We keep the assertion that the `mid` index is within the slice. Then we get to
-the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
+We keep the assertion that the `mid` index is within the slice. Then, we get to
+the unsafe code: The `slice::from_raw_parts_mut` function takes a raw pointer
 and a length, and it creates a slice. We use this function to create a slice
-that starts from `ptr` and is `mid` items long. Then we call the `add`
-method on `ptr` with `mid` as an argument to get a raw pointer that starts at
-`mid`, and we create a slice using that pointer and the remaining number of
-items after `mid` as the length.
+that starts from `ptr` and is `mid` items long. Then, we call the `add` method
+on `ptr` with `mid` as an argument to get a raw pointer that starts at `mid`,
+and we create a slice using that pointer and the remaining number of items
+after `mid` as the length.
 
 The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
 pointer and must trust that this pointer is valid. The `add` method on raw
-pointers is also unsafe, because it must trust that the offset location is also
+pointers is also unsafe because it must trust that the offset location is also
 a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
-`slice::from_raw_parts_mut` and `add` so we could call them. By looking at
+`slice::from_raw_parts_mut` and `add` so that we could call them. By looking at
 the code and by adding the assertion that `mid` must be less than or equal to
 `len`, we can tell that all the raw pointers used within the `unsafe` block
 will be valid pointers to data within the slice. This is an acceptable and
 appropriate use of `unsafe`.
 
-Note that we don’t need to mark the resulting `split_at_mut` function as
+Note that we don’t need to mark the resultant `split_at_mut` function as
 `unsafe`, and we can call this function from safe Rust. We’ve created a safe
 abstraction to the unsafe code with an implementation of the function that uses
 `unsafe` code in a safe way, because it creates only valid pointers from the
@@ -403,18 +406,18 @@ that the slice this code creates contains valid `i32` values. Attempting to use
 
 #### Using extern Functions to Call External Code
 
-Sometimes, your Rust code might need to interact with code written in another
+Sometimes your Rust code might need to interact with code written in another
 language. For this, Rust has the keyword `extern` that facilitates the creation
-and use of a *Foreign Function Interface (FFI)*. An FFI is a way for a
+and use of a *Foreign Function Interface (FFI)*, which is a way for a
 programming language to define functions and enable a different (foreign)
 programming language to call those functions.
 
 Listing 20-8 demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
-usually unsafe to call from Rust code, so they must also be marked `unsafe`. The
-reason is that other languages don’t enforce Rust’s rules and guarantees, and
-Rust can’t check them, so responsibility falls on the programmer to ensure
-safety.
+generally unsafe to call from Rust code, so `extern` blocks must also be marked
+`unsafe`. The reason is that other languages don’t enforce Rust’s rules and
+guarantees, and Rust can’t check them, so responsibility falls on the
+programmer to ensure safety.
 
 src/main.rs
 
@@ -433,16 +436,19 @@ fn main() {
 Listing 20-8: Declaring and calling an `extern` function defined in another language
 
 Within the `unsafe extern "C"` block, we list the names and signatures of
-external functions from another language we want to call. The `"C"` part defines
-which *application binary interface (ABI)* the external function uses: the ABI
-defines how to call the function at the assembly level. The `"C"` ABI is the
-most common and follows the C programming language’s ABI.
+external functions from another language we want to call. The `"C"` part
+defines which *application binary interface (ABI)* the external function uses:
+The ABI defines how to call the function at the assembly level. The `"C"` ABI
+is the most common and follows the C programming language’s ABI. Information
+about all the ABIs Rust supports is available in the Rust Reference at *../reference/items/external-blocks.html#abi*.
 
-This particular function does not have any memory safety considerations, though.
-In fact, we know that any call to `abs` will always be safe for any `i32`, so we
-can use the `safe` keyword to say that this specific function is safe to call
-even though it is in an `unsafe extern` block. Once we make that change, calling
-it no longer requires an `unsafe` block, as shown in Listing 20-9.
+Every item declared within an `unsafe extern` block is implicitly unsafe.
+However, some FFI functions *are* safe to call. For example, the `abs` function
+from C’s standard library does not have any memory safety considerations, and we
+know it can be called with any `i32`. In cases like this, we can use the `safe`
+keyword to say that this specific function is safe to call even though it is in
+an `unsafe extern` block. Once we make that change, calling it no longer
+requires an `unsafe` block, as shown in Listing 20-9.
 
 src/main.rs
 
@@ -459,42 +465,44 @@ fn main() {
 Listing 20-9: Explicitly marking a function as `safe` within an `unsafe extern` block and calling it safely
 
 Marking a function as `safe` does not inherently make it safe! Instead, it is
-like a promise you are making to Rust that it *is* safe. It is still your
+like a promise you are making to Rust that it is safe. It is still your
 responsibility to make sure that promise is kept!
 
-> #### Calling Rust Functions from Other Languages
-> 
-> We can also use `extern` to create an interface that allows other languages to
-> call Rust functions. Instead of creating a whole `extern` block, we add the
-> `extern` keyword and specify the ABI to use just before the `fn` keyword for
-> the relevant function. We also need to add a `#[unsafe(no_mangle)]` annotation
-> to tell the Rust compiler not to mangle the name of this function. *Mangling*
-> is when a compiler changes the name we’ve given a function to a different name
-> that contains more information for other parts of the compilation process to
-> consume but is less human readable. Every programming language compiler
-> mangles names slightly differently, so for a Rust function to be nameable by
-> other languages, we must disable the Rust compiler’s name mangling. This is
-> unsafe because there might be name collisions across libraries without the
-> built-in mangling, so it is our responsibility to make sure the name we have
-> exported is safe to export without mangling.
-> 
-> In the following example, we make the `call_from_c` function accessible from
-> C code, after it’s compiled to a shared library and linked from C:
-> 
-> ````rust
-> #[unsafe(no_mangle)]
-> pub extern "C" fn call_from_c() {
->     println!("Just called a Rust function from C!");
-> }
-> ````
-> 
-> This usage of `extern` does not require `unsafe`.
+#### Calling Rust Functions from Other Languages
+
+We can also use `extern` to create an interface that allows other languages to
+call Rust functions. Instead of creating a whole `extern` block, we add the
+`extern` keyword and specify the ABI to use just before the `fn` keyword for
+the relevant function. We also need to add an `#[unsafe(no_mangle)]` annotation
+to tell the Rust compiler not to mangle the name of this function. *Mangling*
+is when a compiler changes the name we’ve given a function to a different name
+that contains more information for other parts of the compilation process to
+consume but is less human readable. Every programming language compiler mangles
+names slightly differently, so for a Rust function to be nameable by other
+languages, we must disable the Rust compiler’s name mangling. This is unsafe
+because there might be name collisions across libraries without the built-in
+mangling, so it is our responsibility to make sure the name we choose is safe
+to export without mangling.
+
+In the following example, we make the `call_from_c` function accessible from C
+code, after it’s compiled to a shared library and linked from C:
+
+```
+#[unsafe(no_mangle)]
+pub extern "C" fn call_from_c() {
+    println!("Just called a Rust function from C!");
+}
+```
+
+This usage of `extern` requires `unsafe` only in the attribute, not on the
+`extern` block.
 
 ### Accessing or Modifying a Mutable Static Variable
 
-In this book, we’ve not yet talked about *global variables*, which Rust does
-support but can be problematic with Rust’s ownership rules. If two threads are
-accessing the same mutable global variable, it can cause a data race.
+In this book, we’ve not yet talked about global variables, which Rust does
+support but which can be problematic with Rust’s ownership rules. If two
+threads are accessing the same mutable global variable, it can cause a data
+race.
 
 In Rust, global variables are called *static* variables. Listing 20-10 shows an
 example declaration and use of a static variable with a string slice as a
@@ -506,19 +514,18 @@ src/main.rs
 static HELLO_WORLD: &str = "Hello, world!";
 
 fn main() {
-    println!("name is: {HELLO_WORLD}");
+    println!("value is: {HELLO_WORLD}");
 }
 ```
 
 Listing 20-10: Defining and using an immutable static variable
 
-Static variables are similar to constants, which we discussed in
-“Constants” in
-Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
-convention. Static variables can only store references with the `'static`
-lifetime, which means the Rust compiler can figure out the lifetime and we
-aren’t required to annotate it explicitly. Accessing an immutable static
-variable is safe.
+Static variables are similar to constants, which we discussed in the
+“Declaring Constants” section in Chapter 3. The
+names of static variables are in `SCREAMING_SNAKE_CASE` by convention. Static
+variables can only store references with the `'static` lifetime, which means
+the Rust compiler can figure out the lifetime and we aren’t required to
+annotate it explicitly. Accessing an immutable static variable is safe.
 
 A subtle difference between constants and immutable static variables is that
 values in a static variable have a fixed address in memory. Using the value
@@ -551,14 +558,14 @@ fn main() {
 }
 ```
 
-Listing 20-11: Reading from or writing to a mutable static variable is unsafe
+Listing 20-11: Reading from or writing to a mutable static variable is unsafe.
 
 As with regular variables, we specify mutability using the `mut` keyword. Any
 code that reads or writes from `COUNTER` must be within an `unsafe` block. The
 code in Listing 20-11 compiles and prints `COUNTER: 3` as we would expect
 because it’s single threaded. Having multiple threads access `COUNTER` would
 likely result in data races, so it is undefined behavior. Therefore, we need to
-mark the entire function as `unsafe`, and document the safety limitation, so
+mark the entire function as `unsafe` and document the safety limitation so that
 anyone calling the function knows what they are and are not allowed to do
 safely.
 
@@ -568,18 +575,21 @@ function safely. Likewise, whenever we perform an unsafe operation, it is
 idiomatic to write a comment starting with `SAFETY` to explain how the safety
 rules are upheld.
 
-Additionally, the compiler will not allow you to create references to a mutable
-static variable. You can only access it via a raw pointer, created with one of
-the raw borrow operators. That includes in cases where the reference is created
-invisibly, as when it is used in the `println!` in this code listing. The
-requirement that references to static mutable variables can only be created via
-raw pointers helps make the safety requirements for using them more obvious.
+Additionally, the compiler will deny by default any attempt to create
+references to a mutable static variable through a compiler lint. You must
+either explicitly opt out of that lint’s protections by adding an
+`#[allow(static_mut_refs)]` annotation or access the mutable static variable
+via a raw pointer created with one of the raw borrow operators. That includes
+cases where the reference is created invisibly, as when it is used in the
+`println!` in this code listing. Requiring references to static mutable
+variables to be created via raw pointers helps make the safety requirements for
+using them more obvious.
 
-With mutable data that is globally accessible, it’s difficult to ensure there
-are no data races, which is why Rust considers mutable static variables to be
-unsafe. Where possible, it’s preferable to use the concurrency techniques and
-thread-safe smart pointers we discussed in Chapter 16 so the compiler checks
-that data accessed from different threads is done safely.
+With mutable data that is globally accessible, it’s difficult to ensure that
+there are no data races, which is why Rust considers mutable static variables
+to be unsafe. Where possible, it’s preferable to use the concurrency techniques
+and thread-safe smart pointers we discussed in Chapter 16 so that the compiler
+checks that data access from different threads is done safely.
 
 ### Implementing an Unsafe Trait
 
@@ -598,8 +608,6 @@ unsafe trait Foo {
 unsafe impl Foo for i32 {
     // method implementations go here
 }
-
-fn main() {}
 ```
 
 Listing 20-12: Defining and implementing an unsafe trait
@@ -607,100 +615,133 @@ Listing 20-12: Defining and implementing an unsafe trait
 By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
 the compiler can’t verify.
 
-As an example, recall the `Sync` and `Send` marker traits we discussed in
-“Extensible Concurrency with the `Sync` and `Send`
-Traits” in
-Chapter 16: the compiler implements these traits automatically if our types are
-composed entirely of `Send` and `Sync` types. If we implement a type that
-contains a type that is not `Send` or `Sync`, such as raw pointers, and we want
-to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify
-that our type upholds the guarantees that it can be safely sent across threads
-or accessed from multiple threads; therefore, we need to do those checks
-manually and indicate as such with `unsafe`.
+As an example, recall the `Send` and `Sync` marker traits we discussed in the
+“Extensible Concurrency with `Send` and `Sync`”
+section in Chapter 16: The compiler implements these traits automatically if
+our types are composed entirely of other types that implement `Send` and
+`Sync`. If we implement a type that contains a type that does not implement
+`Send` or `Sync`, such as raw pointers, and we want to mark that type as `Send`
+or `Sync`, we must use `unsafe`. Rust can’t verify that our type upholds the
+guarantees that it can be safely sent across threads or accessed from multiple
+threads; therefore, we need to do those checks manually and indicate as such
+with `unsafe`.
 
 ### Accessing Fields of a Union
 
-The final action that works only with `unsafe` is accessing fields of a
-*union*. A `union` is similar to a `struct`, but only one declared field is
-used in a particular instance at one time. Unions are primarily used to
-interface with unions in C code. Accessing union fields is unsafe because Rust
-can’t guarantee the type of the data currently being stored in the union
-instance. You can learn more about unions in the Rust Reference at *../reference/items/unions.html*.
+The final action that works only with `unsafe` is accessing fields of a union.
+A *union* is similar to a `struct`, but only one declared field is used in a
+particular instance at one time. Unions are primarily used to interface with
+unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
+the type of the data currently being stored in the union instance. You can
+learn more about unions in the Rust Reference at *../reference/items/unions.html*.
 
-### Using Miri to check unsafe code
+### Using Miri to Check Unsafe Code
 
 When writing unsafe code, you might want to check that what you have written
-actually is safe and correct. One of the best ways to do that is to use
-Miri at *https://github.com/rust-lang/miri*, an official Rust tool for detecting undefined behavior. Whereas
-the borrow checker is a *static* tool which works at compile time, Miri is a
-*dynamic* tool which works at runtime. It checks your code by running your
-program, or its test suite, and detecting when you violate the rules it
-understands about how Rust should work.
+actually is safe and correct. One of the best ways to do that is to use Miri,
+an official Rust tool for detecting undefined behavior. Whereas the borrow
+checker is a *static* tool that works at compile time, Miri is a *dynamic*
+tool that works at runtime. It checks your code by running your program, or
+its test suite, and detecting when you violate the rules it understands about
+how Rust should work.
 
 Using Miri requires a nightly build of Rust (which we talk about more in
-Appendix G: How Rust is Made and “Nightly Rust” at *appendix-07-nightly-rust.html*). You can install
-both a nightly version of Rust and the Miri tool by typing `rustup +nightly component add miri`. This does not change what version of Rust your project
-uses; it only adds the tool to your system so you can use it when you want to.
-You can run Miri on a project by typing `cargo +nightly miri run` or `cargo +nightly miri test`.
+Appendix G: How Rust is Made and “Nightly Rust”). You
+can install both a nightly version of Rust and the Miri tool by typing `rustup +nightly component add miri`. This does not change what version of Rust your
+project uses; it only adds the tool to your system so you can use it when you
+want to. You can run Miri on a project by typing `cargo +nightly miri run` or
+`cargo +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-11:
+against Listing 20-7.
 
 ```
 $ cargo +nightly miri run
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
-     Running `/Users/chris/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo-miri runner target/miri/aarch64-apple-darwin/debug/unsafe-example`
-warning: creating a shared reference to mutable static is discouraged
-  --> src/main.rs:14:33
-   |
-14 |         println!("COUNTER: {}", COUNTER);
-   |                                 ^^^^^^^ shared reference to mutable static
-   |
-   = note: for more information, see <https://doc.rust-lang.org/nightly/edition-guide/rust-2024/static-mut-references.html>
-   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
-   = note: `#[warn(static_mut_refs)]` on by default
+     Running `file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/unsafe-example`
+warning: integer-to-pointer cast
+ --> src/main.rs:5:13
+  |
+5 |     let r = address as *mut i32;
+  |             ^^^^^^^^^^^^^^^^^^^ integer-to-pointer cast
+  |
+  = help: this program is using integer-to-pointer casts or (equivalently) `ptr::with_exposed_provenance`, which means that Miri might miss pointer bugs in this program
+  = help: see https://doc.rust-lang.org/nightly/std/ptr/fn.with_exposed_provenance.html for more details on that operation
+  = help: to ensure that Miri does not miss bugs in your program, use Strict Provenance APIs (https://doc.rust-lang.org/nightly/std/ptr/index.html#strict-provenance, https://crates.io/crates/sptr) instead
+  = help: you can then set `MIRIFLAGS=-Zmiri-strict-provenance` to ensure you are not relying on `with_exposed_provenance` semantics
+  = help: alternatively, `MIRIFLAGS=-Zmiri-permissive-provenance` disables this warning
+  = note: BACKTRACE:
+  = note: inside `main` at src/main.rs:5:13: 5:32
 
-COUNTER: 3
+error: Undefined Behavior: pointer not dereferenceable: pointer must be dereferenceable for 40000 bytes, but got 0x1234[noalloc] which is a dangling pointer (it has no provenance)
+ --> src/main.rs:7:35
+  |
+7 |     let values: &[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Undefined Behavior occurred here
+  |
+  = help: this indicates a bug in the program: it performed an invalid operation, and caused Undefined Behavior
+  = help: see https://doc.rust-lang.org/nightly/reference/behavior-considered-undefined.html for further information
+  = note: BACKTRACE:
+  = note: inside `main` at src/main.rs:7:35: 7:70
+
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
+
+error: aborting due to 1 previous error; 1 warning emitted
+
 ```
 
-It helpfully and correctly notices that we have shared references to mutable
-data, and warns about it. In this case, it does not tell us how to fix the
-problem, but it means that we know there is a possible issue and can think about
-how to make sure it is safe. In other cases, it can actually tell us that some
-code is *sure* to be wrong and make recommendations about how to fix it.
+Miri correctly warns us that we’re casting an integer to a pointer, which might
+be a problem, but Miri can’t determine whether a problem exists because it
+doesn’t know how the pointer originated. Then, Miri returns an error where
+Listing 20-7 has undefined behavior because we have a dangling pointer. Thanks
+to Miri, we now know there is a risk of undefined behavior, and we can think
+about how to make the code safe. In some cases, Miri can even make
+recommendations about how to fix errors.
 
-Miri doesn’t catch *everything* you might get wrong when writing unsafe code.
-For one thing, since it is a dynamic check, it only catches problems with code
-that actually gets run. That means you will need to use it in conjunction with
-good testing techniques to increase your confidence about the unsafe code you
-have written. For another thing, it does not cover every possible way your code
-can be unsound. If Miri *does* catch a problem, you know there’s a bug, but just
-because Miri *doesn’t* catch a bug doesn’t mean there isn’t a problem. Miri can
-catch a lot, though. Try running it on the other examples of unsafe code in this
-chapter and see what it says!
+Miri doesn’t catch everything you might get wrong when writing unsafe code.
+Miri is a dynamic analysis tool, so it only catches problems with code that
+actually gets run. That means you will need to use it in conjunction with good
+testing techniques to increase your confidence about the unsafe code you have
+written. Miri also does not cover every possible way your code can be unsound.
 
-### When to Use Unsafe Code
+Put another way: If Miri *does* catch a problem, you know there’s a bug, but
+just because Miri *doesn’t* catch a bug doesn’t mean there isn’t a problem. It
+can catch a lot, though. Try running it on the other examples of unsafe code in
+this chapter and see what it says!
 
-Using `unsafe` to take one of the five actions (superpowers) just discussed
-isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
-correct because the compiler can’t help uphold memory safety. When you have a
-reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
-annotation makes it easier to track down the source of problems when they occur.
-Whenever you write unsafe code, you can use Miri to help you be more confident
-that the code you have written upholds Rust’s rules.
+You can learn more about Miri at its GitHub repository at *https://github.com/rust-lang/miri*.
+
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="when-to-use-unsafe-code"></a>
+
+### Using Unsafe Code Correctly
+
+Using `unsafe` to use one of the five superpowers just discussed isn’t wrong or
+even frowned upon, but it is trickier to get `unsafe` code correct because the
+compiler can’t help uphold memory safety. When you have a reason to use
+`unsafe` code, you can do so, and having the explicit `unsafe` annotation makes
+it easier to track down the source of problems when they occur. Whenever you
+write unsafe code, you can use Miri to help you be more confident that the code
+you have written upholds Rust’s rules.
 
 For a much deeper exploration of how to work effectively with unsafe Rust, read
-Rust’s official guide to the subject, the Rustonomicon at *https://doc.rust-lang.org/nomicon/*.
+Rust’s official guide for `unsafe`, The Rustonomicon at *https://doc.rust-lang.org/nomicon/*.
 
 ## Advanced Traits
 
-We first covered traits in “Traits: Defining Shared
-Behavior” in Chapter 10, but we
-didn’t discuss the more advanced details. Now that you know more about Rust, we
-can get into the nitty-gritty.
+We first covered traits in the “Defining Shared Behavior with
+Traits” section in Chapter 10, but we didn’t discuss
+the more advanced details. Now that you know more about Rust, we can get into
+the nitty-gritty.
 
-### Specifying Placeholder Types in Trait Definitions with Associated Types
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
+<a id="associated-types"></a>
+
+### Defining Traits with Associated Types
 
 *Associated types* connect a type placeholder with a trait such that the trait
 method definitions can use these placeholder types in their signatures. The
@@ -710,7 +751,7 @@ trait that uses some types without needing to know exactly what those types are
 until the trait is implemented.
 
 We’ve described most of the advanced features in this chapter as being rarely
-needed. Associated types are somewhere in the middle: they’re used more rarely
+needed. Associated types are somewhere in the middle: They’re used more rarely
 than features explained in the rest of the book but more commonly than many of
 the other features discussed in this chapter.
 
@@ -754,7 +795,7 @@ impl Iterator for Counter {
 
 
 
-This syntax seems comparable to that of generics. So why not just define the
+This syntax seems comparable to that of generics. So, why not just define the
 `Iterator` trait with generics, as shown in Listing 20-14?
 
 
@@ -775,19 +816,23 @@ the concrete types of the generic type parameters each time. When we use the
 `next` method on `Counter`, we would have to provide type annotations to
 indicate which implementation of `Iterator` we want to use.
 
-With associated types, we don’t need to annotate types because we can’t
+With associated types, we don’t need to annotate types, because we can’t
 implement a trait on a type multiple times. In Listing 20-13 with the
-definition that uses associated types, we can only choose what the type of
-`Item` will be once, because there can only be one `impl Iterator for Counter`.
-We don’t have to specify that we want an iterator of `u32` values everywhere
-that we call `next` on `Counter`.
+definition that uses associated types, we can choose what the type of `Item`
+will be only once because there can be only one `impl Iterator for Counter`. We
+don’t have to specify that we want an iterator of `u32` values everywhere we
+call `next` on `Counter`.
 
-Associated types also become part of the trait’s contract: implementors of the
+Associated types also become part of the trait’s contract: Implementors of the
 trait must provide a type to stand in for the associated type placeholder.
 Associated types often have a name that describes how the type will be used,
-and documenting the associated type in the API documentation is good practice.
+and documenting the associated type in the API documentation is a good practice.
 
-### Default Generic Type Parameters and Operator Overloading
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="default-generic-type-parameters-and-operator-overloading"></a>
+
+### Using Default Generic Parameters and Operator Overloading
 
 When we use generic type parameters, we can specify a default concrete type for
 the generic type. This eliminates the need for implementors of the trait to
@@ -801,9 +846,9 @@ in particular situations.
 Rust doesn’t allow you to create your own operators or overload arbitrary
 operators. But you can overload the operations and corresponding traits listed
 in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 20-15 we overload the `+` operator to add two `Point`
+example, in Listing 20-15, we overload the `+` operator to add two `Point`
 instances together. We do this by implementing the `Add` trait on a `Point`
-struct:
+struct.
 
 src/main.rs
 
@@ -854,8 +899,8 @@ trait Add<Rhs=Self> {
 ```
 
 This code should look generally familiar: a trait with one method and an
-associated type. The new part is `Rhs=Self`: this syntax is called *default
-type parameters*. The `Rhs` generic type parameter (short for “right hand
+associated type. The new part is `Rhs=Self`: This syntax is called *default
+type parameters*. The `Rhs` generic type parameter (short for “right-hand
 side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
 specify a concrete type for `Rhs` when we implement the `Add` trait, the type
 of `Rhs` will default to `Self`, which will be the type we’re implementing
@@ -868,10 +913,11 @@ default.
 
 We have two structs, `Millimeters` and `Meters`, holding values in different
 units. This thin wrapping of an existing type in another struct is known as the
-*newtype pattern*, which we describe in more detail in the “Using the Newtype
-Pattern to Implement External Traits on External Types” section. We want to add values in millimeters to values in meters and have
-the implementation of `Add` do the conversion correctly. We can implement `Add`
-for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
+*newtype pattern*, which we describe in more detail in the “Implementing
+External Traits with the Newtype Pattern” section. We
+want to add values in millimeters to values in meters and have the
+implementation of `Add` do the conversion correctly. We can implement `Add` for
+`Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
 
 src/lib.rs
 
@@ -890,7 +936,7 @@ impl Add<Meters> for Millimeters {
 }
 ```
 
-Listing 20-16: Implementing the `Add` trait on `Millimeters` to add `Millimeters` to `Meters`
+Listing 20-16: Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`
 
 To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
 value of the `Rhs` type parameter instead of using the default of `Self`.
@@ -901,18 +947,23 @@ You’ll use default type parameters in two main ways:
 1. To allow customization in specific cases most users won’t need
 
 The standard library’s `Add` trait is an example of the second purpose:
-usually, you’ll add two like types, but the `Add` trait provides the ability to
+Usually, you’ll add two like types, but the `Add` trait provides the ability to
 customize beyond that. Using a default type parameter in the `Add` trait
 definition means you don’t have to specify the extra parameter most of the
 time. In other words, a bit of implementation boilerplate isn’t needed, making
 it easier to use the trait.
 
-The first purpose is similar to the second but in reverse: if you want to add a
+The first purpose is similar to the second but in reverse: If you want to add a
 type parameter to an existing trait, you can give it a default to allow
 extension of the functionality of the trait without breaking the existing
 implementation code.
 
-### Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
+<a id="disambiguating-between-methods-with-the-same-name"></a>
+
+### Disambiguating Between Identically Named Methods
 
 Nothing in Rust prevents a trait from having a method with the same name as
 another trait’s method, nor does Rust prevent you from implementing both traits
@@ -957,7 +1008,7 @@ impl Human {
 }
 ```
 
-Listing 20-17: Two traits are defined to have a ` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly
+Listing 20-17: Two traits are defined to have a `fly` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
 the method that is directly implemented on the type, as shown in Listing 20-18.
@@ -1018,11 +1069,11 @@ trait to use based on the type of `self`.
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn’t always know which type you
-mean unless you use *fully qualified syntax*. For example, in Listing 20-20 we
-create a trait for an animal shelter that wants to name all baby dogs *Spot*.
-We make an `Animal` trait with an associated non-method function `baby_name`.
-The `Animal` trait is implemented for the struct `Dog`, on which we also
-provide an associated non-method function `baby_name` directly.
+mean unless you use fully qualified syntax. For example, in Listing 20-20, we
+create a trait for an animal shelter that wants to name all baby dogs Spot. We
+make an `Animal` trait with an associated non-method function `baby_name`. The
+`Animal` trait is implemented for the struct `Dog`, on which we also provide an
+associated non-method function `baby_name` directly.
 
 src/main.rs
 
@@ -1070,10 +1121,10 @@ A baby dog is called a Spot
 ```
 
 This output isn’t what we wanted. We want to call the `baby_name` function that
-is part of the `Animal` trait that we implemented on `Dog` so the code prints
-`A baby dog is called a puppy`. The technique of specifying the trait name that
-we used in Listing 20-19 doesn’t help here; if we change `main` to the code in
-Listing 20-21, we’ll get a compilation error.
+is part of the `Animal` trait that we implemented on `Dog` so that the code
+prints `A baby dog is called a puppy`. The technique of specifying the trait
+name that we used in Listing 20-19 doesn’t help here; if we change `main` to
+the code in Listing 20-21, we’ll get a compilation error.
 
 src/main.rs
 
@@ -1145,17 +1196,21 @@ In general, fully qualified syntax is defined as follows:
 ```
 
 For associated functions that aren’t methods, there would not be a `receiver`:
-there would only be the list of other arguments. You could use fully qualified
+There would only be the list of other arguments. You could use fully qualified
 syntax everywhere that you call functions or methods. However, you’re allowed
 to omit any part of this syntax that Rust can figure out from other information
 in the program. You only need to use this more verbose syntax in cases where
 there are multiple implementations that use the same name and Rust needs help
 to identify which implementation you want to call.
 
-### Using Supertraits to Require One Trait’s Functionality Within Another Trait
+<!-- Old headings. Do not remove or links may break. -->
 
-Sometimes, you might write a trait definition that depends on another trait:
-for a type to implement the first trait, you want to require that type to also
+<a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
+
+### Using Supertraits
+
+Sometimes you might write a trait definition that depends on another trait: For
+a type to implement the first trait, you want to require that type to also
 implement the second trait. You would do this so that your trait definition can
 make use of the associated items of the second trait. The trait your trait
 definition is relying on is called a *supertrait* of your trait.
@@ -1282,28 +1337,33 @@ impl fmt::Display for Point {
 
 
 
-Then implementing the `OutlinePrint` trait on `Point` will compile
+Then, implementing the `OutlinePrint` trait on `Point` will compile
 successfully, and we can call `outline_print` on a `Point` instance to display
 it within an outline of asterisks.
 
-### Using the Newtype Pattern to Implement External Traits on External Types
+<!-- Old headings. Do not remove or links may break. -->
 
-In “Implementing a Trait on a Type” in Chapter 10, we mentioned the orphan rule that states we’re only allowed
-to implement a trait on a type if either the trait or the type are local to our
-crate. It’s possible to get around this restriction using the *newtype pattern*,
-which involves creating a new type in a tuple struct. (We covered tuple structs
-in “Using Tuple Structs without Named Fields to Create Different
-Types” in Chapter 5.) The tuple struct will have
-one field and be a thin wrapper around the type we want to implement a trait
-for. Then the wrapper type is local to our crate, and we can implement the trait
-on the wrapper. *Newtype* is a term that originates from the Haskell programming
-language. There is no runtime performance penalty for using this pattern, and
-the wrapper type is elided at compile time.
+<a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
+<a id="using-the-newtype-pattern-to-implement-external-traits"></a>
+
+### Implementing External Traits with the Newtype Pattern
+
+In the “Implementing a Trait on a Type” section in Chapter 10, we mentioned the orphan rule that states
+we’re only allowed to implement a trait on a type if either the trait or the
+type, or both, are local to our crate. It’s possible to get around this
+restriction using the newtype pattern, which involves creating a new type in a
+tuple struct. (We covered tuple structs in the “Creating Different Types with
+Tuple Structs” section in Chapter 5.) The tuple
+struct will have one field and be a thin wrapper around the type for which we
+want to implement a trait. Then, the wrapper type is local to our crate, and we
+can implement the trait on the wrapper. *Newtype* is a term that originates
+from the Haskell programming language. There is no runtime performance penalty
+for using this pattern, and the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
 `Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
-that holds an instance of `Vec<T>`; then we can implement `Display` on
+that holds an instance of `Vec<T>`; then, we can implement `Display` on
 `Wrapper` and use the `Vec<T>` value, as shown in Listing 20-24.
 
 src/main.rs
@@ -1327,21 +1387,21 @@ fn main() {
 
 Listing 20-24: Creating a `Wrapper` type around `Vec<String>` to implement `Display`
 
-The implementation of `Display` uses `self.0` to access the inner `Vec<T>`,
+The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
 because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
-tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
+tuple. Then, we can use the functionality of the `Display` trait on `Wrapper`.
 
 The downside of using this technique is that `Wrapper` is a new type, so it
 doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec<T>` directly on `Wrapper` such that the methods delegate
-to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec<T>`. If
-we wanted the new type to have every method the inner type has, implementing the
-`Deref` trait (discussed in “Treating Smart Pointers Like Regular References
-with the `Deref` Trait” in Chapter 15) on
-the `Wrapper` to return the inner type would be a solution. If we don’t want the
-`Wrapper` type to have all the methods of the inner type—for example, to
-restrict the `Wrapper` type’s behavior—we would have to implement just the
-methods we do want manually.
+all the methods of `Vec<T>` directly on `Wrapper` such that the methods
+delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
+`Vec<T>`. If we wanted the new type to have every method the inner type has,
+implementing the `Deref` trait on the `Wrapper` to return the inner type would
+be a solution (we discussed implementing the `Deref` trait in the “Treating
+Smart Pointers Like Regular References”
+section in Chapter 15). If we didn’t want the `Wrapper` type to have all the
+methods of the inner type—for example, to restrict the `Wrapper` type’s
+behavior—we would have to implement just the methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.
@@ -1350,23 +1410,28 @@ switch focus and look at some advanced ways to interact with Rust’s type syste
 
 The Rust type system has some features that we’ve so far mentioned but haven’t
 yet discussed. We’ll start by discussing newtypes in general as we examine why
-newtypes are useful as types. Then we’ll move on to type aliases, a feature
+they are useful as types. Then, we’ll move on to type aliases, a feature
 similar to newtypes but with slightly different semantics. We’ll also discuss
 the `!` type and dynamically sized types.
 
-### Using the Newtype Pattern for Type Safety and Abstraction
+<!-- Old headings. Do not remove or links may break. -->
 
-This section assumes you’ve read the earlier section “Using the Newtype Pattern
-to Implement External Traits on External Types.” The newtype pattern is also useful for tasks beyond those we’ve
-discussed so far, including statically enforcing that values are never confused
-and indicating the units of a value. You saw an example of using newtypes to
-indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
-structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we couldn’t compile a program that accidentally
-tried to call that function with a value of type `Meters` or a plain `u32`.
+<a id="using-the-newtype-pattern-for-type-safety-and-abstraction"></a>
+
+### Type Safety and Abstraction with the Newtype Pattern
+
+This section assumes you’ve read the earlier section “Implementing External
+Traits with the Newtype Pattern”. The newtype pattern
+is also useful for tasks beyond those we’ve discussed so far, including
+statically enforcing that values are never confused and indicating the units of
+a value. You saw an example of using newtypes to indicate units in Listing
+20-16: Recall that the `Millimeters` and `Meters` structs wrapped `u32` values
+in a newtype. If we wrote a function with a parameter of type `Millimeters`, we
+wouldn’t be able to compile a program that accidentally tried to call that
+function with a value of type `Meters` or a plain `u32`.
 
 We can also use the newtype pattern to abstract away some implementation
-details of a type: the new type can expose a public API that is different from
+details of a type: The new type can expose a public API that is different from
 the API of the private inner type.
 
 Newtypes can also hide internal implementation. For example, we could provide a
@@ -1374,11 +1439,17 @@ Newtypes can also hide internal implementation. For example, we could provide a
 associated with their name. Code using `People` would only interact with the
 public API we provide, such as a method to add a name string to the `People`
 collection; that code wouldn’t need to know that we assign an `i32` ID to names
-internally. The newtype pattern is a lightweight way to achieve encapsulation to
-hide implementation details, which we discussed in “Encapsulation that Hides
-Implementation Details” in Chapter 18.
+internally. The newtype pattern is a lightweight way to achieve encapsulation
+to hide implementation details, which we discussed in the “Encapsulation that
+Hides Implementation
+Details”
+section in Chapter 18.
 
-### Creating Type Synonyms with Type Aliases
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="creating-type-synonyms-with-type-aliases"></a>
+
+### Type Synonyms and Type Aliases
 
 Rust provides the ability to declare a *type alias* to give an existing type
 another name. For this we use the `type` keyword. For example, we can create
@@ -1388,7 +1459,7 @@ the alias `Kilometers` to `i32` like so:
     type Kilometers = i32;
 ```
 
-Now, the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
+Now the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
 and `Meters` types we created in Listing 20-16, `Kilometers` is not a separate,
 new type. Values that have the type `Kilometers` will be treated the same as
 values of type `i32`:
@@ -1403,8 +1474,8 @@ values of type `i32`:
 ```
 
 Because `Kilometers` and `i32` are the same type, we can add values of both
-types and we can pass `Kilometers` values to functions that take `i32`
-parameters. However, using this method, we don’t get the type checking benefits
+types and can pass `Kilometers` values to functions that take `i32`
+parameters. However, using this method, we don’t get the type-checking benefits
 that we get from the newtype pattern discussed earlier. In other words, if we
 mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
 an error.
@@ -1417,7 +1488,7 @@ Box<dyn Fn() + Send + 'static>
 ```
 
 Writing this lengthy type in function signatures and as type annotations all
-over the code can be tiresome and error prone. Imagine having a project full of
+over the code can be tiresome and error-prone. Imagine having a project full of
 code like that in Listing 20-25.
 
 
@@ -1504,12 +1575,12 @@ pub trait Write {
 }
 ```
 
-The type alias helps in two ways: it makes code easier to write *and* it gives
+The type alias helps in two ways: It makes code easier to write *and* it gives
 us a consistent interface across all of `std::io`. Because it’s an alias, it’s
 just another `Result<T, E>`, which means we can use any methods that work on
 `Result<T, E>` with it, as well as special syntax like the `?` operator.
 
-### The Never Type that Never Returns
+### The Never Type That Never Returns
 
 Rust has a special type named `!` that’s known in type theory lingo as the
 *empty type* because it has no values. We prefer to call it the *never type*
@@ -1523,11 +1594,11 @@ fn bar() -> ! {
 ```
 
 This code is read as “the function `bar` returns never.” Functions that return
-never are called *diverging functions*. We can’t create values of the type `!`
+never are called *diverging functions*. We can’t create values of the type `!`,
 so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
-Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
+Listing 2-5, part of the number-guessing game; we’ve reproduced a bit of it
 here in Listing 20-27.
 
 
@@ -1540,10 +1611,10 @@ here in Listing 20-27.
 
 Listing 20-27: A `match` with an arm that ends in `continue`
 
-At the time, we skipped over some details in this code. In “The `match` Control
-Flow Operator” in Chapter 6, we
-discussed that `match` arms must all return the same type. So, for example, the
-following code doesn’t work:
+At the time, we skipped over some details in this code. In “The `match`
+Control Flow Construct”
+section in Chapter 6, we discussed that `match` arms must all return the same
+type. So, for example, the following code doesn’t work:
 
 ```
     let guess = match guess.trim().parse() {
@@ -1553,7 +1624,7 @@ following code doesn’t work:
 ```
 
 The type of `guess` in this code would have to be an integer *and* a string,
-and Rust requires that `guess` have only one type. So what does `continue`
+and Rust requires that `guess` have only one type. So, what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
 that ends with `continue` in Listing 20-27?
 
@@ -1589,7 +1660,7 @@ of the overall `match` expression is `T`. This code works because `panic!`
 doesn’t produce a value; it ends the program. In the `None` case, we won’t be
 returning a value from `unwrap`, so this code is valid.
 
-One final expression that has the type `!` is a `loop`:
+One final expression that has the type `!` is a loop:
 
 ```
     print!("forever ");
@@ -1613,9 +1684,10 @@ code using values whose size we can know only at runtime.
 
 Let’s dig into the details of a dynamically sized type called `str`, which
 we’ve been using throughout the book. That’s right, not `&str`, but `str` on
-its own, is a DST. We can’t know how long the string is until runtime, meaning
-we can’t create a variable of type `str`, nor can we take an argument of type
-`str`. Consider the following code, which does not work:
+its own, is a DST. In many cases, such as when storing text entered by a user,
+we can’t know how long the string is until runtime. That means we can’t create
+a variable of type `str`, nor can we take an argument of type `str`. Consider
+the following code, which does not work:
 
 ```
     let s1: str = "Hello there!";
@@ -1629,28 +1701,26 @@ same amount of space. But they have different lengths: `s1` needs 12 bytes of
 storage and `s2` needs 15. This is why it’s not possible to create a variable
 holding a dynamically sized type.
 
-So what do we do? In this case, you already know the answer: we make the types
-of `s1` and `s2` a `&str` rather than a `str`. Recall from “String
-Slices” in Chapter 4 that the slice data
-structure just stores the starting position and the length of the slice. So
-although a `&T` is a single value that stores the memory address of where the
-`T` is located, a `&str` is *two* values: the address of the `str` and its
-length. As such, we can know the size of a `&str` value at compile time: it’s
-twice the length of a `usize`. That is, we always know the size of a `&str`, no
-matter how long the string it refers to is. In general, this is the way in which
-dynamically sized types are used in Rust: they have an extra bit of metadata
-that stores the size of the dynamic information. The golden rule of dynamically
-sized types is that we must always put values of dynamically sized types behind
-a pointer of some kind.
+So, what do we do? In this case, you already know the answer: We make the type
+of `s1` and `s2` string slice (`&str`) rather than `str`. Recall from the
+“String Slices” section in Chapter 4 that the
+slice data structure only stores the starting position and the length of the
+slice. So, although `&T` is a single value that stores the memory address of
+where the `T` is located, a string slice is *two* values: the address of the
+`str` and its length. As such, we can know the size of a string slice value at
+compile time: It’s twice the length of a `usize`. That is, we always know the
+size of a string slice, no matter how long the string it refers to is. In
+general, this is the way in which dynamically sized types are used in Rust:
+They have an extra bit of metadata that stores the size of the dynamic
+information. The golden rule of dynamically sized types is that we must always
+put values of dynamically sized types behind a pointer of some kind.
 
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In “Using Trait Objects That Allow for Values of
-Different
-Types” in Chapter 18, we mentioned that to use traits as trait objects, we must put
-them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>`
-would work too).
+using the name of the trait. In the “Using Trait Objects to Abstract over
+Shared Behavior” section in Chapter 18, we mentioned that to use traits as trait
+objects, we must put them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>` would work too).
 
 To work with DSTs, Rust provides the `Sized` trait to determine whether or not
 a type’s size is known at compile time. This trait is automatically implemented
@@ -1682,7 +1752,7 @@ fn generic<T: ?Sized>(t: &T) {
 }
 ```
 
-A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this
+A trait bound on `?Sized` means “`T` may or may not be `Sized`,” and this
 notation overrides the default that generic types must have a known size at
 compile time. The `?Trait` syntax with this meaning is only available for
 `Sized`, not any other traits.
@@ -1703,14 +1773,14 @@ including function pointers and returning closures.
 We’ve talked about how to pass closures to functions; you can also pass regular
 functions to functions! This technique is useful when you want to pass a
 function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
-closure trait. The `fn` type is called a *function pointer*. Passing functions
-with function pointers will allow you to use functions as arguments to other
-functions.
+coerce to the type `fn` (with a lowercase *f*), not to be confused with the
+`Fn` closure trait. The `fn` type is called a *function pointer*. Passing
+functions with function pointers will allow you to use functions as arguments
+to other functions.
 
 The syntax for specifying that a parameter is a function pointer is similar to
 that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds one to its parameter. The function `do_twice` takes two
+`add_one` that adds 1 to its parameter. The function `do_twice` takes two
 parameters: a function pointer to any function that takes an `i32` parameter
 and returns an `i32`, and one `i32` value. The `do_twice` function calls the
 function `f` twice, passing it the `arg` value, then adds the two function call
@@ -1749,7 +1819,7 @@ of the `Fn` traits as a trait bound.
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
 `FnOnce`), meaning you can always pass a function pointer as an argument for a
 function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
+type and one of the closure traits so that your functions can accept either
 functions or closures.
 
 That said, one example of where you would want to only accept `fn` and not
@@ -1758,8 +1828,9 @@ functions can accept functions as arguments, but C doesn’t have closures.
 
 As an example of where you could use either a closure defined inline or a named
 function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` function to turn a vector of
-numbers into a vector of strings, we could use a closure, like this:
+trait in the standard library. To use the `map` method to turn a vector of
+numbers into a vector of strings, we could use a closure, as in Listing 20-29.
+
 
 ```
     let list_of_numbers = vec![1, 2, 3];
@@ -1767,8 +1838,11 @@ numbers into a vector of strings, we could use a closure, like this:
         list_of_numbers.iter().map(|i| i.to_string()).collect();
 ```
 
-Or we could name a function as the argument to `map` instead of the closure,
-like this:
+Listing 20-29: Using a closure with the `map` method to convert numbers to strings
+
+Or we could name a function as the argument to `map` instead of the closure.
+Listing 20-30 shows what this would look like.
+
 
 ```
     let list_of_numbers = vec![1, 2, 3];
@@ -1776,17 +1850,22 @@ like this:
         list_of_numbers.iter().map(ToString::to_string).collect();
 ```
 
-Note that we must use the fully qualified syntax that we talked about in
-“Advanced Traits” because there are multiple
-functions available named `to_string`. Here, we’re using the `to_string`
-function defined in the `ToString` trait, which the standard library has
-implemented for any type that implements `Display`.
+Listing 20-30: Using the `String::to_string` function with the `map` method to convert numbers to strings
 
-Recall from “Enum values” in Chapter 6 that the
-name of each enum variant that we define also becomes an initializer function.
-We can use these initializer functions as function pointers that implement the
-closure traits, which means we can specify the initializer functions as
-arguments for methods that take closures, like so:
+Note that we must use the fully qualified syntax that we talked about in the
+“Advanced Traits” section because there are
+multiple functions available named `to_string`.
+
+Here, we’re using the `to_string` function defined in the `ToString` trait,
+which the standard library has implemented for any type that implements
+`Display`.
+
+Recall from the “Enum Values” section in Chapter
+6 that the name of each enum variant that we define also becomes an initializer
+function. We can use these initializer functions as function pointers that
+implement the closure traits, which means we can specify the initializer
+functions as arguments for methods that take closures, as seen in Listing 20-31.
+
 
 ```
     enum Status {
@@ -1797,9 +1876,11 @@ arguments for methods that take closures, like so:
     let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
 ```
 
-Here we create `Status::Value` instances using each `u32` value in the range
+Listing 20-31: Using an enum initializer with the `map` method to create a `Status` instance from numbers
+
+Here, we create `Status::Value` instances using each `u32` value in the range
 that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style, and some people prefer to use closures. They
+Some people prefer this style and some people prefer to use closures. They
 compile to the same code, so use whichever style is clearer to you.
 
 ### Returning Closures
@@ -1807,13 +1888,15 @@ compile to the same code, so use whichever style is clearer to you.
 Closures are represented by traits, which means you can’t return closures
 directly. In most cases where you might want to return a trait, you can instead
 use the concrete type that implements the trait as the return value of the
-function. However, you can’t do that with closures because they don’t have a
-concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+function. However, you can’t usually do that with closures because they don’t
+have a concrete type that is returnable; you’re not allowed to use the function
+pointer `fn` as a return type if the closure captures any values from its
+scope, for example.
 
 Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
-For example, this code will work just fine:
+Chapter 10. You can return any function type, using `Fn`, `FnOnce`, and `FnMut`.
+For example, the code in Listing 20-32 will compile just fine.
+
 
 ```
 fn returns_closure() -> impl Fn(i32) -> i32 {
@@ -1821,11 +1904,16 @@ fn returns_closure() -> impl Fn(i32) -> i32 {
 }
 ```
 
-However, as we noted in the “Closure Type Inference and
-Annotation” section in Chapter 13, each closure
-is also its own distinct type. If you need to work with multiple functions that
+Listing 20-32: Returning a closure from a function using the `impl Trait` syntax
+
+However, as we noted in the “Inferring and Annotating Closure
+Types” section in Chapter 13, each closure is
+also its own distinct type. If you need to work with multiple functions that
 have the same signature but different implementations, you will need to use a
-trait object for them:
+trait object for them. Consider what happens if you write code like that shown
+in Listing 20-33.
+
+src/main.rs
 
 ```
 fn main() {
@@ -1836,6 +1924,58 @@ fn main() {
     }
 }
 
+fn returns_closure() -> impl Fn(i32) -> i32 {
+    |x| x + 1
+}
+
+fn returns_initialized_closure(init: i32) -> impl Fn(i32) -> i32 {
+    move |x| x + init
+}
+```
+
+Listing 20-33: Creating a `Vec<T>` of closures defined by functions that return `impl Fn` types
+
+Here we have two functions, `returns_closure` and `returns_initialized_closure`,
+which both return `impl Fn(i32) -> i32`. Notice that the closures that they
+return are different, even though they implement the same type. If we try to
+compile this, Rust lets us know that it won’t work:
+
+```
+$ cargo build
+   Compiling functions-example v0.1.0 (file:///projects/functions-example)
+error[E0308]: mismatched types
+  --> src/main.rs:2:44
+   |
+2  |     let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected opaque type, found a different opaque type
+...
+9  | fn returns_closure() -> impl Fn(i32) -> i32 {
+   |                         ------------------- the expected opaque type
+...
+13 | fn returns_initialized_closure(init: i32) -> impl Fn(i32) -> i32 {
+   |                                              ------------------- the found opaque type
+   |
+   = note: expected opaque type `impl Fn(i32) -> i32` (opaque type at <src/main.rs:9:25>)
+              found opaque type `impl Fn(i32) -> i32` (opaque type at <src/main.rs:13:46>)
+   = note: distinct uses of `impl Trait` result in different opaque types
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `functions-example` (bin "functions-example") due to 1 previous error
+```
+
+The error message tells us that whenever we return an `impl Trait`, Rust
+creates a unique *opaque type*, a type where we cannot see into the details of
+what Rust constructs for us, nor can we guess the type Rust will generate to
+write ourselves. So, even though these functions return closures that implement
+the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for each are
+distinct. (This is similar to how Rust produces different concrete types for
+distinct async blocks even when they have the same output type, as we saw in
+“The `Pin` Type and the `Unpin` Trait” in
+Chapter 17.) We have seen a solution to this problem a few times now: We can
+use a trait object, as in Listing 20-34.
+
+
+```
 fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
     Box::new(|x| x + 1)
 }
@@ -1845,10 +1985,11 @@ fn returns_initialized_closure(init: i32) -> Box<dyn Fn(i32) -> i32> {
 }
 ```
 
-This code will compile just fine—but it wouldn’t if we had tried to stick with
-`impl Fn(i32) -> i32`. For more about trait objects, refer to the section
-“Using Trait Objects That Allow for Values of Different
-Types” in Chapter 18.
+Listing 20-34: Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so that they have the same type
+
+This code will compile just fine. For more about trait objects, refer to the
+section “Using Trait Objects To Abstract over Shared
+Behavior” in Chapter 18.
 
 Next, let’s look at macros!
 
@@ -1856,8 +1997,8 @@ Next, let’s look at macros!
 
 We’ve used macros like `println!` throughout this book, but we haven’t fully
 explored what a macro is and how it works. The term *macro* refers to a family
-of features in Rust: *declarative* macros with `macro_rules!` and three kinds
-of *procedural* macros:
+of features in Rust—declarative macros with `macro_rules!` and three kinds of
+procedural macros:
 
 * Custom `#[derive]` macros that specify code added with the `derive` attribute
   used on structs and enums
@@ -1878,11 +2019,11 @@ macros *expand* to produce more code than the code you’ve written manually.
 
 Metaprogramming is useful for reducing the amount of code you have to write and
 maintain, which is also one of the roles of functions. However, macros have
-some additional powers that functions don’t.
+some additional powers that functions don’t have.
 
 A function signature must declare the number and type of parameters the
 function has. Macros, on the other hand, can take a variable number of
-parameters: we can call `println!("hello")` with one argument or
+parameters: We can call `println!("hello")` with one argument or
 `println!("hello {}", name)` with two arguments. Also, macros are expanded
 before the compiler interprets the meaning of the code, so a macro can, for
 example, implement a trait on a given type. A function can’t, because it gets
@@ -1898,16 +2039,20 @@ Another important difference between macros and functions is that you must
 define macros or bring them into scope *before* you call them in a file, as
 opposed to functions you can define anywhere and call anywhere.
 
-### Declarative Macros with macro_rules! for General Metaprogramming
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="declarative-macros-with-macro_rules-for-general-metaprogramming"></a>
+
+### Declarative Macros for General Metaprogramming
 
 The most widely used form of macros in Rust is the *declarative macro*. These
 are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
 or just plain “macros.” At their core, declarative macros allow you to write
 something similar to a Rust `match` expression. As discussed in Chapter 6,
 `match` expressions are control structures that take an expression, compare the
-resulting value of the expression to patterns, and then run the code associated
+resultant value of the expression to patterns, and then run the code associated
 with the matching pattern. Macros also compare a value to patterns that are
-associated with particular code: in this situation, the value is the literal
+associated with particular code: In this situation, the value is the literal
 Rust source code passed to the macro; the patterns are compared with the
 structure of that source code; and the code associated with each pattern, when
 matched, replaces the code passed to the macro. This all happens during
@@ -1927,7 +2072,7 @@ We could also use the `vec!` macro to make a vector of two integers or a vector
 of five string slices. We wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
-Listing 20-29 shows a slightly simplified definition of the `vec!` macro.
+Listing 20-35 shows a slightly simplified definition of the `vec!` macro.
 
 src/lib.rs
 
@@ -1946,11 +2091,11 @@ macro_rules! vec {
 }
 ```
 
-Listing 20-29: A simplified version of the `vec!` macro definition
+Listing 20-35: A simplified version of the `vec!` macro definition
 
 > Note: The actual definition of the `vec!` macro in the standard library
-> includes code to preallocate the correct amount of memory up front. That code
-> is an optimization that we don’t include here to make the example simpler.
+> includes code to pre-allocate the correct amount of memory up front. That code
+> is an optimization that we don’t include here, to make the example simpler.
 
 The `#[macro_export]` annotation indicates that this macro should be made
 available whenever the crate in which the macro is defined is brought into
@@ -1968,7 +2113,7 @@ is the only pattern in this macro, there is only one valid way to match; any
 other pattern will result in an error. More complex macros will have more than
 one arm.
 
-Valid pattern syntax in macro definitions is different than the pattern syntax
+Valid pattern syntax in macro definitions is different from the pattern syntax
 covered in Chapter 19 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
 Listing 20-29 mean; for the full macro pattern syntax, see the Rust
@@ -1983,9 +2128,9 @@ for use in the replacement code. Within `$()` is `$x:expr`, which matches any
 Rust expression and gives the expression the name `$x`.
 
 The comma following `$()` indicates that a literal comma separator character
-must appear between each instance of the code that matches the code within
-`$()`. The `*` specifies that the pattern matches zero or more of whatever
-precedes the `*`.
+must appear between each instance of the code that matches the code in `$()`.
+The `*` specifies that the pattern matches zero or more of whatever precedes
+the `*`.
 
 When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
 times with the three expressions `1`, `2`, and `3`.
@@ -2016,54 +2161,58 @@ Daniel Keep and continued by Lukas Wirth.
 
 ### Procedural Macros for Generating Code from Attributes
 
-The second form of macros is the *procedural macro*, which acts more like a
-function (and is a type of procedure). Procedural macros accept some code as an
-input, operate on that code, and produce some code as an output rather than
+The second form of macros is the procedural macro, which acts more like a
+function (and is a type of procedure). *Procedural macros* accept some code as
+an input, operate on that code, and produce some code as an output rather than
 matching against patterns and replacing the code with other code as declarative
-macros do. The three kinds of procedural macros are custom derive,
+macros do. The three kinds of procedural macros are custom `derive`,
 attribute-like, and function-like, and all work in a similar fashion.
 
 When creating procedural macros, the definitions must reside in their own crate
 with a special crate type. This is for complex technical reasons that we hope
-to eliminate in the future. In Listing 20-30, we show how to define a
+to eliminate in the future. In Listing 20-36, we show how to define a
 procedural macro, where `some_attribute` is a placeholder for using a specific
 macro variety.
 
 src/lib.rs
 
 ```
-use proc_macro;
+use proc_macro::TokenStream;
 
 #[some_attribute]
 pub fn some_name(input: TokenStream) -> TokenStream {
 }
 ```
 
-Listing 20-30: An example of defining a procedural macro
+Listing 20-36: An example of defining a procedural macro
 
 The function that defines a procedural macro takes a `TokenStream` as an input
 and produces a `TokenStream` as an output. The `TokenStream` type is defined by
 the `proc_macro` crate that is included with Rust and represents a sequence of
-tokens. This is the core of the macro: the source code that the macro is
+tokens. This is the core of the macro: The source code that the macro is
 operating on makes up the input `TokenStream`, and the code the macro produces
 is the output `TokenStream`. The function also has an attribute attached to it
 that specifies which kind of procedural macro we’re creating. We can have
 multiple kinds of procedural macros in the same crate.
 
 Let’s look at the different kinds of procedural macros. We’ll start with a
-custom derive macro and then explain the small dissimilarities that make the
+custom `derive` macro and then explain the small dissimilarities that make the
 other forms different.
 
-### How to Write a Custom derive Macro
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="how-to-write-a-custom-derive-macro"></a>
+
+### Custom derive Macros
 
 Let’s create a crate named `hello_macro` that defines a trait named
 `HelloMacro` with one associated function named `hello_macro`. Rather than
 making our users implement the `HelloMacro` trait for each of their types,
-we’ll provide a procedural macro so users can annotate their type with
+we’ll provide a procedural macro so that users can annotate their type with
 `#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
 function. The default implementation will print `Hello, Macro! My name is TypeName!` where `TypeName` is the name of the type on which this trait has
 been defined. In other words, we’ll write a crate that enables another
-programmer to write code like Listing 20-31 using our crate.
+programmer to write code like Listing 20-37 using our crate.
 
 src/main.rs
 
@@ -2079,7 +2228,7 @@ fn main() {
 }
 ```
 
-Listing 20-31: The code a user of our crate will be able to write when using our procedural macro
+Listing 20-37: The code a user of our crate will be able to write when using our procedural macro
 
 This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
 first step is to make a new library crate, like this:
@@ -2088,7 +2237,8 @@ first step is to make a new library crate, like this:
 $ cargo new hello_macro --lib
 ```
 
-Next, we’ll define the `HelloMacro` trait and its associated function:
+Next, in Listing 20-38, we’ll define the `HelloMacro` trait and its associated
+function.
 
 src/lib.rs
 
@@ -2098,10 +2248,12 @@ pub trait HelloMacro {
 }
 ```
 
-
+Listing 20-38: A simple trait that we will use with the `derive` macro
 
 We have a trait and its function. At this point, our crate user could implement
-the trait to achieve the desired functionality, like so:
+the trait to achieve the desired functionality, as in Listing 20-39.
+
+src/main.rs
 
 ```
 use hello_macro::HelloMacro;
@@ -2119,6 +2271,8 @@ fn main() {
 }
 ```
 
+Listing 20-39: How it would look if users wrote a manual implementation of the `HelloMacro` trait
+
 However, they would need to write the implementation block for each type they
 wanted to use with `hello_macro`; we want to spare them from having to do this
 work.
@@ -2131,7 +2285,7 @@ name at runtime. We need a macro to generate code at compile time.
 The next step is to define the procedural macro. At the time of this writing,
 procedural macros need to be in their own crate. Eventually, this restriction
 might be lifted. The convention for structuring crates and macro crates is as
-follows: for a crate named `foo`, a custom derive procedural macro crate is
+follows: For a crate named `foo`, a custom `derive` procedural macro crate is
 called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
 our `hello_macro` project:
 
@@ -2168,7 +2322,7 @@ quote = "1.0"
 
 
 
-To start defining the procedural macro, place the code in Listing 20-32 into
+To start defining the procedural macro, place the code in Listing 20-40 into
 your *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code
 won’t compile until we add a definition for the `impl_hello_macro` function.
 
@@ -2189,26 +2343,27 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 }
 ```
 
-Listing 20-32: Code that most procedural macro crates will require in order to process Rust code
+Listing 20-40: Code that most procedural macro crates will require in order to process Rust code
 
 Notice that we’ve split the code into the `hello_macro_derive` function, which
 is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
-function, which is responsible for transforming the syntax tree: this makes
+function, which is responsible for transforming the syntax tree: This makes
 writing a procedural macro more convenient. The code in the outer function
 (`hello_macro_derive` in this case) will be the same for almost every
 procedural macro crate you see or create. The code you specify in the body of
 the inner function (`impl_hello_macro` in this case) will be different
 depending on your procedural macro’s purpose.
 
-We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
-`proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler’s API that
-allows us to read and manipulate Rust code from our code.
+We’ve introduced three new crates: `proc_macro`, `syn`,
+and `quote`. The `proc_macro` crate comes with Rust,
+so we didn’t need to add that to the dependencies in *Cargo.toml*. The
+`proc_macro` crate is the compiler’s API that allows us to read and manipulate
+Rust code from our code.
 
 The `syn` crate parses Rust code from a string into a data structure that we
 can perform operations on. The `quote` crate turns `syn` data structures back
 into Rust code. These crates make it much simpler to parse any sort of Rust
-code we might want to handle: writing a full parser for Rust code is no simple
+code we might want to handle: Writing a full parser for Rust code is no simple
 task.
 
 The `hello_macro_derive` function will be called when a user of our library
@@ -2221,8 +2376,8 @@ The `hello_macro_derive` function first converts the `input` from a
 `TokenStream` to a data structure that we can then interpret and perform
 operations on. This is where `syn` comes into play. The `parse` function in
 `syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
-parsed Rust code. Listing 20-33 shows the relevant parts of the `DeriveInput`
-struct we get from parsing the `struct Pancakes;` string:
+parsed Rust code. Listing 20-41 shows the relevant parts of the `DeriveInput`
+struct we get from parsing the `struct Pancakes;` string.
 
 
 ```
@@ -2245,16 +2400,16 @@ DeriveInput {
 }
 ```
 
-Listing 20-33: The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-31
+Listing 20-41: The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37
 
 The fields of this struct show that the Rust code we’ve parsed is a unit struct
-with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
+with the `ident` (*identifier*, meaning the name) of `Pancakes`. There are more
 fields on this struct for describing all sorts of Rust code; check the `syn`
 documentation for `DeriveInput` at *https://docs.rs/syn/2.0/syn/struct.DeriveInput.html* for more information.
 
 Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
 the new Rust code we want to include. But before we do, note that the output
-for our derive macro is also a `TokenStream`. The returned `TokenStream` is
+for our `derive` macro is also a `TokenStream`. The returned `TokenStream` is
 added to the code that our crate users write, so when they compile their crate,
 they’ll get the extra functionality that we provide in the modified
 `TokenStream`.
@@ -2269,41 +2424,41 @@ about what went wrong by using `panic!` or `expect`.
 
 Now that we have the code to turn the annotated Rust code from a `TokenStream`
 into a `DeriveInput` instance, let’s generate the code that implements the
-`HelloMacro` trait on the annotated type, as shown in Listing 20-34.
+`HelloMacro` trait on the annotated type, as shown in Listing 20-42.
 
 hello_macro_derive/src/lib.rs
 
 ```
 fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated = quote! {
         impl HelloMacro for #name {
             fn hello_macro() {
                 println!("Hello, Macro! My name is {}!", stringify!(#name));
             }
         }
     };
-    gen.into()
+    generated.into()
 }
 ```
 
-Listing 20-34: Implementing the `HelloMacro` trait using the parsed Rust code
+Listing 20-42: Implementing the `HelloMacro` trait using the parsed Rust code
 
 We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The struct in Listing 20-33 shows that when
-we run the `impl_hello_macro` function on the code in Listing 20-31, the
+annotated type using `ast.ident`. The struct in Listing 20-41 shows that when
+we run the `impl_hello_macro` function on the code in Listing 20-37, the
 `ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
-the `name` variable in Listing 20-34 will contain an `Ident` struct instance
+the `name` variable in Listing 20-42 will contain an `Ident` struct instance
 that, when printed, will be the string `"Pancakes"`, the name of the struct in
-Listing 20-31.
+Listing 20-37.
 
 The `quote!` macro lets us define the Rust code that we want to return. The
-compiler expects something different to the direct result of the `quote!`
+compiler expects something different from the direct result of the `quote!`
 macro’s execution, so we need to convert it to a `TokenStream`. We do this by
 calling the `into` method, which consumes this intermediate representation and
 returns a value of the required `TokenStream` type.
 
-The `quote!` macro also provides some very cool templating mechanics: we can
+The `quote!` macro also provides some very cool templating mechanics: We can
 enter `#name`, and `quote!` will replace it with the value in the variable
 `name`. You can even do some repetition similar to the way regular macros work.
 Check out the `quote` crate’s docs at *https://docs.rs/quote* for a thorough introduction.
@@ -2316,42 +2471,45 @@ the name of the annotated type.
 
 The `stringify!` macro used here is built into Rust. It takes a Rust
 expression, such as `1 + 2`, and at compile time turns the expression into a
-string literal, such as `"1 + 2"`. This is different than `format!` or
-`println!`, macros which evaluate the expression and then turn the result into
-a `String`. There is a possibility that the `#name` input might be an
-expression to print literally, so we use `stringify!`. Using `stringify!` also
-saves an allocation by converting `#name` to a string literal at compile time.
+string literal, such as `"1 + 2"`. This is different from `format!` or
+`println!`, which are macros that evaluate the expression and then turn the
+result into a `String`. There is a possibility that the `#name` input might be
+an expression to print literally, so we use `stringify!`. Using `stringify!`
+also saves an allocation by converting `#name` to a string literal at compile
+time.
 
 At this point, `cargo build` should complete successfully in both `hello_macro`
 and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
-20-31 to see the procedural macro in action! Create a new binary project in
+20-37 to see the procedural macro in action! Create a new binary project in
 your *projects* directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
 crate’s *Cargo.toml*. If you’re publishing your versions of `hello_macro` and
-`hello_macro_derive` to crates.io at *https://crates.io/*, they would be regular
-dependencies; if not, you can specify them as `path` dependencies as follows:
+`hello_macro_derive` to crates.io, they
+would be regular dependencies; if not, you can specify them as `path`
+dependencies as follows:
 
 ```
+[dependencies]
 hello_macro = { path = "../hello_macro" }
 hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
 ```
 
-Put the code in Listing 20-31 into *src/main.rs*, and run `cargo run`: it
-should print `Hello, Macro! My name is Pancakes!` The implementation of the
+Put the code in Listing 20-37 into *src/main.rs*, and run `cargo run`: It
+should print `Hello, Macro! My name is Pancakes!`. The implementation of the
 `HelloMacro` trait from the procedural macro was included without the
 `pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the
 trait implementation.
 
 Next, let’s explore how the other kinds of procedural macros differ from custom
-derive macros.
+`derive` macros.
 
-### Attribute-Like macros
+### Attribute-Like Macros
 
-Attribute-like macros are similar to custom derive macros, but instead of
+Attribute-like macros are similar to custom `derive` macros, but instead of
 generating code for the `derive` attribute, they allow you to create new
 attributes. They’re also more flexible: `derive` only works for structs and
 enums; attributes can be applied to other items as well, such as functions.
-Here’s an example of using an attribute-like macro: say you have an attribute
+Here’s an example of using an attribute-like macro. Say you have an attribute
 named `route` that annotates functions when using a web application framework:
 
 ```
@@ -2372,18 +2530,18 @@ contents of the attribute: the `GET, "/"` part. The second is the body of the
 item the attribute is attached to: in this case, `fn index() {}` and the rest
 of the function’s body.
 
-Other than that, attribute-like macros work the same way as custom derive
-macros: you create a crate with the `proc-macro` crate type and implement a
+Other than that, attribute-like macros work the same way as custom `derive`
+macros: You create a crate with the `proc-macro` crate type and implement a
 function that generates the code you want!
 
-### Function-Like macros
+### Function-Like Macros
 
 Function-like macros define macros that look like function calls. Similarly to
 `macro_rules!` macros, they’re more flexible than functions; for example, they
-can take an unknown number of arguments. However, `macro_rules!` macros can only
-be defined using the match-like syntax we discussed in “Declarative Macros with
-`macro_rules!` for General Metaprogramming” earlier.
-Function-like macros take a `TokenStream` parameter and their definition
+can take an unknown number of arguments. However, `macro_rules!` macros can
+only be defined using the match-like syntax we discussed in the “Declarative
+Macros for General Metaprogramming” section earlier.
+Function-like macros take a `TokenStream` parameter, and their definition
 manipulates that `TokenStream` using Rust code as the other two types of
 procedural macros do. An example of a function-like macro is an `sql!` macro
 that might be called like so:
@@ -2401,7 +2559,7 @@ syntactically correct, which is much more complex processing than a
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-This definition is similar to the custom derive macro’s signature: we receive
+This definition is similar to the custom `derive` macro’s signature: We receive
 the tokens that are inside the parentheses and return the code we wanted to
 generate.
 
@@ -2410,7 +2568,7 @@ generate.
 Whew! Now you have some Rust features in your toolbox that you likely won’t use
 often, but you’ll know they’re available in very particular circumstances.
 We’ve introduced several complex topics so that when you encounter them in
-error message suggestions or in other peoples’ code, you’ll be able to
+error message suggestions or in other people’s code, you’ll be able to
 recognize these concepts and syntax. Use this chapter as a reference to guide
 you to solutions.
 

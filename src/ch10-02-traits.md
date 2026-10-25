@@ -1,4 +1,8 @@
-## Traits: Defining Shared Behavior
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="traits-defining-shared-behavior"></a>
+
+## Defining Shared Behavior with Traits
 
 A _trait_ defines the functionality a particular type has and can share with
 other types. We can use traits to define shared behavior in an abstract way. We
@@ -49,7 +53,7 @@ its own custom behavior for the body of the method. The compiler will enforce
 that any type that has the `Summary` trait will have the method `summarize`
 defined with this signature exactly.
 
-A trait can have multiple methods in its body: the method signatures are listed
+A trait can have multiple methods in its body: The method signatures are listed
 one per line, and each line ends in a semicolon.
 
 ### Implementing a Trait on a Type
@@ -103,16 +107,20 @@ library traits like `Display` on a custom type like `SocialPost` as part of our
 crate.
 
 But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
-`Display` and `Vec<T>` are both defined in the standard library and aren’t
-local to our `aggregator` crate. This restriction is part of a property called
-_coherence_, and more specifically the _orphan rule_, so named because the
-parent type is not present. This rule ensures that other people’s code can’t
-break your code and vice versa. Without the rule, two crates could implement
-the same trait for the same type, and Rust wouldn’t know which implementation
-to use.
+implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
+because `Display` and `Vec<T>` are both defined in the standard library and
+aren’t local to our `aggregator` crate. This restriction is part of a property
+called _coherence_, and more specifically the _orphan rule_, so named because
+the parent type is not present. This rule ensures that other people’s code
+can’t break your code and vice versa. Without the rule, two crates could
+implement the same trait for the same type, and Rust wouldn’t know which
+implementation to use.
 
-### Default Implementations
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="default-implementations"></a>
+
+### Using Default Implementations
 
 Sometimes it’s useful to have default behavior for some or all of the methods
 in a trait instead of requiring implementations for all methods on every type.
@@ -186,7 +194,11 @@ This code prints `1 new post: (Read more from @horse_ebooks...)`.
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
 
-### Traits as Parameters
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="traits-as-parameters"></a>
+
+### Using Traits as Parameters
 
 Now that you know how to define and implement traits, we can explore how to use
 traits to define functions that accept many different types. We’ll use the
@@ -204,7 +216,7 @@ keyword and the trait name. This parameter accepts any type that implements the
 specified trait. In the body of `notify`, we can call any methods on `item`
 that come from the `Summary` trait, such as `summarize`. We can call `notify`
 and pass in any instance of `NewsArticle` or `SocialPost`. Code that calls the
-function with any other type, such as a `String` or an `i32`, won’t compile
+function with any other type, such as a `String` or an `i32`, won’t compile,
 because those types don’t implement `Summary`.
 
 <!-- Old headings. Do not remove or links may break. -->
@@ -248,10 +260,14 @@ The generic type `T` specified as the type of the `item1` and `item2`
 parameters constrains the function such that the concrete type of the value
 passed as an argument for `item1` and `item2` must be the same.
 
-#### Specifying Multiple Trait Bounds with the `+` Syntax
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="specifying-multiple-trait-bounds-with-the--syntax"></a>
+
+#### Multiple Trait Bounds with the `+` Syntax
 
 We can also specify more than one trait bound. Say we wanted `notify` to use
-display formatting as well as `summarize` on `item`: we specify in the `notify`
+display formatting as well as `summarize` on `item`: We specify in the `notify`
 definition that `item` must implement both `Display` and `Summary`. We can do
 so using the `+` syntax:
 
@@ -287,7 +303,7 @@ we can use a `where` clause, like this:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
-This function’s signature is less cluttered: the function name, parameter list,
+This function’s signature is less cluttered: The function name, parameter list,
 and return type are close together, similar to a function without lots of trait
 bounds.
 
@@ -324,21 +340,20 @@ the return type specified as `impl Summary` wouldn’t work:
 Returning either a `NewsArticle` or a `SocialPost` isn’t allowed due to
 restrictions around how the `impl Trait` syntax is implemented in the compiler.
 We’ll cover how to write a function with this behavior in the [“Using Trait
-Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> section of Chapter 18.
+Objects to Abstract over Shared Behavior”][trait-objects]<!-- ignore -->
+section of Chapter 18.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
 traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
-`new` function to return a new instance of `Pair<T>` (recall from the
-[“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
-is a type alias for the type of the `impl` block, which in this case is
-`Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
-`cmp_display` method if its inner type `T` implements the `PartialOrd` trait
-that enables comparison _and_ the `Display` trait that enables printing.
+`new` function to return a new instance of `Pair<T>` (recall from the [“Method
+Syntax”][methods]<!-- ignore --> section of Chapter 5 that `Self` is a type
+alias for the type of the `impl` block, which in this case is `Pair<T>`). But
+in the next `impl` block, `Pair<T>` only implements the `cmp_display` method if
+its inner type `T` implements the `PartialOrd` trait that enables comparison
+_and_ the `Display` trait that enables printing.
 
 <Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
 
@@ -378,12 +393,12 @@ reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type which didn’t define the method. But
-Rust moves these errors to compile time so we’re forced to fix the problems
+runtime if we called a method on a type that didn’t define the method. But Rust
+moves these errors to compile time so that we’re forced to fix the problems
 before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime because we’ve already checked at compile
+that checks for behavior at runtime, because we’ve already checked at compile
 time. Doing so improves performance without having to give up the flexibility
 of generics.
 
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[methods]: ch05-03-method-syntax.html#defining-methods
+[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
+[methods]: ch05-03-method-syntax.html#method-syntax

@@ -1,4 +1,7 @@
-## Developing the Library’s Functionality with Test-Driven Development
+<!-- Old headings. Do not remove or links may break. -->
+<a id="developing-the-librarys-functionality-with-test-driven-development"></a>
+
+## Adding Functionality with Test-Driven Development
 
 Now that we have the search logic in _src/lib.rs_ separate from the `main`
 function, it’s much easier to write tests for the core functionality of our
@@ -17,7 +20,7 @@ the test-driven development (TDD) process with the following steps:
 
 Though it’s just one of many ways to write software, TDD can help drive code
 design. Writing the test before you write the code that makes the test pass
-helps to maintain high test coverage throughout the process.
+helps maintain high test coverage throughout the process.
 
 We’ll test-drive the implementation of the functionality that will actually do
 the searching for the query string in the file contents and produce a list of
@@ -28,7 +31,7 @@ lines that match the query. We’ll add this functionality in a function called
 
 In _src/lib.rs_, we’ll add a `tests` module with a test function, as we did in
 [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the
-behavior we want the `search` function to have: it will take a query and the
+behavior we want the `search` function to have: It will take a query and the
 text to search, and it will return only the lines from the text that contain
 the query. Listing 12-15 shows this test.
 
@@ -50,11 +53,11 @@ If we run this test, it will currently fail because the `unimplemented!` macro
 panics with the message “not implemented”. In accordance with TDD principles,
 we’ll take a small step of adding just enough code to get the test to not panic
 when calling the function by defining the `search` function to always return an
-empty vector, as shown in Listing 12-16. Then the test should compile and fail
+empty vector, as shown in Listing 12-16. Then, the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`
+fast, productive."`.
 
-<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so calling it won’t panic">
+<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so that calling it won’t panic">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
@@ -126,7 +129,7 @@ this won’t compile yet.
 </Listing>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
+[Chapter 13][ch13-iterators]<!-- ignore -->. But recall that you saw this way
 of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
 `for` loop with an iterator to run some code on each item in a collection.
 
@@ -156,7 +159,7 @@ to return. For that, we can make a mutable vector before the `for` loop and
 call the `push` method to store a `line` in the vector. After the `for` loop,
 we return the vector, as shown in Listing 12-19.
 
-<Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
+<Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so that we can return them">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}

@@ -4,6 +4,8 @@ enum List {
 }
 
 // ANCHOR: here
+// --snip--
+
 use crate::List::{Cons, Nil};
 
 fn main() {

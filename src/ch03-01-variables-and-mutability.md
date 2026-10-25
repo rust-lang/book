@@ -36,7 +36,7 @@ not a good programmer! Experienced Rustaceans still get compiler errors.
 You received the error message `` cannot assign twice to immutable variable `x` `` because you tried to assign a second value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
-value that’s designated as immutable because this very situation can lead to
+value that’s designated as immutable, because this very situation can lead to
 bugs. If one part of our code operates on the assumption that a value will
 never change and another part of our code changes that value, it’s possible
 that the first part of the code won’t do what it was designed to do. The cause
@@ -46,7 +46,7 @@ compiler guarantees that when you state that a value won’t change, it really
 won’t change, so you don’t have to keep track of it yourself. Your code is thus
 easier to reason through.
 
-But mutability can be very useful, and can make code more convenient to write.
+But mutability can be very useful and can make code more convenient to write.
 Although variables are immutable by default, you can make them mutable by
 adding `mut` in front of the variable name as you did in [Chapter
 2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
@@ -71,7 +71,10 @@ We’re allowed to change the value bound to `x` from `5` to `6` when `mut` is
 used. Ultimately, deciding whether to use mutability or not is up to you and
 depends on what you think is clearest in that particular situation.
 
-### Constants
+<!-- Old headings. Do not remove or links may break. -->
+<a id="constants"></a>
+
+### Declaring Constants
 
 Like immutable variables, _constants_ are values that are bound to a name and
 are not allowed to change, but there are a few differences between constants
@@ -96,7 +99,7 @@ Here’s an example of a constant declaration:
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the
+The constant’s name is `THREE_HOURS_IN_SECONDS`, and its value is set to the
 result of multiplying 60 (the number of seconds in a minute) by 60 (the number
 of minutes in an hour) by 3 (the number of hours we want to count in this
 program). Rust’s naming convention for constants is to use all uppercase with
@@ -115,7 +118,7 @@ earn, or the speed of light.
 
 Naming hardcoded values used throughout your program as constants is useful in
 conveying the meaning of that value to future maintainers of the code. It also
-helps to have only one place in your code you would need to change if the
+helps to have only one place in your code that you would need to change if the
 hardcoded value needed to be updated in the future.
 
 ### Shadowing
@@ -136,9 +139,9 @@ use of the `let` keyword as follows:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
-This program first binds `x` to a value of `5`. Then it creates a new variable
-`x` by repeating `let x =`, taking the original value and adding `1` so the
-value of `x` is then `6`. Then, within an inner scope created with the curly
+This program first binds `x` to a value of `5`. Then, it creates a new variable
+`x` by repeating `let x =`, taking the original value and adding `1` so that
+the value of `x` is `6`. Then, within an inner scope created with the curly
 brackets, the third `let` statement also shadows `x` and creates a new
 variable, multiplying the previous value by `2` to give `x` a value of `12`.
 When that scope is over, the inner shadowing ends and `x` returns to being `6`.
@@ -152,7 +155,7 @@ Shadowing is different from marking a variable as `mut` because we’ll get a
 compile-time error if we accidentally try to reassign to this variable without
 using the `let` keyword. By using `let`, we can perform a few transformations
 on a value but have the variable be immutable after those transformations have
-been completed.
+completed.
 
 The other difference between `mut` and shadowing is that because we’re
 effectively creating a new variable when we use the `let` keyword again, we can
@@ -164,7 +167,7 @@ inputting space characters, and then we want to store that input as a number:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-The first `spaces` variable is a string type and the second `spaces` variable
+The first `spaces` variable is a string type, and the second `spaces` variable
 is a number type. Shadowing thus spares us from having to come up with
 different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
 the simpler `spaces` name. However, if we try to use `mut` for this, as shown

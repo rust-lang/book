@@ -10,8 +10,8 @@ failures:
 
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
 
-thread 'tests::it_sends_an_over_75_percent_warning_message' panicked at src/lib.rs:60:53:
-already borrowed: BorrowMutError
+thread 'tests::it_sends_an_over_75_percent_warning_message' (6028024) panicked at src/lib.rs:60:53:
+RefCell already borrowed
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 

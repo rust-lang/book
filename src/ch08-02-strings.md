@@ -12,15 +12,19 @@ implemented as a collection of bytes, plus some methods to provide useful
 functionality when those bytes are interpreted as text. In this section, we’ll
 talk about the operations on `String` that every collection type has, such as
 creating, updating, and reading. We’ll also discuss the ways in which `String`
-is different from the other collections, namely how indexing into a `String` is
+is different from the other collections, namely, how indexing into a `String` is
 complicated by the differences between how people and computers interpret
 `String` data.
 
-### What Is a String?
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="what-is-a-string"></a>
+
+### Defining Strings
 
 We’ll first define what we mean by the term _string_. Rust has only one string
 type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about _string slices_,
+in its borrowed form, `&str`. In Chapter 4, we talked about string slices,
 which are references to some UTF-8 encoded string data stored elsewhere. String
 literals, for example, are stored in the program’s binary and are therefore
 string slices.
@@ -102,7 +106,11 @@ A `String` can grow in size and its contents can change, just like the contents
 of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
 use the `+` operator or the `format!` macro to concatenate `String` values.
 
-#### Appending to a String with `push_str` and `push`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="appending-to-a-string-with-push_str-and-push"></a>
+
+#### Appending with `push_str` or `push`
 
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15.
@@ -145,7 +153,11 @@ method.
 
 As a result, `s` will contain `lol`.
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="concatenation-with-the--operator-or-the-format-macro"></a>
+
+#### Concatenating with `+` or `format!`
 
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
@@ -174,18 +186,19 @@ call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need in order to understand the tricky
 bits of the `+` operator.
 
-First, `s2` has an `&`, meaning that we’re adding a _reference_ of the second
+First, `s2` has an `&`, meaning that we’re adding a reference of the second
 string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&str` to a `String`; we can’t add two `String`
-values together. But wait—the type of `&s2` is `&String`, not `&str`, as
-specified in the second parameter to `add`. So why does Listing 8-18 compile?
+function: We can only add a string slice to a `String`; we can’t add two
+`String` values together. But wait—the type of `&s2` is `&String`, not `&str`,
+as specified in the second parameter to `add`. So, why does Listing 8-18
+compile?
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can _coerce_ the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a _deref coercion_, which here turns `&s2` into `&s2[..]`.
-We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
-not take ownership of the `s` parameter, `s2` will still be a valid `String`
-after this operation.
+can coerce the `&String` argument into a `&str`. When we call the `add` method,
+Rust uses a deref coercion, which here turns `&s2` into `&s2[..]`. We’ll
+discuss deref coercion in more depth in Chapter 15. Because `add` does not take
+ownership of the `s` parameter, `s2` will still be a valid `String` after this
+operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`
 because `self` does _not_ have an `&`. This means `s1` in Listing 8-18 will be
@@ -224,7 +237,7 @@ string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19.
 
-<Listing number="8-19" caption="Attempting to use indexing syntax with a String">
+<Listing number="8-19" caption="Attempting to use indexing syntax with a `String`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
@@ -238,9 +251,8 @@ This code will result in the following error:
 {{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
-The error and the note tell the story: Rust strings don’t support indexing. But
-why not? To answer that question, we need to discuss how Rust stores strings in
-memory.
+The error tells the story: Rust strings don’t support indexing. But why not? To
+answer that question, we need to discuss how Rust stores strings in memory.
 
 #### Internal Representation
 
@@ -252,7 +264,7 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:
 ```
 
 In this case, `len` will be `4`, which means the vector storing the string
-`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
+`"Hola"` is 4 bytes long. Each of these letters takes 1 byte when encoded in
 UTF-8. The following line, however, may surprise you (note that this string
 begins with the capital Cyrillic letter _Ze_, not the number 3):
 
@@ -261,7 +273,7 @@ begins with the capital Cyrillic letter _Ze_, not the number 3):
 ```
 
 If you were asked how long the string is, you might say 12. In fact, Rust’s
-answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
+answer is 24: That’s the number of bytes it takes to encode “Здравствуйте” in
 UTF-8, because each Unicode scalar value in that string takes 2 bytes of
 storage. Therefore, an index into the string’s bytes will not always correlate
 to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
@@ -278,14 +290,18 @@ seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
 has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hi"[0]` were valid code that
+if the string contains only Latin letters: If `&"hi"[0]` were valid code that
 returned the byte value, it would return `104`, not `h`.
 
 The answer, then, is that to avoid returning an unexpected value and causing
 bugs that might not be discovered immediately, Rust doesn’t compile this code
 at all and prevents misunderstandings early in the development process.
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="bytes-and-scalar-values-and-grapheme-clusters-oh-my"></a>
+
+#### Bytes, Scalar Values, and Grapheme Clusters
 
 Another point about UTF-8 is that there are actually three relevant ways to
 look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
@@ -308,7 +324,7 @@ bytes look like this:
 ```
 
 There are six `char` values here, but the fourth and sixth are not letters:
-they’re diacritics that don’t make sense on their own. Finally, if we look at
+They’re diacritics that don’t make sense on their own. Finally, if we look at
 them as grapheme clusters, we’d get what a person would call the four letters
 that make up the Hindi word:
 
@@ -342,8 +358,8 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first four bytes of the string.
-Earlier, we mentioned that each of these characters was two bytes, which means
+Here, `s` will be a `&str` that contains the first 4 bytes of the string.
+Earlier, we mentioned that each of these characters was 2 bytes, which means
 `s` will be `Зд`.
 
 If we were to try to slice only part of a character’s bytes with something like
@@ -357,7 +373,11 @@ index were accessed in a vector:
 You should use caution when creating string slices with ranges, because doing
 so can crash your program.
 
-### Methods for Iterating Over Strings
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="methods-for-iterating-over-strings"></a>
+
+### Iterating Over Strings
 
 The best way to operate on pieces of strings is to be explicit about whether
 you want characters or bytes. For individual Unicode scalar values, use the
@@ -386,7 +406,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this string:
+This code will print the 4 bytes that make up this string:
 
 ```text
 208
@@ -396,14 +416,18 @@ This code will print the four bytes that make up this string:
 ```
 
 But be sure to remember that valid Unicode scalar values may be made up of more
-than one byte.
+than 1 byte.
 
 Getting grapheme clusters from strings, as with the Devanagari script, is
 complex, so this functionality is not provided by the standard library. Crates
 are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the
 functionality you need.
 
-### Strings Are Not So Simple
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="strings-are-not-so-simple"></a>
+
+### Handling the Complexities of Strings
 
 To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust

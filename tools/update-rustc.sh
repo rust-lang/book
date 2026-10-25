@@ -56,6 +56,9 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     # minimize diff churn
     test_binary_hash=$(sed -E -ne 's@.*Running [^[:space:]]+( [^[:space:]\(\)]+)? \(target/debug/deps/[^-]*-([^\s]*)\)@\2@p' "${full_output_path}" | head -n 1)
 
+    # Save the panicking thread PID; we're going to keep it to minimize diff churn
+    panic_pid=$(sed -E -ne "s/thread '([^']*)' \(([0-9]+)\) panicked at (.*)/\2/p" "${full_output_path}")
+
     # Act like this is the first time this listing has been built
     cargo clean > /dev/null 2>&1
 
@@ -80,9 +83,12 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     #
     # - Replaces the path up to `.rustup/toolchains` with `file:///home`, while
     #   preserving leading spaces and the `-->`.
-    # - Replaces the version-and-architecture-tripl with just the version, so
+    # - Replaces the version-and-architecture-triple with just the version, so
     #   e.g. `1.82-aarch64-apple-darwin` becomes `1.82`.
     sed -i '' -E -e 's@^([[:space:]]*-->[[:space:]]+).*(\.rustup/toolchains/[[:digit:]]+\.[[:digit:]]+)([^/]*)@\1file:///home/\2@' "${full_output_path}"
+
+    # Similarly, replace Miri paths
+    sed -i '' -E -e "s@Running \`(.*)\.rustup/toolchains/nightly([^/]*)/bin/cargo-miri runner target/miri/([^/]*)/debug/([^/]*)@Running \`file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/\4@" "${full_output_path}"
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then
@@ -95,6 +101,11 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
         replacement+="${test_binary_hash}"
         replacement+=')@g'
         sed -i '' -E -e "${replacement}" "${full_output_path}"
+    fi
+
+    # Restore the previous panicking thread PID, if there is one
+    if [ -n "${panic_pid}" ]; then
+      sed -i '' -E -e "s/thread '([^']*)' \(([0-9]+)\) panicked at (.*)/thread '\1' \(${panic_pid}\) panicked at \3/" "${full_output_path}"
     fi
 
     # Clean again

@@ -1,4 +1,8 @@
-# Managing Growing Projects with Packages, Crates, and Modules
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="managing-growing-projects-with-packages-crates-and-modules"></a>
+
+# Packages, Crates, and Modules
 
 As you write large programs, organizing your code will become increasingly
 important. By grouping related functionality and separating code with distinct
@@ -11,18 +15,18 @@ and then multiple files. A package can contain multiple binary crates and
 optionally one library crate. As a package grows, you can extract parts into
 separate crates that become external dependencies. This chapter covers all
 these techniques. For very large projects comprising a set of interrelated
-packages that evolve together, Cargo provides _workspaces_, which we’ll cover
-in [“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
+packages that evolve together, Cargo provides workspaces, which we’ll cover in
+[“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
 
 We’ll also discuss encapsulating implementation details, which lets you reuse
-code at a higher level: once you’ve implemented an operation, other code can
+code at a higher level: Once you’ve implemented an operation, other code can
 call your code via its public interface without having to know how the
 implementation works. The way you write code defines which parts are public for
 other code to use and which parts are private implementation details that you
 reserve the right to change. This is another way to limit the amount of detail
 you have to keep in your head.
 
-A related concept is scope: the nested context in which code is written has a
+A related concept is scope: The nested context in which code is written has a
 set of names that are defined as “in scope.” When reading, writing, and
 compiling code, programmers and compilers need to know whether a particular
 name at a particular spot refers to a variable, function, struct, enum, module,

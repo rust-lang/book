@@ -8,25 +8,25 @@ when compiling and running the code.
 
 Functions can take parameters of some generic type, instead of a concrete type
 like `i32` or `String`, in the same way they take parameters with unknown
-values to run the same code on multiple concrete values. In fact, we’ve already
+values to run the same code on multiple concrete values. In fact, we already
 used generics in Chapter 6 with `Option<T>`, in Chapter 8 with `Vec<T>` and
 `HashMap<K, V>`, and in Chapter 9 with `Result<T, E>`. In this chapter, you’ll
 explore how to define your own types, functions, and methods with generics!
 
-First we’ll review how to extract a function to reduce code duplication. We’ll
+First, we’ll review how to extract a function to reduce code duplication. We’ll
 then use the same technique to make a generic function from two functions that
 differ only in the types of their parameters. We’ll also explain how to use
 generic types in struct and enum definitions.
 
-Then you’ll learn how to use _traits_ to define behavior in a generic way. You
+Then, you’ll learn how to use traits to define behavior in a generic way. You
 can combine traits with generic types to constrain a generic type to accept
 only those types that have a particular behavior, as opposed to just any type.
 
 Finally, we’ll discuss _lifetimes_: a variety of generics that give the
 compiler information about how references relate to each other. Lifetimes allow
 us to give the compiler enough information about borrowed values so that it can
-ensure references will be valid in more situations than it could without our
-help.
+ensure that references will be valid in more situations than it could without
+our help.
 
 ## Removing Duplication by Extracting a Function
 
@@ -34,7 +34,7 @@ Generics allow us to replace specific types with a placeholder that represents
 multiple types to remove code duplication. Before diving into generics syntax,
 let’s first look at how to remove duplication in a way that doesn’t involve
 generic types by extracting a function that replaces specific values with a
-placeholder that represents multiple values. Then we’ll apply the same
+placeholder that represents multiple values. Then, we’ll apply the same
 technique to extract a generic function! By looking at how to recognize
 duplicated code you can extract into a function, you’ll start to recognize
 duplicated code that can use generics.
@@ -71,7 +71,7 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 
 </Listing>
 
-Although this code works, duplicating code is tedious and error prone. We also
+Although this code works, duplicating code is tedious and error-prone. We also
 have to remember to update the code in multiple places when we want to change
 it.
 
@@ -81,7 +81,7 @@ solution makes our code clearer and lets us express the concept of finding the
 largest number in a list abstractly.
 
 In Listing 10-3, we extract the code that finds the largest number into a
-function named `largest`. Then we call the function to find the largest number
+function named `largest`. Then, we call the function to find the largest number
 in the two lists from Listing 10-2. We could also use the function on any other
 list of `i32` values we might have in the future.
 

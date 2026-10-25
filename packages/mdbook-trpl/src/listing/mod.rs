@@ -1,10 +1,9 @@
 use anyhow::anyhow;
 use html_parser::Dom;
-use mdbook::{
-    book::Book,
+use mdbook_preprocessor::{
+    book::{Book, BookItem},
     errors::Result,
-    preprocess::{Preprocessor, PreprocessorContext},
-    BookItem,
+    Preprocessor, PreprocessorContext,
 };
 use pulldown_cmark::{html, Event};
 use pulldown_cmark_to_cmark::cmark;
@@ -80,8 +79,8 @@ impl Preprocessor for TrplListing {
         }
     }
 
-    fn supports_renderer(&self, renderer: &str) -> bool {
-        renderer == "html" || renderer == "markdown" || renderer == "test"
+    fn supports_renderer(&self, renderer: &str) -> Result<bool> {
+        Ok(renderer == "html" || renderer == "markdown" || renderer == "test")
     }
 }
 

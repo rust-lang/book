@@ -13,29 +13,28 @@ binary. To separate these two types of arguments, you list the arguments that
 go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
 with `cargo test`, and running `cargo test -- --help` displays the options you
-can use after the separator. Those options are also documented in [the “Tests”
-section][tests] of the [the rustc book][rustc].
+can use after the separator. These options are also documented in [the “Tests”
+section of _The `rustc` Book_][tests].
 
 [tests]: https://doc.rust-lang.org/rustc/tests/index.html
-[rustc]: https://doc.rust-lang.org/rustc/index.html
 
 ### Running Tests in Parallel or Consecutively
 
 When you run multiple tests, by default they run in parallel using threads,
-meaning they finish running faster and you get feedback quicker. Because the
-tests are running at the same time, you must make sure your tests don’t depend
-on each other or on any shared state, including a shared environment, such as
-the current working directory or environment variables.
+meaning they finish running more quickly and you get feedback sooner. Because
+the tests are running at the same time, you must make sure your tests don’t
+depend on each other or on any shared state, including a shared environment,
+such as the current working directory or environment variables.
 
 For example, say each of your tests runs some code that creates a file on disk
-named _test-output.txt_ and writes some data to that file. Then each test reads
-the data in that file and asserts that the file contains a particular value,
-which is different in each test. Because the tests run at the same time, one
-test might overwrite the file in the time between another test writing and
-reading the file. The second test will then fail, not because the code is
-incorrect but because the tests have interfered with each other while running
-in parallel. One solution is to make sure each test writes to a different file;
-another solution is to run the tests one at a time.
+named _test-output.txt_ and writes some data to that file. Then, each test
+reads the data in that file and asserts that the file contains a particular
+value, which is different in each test. Because the tests run at the same time,
+one test might overwrite the file in the time between when another test is
+writing and reading the file. The second test will then fail, not because the
+code is incorrect but because the tests have interfered with each other while
+running in parallel. One solution is to make sure each test writes to a
+different file; another solution is to run the tests one at a time.
 
 If you don’t want to run the tests in parallel or if you want more fine-grained
 control over the number of threads used, you can send the `--test-threads` flag
@@ -97,7 +96,7 @@ see the following output:
 
 ### Running a Subset of Tests by Name
 
-Sometimes, running a full test suite can take a long time. If you’re working on
+Running a full test suite can sometimes take a long time. If you’re working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
@@ -150,7 +149,11 @@ named `one_hundred`. Also note that the module in which a test appears becomes
 part of the test’s name, so we can run all the tests in a module by filtering
 on the module’s name.
 
-### Ignoring Some Tests Unless Specifically Requested
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="ignoring-some-tests-unless-specifically-requested"></a>
+
+### Ignoring Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
 might want to exclude them during most runs of `cargo test`. Rather than

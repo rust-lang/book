@@ -46,7 +46,7 @@ Using `TcpListener`, we can listen for TCP connections at the address
 `127.0.0.1:7878`. In the address, the section before the colon is an IP address
 representing your computer (this is the same on every computer and doesn’t
 represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port so
+chosen this port for two reasons: HTTP isn’t normally accepted on this port, so
 our server is unlikely to conflict with any other web server you might have
 running on your machine, and 7878 is _rust_ typed on a telephone.
 
@@ -56,19 +56,16 @@ because, in networking, connecting to a port to listen to is known as “binding
 to a port.”
 
 The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (non-administrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+possible for binding to fail, for example, if we ran two instances of our
+program and so had two programs listening to the same port. Because we’re
+writing a basic server just for learning purposes, we won’t worry about
+handling these kinds of errors; instead, we use `unwrap` to stop the program if
+errors happen.
 
 The `incoming` method on `TcpListener` returns an iterator that gives us a
 sequence of streams (more specifically, streams of type `TcpStream`). A single
-_stream_ represents an open connection between the client and the server. A
-_connection_ is the name for the full request and response process in which a
+_stream_ represents an open connection between the client and the server.
+_Connection_ is the name for the full request and response process in which a
 client connects to the server, the server generates a response, and the server
 closes the connection. As such, we will read from the `TcpStream` to see what
 the client sent and then write our response to the stream to send data back to
@@ -112,17 +109,17 @@ part of the `drop` implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary.
 
 Browsers also sometimes open multiple connections to the server without sending
-any requests, so that if they *do* later send requests, they can happen faster.
-When this happens, our server will see each connection, regardless of whether
-there are any requests over that connection. Many versions of Chrome-based
-browsers do this, for example; you can disable that optimization by using =
-private browsing mode or use a different browser.
+any requests so that if they *do* later send requests, those requests can
+happen more quickly. When this occurs, our server will see each connection,
+regardless of whether there are any requests over that connection. Many
+versions of Chrome-based browsers do this, for example; you can disable that
+optimization by using private browsing mode or using a different browser.
 
 The important factor is that we’ve successfully gotten a handle to a TCP
 connection!
 
-Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
-you’re done running a particular version of the code. Then restart the program
+Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>C</kbd> when
+you’re done running a particular version of the code. Then, restart the program
 by invoking the `cargo run` command after you’ve made each set of code changes
 to make sure you’re running the newest code.
 
@@ -132,8 +129,8 @@ Let’s implement the functionality to read the request from the browser! To
 separate the concerns of first getting a connection and then taking some action
 with the connection, we’ll start a new function for processing connections. In
 this new `handle_connection` function, we’ll read data from the TCP stream and
-print it so we can see the data being sent from the browser. Change the code to
-look like Listing 21-2.
+print it so that we can see the data being sent from the browser. Change the
+code to look like Listing 21-2.
 
 <Listing number="21-2" file-name="src/main.rs" caption="Reading from the `TcpStream` and printing the data">
 
@@ -143,15 +140,15 @@ look like Listing 21-2.
 
 </Listing>
 
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
+We bring `std::io::BufReader` and `std::io::prelude` into scope to get access
 to traits and types that let us read from and write to the stream. In the `for`
 loop in the `main` function, instead of printing a message that says we made a
 connection, we now call the new `handle_connection` function and pass the
 `stream` to it.
 
 In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. The `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+wraps a reference to the `stream`. The `BufReader` adds buffering by managing
+calls to the `std::io::Read` trait methods for us.
 
 We create a variable named `http_request` to collect the lines of the request
 the browser sends to our server. We indicate that we want to collect these
@@ -160,7 +157,7 @@ lines in a vector by adding the `Vec<_>` type annotation.
 `BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
 method. The `lines` method returns an iterator of `Result<String,
 std::io::Error>` by splitting the stream of data whenever it sees a newline
-byte. To get each `String`, we map and `unwrap` each `Result`. The `Result`
+byte. To get each `String`, we `map` and `unwrap` each `Result`. The `Result`
 might be an error if the data isn’t valid UTF-8 or if there was a problem
 reading from the stream. Again, a production program should handle these errors
 more gracefully, but we’re choosing to stop the program in the error case for
@@ -169,17 +166,24 @@ simplicity.
 The browser signals the end of an HTTP request by sending two newline
 characters in a row, so to get one request from the stream, we take lines until
 we get a line that is the empty string. Once we’ve collected the lines into the
-vector, we’re printing them out using pretty debug formatting so we can take a
-look at the instructions the web browser is sending to our server.
+vector, we’re printing them out using pretty debug formatting so that we can
+take a look at the instructions the web browser is sending to our server.
 
 Let’s try this code! Start the program and make a request in a web browser
 again. Note that we’ll still get an error page in the browser, but our
 program’s output in the terminal will now look similar to this:
 
+<!-- manual-regeneration
+cd listings/ch21-web-server/listing-21-02
+cargo run
+make a request to 127.0.0.1:7878
+Can't automate because the output depends on making requests
+-->
+
 ```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.42s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.42s
      Running `target/debug/hello`
 Request: [
     "GET / HTTP/1.1",
@@ -209,7 +213,12 @@ from our program.
 Let’s break down this request data to understand what the browser is asking of
 our program.
 
-### A Closer Look at an HTTP Request
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-closer-look-at-an-http-request"></a>
+<a id="looking-closer-at-an-http-request"></a>
+
+### Looking More Closely at an HTTP Request
 
 HTTP is a text-based protocol, and a request takes this format:
 
@@ -220,19 +229,19 @@ message-body
 ```
 
 The first line is the _request line_ that holds information about what the
-client is requesting. The first part of the request line indicates the _method_
+client is requesting. The first part of the request line indicates the method
 being used, such as `GET` or `POST`, which describes how the client is making
 this request. Our client used a `GET` request, which means it is asking for
 information.
 
 The next part of the request line is _/_, which indicates the _uniform resource
-identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
+identifier_ _(URI)_ the client is requesting: A URI is almost, but not quite,
 the same as a _uniform resource locator_ _(URL)_. The difference between URIs
 and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute _URL_ for _URI_ here.
+uses the term _URI_, so we can just mentally substitute _URL_ for _URI_ here.
 
 The last part is the HTTP version the client uses, and then the request line
-ends in a CRLF sequence. (CRLF stands for _carriage return_ and _line feed_,
+ends in a CRLF sequence. (_CRLF_ stands for _carriage return_ and _line feed_,
 which are terms from the typewriter days!) The CRLF sequence can also be
 written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
 _CRLF sequence_ separates the request line from the rest of the request data.
@@ -267,7 +276,7 @@ a reason phrase that provides a text description of the status code. After the
 CRLF sequence are any headers, another CRLF sequence, and the body of the
 response.
 
-Here is an example response that uses HTTP version 1.1, and has a status code of
+Here is an example response that uses HTTP version 1.1 and has a status code of
 200, an OK reason phrase, no headers, and no body:
 
 ```text
@@ -289,11 +298,11 @@ Listing 21-3.
 </Listing>
 
 The first new line defines the `response` variable that holds the success
-message’s data. Then we call `as_bytes` on our `response` to convert the string
-data to bytes. The `write_all` method on `stream` takes a `&[u8]` and sends
-those bytes directly down the connection. Because the `write_all` operation
-could fail, we use `unwrap` on any error result as before. Again, in a real
-application you would add error handling here.
+message’s data. Then, we call `as_bytes` on our `response` to convert the
+string data to bytes. The `write_all` method on `stream` takes a `&[u8]` and
+sends those bytes directly down the connection. Because the `write_all`
+operation could fail, we use `unwrap` on any error result as before. Again, in
+a real application, you would add error handling here.
 
 With these changes, let’s run our code and make a request. We’re no longer
 printing any data to the terminal, so we won’t see any output other than the
@@ -335,8 +344,8 @@ string should look familiar; we used it when we read the contents of a file for
 our I/O project in Listing 12-4.
 
 Next, we use `format!` to add the file’s contents as the body of the success
-response. To ensure a valid HTTP response, we add the `Content-Length` header
-which is set to the size of our response body, in this case the size of
+response. To ensure a valid HTTP response, we add the `Content-Length` header,
+which is set to the size of our response body—in this case, the size of
 `hello.html`.
 
 Run this code with `cargo run` and load _127.0.0.1:7878_ in your browser; you
@@ -354,7 +363,7 @@ request to _/_.
 
 Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s add functionality to check that the browser is
-requesting _/_ before returning the HTML file and return an error if the
+requesting _/_ before returning the HTML file and to return an error if the
 browser requests anything else. For this we need to modify `handle_connection`,
 as shown in Listing 21-6. This new code checks the content of the request
 received against what we know a request for _/_ looks like and adds `if` and
@@ -404,7 +413,7 @@ indicating the response to the end user.
 Here, our response has a status line with status code 404 and the reason phrase
 `NOT FOUND`. The body of the response will be the HTML in the file _404.html_.
 You’ll need to create a _404.html_ file next to _hello.html_ for the error
-page; again feel free to use any HTML you want or use the example HTML in
+page; again, feel free to use any HTML you want, or use the example HTML in
 Listing 21-8.
 
 <Listing number="21-8" file-name="404.html" caption="Sample content for the page to send back with any 404 response">
@@ -419,16 +428,20 @@ With these changes, run your server again. Requesting _127.0.0.1:7878_ should
 return the contents of _hello.html_, and any other request, like
 _127.0.0.1:7878/foo_, should return the error HTML from _404.html_.
 
-### A Touch of Refactoring
+<!-- Old headings. Do not remove or links may break. -->
 
-At the moment, the `if` and `else` blocks have a lot of repetition: they’re both
-reading files and writing the contents of the files to the stream. The only
-differences are the status line and the filename. Let’s make the code more
+<a id="a-touch-of-refactoring"></a>
+
+### Refactoring
+
+At the moment, the `if` and `else` blocks have a lot of repetition: They’re
+both reading files and writing the contents of the files to the stream. The
+only differences are the status line and the filename. Let’s make the code more
 concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables; we
-can then use those variables unconditionally in the code to read the file and
-write the response. Listing 21-9 shows the resultant code after replacing the
-large `if` and `else` blocks.
+that will assign the values of the status line and the filename to variables;
+we can then use those variables unconditionally in the code to read the file
+and write the response. Listing 21-9 shows the resultant code after replacing
+the large `if` and `else` blocks.
 
 <Listing number="21-9" file-name="src/main.rs" caption="Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases">
 
@@ -456,5 +469,5 @@ requests with a 404 response.
 
 Currently, our server runs in a single thread, meaning it can only serve one
 request at a time. Let’s examine how that can be a problem by simulating some
-slow requests. Then we’ll fix it so our server can handle multiple requests at
-once.
+slow requests. Then, we’ll fix it so that our server can handle multiple
+requests at once.

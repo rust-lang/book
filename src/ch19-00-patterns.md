@@ -1,6 +1,6 @@
 # Patterns and Matching
 
-_Patterns_ are a special syntax in Rust for matching against the structure of
+Patterns are a special syntax in Rust for matching against the structure of
 types, both complex and simple. Using patterns in conjunction with `match`
 expressions and other constructs gives you more control over a program’s
 control flow. A pattern consists of some combination of the following:

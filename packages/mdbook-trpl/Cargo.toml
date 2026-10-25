@@ -23,9 +23,10 @@ path = "src/bin/figure.rs"
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 html_parser = "0.7.0"
-mdbook = { version = "0.4", default-features = false }     # only need the library
+mdbook-preprocessor = "0.5.1"
 pulldown-cmark = { version = "0.12", features = ["simd"] }
 pulldown-cmark-to-cmark = "19"
+serde = { version = "1.0.228", features = ["serde_derive"] }
 serde_json = "1"
 thiserror = "1.0.60"
 toml = "0.8.12"

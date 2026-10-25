@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::time::Duration;
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         // ANCHOR: join
         let fut1 = async {
             for i in 1..10 {

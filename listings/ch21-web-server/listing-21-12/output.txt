@@ -1,6 +1,6 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
-error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
+error[E0433]: cannot find type `ThreadPool` in this scope
   --> src/main.rs:11:16
    |
 11 |     let pool = ThreadPool::new(4);

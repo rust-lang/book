@@ -7,11 +7,23 @@ error[E0277]: cannot add `Option<i8>` to `i8`
   |                 ^ no implementation for `i8 + Option<i8>`
   |
   = help: the trait `Add<Option<i8>>` is not implemented for `i8`
-  = help: the following other types implement trait `Add<Rhs>`:
-            `&i8` implements `Add<i8>`
-            `&i8` implements `Add`
-            `i8` implements `Add<&i8>`
-            `i8` implements `Add`
+help: the following other types implement trait `Add<Rhs>`
+ --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/ops/arith.rs:98:8
+  |
+  = note: `i8` implements `Add`
+ ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/ops/arith.rs:113:0
+  |
+  = note: in this macro invocation
+ --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/internal_macros.rs:22:8
+  |
+  = note: `&i8` implements `Add<i8>`
+ ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/internal_macros.rs:33:8
+  |
+  = note: `i8` implements `Add<&i8>`
+ ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/internal_macros.rs:44:8
+  |
+  = note: `&i8` implements `Add`
+  = note: this error originates in the macro `add_impl` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `enums` (bin "enums") due to 1 previous error

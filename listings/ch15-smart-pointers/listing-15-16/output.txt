@@ -2,6 +2,6 @@ $ cargo run
    Compiling drop-example v0.1.0 (file:///projects/drop-example)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
      Running `target/debug/drop-example`
-CustomSmartPointer created.
+CustomSmartPointer created
 Dropping CustomSmartPointer with data `some data`!
-CustomSmartPointer dropped before the end of main.
+CustomSmartPointer dropped before the end of main

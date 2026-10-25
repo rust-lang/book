@@ -2,7 +2,7 @@ use std::io;
 
 use clap::{self, Parser, Subcommand};
 
-use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
+use mdbook_preprocessor::Preprocessor;
 use mdbook_trpl::Figure;
 
 fn main() -> Result<(), String> {
@@ -15,7 +15,7 @@ fn main() -> Result<(), String> {
             }
         }
         None => {
-            let (ctx, book) = CmdPreprocessor::parse_input(io::stdin())
+            let (ctx, book) = mdbook_preprocessor::parse_input(io::stdin())
                 .map_err(|e| format!("{e}"))?;
             let processed =
                 Figure.run(&ctx, book).map_err(|e| format!("{e}"))?;
