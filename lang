@@ -1,0 +1,115 @@
+# 1) ensure you're on the PR branch
+git checkout <your-pr-branch>
+
+# 2) create/update workflow
+mkdir -p .github/workflows
+cat > .github/workflows/node-ci.yml <<'YAML'
+name: Node.js CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (if configured)
+        run: |
+          if npm run | grep -qE '^[[:space:]]*lint'; then
+            npm run lint
+          else
+            echo "No lint script found; skipping."
+          fi
+
+      - name: Typecheck (if configured)
+        run: |
+          if npm run | grep -qE '^[[:space:]]*typecheck'; then
+            npm run typecheck
+          else
+            echo "No typecheck script found; skipping."
+          fi
+
+      - name: Build (if configured)
+        run: |
+          if npm run | grep -qE '^[[:space:]]*build'; then
+            npm run build
+          else
+            echo "No build script found; skipping."
+          fi
+
+      - name: Test (if configured)
+        run: |
+          if npm run | grep -qE '^[[:space:]]*test'; then
+            npm test -- --ci
+          else
+            echo "No test script found; skipping."
+          fi
+YAML
+
+# 3) add smoke test
+mkdir -p scripts
+cat > scripts/ci-smoke.test.js <<'JS'
+#!/usr/bin/env node
+
+const { execSync } = require('node:child_process');
+
+function hasScript(name) {
+  try {
+    const output = execSync('npm run', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    return new RegExp(`^\\s*${name}\\b`, 'm').test(output);
+  } catch {
+    return false;
+  }
+}
+
+function run(cmd) {
+  execSync(cmd, { stdio: 'inherit' });
+}
+
+console.log('Running CI smoke checks...');
+run('npm --version');
+run('node --version');
+
+if (hasScript('build')) {
+  console.log('Found build script; running build...');
+  run('npm run build');
+} else {
+  console.log('No build script found; skipping build check.');
+}
+
+if (hasScript('test')) {
+  console.log('Found test script; running tests...');
+  run('npm test -- --ci');
+} else {
+  console.log('No test script found; skipping test check.');
+}
+
+console.log('CI smoke checks completed.');
+JS
+
+# 4) wire package.json script (manual edit if needed)
+# Add: "test:ci-smoke": "node scripts/ci-smoke.test.js"
+
+# 5) commit + push
+git add .github/workflows/node-ci.yml scripts/ci-smoke.test.js package.json
+git commit -m "ci: harden node workflow and add ci smoke test"
+git push
