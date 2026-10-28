@@ -7,8 +7,8 @@ error[E0004]: non-exhaustive patterns: `None` not covered
   |               ^ pattern `None` not covered
   |
 note: `Option<i32>` defined here
- --> /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/option.rs:598:0
- ::: /rustc/88d9e12ae178fab0fb5cc050a94da85685d449ea/library/core/src/option.rs:602:4
+ --> /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/option.rs:598:0
+ ::: /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/option.rs:602:4
   |
   = note: not covered
   = note: the matched value is of type `Option<i32>`
