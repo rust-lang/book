@@ -171,10 +171,12 @@ from under them! However, multiple immutable references are allowed because no
 one who is just reading the data has the ability to affect anyone else’s
 reading of the data.
 
-Note that a reference’s scope starts from where it is introduced and continues
-through the last time that reference is used. For instance, this code will
-compile because the last usage of the immutable references is in the `println!`,
-before the mutable reference is introduced:
+Note that a reference’s scope is distinct from a variable’s scope: a
+variable’s scope extends to the end of the block where it was declared,
+whereas a reference’s scope starts from where the reference is introduced
+and continues through the last time that reference is used. For instance,
+this code will compile because the last usage of the immutable references
+is in the `println!`, before the mutable reference is introduced:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
