@@ -170,11 +170,12 @@ what `cargo` is and what each of these commands does in detail later.)
 $ cargo new get-dependencies
 $ cd get-dependencies
 $ cargo add rand@0.10.1 trpl@0.2.0
+$ cargo fetch
 ```
 
-This will cache the downloads for these packages so you will not need to
-download them later. Once you have run this command, you do not need to keep the
-`get-dependencies` folder. If you have run this command, you can use the
+This will download and cache the packages so you will not need to download them
+later. Once you have run these commands, you do not need to keep the
+`get-dependencies` folder. If you have run these commands, you can use the
 `--offline` flag with all `cargo` commands in the rest of the book to use these
 cached versions instead of attempting to use the network.
 
