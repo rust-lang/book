@@ -2,7 +2,7 @@
 
 Now that you’ve installed Rust, it’s time to write your first Rust program.
 It’s traditional when learning a new language to write a little program that
-prints the text `Hello, world!` to the screen, so we’ll do the same here!
+prints the text `Hello, World!` to the screen, so we’ll do the same here!
 
 > Note: This book assumes basic familiarity with the command line. Rust makes
 > no specific demands about your editing or tooling or where your code lives, so
@@ -23,7 +23,7 @@ we suggest making a _projects_ directory in your home directory and keeping all
 your projects there.
 
 Open a terminal and enter the following commands to make a _projects_ directory
-and a directory for the “Hello, world!” project within the _projects_ directory.
+and a directory for the “Hello, World!” project within the _projects_ directory.
 
 For Linux, macOS, and PowerShell on Windows, enter this:
 
@@ -55,11 +55,11 @@ _hello_world.rs_ rather than _helloworld.rs_.
 
 Now open the _main.rs_ file you just created and enter the code in Listing 1-1.
 
-<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
+<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, World!`">
 
 ```rust
 fn main() {
-    println!("Hello, world!");
+    println!("Hello, World!");
 }
 ```
 
@@ -72,7 +72,7 @@ commands to compile and run the file:
 ```console
 $ rustc main.rs
 $ ./main
-Hello, world!
+Hello, World!
 ```
 
 On Windows, enter the command `.\main` instead of `./main`:
@@ -80,15 +80,15 @@ On Windows, enter the command `.\main` instead of `./main`:
 ```powershell
 > rustc main.rs
 > .\main
-Hello, world!
+Hello, World!
 ```
 
-Regardless of your operating system, the string `Hello, world!` should print to
+Regardless of your operating system, the string `Hello, World!` should print to
 the terminal. If you don’t see this output, refer back to the
 [“Troubleshooting”][troubleshooting]<!-- ignore --> part of the Installation
 section for ways to get help.
 
-If `Hello, world!` did print, congratulations! You’ve officially written a Rust
+If `Hello, World!` did print, congratulations! You’ve officially written a Rust
 program. That makes you a Rust programmer—welcome!
 
 <!-- Old headings. Do not remove or links may break. -->
@@ -97,7 +97,7 @@ program. That makes you a Rust programmer—welcome!
 
 ### The Anatomy of a Rust Program
 
-Let’s review this “Hello, world!” program in detail. Here’s the first piece of
+Let’s review this “Hello, World!” program in detail. Here’s the first piece of
 the puzzle:
 
 ```rust
@@ -125,7 +125,7 @@ line as the function declaration, adding one space in between.
 The body of the `main` function holds the following code:
 
 ```rust
-println!("Hello, world!");
+println!("Hello, World!");
 ```
 
 This line does all the work in this little program: It prints text to the
@@ -138,7 +138,7 @@ detail in [Chapter 20][ch20-macros]<!-- ignore -->. For now, you just need to
 know that using a `!` means that you’re calling a macro instead of a normal
 function and that macros don’t always follow the same rules as functions.
 
-Second, you see the `"Hello, world!"` string. We pass this string as an argument
+Second, you see the `"Hello, World!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
 
 Third, we end the line with a semicolon (`;`), which indicates that this
@@ -192,7 +192,7 @@ From here, you run the _main_ or _main.exe_ file, like this:
 $ ./main # or .\main on Windows
 ```
 
-If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
+If your _main.rs_ is your “Hello, World!” program, this line prints `Hello,
 world!` to your terminal.
 
 If you’re more familiar with a dynamic language, such as Ruby, Python, or
