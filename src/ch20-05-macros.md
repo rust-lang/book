@@ -110,7 +110,7 @@ one arm.
 Valid pattern syntax in macro definitions is different from the pattern syntax
 covered in Chapter 19 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
-Listing 20-29 mean; for the full macro pattern syntax, see the [Rust
+Listing 20-35 mean; for the full macro pattern syntax, see the [Rust
 Reference][ref].
 
 First, we use a set of parentheses to encompass the whole pattern. We use a
