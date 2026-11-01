@@ -23,7 +23,8 @@ described.
 - **`continue`**: Continue to the next loop iteration.
 - **`crate`**: In a module path, refers to the crate root.
 - **`dyn`**: Dynamic dispatch to a trait object.
-- **`else`**: Fallback for `if` and `if let` control flow constructs.
+- **`else`**: Fallback for `if`, `if let`, and `let...else` control flow
+  constructs.
 - **`enum`**: Define an enumeration.
 - **`extern`**: Link an external function or variable.
 - **`false`**: Boolean false literal.
