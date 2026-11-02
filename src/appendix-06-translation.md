@@ -30,3 +30,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Tiếng Việt](https://github.com/tuanemdev/rust-book-vn)
 - [Italiano](https://nixxo.github.io/rust-lang-book-it/)
 - [বাংলা](https://github.com/IsmailHosenIsmailJames/rust-book-bn)
+- [Türkçe](https://hakantr.github.io/kitap-rs/)
