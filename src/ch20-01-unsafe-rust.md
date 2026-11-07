@@ -392,7 +392,9 @@ support but which can be problematic with Rust’s ownership rules. If two
 threads are accessing the same mutable global variable, it can cause a data
 race.
 
-In Rust, global variables are called _static_ variables. Listing 20-10 shows an
+Rust doesn’t have a dedicated “global variable” keyword; instead, it has
+_static_ variables, which live for the entire program and can be declared at
+module scope (globally) or inside a function (locally). Listing 20-10 shows an
 example declaration and use of a static variable with a string slice as a
 value.
 
