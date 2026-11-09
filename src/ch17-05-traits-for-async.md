@@ -198,7 +198,7 @@ Directly awaiting a future with `await` pins the future implicitly. That’s why
 we don’t need to use `pin!` everywhere we want to await futures.
 
 However, we’re not directly awaiting a future here. Instead, we construct a new
-future, JoinAll, by passing a collection of futures to the `join_all` function.
+future, `JoinAll`, by passing a collection of futures to the `join_all` function.
 The signature for `join_all` requires that the types of the items in the
 collection all implement the `Future` trait, and `Box<T>` implements `Future`
 only if the `T` it wraps is a future that implements the `Unpin` trait.
