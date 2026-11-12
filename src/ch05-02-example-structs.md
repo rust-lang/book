@@ -142,7 +142,7 @@ implementation of `Display` to use with `println!` and the `{}` placeholder.
 If we continue reading the errors, we’ll find this helpful note:
 
 ```text
-{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:9:10}}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:12:13}}
 ```
 
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
@@ -160,7 +160,7 @@ Compile the code with this change. Drat! We still get an error:
 But again, the compiler gives us a helpful note:
 
 ```text
-{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:11:12}}
 ```
 
 Rust _does_ include functionality to print out debugging information, but we
