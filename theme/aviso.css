@@ -1,0 +1,17 @@
+/* Aviso de página ainda não traduzida (tool/aviso/aviso.py). */
+.aviso-traducao {
+  margin: 0 0 1.5em;
+  padding: 0.75em 1em;
+  border-radius: 6px;
+  border: 1px solid #d4a72c;
+  background: #fff8c5;
+  color: #3b2f00;
+}
+.aviso-traducao p { margin: 0; }
+.aviso-traducao a { color: #0b4f9c; font-weight: 600; }
+.coal .aviso-traducao, .navy .aviso-traducao, .ayu .aviso-traducao {
+  background: #3b3214;
+  border-color: #9a7b1f;
+  color: #f5e7b5;
+}
+.coal .aviso-traducao a, .navy .aviso-traducao a, .ayu .aviso-traducao a { color: #8cc4ff; }

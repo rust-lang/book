@@ -17,3 +17,7 @@ Toda tradução e retradução de página roda no **Haiku** (`model: haiku`), lo
 - Links de referência `[texto][chave]` e as definições `[chave]: url` no fim do arquivo: a chave e a URL ficam em inglês; traduza só o texto visível.
 - Títulos traduzidos levam a âncora original: depois de traduzir, rode `python3 tool/traducao/ancorar_titulos.py <arquivos>` (acrescenta `{#slug-do-inglês}`, que o mdBook aceita). Links `#...` continuam apontando para o id em inglês.
 - `python3 tool/traducao/verificar.py` confere tudo isso contra o inglês do commit em `ultimo-sync-upstream.txt`.
+
+## Aviso de página não traduzida
+
+`tool/aviso/aviso.py` é um pré-processador do mdBook (registrado no `book.toml`): todo capítulo sem `<!-- ia-translate: true -->` ganha no topo um aviso de que ainda está em inglês, com link para o arquivo no GitHub. Ao traduzir um capítulo, o aviso some sozinho no próximo build. Estilo em `theme/aviso.css`.
