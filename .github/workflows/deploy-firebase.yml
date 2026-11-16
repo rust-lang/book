@@ -1,0 +1,49 @@
+name: Deploy rust.documentacao.dev
+
+# Build do livro com o mdBook (e os pré-processadores de packages/mdbook-trpl)
+# e deploy no site Firebase rust-documentacao (projeto transliteradu).
+# Precisa do secret FIREBASE_SERVICE_ACCOUNT.
+
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'listings/**', 'theme/**', 'book.toml', 'packages/mdbook-trpl/**', 'firebase.json', '.github/workflows/deploy-firebase.yml']
+  pull_request:
+    paths: ['src/**', 'book.toml', 'firebase.json']
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  MDBOOK_VERSION: 0.5.1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conferir traduções
+        run: python3 tool/traducao/verificar.py
+      - name: Instalar Rust e mdBook
+        run: |
+          rustup set profile minimal
+          rustup toolchain install $(cat rust-toolchain)
+          mkdir bin
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+          echo "$(pwd)/bin" >> "$GITHUB_PATH"
+      - name: Build do livro
+        run: |
+          cargo install --locked --path packages/mdbook-trpl
+          mdbook build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: transliteradu
+          channelId: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'live' }}

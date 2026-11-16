@@ -230,7 +230,7 @@ impl Listing {
 
         match self.file_name.as_ref() {
             Some(file_name) => format!(
-                "{figure}<span class=\"file-name\">Filename: {file_name}</span>\n",
+                "{figure}<span class=\"file-name\">Nome do arquivo: {file_name}</span>\n",
             ),
             None => figure,
         }
@@ -244,7 +244,7 @@ impl Listing {
                     .map(|caption| format!(": {}", caption))
                     .unwrap_or_default();
                 let listing_a_tag = format!(
-                    "<a href=\"#listing-{number}\">Listing {number}</a>"
+                    "<a href=\"#listing-{number}\">Listagem {number}</a>"
                 );
                 format!(
                     r#"<figcaption>{listing_a_tag}{caption_text}</figcaption>
@@ -269,10 +269,10 @@ impl Listing {
     fn closing_text(&self, trailing: &str) -> String {
         match (&self.number, &self.caption) {
             (Some(number), Some(caption)) => {
-                format!("Listing {number}: {caption}{trailing}")
+                format!("Listagem {number}: {caption}{trailing}")
             }
             (None, Some(caption)) => format!("{caption}{trailing}"),
-            (Some(number), None) => format!("Listing {number}{trailing}"),
+            (Some(number), None) => format!("Listagem {number}{trailing}"),
             (None, None) => trailing.into(),
         }
     }

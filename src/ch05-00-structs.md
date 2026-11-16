@@ -1,14 +1,16 @@
-# Using Structs to Structure Related Data
+<!-- ia-translate: true -->
+# Usando Structs para Estruturar Dados Relacionados {#using-structs-to-structure-related-data}
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a struct is like an object’s
-data attributes. In this chapter, we’ll compare and contrast tuples with
-structs to build on what you already know and demonstrate when structs are a
-better way to group data.
+Um _struct_, ou _estrutura_, é um tipo de dado personalizado que permite agrupar
+e nomear vários valores relacionados que formam um grupo com significado. Se
+você conhece uma linguagem orientada a objetos, um struct é como os atributos de
+dados de um objeto. Neste capítulo, vamos comparar e contrastar tuplas com
+structs para construir sobre o que você já sabe e demonstrar quando structs são
+uma forma melhor de agrupar dados.
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+Vamos mostrar como definir e instanciar structs. Vamos discutir como definir
+funções associadas, especialmente o tipo de função associada chamada _método_,
+para especificar o comportamento associado a um tipo struct. Structs e enums
+(discutidos no Capítulo 6) são os blocos de construção para criar novos tipos no
+domínio do seu programa, para aproveitar ao máximo a verificação de tipos em
+tempo de compilação do Rust.
