@@ -7,7 +7,7 @@ language = "pt-BR"
 authors = ["Steve Klabnik", "Carol Nichols", "Chris Krycho", "Contributions from the Rust Community"]
 
 [output.html]
-additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.css", "theme/listing.css"]
+additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.css", "theme/listing.css", "theme/aviso.css"]
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/documentacao-dev/rust-book-brasil"
 
@@ -39,6 +39,9 @@ use-boolean-and = true
 "ch20-03-graceful-shutdown-and-cleanup.html" = "ch21-03-graceful-shutdown-and-cleanup.html"
 
 # Do not sync this preprocessor; it is for the HTML renderer only.
+[preprocessor.aviso-traducao]
+command = "python3 tool/aviso/aviso.py"
+
 [preprocessor.trpl-note]
 command = "cargo run --manifest-path packages/mdbook-trpl/Cargo.toml --bin mdbook-trpl-note"
 
