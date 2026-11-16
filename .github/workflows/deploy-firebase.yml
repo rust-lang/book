@@ -28,6 +28,12 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Buscar o upstream (o verificar.py compara com o inglês)
+        run: |
+          git remote add upstream https://github.com/rust-lang/book.git
+          git fetch --quiet upstream
       - name: Conferir traduções
         run: python3 tool/traducao/verificar.py
       - name: Instalar Rust e mdBook
