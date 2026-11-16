@@ -8,3 +8,5 @@ tmp
 .nova
 .vscode
 .zed
+/book/
+.firebase/

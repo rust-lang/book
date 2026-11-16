@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "rust-documentacao",
+    "public": "book",
+    "cleanUrls": false,
+    "ignore": ["firebase.json", "**/.*"],
+    "headers": [
+      { "source": "**/*.@(css|js|svg|png|jpg|woff|woff2)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] }
+    ]
+  }
+}
