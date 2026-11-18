@@ -1,7 +1,7 @@
 $ cargo test -- --ignored
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
-     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/build/adder/9af350bc1ce9a130/out/adder-9af350bc1ce9a130)
 
 running 1 test
 test tests::expensive_test ... ok
