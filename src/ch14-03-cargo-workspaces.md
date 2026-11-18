@@ -23,12 +23,10 @@ $ mkdir add
 $ cd add
 ```
 
-Next, in the _add_ directory, we create the _Cargo.toml_ file that will
-configure the entire workspace. This file won’t have a `[package]` section.
-Instead, it will start with a `[workspace]` section that will allow us to add
-members to the workspace. We also make a point to use the latest and greatest
-version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` value to `"3"`:
+Next, create a file named _Cargo.toml_ in the _add_ directory using your text
+editor. This file configures the entire workspace. Start it with a `[workspace]`
+section and leave out the `[package]` section. Set `resolver` to `"3"` to use
+Cargo’s latest resolver in the workspace:
 
 <span class="filename">Filename: Cargo.toml</span>
 
