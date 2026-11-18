@@ -9,8 +9,9 @@ A path can take two forms:
 - An _absolute path_ is the full path starting from a crate root; for code
   from an external crate, the absolute path begins with the crate name, and for
   code from the current crate, it starts with the literal `crate`.
-- A _relative path_ starts from the current module and uses `self`, `super`, or
-  an identifier in the current module.
+- A _relative path_ starts with `self`, `super`, or an identifier in the
+  current module. Paths that start with `self` or an identifier begin in the
+  current module; paths that start with `super` begin in the parent module.
 
 Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
