@@ -473,7 +473,7 @@ checked into source control with the rest of the code in your project.
 When you _do_ want to update a crate, Cargo provides the command `update`,
 which will ignore the _Cargo.lock_ file and figure out all the latest versions
 that fit your specifications in _Cargo.toml_. Cargo will then write those
-versions to the _Cargo.lock_ file. Otherwise, by default, Cargo will only look
+versions to the _Cargo.lock_ file. Given our specification `0.10.1`, Cargo will only look
 for versions greater than 0.10.1 and less than 0.11.0. If the `rand` crate has
 released the two new versions 0.10.2 and 0.999.0, you would see the following if
 you ran `cargo update`:
