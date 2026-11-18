@@ -169,6 +169,19 @@ until it has collected all of the results, but after the change, the results
 will be printed as each matching line is found because the `for` loop in the
 `run` function is able to take advantage of the laziness of the iterator.
 
+This change also requires an adjustment to `run`. Its existing `if` expression
+chooses between `search` and `search_case_insensitive`, and both branches must
+have the same type. Changing just `search` leaves one branch returning an
+iterator and the other returning a vector. Changing both functions to return
+`impl Iterator<Item = &'a str>` doesn't resolve this mismatch: each function's
+`impl Iterator` return type is distinct. One straightforward option is to move
+the `for` loop into each branch, so the two iterator types don't need to match.
+
+Also note that returning a lazy iterator changes how long the search query is
+needed. The iterator returned by `filter` captures `query`, so `search` needs to
+keep that reference valid for the iterator's lifetime, for example by changing
+its `query` parameter to `&'a str` as well.
+
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="choosing-between-loops-or-iterators"></a>
