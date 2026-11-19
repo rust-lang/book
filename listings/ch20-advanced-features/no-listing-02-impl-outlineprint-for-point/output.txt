@@ -34,7 +34,7 @@ note: required by a bound in `OutlinePrint::outline_print`
  3 | trait OutlinePrint: fmt::Display {
    |                     ^^^^^^^^^^^^ required by this bound in `OutlinePrint::outline_print`
  4 |     fn outline_print(&self) {
-   |        ------------- required by a bound in this associated function
+   |
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `traits-example` (bin "traits-example") due to 2 previous errors
