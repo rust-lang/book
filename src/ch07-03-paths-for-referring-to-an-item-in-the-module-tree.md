@@ -36,34 +36,43 @@ Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`
 
 </Listing>
 
-The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
-we use an absolute path. The `add_to_waitlist` function is defined in the same
-crate as `eat_at_restaurant`, which means we can use the `crate` keyword to
-start an absolute path. We then include each of the successive modules until we
-make our way to `add_to_waitlist`. You can imagine a filesystem with the same
-structure: We’d specify the path `/front_of_house/hosting/add_to_waitlist` to
-run the `add_to_waitlist` program; using the `crate` name to start from the
-crate root is like using `/` to start from the filesystem root in your shell.
+In the listing, `eat_at_restaurant` calls `add_to_waitlist` in two different
+ways:
 
-The second time we call `add_to_waitlist` in `eat_at_restaurant`, we use a
-relative path. The path starts with `front_of_house`, the name of the module
-defined at the same level of the module tree as `eat_at_restaurant`. Here the
-filesystem equivalent would be using the path
-`front_of_house/hosting/add_to_waitlist`. Starting with a module name means
-that the path is relative.
+The first call to `add_to_waitlist` uses an absolute path that starts with the
+`crate` keyword and includes all intermediate module names, until it reaches
+`add_to_waitlist`.
 
-Choosing whether to use a relative or absolute path is a decision you’ll make
-based on your project, and it depends on whether you’re more likely to move
-item definition code separately from or together with the code that uses the
-item. For example, if we moved the `front_of_house` module and the
-`eat_at_restaurant` function into a module named `customer_experience`, we’d
-need to update the absolute path to `add_to_waitlist`, but the relative path
-would still be valid. However, if we moved the `eat_at_restaurant` function
-separately into a module named `dining`, the absolute path to the
-`add_to_waitlist` call would stay the same, but the relative path would need to
-be updated. Our preference in general is to specify absolute paths because it’s
-more likely we’ll want to move code definitions and item calls independently of
-each other.
+The second call to `add_to_waitlist` uses a relative path that starts with
+`front_of_house`, which is a module defined at the same level as
+`eat_at_restaurant`.
+
+### Choosing between absolute and relative paths
+
+Choosing whether to use a relative or an absolute path is a decision you have to
+make based on your needs:
+
+- Relative paths are advantageous when item definitions are moved **together**
+  with code that uses the items.
+
+  For example, if we moved the `front_of_house` module (which contains
+  `add_to_waitlist`) **together** with the `eat_at_restaurant` function into a
+  new module named `customer_experience`, we’d need to update the absolute path
+  to `add_to_waitlist`, but the relative path would still be valid.
+
+- Absolute paths are advantageous when item definitions are moved **separately**
+  from code that uses the items.
+
+  If we moved the `eat_at_restaurant` function **on its own** into a new module
+  named `dining`, the absolute path to `add_to_waitlist` would stay the same,
+  but the relative path would need to be updated.
+
+To summarize, it depends on whether you’re more likely to move item definitions
+_separately_ from or _together_ with the code that uses the items. Our
+preference in general is to specify absolute paths because it’s more likely
+we’ll want to move code definitions and item calls independently of each other.
+
+### Module and module item privacy
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 errors we get are shown in Listing 7-4.
