@@ -50,9 +50,9 @@ Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> later in this chapter.
 ### `let` Statements
 
 Prior to this chapter, we had only explicitly discussed using patterns with
-`match` and `if let`, but in fact, we’ve used patterns in other places as well,
-including in `let` statements. For example, consider this straightforward
-variable assignment with `let`:
+`match`, `if let`, `let...else`, and `while let`, but in fact, we’ve used
+patterns in other places as well, including in `let` statements. For example,
+consider this straightforward variable assignment with `let`:
 
 ```rust
 let x = 5;
@@ -171,6 +171,26 @@ The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
 last `else` block and therefore missed handling some cases, the compiler would
 not alert us to the possible logic bug.
+
+### `let...else` Statements
+
+Chapter 6 also introduced `let...else`, which combines a `let` statement with
+an `else` block. If the pattern matches, the variables it binds are available
+in the surrounding scope, just as with a plain `let` statement. If the pattern
+doesn’t match, the `else` block runs, and it must diverge: it has to return
+from the function, `break`, `continue`, or `panic!`, so that the code after the
+statement can only be reached when the bindings exist. For example, this
+statement either binds `x` to the value inside `some_value` or returns:
+
+```rust,ignore
+let Some(x) = some_value else {
+    return;
+};
+```
+
+Because the `else` block handles the non-matching case, `let...else` accepts a
+refutable pattern, which a plain `let` statement does not. We’ll look at
+refutability in more detail in the next section.
 
 ### `while let` Conditional Loops
 
