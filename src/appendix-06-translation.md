@@ -20,6 +20,7 @@ For resources in languages other than English. Most are still in progress; see
 - [Tagalog](https://github.com/josephace135/book)
 - [Esperanto](https://github.com/psychoslave/Rust-libro)
 - [ελληνική](https://github.com/TChatzigiannakis/rust-book-greek)
+- [עברית](https://github.com/IttayWeiss/rustbook-heb)
 - [Svenska](https://github.com/sebras/book)
 - [Farsi](https://github.com/RustFarsi/book), [Persian (FA)](https://github.com/persian-rust/book)
 - [Deutsch](https://github.com/rust-lang-de/rustbook-de)
