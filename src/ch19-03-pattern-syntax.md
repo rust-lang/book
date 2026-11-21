@@ -416,6 +416,8 @@ because `s` doesn’t get moved into `_`.
 
 This code works just fine because we never bind `s` to anything; it isn’t moved.
 
+<!-- Old headings. Do not remove or links may break. -->
+
 <a id="ignoring-remaining-parts-of-a-value-with-"></a>
 
 #### Remaining Parts of a Value with `..`
