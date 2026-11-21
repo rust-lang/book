@@ -377,10 +377,11 @@ This output shows `cargo test` only ran the tests for the `add_one` crate and
 didn’t run the `adder` crate tests.
 
 If you publish the crates in the workspace to
-[crates.io](https://crates.io/)<!-- ignore -->, each crate in the workspace
-will need to be published separately. Like `cargo test`, we can publish a
-particular crate in our workspace by using the `-p` flag and specifying the
-name of the crate we want to publish.
+[crates.io](https://crates.io/)<!-- ignore -->, each crate is published as a
+separate package. Like `cargo test`, we can publish a particular crate in our
+workspace by using the `-p` flag and specifying the name of the crate we want
+to publish. We can also publish all crates in the workspace with
+`cargo publish --workspace`.
 
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
