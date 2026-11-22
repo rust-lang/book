@@ -57,21 +57,21 @@ the changes are likely to be due to the threads running differently rather than
 changes in the compiler -->
 
 ```text
-hi number 1 from the second task!
-hi number 1 from the first task!
-hi number 2 from the first task!
-hi number 2 from the second task!
-hi number 3 from the first task!
-hi number 3 from the second task!
-hi number 4 from the first task!
-hi number 4 from the second task!
-hi number 5 from the first task!
+hi number 1 from the main task!
+hi number 1 from the spawned task!
+hi number 2 from the spawned task!
+hi number 2 from the main task!
+hi number 3 from the spawned task!
+hi number 3 from the main task!
+hi number 4 from the spawned task!
+hi number 4 from the main task!
+hi number 5 from the spawned task!
 ```
 
 This version stops as soon as the `for` loop in the body of the main async
 block finishes, because the task spawned by `spawn_task` is shut down when the
 `main` function ends. If you want it to run all the way to the task’s
-completion, you will need to use a join handle to wait for the first task to
+completion, you will need to use a join handle to wait for the spawned task to
 complete. With threads, we used the `join` method to “block” until the thread
 was done running. In Listing 17-7, we can use `await` to do the same thing,
 because the task handle itself is a future. Its `Output` type is a `Result`, so
@@ -92,19 +92,19 @@ the changes are likely to be due to the threads running differently rather than
 changes in the compiler -->
 
 ```text
-hi number 1 from the second task!
-hi number 1 from the first task!
-hi number 2 from the first task!
-hi number 2 from the second task!
-hi number 3 from the first task!
-hi number 3 from the second task!
-hi number 4 from the first task!
-hi number 4 from the second task!
-hi number 5 from the first task!
-hi number 6 from the first task!
-hi number 7 from the first task!
-hi number 8 from the first task!
-hi number 9 from the first task!
+hi number 1 from the main task!
+hi number 1 from the spawned task!
+hi number 2 from the spawned task!
+hi number 2 from the main task!
+hi number 3 from the spawned task!
+hi number 3 from the main task!
+hi number 4 from the spawned task!
+hi number 4 from the main task!
+hi number 5 from the spawned task!
+hi number 6 from the spawned task!
+hi number 7 from the spawned task!
+hi number 8 from the spawned task!
+hi number 9 from the spawned task!
 ```
 
 So far, it looks like async and threads give us similar outcomes, just with
