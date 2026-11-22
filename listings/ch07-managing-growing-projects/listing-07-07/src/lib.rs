@@ -5,7 +5,7 @@ mod front_of_house {
     }
 }
 
-// -- snip --
+// --snip--
 // ANCHOR_END: here
 pub fn eat_at_restaurant() {
     // Absolute path

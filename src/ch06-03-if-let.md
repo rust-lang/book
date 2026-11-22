@@ -62,7 +62,7 @@ Or we could use an `if let` and `else` expression, like this:
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
 ```
 
-## Staying on the “Happy Path” with `let...else`
+### Staying on the “Happy Path” with `let...else`
 
 The common pattern is to perform some computation when a value is present and
 return a default value otherwise. Continuing with our example of coins with a
