@@ -25,11 +25,15 @@ expression to run if the value matches that arm’s pattern, like this:
 For example, here’s the `match` expression from Listing 6-5 that matches on an
 `Option<i32>` value in the variable `x`:
 
-```rust,ignore
+```rust,noplayground
+# let x: Option<i32> = Some(5);
+# let result =
 match x {
     None => None,
     Some(i) => Some(i + 1),
 }
+# ;
+# assert_eq!(result, Some(6));
 ```
 
 The patterns in this `match` expression are the `None` and `Some(i)` to the

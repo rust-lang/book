@@ -157,7 +157,10 @@ on the `SelectBox` type as well, as shown in Listing 18-8.
 
 <Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod gui {
+{{#rustdoc_include ../listings/ch18-oop/listing-18-03/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch18-oop/listing-18-08/src/main.rs:here}}
 ```
 
@@ -171,7 +174,10 @@ components. Listing 18-9 shows this implementation.
 
 <Listing number="18-9" file-name="src/main.rs" caption="Using trait objects to store values of different types that implement the same trait">
 
-```rust,ignore
+```rust,noplayground
+# mod gui {
+{{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/main.rs:here}}
 ```
 

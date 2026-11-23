@@ -213,7 +213,7 @@ what that looks like.
 
 <Listing number="15-22" file-name="src/lib.rs" caption="Using `RefCell<T>` to mutate an inner value while the outer value is considered immutable">
 
-```rust,noplayground
+```rust,test_harness,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
 ```
 

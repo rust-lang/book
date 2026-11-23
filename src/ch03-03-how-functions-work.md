@@ -167,11 +167,14 @@ curly brackets is an expression, for example:
 
 This expression:
 
-```rust,ignore
+```rust,noplayground
+# let y =
 {
     let x = 3;
     x + 1
 }
+# ;
+# assert_eq!(y, 4);
 ```
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`

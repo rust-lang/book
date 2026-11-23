@@ -205,7 +205,7 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 
 <Listing number="14-4" file-name="src/main.rs" caption="A crate using the `art` crate’s items with its internal structure exported">
 
-```rust,ignore
+```rust,ignore (requires the companion art library as a separate crate)
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-04/src/main.rs}}
 ```
 
@@ -226,8 +226,9 @@ items at the top level, as shown in Listing 14-5.
 
 <Listing number="14-5" file-name="src/lib.rs" caption="Adding `pub use` statements to re-export items">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
+# fn main() {}
 ```
 
 </Listing>
@@ -247,7 +248,7 @@ structure in Listing 14-5, as shown in Listing 14-6.
 
 <Listing number="14-6" file-name="src/main.rs" caption="A program using the re-exported items from the `art` crate">
 
-```rust,ignore
+```rust,ignore (requires the companion art library as a separate crate)
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
 ```
 

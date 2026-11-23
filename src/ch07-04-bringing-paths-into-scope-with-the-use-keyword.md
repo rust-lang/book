@@ -198,7 +198,7 @@ wanted to bring into scope. Recall that in [“Generating a Random
 Number”][rand]<!-- ignore --> in Chapter 2, we brought items in the
 `rand::prelude` module into scope and called the `rand::rng` function:
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 

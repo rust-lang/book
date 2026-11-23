@@ -128,11 +128,13 @@ to line up the relevant parts. This illustrates how closure syntax is similar
 to function syntax except for the use of pipes and the amount of syntax that is
 optional:
 
-```rust,ignore
+```rust,noplayground
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
 let add_one_v2 = |x: u32| -> u32 { x + 1 };
 let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
+# assert_eq!(add_one_v3(1_u32), add_one_v1(1));
+# assert_eq!(add_one_v4(1_u32), add_one_v1(1));
 ```
 
 The first line shows a function definition and the second line shows a fully
@@ -306,7 +308,7 @@ depending on how the closure’s body handles the values:
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-1:
 
-```rust,ignore
+```rust,ignore (excerpt from a standard library implementation)
 impl<T> Option<T> {
     pub fn unwrap_or_else<F>(self, f: F) -> T
     where

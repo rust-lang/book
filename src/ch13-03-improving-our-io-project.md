@@ -15,7 +15,10 @@ in Listing 12-23.
 
 <Listing number="13-17" file-name="src/main.rs" caption="Reproduction of the `Config::build` function from Listing 12-23">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/main.rs:ch13}}
 ```
 
@@ -46,7 +49,10 @@ Open your I/O project’s _src/main.rs_ file, which should look like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
@@ -116,7 +122,10 @@ updates the code from Listing 12-23 to use the `next` method.
 
 <Listing number="13-20" file-name="src/main.rs" caption="Changing the body of `Config::build` to use iterator methods">
 
-```rust,ignore,noplayground
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/main.rs:here}}
 ```
 
@@ -141,7 +150,7 @@ project, which is reproduced here in Listing 13-21 as it was in Listing 12-19.
 
 <Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from Listing 12-19">
 
-```rust,ignore
+```rust,test_harness,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
 ```
 
@@ -156,7 +165,7 @@ concurrent access to the `results` vector. Listing 13-22 shows this change.
 
 <Listing number="13-22" file-name="src/lib.rs" caption="Using iterator adapter methods in the implementation of the `search` function">
 
-```rust,ignore
+```rust,test_harness,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-22/src/lib.rs:here}}
 ```
 

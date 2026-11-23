@@ -201,7 +201,10 @@ crate by adding the following code to the top of _src/main.rs_:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore
+```rust,compile_fail,noplayground
+# mod hello {
+{{#rustdoc_include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/src/main.rs:here}}
 ```
 
@@ -256,12 +259,16 @@ end up doing something similar to the standard library `thread::spawn`
 implementation, so we can look at what bounds the signature of `thread::spawn`
 has on its parameter. The documentation shows us the following:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::thread::JoinHandle;
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
     where
         F: FnOnce() -> T,
         F: Send + 'static,
         T: Send + 'static,
+# {
+#     unimplemented!()
+# }
 ```
 
 The `F` type parameter is the one we’re concerned with here; the `T` type
@@ -345,8 +352,14 @@ thread pool without any threads should be an unrecoverable error. If you’re
 feeling ambitious, try to write a function named `build` with the following
 signature to compare with the `new` function:
 
-```rust,ignore
+```rust,no_run,noplayground
+# struct PoolCreationError;
+# struct ThreadPool;
+# impl ThreadPool {
 pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
+#     unimplemented!()
+# }
+# }
 ```
 
 #### Creating Space to Store the Threads
@@ -356,12 +369,16 @@ the pool, we can create those threads and store them in the `ThreadPool` struct
 before returning the struct. But how do we “store” a thread? Let’s take another
 look at the `thread::spawn` signature:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::thread::JoinHandle;
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
     where
         F: FnOnce() -> T,
         F: Send + 'static,
         T: Send + 'static,
+# {
+#     unimplemented!()
+# }
 ```
 
 The `spawn` function returns a `JoinHandle<T>`, where `T` is the type that the

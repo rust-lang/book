@@ -1,4 +1,4 @@
-use aggregator::{self, SocialPost, Summary};
+use aggregator::{SocialPost, Summary};
 
 fn main() {
     // ANCHOR: here

@@ -43,8 +43,10 @@ have to declare the type parameter name before we use it. To define the generic
 `largest` function, we place type name declarations inside angle brackets,
 `<>`, between the name of the function and the parameter list, like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn largest<T>(list: &[T]) -> &T {
+#     unimplemented!()
+# }
 ```
 
 We read this definition as “The function `largest` is generic over some type

@@ -176,8 +176,14 @@ with the signature of the method that’s called when we use the `+` operator.
 The `+` operator uses the `add` method, whose signature looks something like
 this:
 
-```rust,ignore
+```rust,no_run,noplayground
+# struct Example;
+# impl std::ops::Add<&str> for Example {
+#     type Output = String;
 fn add(self, s: &str) -> String {
+#     unimplemented!()
+# }
+# }
 ```
 
 In the standard library, you’ll see `add` defined using generics and associated

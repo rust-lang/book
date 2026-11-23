@@ -126,7 +126,10 @@ for an environment variable named `IGNORE_CASE`, as shown in Listing 12-23.
 
 <Listing number="12-23" file-name="src/main.rs" caption="Checking for any value in an environment variable named `IGNORE_CASE`">
 
-```rust,ignore,noplayground
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/main.rs:here}}
 ```
 

@@ -172,8 +172,8 @@ it knows how to dereference.
 When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this
 code:
 
-```rust,ignore
-*(y.deref())
+```rust,noplayground
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:explicit-deref}}
 ```
 
 Rust substitutes the `*` operator with a call to the `deref` method and then a

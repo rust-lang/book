@@ -61,7 +61,10 @@ instead.
 
 <Listing number="12-24" file-name="src/main.rs" caption="Writing error messages to standard error instead of standard output using `eprintln!`">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
 ```
 

@@ -156,7 +156,7 @@ function to call the `add_one` function, as in Listing 14-7.
 
 <Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
 
-```rust,ignore
+```rust,ignore (requires a separate add_one library in the workspace)
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 

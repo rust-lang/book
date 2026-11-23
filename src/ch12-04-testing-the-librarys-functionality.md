@@ -161,7 +161,7 @@ we return the vector, as shown in Listing 12-19.
 
 <Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so that we can return them">
 
-```rust,ignore
+```rust,test_harness,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 

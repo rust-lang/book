@@ -476,7 +476,10 @@ binary crate in _src/main.rs_ and call it, as shown in Listing 12-14.
 
 <Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate’s `search` function in *src/main.rs*">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
 ```
 

@@ -17,7 +17,7 @@ one word, so the entire string should be returned.
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
 
-```rust,ignore
+```rust,ignore (the return type is intentionally unspecified)
 fn first_word(s: &String) -> ?
 ```
 
@@ -97,8 +97,10 @@ Having to worry about the index in `word` getting out of sync with the data in
 `s` is tedious and error-prone! Managing these indices is even more brittle if
 we write a `second_word` function. Its signature would have to look like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn second_word(s: &String) -> (usize, usize) {
+#     unimplemented!()
+# }
 ```
 
 Now we’re tracking a starting _and_ an ending index, and we have even more
@@ -199,8 +201,10 @@ the slice and the number of elements in the slice.
 
 Returning a slice would also work for a `second_word` function:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn second_word(s: &String) -> &str {
+#     unimplemented!()
+# }
 ```
 
 We now have a straightforward API that’s much harder to mess up because the
@@ -258,8 +262,10 @@ immutable reference.
 Knowing that you can take slices of literals and `String` values leads us to
 one more improvement on `first_word`, and that’s its signature:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn first_word(s: &String) -> &str {
+#     unimplemented!()
+# }
 ```
 
 A more experienced Rustacean would write the signature shown in Listing 4-9

@@ -70,8 +70,10 @@ an error.
 The main use case for type synonyms is to reduce repetition. For example, we
 might have a lengthy type like this:
 
-```rust,ignore
+```rust,noplayground
+# type Thunk =
 Box<dyn Fn() + Send + 'static>
+# ;
 ```
 
 Writing this lengthy type in function signatures and as type annotations all
@@ -157,7 +159,7 @@ here in Listing 20-27.
 
 <Listing number="20-27" caption="A `match` with an arm that ends in `continue`">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
 ```
 
@@ -192,7 +194,7 @@ The never type is useful with the `panic!` macro as well. Recall the `unwrap`
 function that we call on `Option<T>` values to produce a value or panic with
 this definition:
 
-```rust,ignore
+```rust,ignore (excerpt from a standard library implementation)
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 

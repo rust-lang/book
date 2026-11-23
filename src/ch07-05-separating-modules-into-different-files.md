@@ -57,7 +57,7 @@ the declaration of the `hosting` module:
 
 <Listing file-name="src/front_of_house.rs">
 
-```rust,ignore
+```rust,ignore (requires the source files that define the modules)
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 

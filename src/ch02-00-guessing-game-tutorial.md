@@ -219,7 +219,9 @@ part is this method:
 
 We could have written this code as:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::io;
+# let mut guess = String::new();
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
@@ -520,7 +522,7 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 <Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
@@ -600,9 +602,7 @@ explain.
 
 <Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
 
-<!-- This example needs the guessing game’s rand dependency. -->
-
-```rust,compile_fail,ignore
+```rust,compile_fail,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
@@ -673,14 +673,16 @@ so by adding this line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
 The line is:
 
-```rust,ignore
+```rust,noplayground
+# let guess = String::from("42");
 let guess: u32 = guess.trim().parse().expect("Please type a number!");
+# assert_eq!(guess, 42);
 ```
 
 We create a variable named `guess`. But wait, doesn’t the program already have
@@ -766,7 +768,7 @@ more chances at guessing the number:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
@@ -829,7 +831,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
@@ -846,7 +848,7 @@ the user can continue guessing. We can do that by altering the line where
 
 <Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
@@ -915,7 +917,7 @@ secret number. Listing 2-6 shows the final code.
 
 <Listing number="2-6" file-name="src/main.rs" caption="Complete guessing game code">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 

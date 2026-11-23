@@ -114,8 +114,8 @@ print `The longest string is abcd`.
 
 <Listing number="10-19" file-name="src/main.rs" caption="A `main` function that calls the `longest` function to find the longer of two string slices">
 
-```rust,ignore
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs}}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:main}}
 ```
 
 </Listing>
@@ -179,10 +179,15 @@ Here are some examples—a reference to an `i32` without a lifetime parameter, a
 reference to an `i32` that has a lifetime parameter named `'a`, and a mutable
 reference to an `i32` that also has the lifetime `'a`:
 
-```rust,ignore
+```rust,no_run,noplayground
+# fn references<'a>(
+#     _:
 &i32        // a reference
+#     , _:
 &'a i32     // a reference with an explicit lifetime
+#     , _:
 &'a mut i32 // a mutable reference with an explicit lifetime
+# ) {}
 ```
 
 One lifetime annotation by itself doesn’t have much meaning, because the
@@ -426,8 +431,10 @@ In early versions (pre-1.0) of Rust, this code wouldn’t have compiled, because
 every reference needed an explicit lifetime. At that time, the function
 signature would have been written like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn first_word<'a>(s: &'a str) -> &'a str {
+#     unimplemented!()
+# }
 ```
 
 After writing a lot of Rust code, the Rust team found that Rust programmers
@@ -482,24 +489,30 @@ lifetimes of the references in the signature of the `first_word` function in
 Listing 10-25. The signature starts without any lifetimes associated with the
 references:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn first_word(s: &str) -> &str {
+#     unimplemented!()
+# }
 ```
 
 Then, the compiler applies the first rule, which specifies that each parameter
 gets its own lifetime. We’ll call it `'a` as usual, so now the signature is
 this:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn first_word<'a>(s: &'a str) -> &str {
+#     unimplemented!()
+# }
 ```
 
 The second rule applies because there is exactly one input lifetime. The second
 rule specifies that the lifetime of the one input parameter gets assigned to
 the output lifetime, so the signature is now this:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn first_word<'a>(s: &'a str) -> &'a str {
+#     unimplemented!()
+# }
 ```
 
 Now all the references in this function signature have lifetimes, and the
@@ -509,15 +522,19 @@ the lifetimes in this function signature.
 Let’s look at another example, this time using the `longest` function that had
 no lifetime parameters when we started working with it in Listing 10-20:
 
-```rust,ignore
+```rust,compile_fail,noplayground
 fn longest(x: &str, y: &str) -> &str {
+#     unimplemented!()
+# }
 ```
 
 Let’s apply the first rule: Each parameter gets its own lifetime. This time we
 have two parameters instead of one, so we have two lifetimes:
 
-```rust,ignore
+```rust,compile_fail,noplayground
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
+#     unimplemented!()
+# }
 ```
 
 You can see that the second rule doesn’t apply, because there is more than one

@@ -133,7 +133,10 @@ before gracefully shutting down the server, as shown in Listing 21-25.
 
 <Listing number="21-25" file-name="src/main.rs" caption="Shutting down the server after serving two requests by exiting the loop">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod hello {
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-25/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-25/src/main.rs:here}}
 ```
 
@@ -204,7 +207,10 @@ Here’s the full code for reference:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod hello {
+{{#rustdoc_include ../listings/ch21-web-server/no-listing-07-final-code/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-07-final-code/src/main.rs}}
 ```
 

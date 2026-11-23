@@ -328,7 +328,7 @@ implemented on `Dog` by saying that we want to treat the `Dog` type as an
 
 In general, fully qualified syntax is defined as follows:
 
-```rust,ignore
+```rust,ignore (schematic syntax with placeholder names and arguments)
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
