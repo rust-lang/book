@@ -18,7 +18,8 @@ _src/front_of_house.rs_ file in Listing 7-22.
 
 <Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
+# fn main() {}
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 

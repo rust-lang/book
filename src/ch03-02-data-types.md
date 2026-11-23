@@ -339,7 +339,9 @@ Chapter 2, to get an array index from the user:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,panics
+<!-- Compile without running: the bounds panic needs an out-of-bounds index on stdin. -->
+
+```rust,should_panic,no_run
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 

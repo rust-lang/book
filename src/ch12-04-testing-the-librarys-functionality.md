@@ -37,7 +37,7 @@ the query. Listing 12-15 shows this test.
 
 <Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function for the functionality we wish we had">
 
-```rust,ignore,does_not_compile
+```rust,should_panic,test_harness,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
@@ -59,7 +59,7 @@ fast, productive."`.
 
 <Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so that calling it won’t panic">
 
-```rust,noplayground
+```rust,should_panic,test_harness,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
@@ -122,7 +122,7 @@ this won’t compile yet.
 
 <Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
@@ -142,7 +142,7 @@ Listing 12-18. Note that this still won’t compile yet.
 
 <Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
 ```
 

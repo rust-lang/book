@@ -168,7 +168,7 @@ future.
 
 <Listing number="17-18" caption="Using our imagined `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
 ```
 
@@ -188,11 +188,9 @@ Let’s implement this! To begin, let’s think about the API for `timeout`:
 
 Listing 17-19 shows this declaration.
 
-<!-- This is not tested because it intentionally does not compile. -->
-
 <Listing number="17-19" caption="Defining the signature of `timeout`" file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:declaration}}
 ```
 

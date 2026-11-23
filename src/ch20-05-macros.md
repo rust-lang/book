@@ -211,7 +211,7 @@ programmer to write code like Listing 20-37 using our crate.
 
 <Listing number="20-37" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
 
-```rust,ignore,does_not_compile
+```rust,ignore (requires the completed hello_macro and hello_macro_derive crates)
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-37/src/main.rs}}
 ```
 
@@ -296,7 +296,9 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 <Listing number="20-40" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
 
-```rust,ignore,does_not_compile
+<!-- This example must be compiled as a proc-macro crate with syn and quote. -->
+
+```rust,compile_fail,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-40/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
 

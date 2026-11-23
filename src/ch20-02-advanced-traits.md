@@ -290,7 +290,7 @@ the code in Listing 20-21, we’ll get a compilation error.
 
 <Listing number="20-21" file-name="src/main.rs" caption="Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-21/src/main.rs:here}}
 ```
 
@@ -395,7 +395,7 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
 ```
 

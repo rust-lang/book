@@ -137,7 +137,7 @@ and calls the `trpl::join_all` function instead, which won’t compile yet.
 
 <Listing number="17-23" caption="Awaiting futures in a collection"  file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
 ```
 

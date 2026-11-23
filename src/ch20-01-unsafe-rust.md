@@ -220,7 +220,7 @@ of `i32` values rather than for a generic type `T`.
 
 <Listing number="20-5" caption="An attempted implementation of `split_at_mut` using only safe Rust">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-05/src/main.rs:here}}
 ```
 

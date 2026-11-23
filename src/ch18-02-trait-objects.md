@@ -204,7 +204,12 @@ with a `String` as a component.
 
 <Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
 
-```rust,ignore,does_not_compile
+<!-- Include the example’s library so the documentation test can compile the example. -->
+
+```rust,compile_fail,noplayground
+# mod gui {
+{{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/main.rs}}
 ```
 

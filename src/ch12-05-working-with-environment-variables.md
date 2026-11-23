@@ -21,7 +21,7 @@ between the two tests, as shown in Listing 12-20.
 
 <Listing number="12-20" file-name="src/lib.rs" caption="Adding a new failing test for the case-insensitive function we’re about to add">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail,test_harness,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
 ```
 
@@ -93,7 +93,12 @@ anywhere yet:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+<!-- Include the example’s library so the documentation test can compile the example. -->
+
+```rust,compile_fail,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/main.rs:here}}
 ```
 
@@ -104,7 +109,10 @@ function, as shown in Listing 12-22. This still won’t compile yet.
 
 <Listing number="12-22" file-name="src/main.rs" caption="Calling either `search` or `search_case_insensitive` based on the value in `config.ignore_case`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/main.rs:there}}
 ```
 

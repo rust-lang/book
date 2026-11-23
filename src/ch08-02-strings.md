@@ -239,7 +239,7 @@ get an error. Consider the invalid code in Listing 8-19.
 
 <Listing number="8-19" caption="Attempting to use indexing syntax with a `String`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
 ```
 
@@ -279,7 +279,7 @@ storage. Therefore, an index into the string’s bytes will not always correlate
 to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
 code:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```

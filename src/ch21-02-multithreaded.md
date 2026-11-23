@@ -149,7 +149,7 @@ struct we want to use instead of `thread::spawn`.
 
 <Listing number="21-12" file-name="src/main.rs" caption="Our ideal `ThreadPool` interface">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-12/src/main.rs:here}}
 ```
 
@@ -523,7 +523,7 @@ closure. The code in Listing 21-17 won’t quite compile yet.
 
 <Listing number="21-17" file-name="src/lib.rs" caption="Passing the receiver to each `Worker`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-17/src/lib.rs:here}}
 ```
 

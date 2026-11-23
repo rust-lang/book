@@ -71,7 +71,7 @@ Listing 4-6. Spoiler alert: It doesn’t work!
 
 <Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
 ```
 
@@ -110,7 +110,7 @@ attempts to create two mutable references to `s` will fail:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/src/main.rs:here}}
 ```
 
@@ -153,7 +153,7 @@ multiple mutable references, just not _simultaneous_ ones:
 Rust enforces a similar rule for combining mutable and immutable references.
 This code results in an error:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
@@ -206,7 +206,7 @@ compile-time error:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
 ```
 
@@ -232,7 +232,7 @@ Let’s take a closer look at exactly what’s happening at each stage of our
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
 ```
 

@@ -600,7 +600,9 @@ explain.
 
 <Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
 
-```rust,ignore,does_not_compile
+<!-- This example needs the guessing game’s rand dependency. -->
+
+```rust,compile_fail,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 

@@ -179,7 +179,7 @@ There’s one other aspect of `match` we need to discuss: The arms’ patterns m
 cover all possibilities. Consider this version of our `plus_one` function,
 which has a bug and won’t compile:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
 ```
 

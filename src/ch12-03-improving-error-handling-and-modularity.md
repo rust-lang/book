@@ -216,7 +216,7 @@ long enough, the program panics and displays a better error message.
 
 <Listing number="12-8" file-name="src/main.rs" caption="Adding a check for the number of arguments">
 
-```rust,ignore
+```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
 ```
 
@@ -267,7 +267,7 @@ well, which we’ll do in the next listing.
 
 <Listing number="12-9" file-name="src/main.rs" caption="Returning a `Result` from `Config::build`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
@@ -461,7 +461,7 @@ the signature in more detail when we fill in the implementation.
 
 <Listing number="12-13" file-name="src/lib.rs" caption="Defining the `search` function in *src/lib.rs*">
 
-```rust,ignore,does_not_compile
+```rust,no_run
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs}}
 ```
 

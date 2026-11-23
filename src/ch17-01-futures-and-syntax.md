@@ -202,7 +202,7 @@ Unfortunately, this code doesn’t compile yet.
 
 <Listing number="17-3" file-name="src/main.rs" caption="Calling the `page_title` function from `main` with a user-supplied argument">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
 ```
 
@@ -264,9 +264,7 @@ result of the `page_title` call, as in Listing 17-4.
 
 <Listing number="17-4" caption="Awaiting an async block with `trpl::block_on`" file-name="src/main.rs">
 
-<!-- should_panic,noplayground because mdbook test does not pass args -->
-
-```rust,should_panic,noplayground
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:run}}
 ```
 
@@ -343,9 +341,7 @@ command line and race them by selecting whichever future finishes first.
 
 <Listing number="17-5" caption="Calling `page_title` for two URLs to see which returns first" file-name="src/main.rs">
 
-<!-- should_panic,noplayground because mdbook does not pass args -->
-
-```rust,should_panic,noplayground
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
 ```
 

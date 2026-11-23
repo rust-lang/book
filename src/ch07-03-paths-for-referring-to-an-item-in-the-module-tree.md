@@ -30,7 +30,8 @@ Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`
 
 <Listing number="7-3" file-name="src/lib.rs" caption="Calling the `add_to_waitlist` function using absolute and relative paths">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
+# fn main() {}
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
@@ -106,7 +107,8 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 
 <Listing number="7-5" file-name="src/lib.rs" caption="Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
+# fn main() {}
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs:here}}
 ```
 

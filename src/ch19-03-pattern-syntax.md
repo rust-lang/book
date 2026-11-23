@@ -395,7 +395,7 @@ distinction matters, Listing 19-21 will provide us with an error.
 
 <Listing number="19-21" caption="An unused variable starting with an underscore still binds the value, which might take ownership of the value.">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-21/src/main.rs:here}}
 ```
 
@@ -462,7 +462,7 @@ compile.
 
 <Listing number="19-25" file-name="src/main.rs" caption="An attempt to use `..` in an ambiguous way">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-25/src/main.rs}}
 ```
 

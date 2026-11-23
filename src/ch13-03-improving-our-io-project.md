@@ -56,7 +56,12 @@ won’t compile until we update `Config::build` as well.
 
 <Listing number="13-18" file-name="src/main.rs" caption="Passing the return value of `env::args` to `Config::build`">
 
-```rust,ignore,does_not_compile
+<!-- Include the example’s library so the documentation test can compile the example. -->
+
+```rust,compile_fail,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-18/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-18/src/main.rs:here}}
 ```
 
@@ -73,7 +78,12 @@ compile, because we need to update the function body.
 
 <Listing number="13-19" file-name="src/main.rs" caption="Updating the signature of `Config::build` to expect an iterator">
 
-```rust,ignore,does_not_compile
+<!-- Include the example’s library so the documentation test can compile the example. -->
+
+```rust,compile_fail,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/main.rs:here}}
 ```
 

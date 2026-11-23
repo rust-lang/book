@@ -33,7 +33,7 @@ statement, so the function body won’t compile.
 
 <Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in.">
 
-```rust,noplayground,test_harness,does_not_compile,ignore
+```rust,compile_fail,test_harness,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
