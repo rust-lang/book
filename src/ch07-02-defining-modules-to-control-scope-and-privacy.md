@@ -89,7 +89,7 @@ _src/garden.rs_, which is:
 Here, `pub mod vegetables;` means the code in _src/garden/vegetables.rs_ is
 included too. That code is:
 
-```rust,noplayground,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 

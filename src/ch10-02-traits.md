@@ -174,7 +174,7 @@ a small part of it. For example, we could define the `Summary` trait to have a
 To use this version of `Summary`, we only need to define `summarize_author`
 when we implement the trait on a type:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 

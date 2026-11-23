@@ -267,13 +267,13 @@ for everything whose size is known at compile time. In addition, Rust
 implicitly adds a bound on `Sized` to every generic function. That is, a
 generic function definition like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
 ```
 
 is actually treated as though we had written this:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
 ```
 
@@ -281,7 +281,7 @@ By default, generic functions will work only on types that have a known size at
 compile time. However, you can use the following special syntax to relax this
 restriction:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 

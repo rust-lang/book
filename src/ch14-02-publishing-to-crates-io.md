@@ -28,7 +28,7 @@ for an `add_one` function in a crate named `my_crate`.
 
 <Listing number="14-1" file-name="src/lib.rs" caption="A documentation comment for a function">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
 ```
 
@@ -120,7 +120,7 @@ start with `//!` to the beginning of the _src/lib.rs_ file, as shown in Listing
 
 <Listing number="14-2" file-name="src/lib.rs" caption="The documentation for the `my_crate` crate as a whole">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
 ```
 

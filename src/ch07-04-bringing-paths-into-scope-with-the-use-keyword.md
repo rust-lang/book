@@ -233,8 +233,8 @@ bring items from `std` into scope:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
+```rust,no_run,noplayground
+{{#include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
 
 </Listing>
@@ -246,8 +246,8 @@ differ, as shown in Listing 7-18.
 
 <Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
 
-```rust,ignore
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
+```rust,no_run,noplayground
+{{#include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
 </Listing>

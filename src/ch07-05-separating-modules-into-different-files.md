@@ -32,7 +32,7 @@ with the name `front_of_house`.
 
 <Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
@@ -68,7 +68,7 @@ contain the definitions made in the `hosting` module:
 
 <Listing file-name="src/front_of_house/hosting.rs">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 

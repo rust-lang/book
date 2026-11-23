@@ -502,7 +502,7 @@ To see what happens when a `should_panic` test with an `expected` message
 fails, let’s again introduce a bug into our code by swapping the bodies of the
 `if value < 1` and the `else if value > 100` blocks:
 
-```rust,ignore,not_desired_behavior
+```rust,no_run,test_harness,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/src/lib.rs:here}}
 ```
 

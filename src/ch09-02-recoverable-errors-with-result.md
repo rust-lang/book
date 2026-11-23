@@ -102,7 +102,7 @@ add an inner `match` expression, shown in Listing 9-5.
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-05/src/main.rs}}
 ```
 
@@ -137,7 +137,7 @@ the missing file error.
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >
-> ```rust,ignore
+> ```rust,no_run,noplayground
 > use std::fs::File;
 > use std::io::ErrorKind;
 >

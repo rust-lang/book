@@ -377,7 +377,7 @@ returned a `ThreadPool` instance containing them.
 
 <Listing number="21-14" file-name="src/lib.rs" caption="Creating a vector for `ThreadPool` to hold the threads">
 
-```rust,ignore,not_desired_behavior
+```rust,no_run,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-14/src/lib.rs:here}}
 ```
 
@@ -696,7 +696,7 @@ Listing 21-21.
 
 <Listing number="21-21" file-name="src/lib.rs" caption="An alternative implementation of `Worker::new` using `while let`">
 
-```rust,ignore,not_desired_behavior
+```rust,no_run,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-21/src/lib.rs:here}}
 ```
 

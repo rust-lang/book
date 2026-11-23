@@ -51,7 +51,7 @@ the `Item` type is `u32`:
 
 <Listing file-name="src/lib.rs">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-22-iterator-on-counter/src/lib.rs:ch19}}
 ```
 

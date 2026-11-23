@@ -75,7 +75,7 @@ calls a new function `parse_config`, which we’ll define in _src/main.rs_.
 
 <Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
 ```
 
@@ -301,7 +301,7 @@ called our program that the program exited with an error state.
 
 <Listing number="12-10" file-name="src/main.rs" caption="Exiting with an error code if building a `Config` fails">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
@@ -354,7 +354,7 @@ function.
 
 <Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
 
@@ -380,7 +380,7 @@ signature and body of `run`.
 
 <Listing number="12-12" file-name="src/main.rs" caption="Changing the `run` function to return `Result`">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
 ```
 
@@ -430,7 +430,7 @@ with `Config::build` in Listing 12-10, but with a slight difference:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 

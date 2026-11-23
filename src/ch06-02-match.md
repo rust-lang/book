@@ -140,14 +140,14 @@ Let’s examine the first execution of `plus_one` in more detail. When we call
 `plus_one(five)`, the variable `x` in the body of `plus_one` will have the
 value `Some(5)`. We then compare that against each match arm:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
 The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
 next arm:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
@@ -159,7 +159,7 @@ new `Some` value with our total `6` inside.
 Now let’s consider the second call of `plus_one` in Listing 6-5, where `x` is
 `None`. We enter the `match` and compare to the first arm:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 

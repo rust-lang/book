@@ -75,7 +75,7 @@ _src/main.rs_.
 
 <Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
@@ -86,7 +86,7 @@ obtain user input and then print the result as output, we need to bring the
 `io` input/output library into scope. The `io` library comes from the standard
 library, known as `std`:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
@@ -102,7 +102,7 @@ user input.
 As you saw in Chapter 1, the `main` function is the entry point into the
 program:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
@@ -112,7 +112,7 @@ are no parameters; and the curly bracket, `{`, starts the body of the function.
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
@@ -123,14 +123,14 @@ from the user.
 
 Next, we’ll create a _variable_ to store the user input, like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
 Now the program is getting interesting! There’s a lot going on in this little
 line. We use the `let` statement to create the variable. Here’s another example:
 
-```rust,ignore
+```rust,no_run,noplayground
 let apples = 5;
 ```
 
@@ -141,7 +141,7 @@ the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
 section in Chapter 3. To make a variable mutable, we add `mut` before the
 variable name:
 
-```rust,ignore
+```rust,no_run,noplayground
 let apples = 5; // immutable
 let mut bananas = 5; // mutable
 ```
@@ -174,7 +174,7 @@ library with `use std::io;` on the first line of the program. Now we’ll call
 the `stdin` function from the `io` module, which will allow us to handle user
 input:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
@@ -213,7 +213,7 @@ We’re still working on this line of code. We’re now discussing a third line 
 text, but note that it’s still part of a single logical line of code. The next
 part is this method:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
@@ -271,7 +271,7 @@ can use `expect`. You’ll learn about recovering from errors in [Chapter
 Aside from the closing curly bracket, there’s only one more line to discuss in
 the code so far:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
