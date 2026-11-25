@@ -238,7 +238,7 @@ between them, as shown in Listing 17-10.
 
 <Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `await` between each message" file-name="src/main.rs">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
 ```
 
@@ -304,7 +304,7 @@ what we’re trying _not_ to do.
 
 <Listing number="17-11" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:futures}}
 ```
 

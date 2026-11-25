@@ -45,7 +45,7 @@ Try running this code; you should see the following output:
 Let’s try changing the value of `number` to a value that makes the condition
 `false` to see what happens:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/src/main.rs:here}}
 ```
 
@@ -61,7 +61,7 @@ following code:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
@@ -146,7 +146,7 @@ example, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
 ```
 
@@ -186,7 +186,7 @@ like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 

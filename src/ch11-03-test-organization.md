@@ -113,7 +113,7 @@ Enter the code in Listing 11-13 into the _tests/integration_test.rs_ file.
 
 <Listing number="11-13" file-name="tests/integration_test.rs" caption="An integration test of a function in the `adder` crate">
 
-```rust,ignore
+```rust,ignore (requires this package’s adder library for the integration test)
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
@@ -224,7 +224,7 @@ function from the `it_adds_two` test in _tests/integration_test.rs_:
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 
-```rust,ignore
+```rust,ignore (requires this package’s adder library and shared test module)
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-13-fix-shared-test-code-problem/tests/integration_test.rs}}
 ```
 

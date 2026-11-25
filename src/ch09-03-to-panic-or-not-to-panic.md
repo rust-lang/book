@@ -151,7 +151,7 @@ number being in range, like so:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
 

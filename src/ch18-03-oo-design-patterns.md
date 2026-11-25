@@ -57,7 +57,7 @@ because we haven’t implemented the `blog` crate.
 
 <Listing number="18-11" file-name="src/main.rs" caption="Code that demonstrates the desired behavior we want our `blog` crate to have">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
 ```
 
@@ -273,7 +273,7 @@ as shown in Listing 18-17.
 
 <Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
 ```
 
@@ -415,7 +415,10 @@ Let’s consider the first part of `main` in Listing 18-11:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore
+```rust,noplayground
+# mod blog {
+{{#rustdoc_include ../listings/ch18-oop/listing-18-18/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:here}}
 ```
 
@@ -498,7 +501,10 @@ The updated code in `main` is shown in Listing 18-21.
 
 <Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
 
-```rust,ignore
+```rust,noplayground
+# mod blog {
+{{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/main.rs}}
 ```
 

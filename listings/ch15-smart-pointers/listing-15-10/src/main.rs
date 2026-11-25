@@ -24,4 +24,11 @@ fn main() {
 
     assert_eq!(5, x);
     assert_eq!(5, *y);
+
+    let explicit_deref = {
+        // ANCHOR: explicit-deref
+        *(y.deref())
+        // ANCHOR_END: explicit-deref
+    };
+    assert_eq!(5, explicit_deref);
 }

@@ -33,7 +33,7 @@ Let’s try calling `panic!` in a simple program:
 
 <Listing file-name="src/main.rs">
 
-```rust,should_panic,panics
+```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
 
@@ -69,7 +69,7 @@ attempts to access an index in a vector beyond the range of valid indexes.
 
 <Listing number="9-1" file-name="src/main.rs" caption="Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`">
 
-```rust,should_panic,panics
+```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 

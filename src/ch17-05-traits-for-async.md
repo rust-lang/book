@@ -68,7 +68,7 @@ that calls `poll`. If you look back at Listing 17-4, where we printed out the
 page title for a single URL once it resolved, Rust compiles it into something
 kind of (although not exactly) like this:
 
-```rust,ignore
+```rust,ignore (schematic expansion of an await expression)
 match page_title(url).poll() {
     Ready(page_title) => match page_title {
         Some(title) => println!("The title for {url} was {title}"),
@@ -84,7 +84,7 @@ What should we do when the future is still `Pending`? We need some way to try
 again, and again, and again, until the future is finally ready. In other words,
 we need a loop:
 
-```rust,ignore
+```rust,ignore (schematic expansion of an await expression)
 let mut page_title_fut = page_title(url);
 loop {
     match page_title_fut.poll() {
@@ -137,7 +137,7 @@ and calls the `trpl::join_all` function instead, which won’t compile yet.
 
 <Listing number="17-23" caption="Awaiting futures in a collection"  file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
 ```
 
@@ -507,8 +507,11 @@ in traits, since the lack thereof is the reason they do not yet have this.
 > different than this, because it supports versions of Rust that did not yet
 > support using async functions in traits. As a result, it looks like this:
 >
-> ```rust,ignore
+> ```rust,no_run,noplayground
+> # struct Next<'a, S: ?Sized>(&'a mut S);
+> # trait StreamExt {
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
+> # }
 > ```
 >
 > That `Next` type is a `struct` that implements `Future` and allows us to name

@@ -135,7 +135,7 @@ to another variable, as the following code tries to do; you’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
@@ -167,11 +167,14 @@ curly brackets is an expression, for example:
 
 This expression:
 
-```rust,ignore
+```rust,noplayground
+# let y =
 {
     let x = 3;
     x + 1
 }
+# ;
+# assert_eq!(y, 4);
 ```
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`
@@ -234,7 +237,7 @@ an expression to a statement?
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 

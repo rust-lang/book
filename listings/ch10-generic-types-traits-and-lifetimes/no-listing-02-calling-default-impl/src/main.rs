@@ -1,4 +1,4 @@
-use aggregator::{self, NewsArticle, Summary};
+use aggregator::{NewsArticle, Summary};
 
 fn main() {
     // ANCHOR: here

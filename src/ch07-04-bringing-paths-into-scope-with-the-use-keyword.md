@@ -33,7 +33,7 @@ statement, so the function body won’t compile.
 
 <Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in.">
 
-```rust,noplayground,test_harness,does_not_compile,ignore
+```rust,compile_fail,test_harness,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
@@ -198,7 +198,7 @@ wanted to bring into scope. Recall that in [“Generating a Random
 Number”][rand]<!-- ignore --> in Chapter 2, we brought items in the
 `rand::prelude` module into scope and called the `rand::rng` function:
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
@@ -233,8 +233,8 @@ bring items from `std` into scope:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
+```rust,no_run,noplayground
+{{#include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
 
 </Listing>
@@ -246,8 +246,8 @@ differ, as shown in Listing 7-18.
 
 <Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
 
-```rust,ignore
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
+```rust,no_run,noplayground
+{{#include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
 </Listing>

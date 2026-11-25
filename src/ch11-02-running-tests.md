@@ -63,7 +63,7 @@ parameter and returns 10, as well as a test that passes and a test that fails.
 
 <Listing number="11-10" file-name="src/lib.rs" caption="Tests for a function that calls `println!`">
 
-```rust,panics,noplayground
+```rust,should_panic,test_harness,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-10/src/lib.rs}}
 ```
 

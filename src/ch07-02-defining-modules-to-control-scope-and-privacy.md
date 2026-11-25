@@ -69,7 +69,7 @@ The crate root file in this case is _src/main.rs_, and it contains:
 
 <Listing file-name="src/main.rs">
 
-```rust,noplayground,ignore
+```rust,ignore,noplayground (requires the source files that define the modules)
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
 ```
 
@@ -80,7 +80,7 @@ _src/garden.rs_, which is:
 
 <Listing file-name="src/garden.rs">
 
-```rust,noplayground,ignore
+```rust,ignore,noplayground (requires the source files that define the modules)
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
 ```
 
@@ -89,7 +89,7 @@ _src/garden.rs_, which is:
 Here, `pub mod vegetables;` means the code in _src/garden/vegetables.rs_ is
 included too. That code is:
 
-```rust,noplayground,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 

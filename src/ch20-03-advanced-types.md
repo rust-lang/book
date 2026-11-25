@@ -70,8 +70,10 @@ an error.
 The main use case for type synonyms is to reduce repetition. For example, we
 might have a lengthy type like this:
 
-```rust,ignore
+```rust,noplayground
+# type Thunk =
 Box<dyn Fn() + Send + 'static>
+# ;
 ```
 
 Writing this lengthy type in function signatures and as type annotations all
@@ -157,7 +159,7 @@ here in Listing 20-27.
 
 <Listing number="20-27" caption="A `match` with an arm that ends in `continue`">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
 ```
 
@@ -168,7 +170,7 @@ Control Flow Construct”][the-match-control-flow-construct]<!-- ignore -->
 section in Chapter 6, we discussed that `match` arms must all return the same
 type. So, for example, the following code doesn’t work:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
@@ -192,7 +194,7 @@ The never type is useful with the `panic!` macro as well. Recall the `unwrap`
 function that we call on `Option<T>` values to produce a value or panic with
 this definition:
 
-```rust,ignore
+```rust,ignore (excerpt from a standard library implementation)
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 
@@ -204,7 +206,7 @@ returning a value from `unwrap`, so this code is valid.
 
 One final expression that has the type `!` is a loop:
 
-```rust,ignore
+```rust,no_run
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 
@@ -227,7 +229,7 @@ we can’t know how long the string is until runtime. That means we can’t crea
 a variable of type `str`, nor can we take an argument of type `str`. Consider
 the following code, which does not work:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
 ```
 
@@ -267,13 +269,13 @@ for everything whose size is known at compile time. In addition, Rust
 implicitly adds a bound on `Sized` to every generic function. That is, a
 generic function definition like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
 ```
 
 is actually treated as though we had written this:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
 ```
 
@@ -281,7 +283,7 @@ By default, generic functions will work only on types that have a known size at
 compile time. However, you can use the following special syntax to relax this
 restriction:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 

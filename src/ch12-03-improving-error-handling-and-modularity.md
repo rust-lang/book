@@ -75,7 +75,7 @@ calls a new function `parse_config`, which we’ll define in _src/main.rs_.
 
 <Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
 ```
 
@@ -216,7 +216,7 @@ long enough, the program panics and displays a better error message.
 
 <Listing number="12-8" file-name="src/main.rs" caption="Adding a check for the number of arguments">
 
-```rust,ignore
+```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
 ```
 
@@ -267,7 +267,7 @@ well, which we’ll do in the next listing.
 
 <Listing number="12-9" file-name="src/main.rs" caption="Returning a `Result` from `Config::build`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
@@ -301,7 +301,7 @@ called our program that the program exited with an error state.
 
 <Listing number="12-10" file-name="src/main.rs" caption="Exiting with an error code if building a `Config` fails">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
@@ -354,7 +354,7 @@ function.
 
 <Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
 
@@ -380,7 +380,7 @@ signature and body of `run`.
 
 <Listing number="12-12" file-name="src/main.rs" caption="Changing the `run` function to return `Result`">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
 ```
 
@@ -430,7 +430,7 @@ with `Config::build` in Listing 12-10, but with a slight difference:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
@@ -461,7 +461,7 @@ the signature in more detail when we fill in the implementation.
 
 <Listing number="12-13" file-name="src/lib.rs" caption="Defining the `search` function in *src/lib.rs*">
 
-```rust,ignore,does_not_compile
+```rust,no_run
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs}}
 ```
 
@@ -476,7 +476,10 @@ binary crate in _src/main.rs_ and call it, as shown in Listing 12-14.
 
 <Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate’s `search` function in *src/main.rs*">
 
-```rust,ignore
+```rust,no_run,noplayground
+# mod minigrep {
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
 ```
 

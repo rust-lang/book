@@ -18,7 +18,8 @@ _src/front_of_house.rs_ file in Listing 7-22.
 
 <Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
+# fn main() {}
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
@@ -31,7 +32,7 @@ with the name `front_of_house`.
 
 <Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
@@ -56,7 +57,7 @@ the declaration of the `hosting` module:
 
 <Listing file-name="src/front_of_house.rs">
 
-```rust,ignore
+```rust,ignore (requires the source files that define the modules)
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
@@ -67,7 +68,7 @@ contain the definitions made in the `hosting` module:
 
 <Listing file-name="src/front_of_house/hosting.rs">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 

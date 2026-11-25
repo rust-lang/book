@@ -143,7 +143,7 @@ is to call the `panic!` macro. Enter the new test as a function named
 
 <Listing number="11-3" file-name="src/lib.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
 
-```rust,panics,noplayground
+```rust,should_panic,test_harness,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs}}
 ```
 
@@ -410,7 +410,7 @@ assertion is on. A more useful failure message would print the value from the
 string with a placeholder filled in with the actual value we got from the
 `greeting` function:
 
-```rust,ignore
+```rust,should_panic,test_harness,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/src/lib.rs:here}}
 ```
 
@@ -502,7 +502,7 @@ To see what happens when a `should_panic` test with an `expected` message
 fails, let’s again introduce a bug into our code by swapping the bodies of the
 `if value < 1` and the `else if value > 100` blocks:
 
-```rust,ignore,not_desired_behavior
+```rust,no_run,test_harness,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/src/lib.rs:here}}
 ```
 

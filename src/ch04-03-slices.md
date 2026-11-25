@@ -17,7 +17,7 @@ one word, so the entire string should be returned.
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
 
-```rust,ignore
+```rust,ignore (the return type is intentionally unspecified)
 fn first_word(s: &String) -> ?
 ```
 
@@ -40,13 +40,13 @@ Because we need to go through the `String` element by element and check whether
 a value is a space, we’ll convert our `String` to an array of bytes using the
 `as_bytes` method.
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
 Next, we create an iterator over the array of bytes using the `iter` method:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
@@ -68,7 +68,7 @@ Inside the `for` loop, we search for the byte that represents the space by
 using the byte literal syntax. If we find a space, we return the position.
 Otherwise, we return the length of the string by using `s.len()`.
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
@@ -97,8 +97,10 @@ Having to worry about the index in `word` getting out of sync with the data in
 `s` is tedious and error-prone! Managing these indices is even more brittle if
 we write a `second_word` function. Its signature would have to look like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn second_word(s: &String) -> (usize, usize) {
+#     unimplemented!()
+# }
 ```
 
 Now we’re tracking a starting _and_ an ending index, and we have even more
@@ -199,8 +201,10 @@ the slice and the number of elements in the slice.
 
 Returning a slice would also work for a `second_word` function:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn second_word(s: &String) -> &str {
+#     unimplemented!()
+# }
 ```
 
 We now have a straightforward API that’s much harder to mess up because the
@@ -215,7 +219,7 @@ will throw a compile-time error:
 
 <Listing file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
 ```
 
@@ -258,8 +262,10 @@ immutable reference.
 Knowing that you can take slices of literals and `String` values leads us to
 one more improvement on `first_word`, and that’s its signature:
 
-```rust,ignore
+```rust,no_run,noplayground
 fn first_word(s: &String) -> &str {
+#     unimplemented!()
+# }
 ```
 
 A more experienced Rustacean would write the signature shown in Listing 4-9
@@ -268,7 +274,7 @@ and `&str` values.
 
 <Listing number="4-9" caption="Improving the `first_word` function by using a string slice for the type of the `s` parameter">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
 ```
 

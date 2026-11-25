@@ -36,7 +36,7 @@ stream by calling its `next` method and then awaiting the output, as in Listing
 
 <Listing number="17-21" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:stream}}
 ```
 

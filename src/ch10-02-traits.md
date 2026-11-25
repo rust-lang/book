@@ -89,7 +89,10 @@ difference is that the user must bring the trait into scope as well as the
 types. Here’s an example of how a binary crate could use our `aggregator`
 library crate:
 
-```rust,ignore
+```rust,noplayground
+# mod aggregator {
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
@@ -147,7 +150,10 @@ directly, we’ve provided a default implementation and specified that
 `NewsArticle` implements the `Summary` trait. As a result, we can still call
 the `summarize` method on an instance of `NewsArticle`, like this:
 
-```rust,ignore
+```rust,noplayground
+# mod aggregator {
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
 ```
 
@@ -174,7 +180,7 @@ a small part of it. For example, we could define the `Summary` trait to have a
 To use this version of `Summary`, we only need to define `summarize_author`
 when we implement the trait on a type:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 
@@ -185,7 +191,10 @@ definition of `summarize_author` that we’ve provided. Because we’ve implemen
 `summarize` method without requiring us to write any more code. Here’s what
 that looks like:
 
-```rust,ignore
+```rust,noplayground
+# mod aggregator {
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
@@ -207,7 +216,7 @@ Listing 10-13 to define a `notify` function that calls the `summarize` method
 on its `item` parameter, which is of some type that implements the `Summary`
 trait. To do this, we use the `impl Trait` syntax, like this:
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
@@ -228,7 +237,10 @@ because those types don’t implement `Summary`.
 The `impl Trait` syntax works for straightforward cases but is actually syntax
 sugar for a longer form known as a _trait bound_; it looks like this:
 
-```rust,ignore
+```rust,noplayground
+# pub trait Summary {
+#     fn summarize(&self) -> String;
+# }
 pub fn notify<T: Summary>(item: &T) {
     println!("Breaking news! {}", item.summarize());
 }
@@ -243,8 +255,10 @@ cases, while the fuller trait bound syntax can express more complexity in other
 cases. For example, we can have two parameters that implement `Summary`. Doing
 so with the `impl Trait` syntax looks like this:
 
-```rust,ignore
+```rust,no_run,noplayground
+# trait Summary {}
 pub fn notify(item1: &impl Summary, item2: &impl Summary) {
+# }
 ```
 
 Using `impl Trait` is appropriate if we want this function to allow `item1` and
@@ -252,8 +266,10 @@ Using `impl Trait` is appropriate if we want this function to allow `item1` and
 we want to force both parameters to have the same type, however, we must use a
 trait bound, like this:
 
-```rust,ignore
+```rust,no_run,noplayground
+# trait Summary {}
 pub fn notify<T: Summary>(item1: &T, item2: &T) {
+# }
 ```
 
 The generic type `T` specified as the type of the `item1` and `item2`
@@ -271,14 +287,20 @@ display formatting as well as `summarize` on `item`: We specify in the `notify`
 definition that `item` must implement both `Display` and `Summary`. We can do
 so using the `+` syntax:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::fmt::Display;
+# trait Summary {}
 pub fn notify(item: &(impl Summary + Display)) {
+# }
 ```
 
 The `+` syntax is also valid with trait bounds on generic types:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::fmt::Display;
+# trait Summary {}
 pub fn notify<T: Summary + Display>(item: &T) {
+# }
 ```
 
 With the two trait bounds specified, the body of `notify` can call `summarize`
@@ -293,13 +315,17 @@ making the function signature hard to read. For this reason, Rust has alternate
 syntax for specifying trait bounds inside a `where` clause after the function
 signature. So, instead of writing this:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::fmt::{Debug, Display};
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+#     unimplemented!()
+# }
 ```
 
 we can use a `where` clause, like this:
 
-```rust,ignore
+```rust,noplayground
+# use std::fmt::{Debug, Display};
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
@@ -312,7 +338,7 @@ bounds.
 We can also use the `impl Trait` syntax in the return position to return a
 value of some type that implements a trait, as shown here:
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 
@@ -333,7 +359,7 @@ However, you can only use `impl Trait` if you’re returning a single type. For
 example, this code that returns either a `NewsArticle` or a `SocialPost` with
 the return type specified as `impl Summary` wouldn’t work:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
@@ -370,7 +396,7 @@ Rust standard library. For example, the standard library implements the
 `ToString` trait on any type that implements the `Display` trait. The `impl`
 block in the standard library looks similar to this code:
 
-```rust,ignore
+```rust,ignore (excerpt from a standard library implementation)
 impl<T: Display> ToString for T {
     // --snip--
 }

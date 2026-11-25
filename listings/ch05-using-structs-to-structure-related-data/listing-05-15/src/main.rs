@@ -16,6 +16,7 @@ impl Rectangle {
 }
 // ANCHOR_END: here
 
+// ANCHOR: main
 fn main() {
     let rect1 = Rectangle {
         width: 30,
@@ -33,3 +34,4 @@ fn main() {
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 }
+// ANCHOR_END: main

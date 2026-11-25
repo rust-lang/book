@@ -136,7 +136,8 @@ matches. The `$x` is replaced with each expression matched. When we call this
 macro with `vec![1, 2, 3];`, the code generated that replaces this macro call
 will be the following:
 
-```rust,ignore
+```rust,noplayground
+# let generated =
 {
     let mut temp_vec = Vec::new();
     temp_vec.push(1);
@@ -144,6 +145,8 @@ will be the following:
     temp_vec.push(3);
     temp_vec
 }
+# ;
+# assert_eq!(generated, vec![1, 2, 3]);
 ```
 
 We’ve defined a macro that can take any number of arguments of any type and can
@@ -170,7 +173,7 @@ macro variety.
 
 <Listing number="20-36" file-name="src/lib.rs" caption="An example of defining a procedural macro">
 
-```rust,ignore
+```rust,ignore (schematic procedural macro with a placeholder attribute)
 use proc_macro::TokenStream;
 
 #[some_attribute]
@@ -211,7 +214,7 @@ programmer to write code like Listing 20-37 using our crate.
 
 <Listing number="20-37" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
 
-```rust,ignore,does_not_compile
+```rust,ignore (requires the completed hello_macro and hello_macro_derive crates)
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-37/src/main.rs}}
 ```
 
@@ -240,7 +243,10 @@ the trait to achieve the desired functionality, as in Listing 20-39.
 
 <Listing number="20-39" file-name="src/main.rs" caption="How it would look if users wrote a manual implementation of the `HelloMacro` trait">
 
-```rust,ignore
+```rust,noplayground
+# mod hello_macro {
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-39/hello_macro/src/lib.rs:0:0}}
+# }
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-39/pancakes/src/main.rs}}
 ```
 
@@ -296,7 +302,7 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 <Listing number="20-40" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail,ignore (requires a procedural macro crate with syn and quote)
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-40/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
 
@@ -338,7 +344,7 @@ struct we get from parsing the `struct Pancakes;` string.
 
 <Listing number="20-41" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
 
-```rust,ignore
+```rust,ignore (shows the parsed structure in debug format)
 DeriveInput {
     // --snip--
 
@@ -386,7 +392,7 @@ into a `DeriveInput` instance, let’s generate the code that implements the
 
 <Listing number="20-42" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
 
-```rust,ignore
+```rust,ignore (requires a procedural macro crate with syn and quote)
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-42/hello_macro/hello_macro_derive/src/lib.rs:here}}
 ```
 
@@ -458,7 +464,7 @@ enums; attributes can be applied to other items as well, such as functions.
 Here’s an example of using an attribute-like macro. Say you have an attribute
 named `route` that annotates functions when using a web application framework:
 
-```rust,ignore
+```rust,ignore (uses a hypothetical route macro)
 #[route(GET, "/")]
 fn index() {
 ```
@@ -466,7 +472,7 @@ fn index() {
 This `#[route]` attribute would be defined by the framework as a procedural
 macro. The signature of the macro definition function would look like this:
 
-```rust,ignore
+```rust,ignore (requires a procedural macro crate)
 #[proc_macro_attribute]
 pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 ```
@@ -492,7 +498,7 @@ manipulates that `TokenStream` using Rust code as the other two types of
 procedural macros do. An example of a function-like macro is an `sql!` macro
 that might be called like so:
 
-```rust,ignore
+```rust,ignore (uses a hypothetical sql macro)
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
@@ -500,7 +506,7 @@ This macro would parse the SQL statement inside it and check that it’s
 syntactically correct, which is much more complex processing than a
 `macro_rules!` macro can do. The `sql!` macro would be defined like this:
 
-```rust,ignore
+```rust,ignore (requires a procedural macro crate)
 #[proc_macro]
 pub fn sql(input: TokenStream) -> TokenStream {
 ```

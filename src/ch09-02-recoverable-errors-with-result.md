@@ -102,7 +102,7 @@ add an inner `match` expression, shown in Listing 9-5.
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-05/src/main.rs}}
 ```
 
@@ -137,7 +137,7 @@ the missing file error.
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >
-> ```rust,ignore
+> ```rust,no_run,noplayground
 > use std::fs::File;
 > use std::io::ErrorKind;
 >
@@ -425,7 +425,7 @@ the value we use `?` on.
 
 <Listing number="9-10" file-name="src/main.rs" caption="Attempting to use the `?` in the `main` function that returns `()` won’t compile.">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
 ```
 
@@ -508,7 +508,7 @@ code will now compile.
 
 <Listing number="9-12" file-name="src/main.rs" caption="Changing `main` to return `Result<(), E>` allows the use of the `?` operator on `Result` values.">
 
-```rust,ignore
+```rust,no_run
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
 ```
 

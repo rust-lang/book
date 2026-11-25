@@ -97,7 +97,7 @@ technique, as shown in Listing 8-5.
 
 <Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
 
-```rust,should_panic,panics
+```rust,should_panic
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
@@ -130,7 +130,7 @@ the function.
 
 <Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
 

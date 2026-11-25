@@ -176,8 +176,14 @@ with the signature of the method that’s called when we use the `+` operator.
 The `+` operator uses the `add` method, whose signature looks something like
 this:
 
-```rust,ignore
+```rust,no_run,noplayground
+# struct Example;
+# impl std::ops::Add<&str> for Example {
+#     type Output = String;
 fn add(self, s: &str) -> String {
+#     unimplemented!()
+# }
+# }
 ```
 
 In the standard library, you’ll see `add` defined using generics and associated
@@ -239,7 +245,7 @@ get an error. Consider the invalid code in Listing 8-19.
 
 <Listing number="8-19" caption="Attempting to use indexing syntax with a `String`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
 ```
 
@@ -279,7 +285,7 @@ storage. Therefore, an index into the string’s bytes will not always correlate
 to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
 code:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```

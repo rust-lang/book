@@ -29,7 +29,7 @@ pattern. As you might expect, this code will not compile.
 
 <Listing number="19-8" caption="Attempting to use a refutable pattern with `let`">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-08/src/main.rs:here}}
 ```
 

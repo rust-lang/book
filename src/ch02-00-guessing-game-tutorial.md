@@ -75,7 +75,7 @@ _src/main.rs_.
 
 <Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
@@ -86,7 +86,7 @@ obtain user input and then print the result as output, we need to bring the
 `io` input/output library into scope. The `io` library comes from the standard
 library, known as `std`:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
@@ -102,7 +102,7 @@ user input.
 As you saw in Chapter 1, the `main` function is the entry point into the
 program:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
@@ -112,7 +112,7 @@ are no parameters; and the curly bracket, `{`, starts the body of the function.
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
@@ -123,14 +123,14 @@ from the user.
 
 Next, we’ll create a _variable_ to store the user input, like this:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
 Now the program is getting interesting! There’s a lot going on in this little
 line. We use the `let` statement to create the variable. Here’s another example:
 
-```rust,ignore
+```rust,no_run,noplayground
 let apples = 5;
 ```
 
@@ -141,7 +141,7 @@ the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
 section in Chapter 3. To make a variable mutable, we add `mut` before the
 variable name:
 
-```rust,ignore
+```rust,no_run,noplayground
 let apples = 5; // immutable
 let mut bananas = 5; // mutable
 ```
@@ -174,7 +174,7 @@ library with `use std::io;` on the first line of the program. Now we’ll call
 the `stdin` function from the `io` module, which will allow us to handle user
 input:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
@@ -213,13 +213,15 @@ We’re still working on this line of code. We’re now discussing a third line 
 text, but note that it’s still part of a single logical line of code. The next
 part is this method:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
 We could have written this code as:
 
-```rust,ignore
+```rust,no_run,noplayground
+# use std::io;
+# let mut guess = String::new();
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
@@ -271,7 +273,7 @@ can use `expect`. You’ll learn about recovering from errors in [Chapter
 Aside from the closing curly bracket, there’s only one more line to discuss in
 the code so far:
 
-```rust,ignore
+```rust,no_run,noplayground
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
@@ -520,7 +522,7 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 <Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
@@ -600,7 +602,7 @@ explain.
 
 <Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
 
-```rust,ignore,does_not_compile
+```rust,compile_fail,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
@@ -671,14 +673,16 @@ so by adding this line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
 The line is:
 
-```rust,ignore
+```rust,noplayground
+# let guess = String::from("42");
 let guess: u32 = guess.trim().parse().expect("Please type a number!");
+# assert_eq!(guess, 42);
 ```
 
 We create a variable named `guess`. But wait, doesn’t the program already have
@@ -764,7 +768,7 @@ more chances at guessing the number:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
@@ -827,7 +831,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
@@ -844,7 +848,7 @@ the user can continue guessing. We can do that by altering the line where
 
 <Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
@@ -913,7 +917,7 @@ secret number. Listing 2-6 shows the final code.
 
 <Listing number="2-6" file-name="src/main.rs" caption="Complete guessing game code">
 
-```rust,ignore
+```rust,ignore (requires the rand crate)
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
