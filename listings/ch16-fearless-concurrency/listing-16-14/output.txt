@@ -16,13 +16,13 @@ error[E0277]: `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
    | |_________^ `Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
    |
    = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc<std::sync::Mutex<i32>>`
-note: required because it's used within this closure
-  --> src/main.rs:11:36
+note: required because `counter` is used within this closure
+  --> src/main.rs:12:27
    |
-11 |         let handle = thread::spawn(move || {
-   |                                    ^^^^^^^
+12 |             let mut num = counter.lock().unwrap();
+   |                           ^^^^^^^
 note: required by a bound in `spawn`
-  --> /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/std/src/thread/functions.rs:125:0
+  --> /rustc/0ef1bc386059596dada8fb65b50425aab2ea637a/library/std/src/thread/functions.rs:125:0
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
