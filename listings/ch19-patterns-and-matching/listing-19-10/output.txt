@@ -1,13 +1,14 @@
 $ cargo run
    Compiling patterns v0.1.0 (file:///projects/patterns)
-warning: irrefutable `let...else` pattern
- --> src/main.rs:2:5
+warning: unreachable `else` clause
+ --> src/main.rs:2:15
   |
 2 |     let x = 5 else {
-  |     ^^^^^^^^^
+  |     --------- ^^^^
+  |     |
+  |     assigning to binding pattern will always succeed
   |
-  = note: this pattern will always match, so the `else` clause is useless
-  = help: consider removing the `else` clause
+  = note: this pattern always matches, so the else clause is unreachable
   = note: `#[warn(irrefutable_let_patterns)]` on by default
 
 warning: `patterns` (bin "patterns") generated 1 warning

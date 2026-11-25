@@ -174,6 +174,8 @@ added this line to _Cargo.toml_:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
+
+* ch01-01-installation.md
 * ch02-00-guessing-game-tutorial.md
 * ch14-03-cargo-workspaces.md
 -->
@@ -193,8 +195,8 @@ make `rand` available to our project.
 Then, to bring `rand` definitions into the scope of our package, we added a
 `use` line starting with the name of the crate, `rand`, and listed the items we
 wanted to bring into scope. Recall that in [“Generating a Random
-Number”][rand]<!-- ignore --> in Chapter 2, we brought the `Rng` trait into
-scope and called the `rand::thread_rng` function:
+Number”][rand]<!-- ignore --> in Chapter 2, we brought items in the
+`rand::prelude` module into scope and called the `rand::rng` function:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}

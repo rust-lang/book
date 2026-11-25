@@ -7,7 +7,7 @@ warning: unused `Map` that must be used
   |     ^^^^^^^^^^^^^^^^^^^^^^^^
   |
   = note: iterators are lazy and do nothing unless consumed
-  = note: `#[warn(unused_must_use)]` on by default
+  = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
 help: use `let _ = ...` to ignore the resulting value
   |
 4 |     let _ = v1.iter().map(|x| x + 1);

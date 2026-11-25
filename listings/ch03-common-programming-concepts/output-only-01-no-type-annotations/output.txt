@@ -7,6 +7,9 @@ error[E0284]: type annotations needed
   |         ^^^^^        ----- type must be known at this point
   |
   = note: cannot satisfy `<_ as FromStr>::Err == _`
+  = note: the type must also implement `FromStr`
+note: required by a bound in `core::str::<impl str>::parse`
+ --> /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/str/mod.rs:2782:4
 help: consider giving `guess` an explicit type
   |
 2 |     let guess: /* Type */ = "42".parse().expect("Not a number!");

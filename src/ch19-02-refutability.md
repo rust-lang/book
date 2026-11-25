@@ -76,7 +76,7 @@ cannot use an irrefutable pattern without receiving a warning. If we give
 </Listing>
 
 Rust complains that it doesn’t make sense to use `let...else` with an
-irrefutable pattern:
+irrefutable pattern because the `else` will never be reached:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}

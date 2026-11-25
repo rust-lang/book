@@ -9,9 +9,13 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
   = help: the trait `SliceIndex<str>` is not implemented for `{integer}`
   = note: you can use `.chars().nth()` or `.bytes().nth()`
           for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
-  = help: the following other types implement trait `SliceIndex<T>`:
-            `usize` implements `SliceIndex<ByteStr>`
-            `usize` implements `SliceIndex<[T]>`
+help: `usize` implements trait `SliceIndex<T>`
+ --> /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/slice/index.rs:179:0
+  |
+  = note: `SliceIndex<[T]>`
+ --> /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/bstr/traits.rs:197:0
+  |
+  = note: `SliceIndex<ByteStr>`
   = note: required for `String` to implement `Index<{integer}>`
 
 For more information about this error, try `rustc --explain E0277`.

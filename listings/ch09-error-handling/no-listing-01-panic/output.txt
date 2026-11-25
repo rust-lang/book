@@ -3,6 +3,6 @@ $ cargo run
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.25s
      Running `target/debug/panic`
 
-thread 'main' panicked at src/main.rs:2:5:
+thread 'main' (6018279) panicked at src/main.rs:2:5:
 crash and burn
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

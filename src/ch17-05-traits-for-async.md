@@ -131,7 +131,7 @@ yet ready.
 
 Back in Listing 17-13, we used the `trpl::join!` macro to await three
 futures. However, it’s common to have a collection such as a vector containing
-some number futures that won’t be known until runtime. Let’s change Listing
+some number of futures that won’t be known until runtime. Let’s change Listing
 17-13 to the code in Listing 17-23 that puts the three futures into a vector
 and calls the `trpl::join_all` function instead, which won’t compile yet.
 

@@ -1,0 +1,26 @@
+# Publish the trpl crate to crates.io after a tag is pushed to this repository.
+name: Publish trpl to crates.io
+
+on:
+  push:
+    tags:
+      - "trpl-v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: publish
+    permissions:
+      id-token: write     # Required for OIDC token exchange
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+        id: auth
+      - name: Publish to crates.io
+        run: |
+          cd packages/trpl
+          cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}

@@ -196,7 +196,7 @@ their environment.
 
 For this example, we’ll use the `filter` method that takes a closure. The
 closure gets an item from the iterator and returns a `bool`. If the closure
-returns `true`, the value will be included in the iteration produced by
+returns `true`, the value will be included in the iterator produced by
 `filter`. If the closure returns `false`, the value won’t be included.
 
 In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`

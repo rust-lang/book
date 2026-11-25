@@ -208,7 +208,7 @@ One final expression that has the type `!` is a loop:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 
-Here, the loop never ends, so `!` is the value of the expression. However, this
+Here, the loop never ends, so `!` is the type of the expression. However, this
 wouldn’t be true if we included a `break`, because the loop would terminate
 when it got to the `break`.
 

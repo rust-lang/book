@@ -158,10 +158,18 @@ or to have downloaded those dependencies ahead of time. To download the
 dependencies ahead of time, you can run the following commands. (We’ll explain
 what `cargo` is and what each of these commands does in detail later.)
 
+<!-- When updating the version of `rand` used, also update the version of
+`rand` used in these files so they all match:
+
+* ch02-00-guessing-game-tutorial.md
+* ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
+* ch14-03-cargo-workspaces.md
+-->
+
 ```console
 $ cargo new get-dependencies
 $ cd get-dependencies
-$ cargo add rand@0.8.5 trpl@0.2.0
+$ cargo add rand@0.10.1 trpl@0.2.0
 ```
 
 This will cache the downloads for these packages so you will not need to
