@@ -106,7 +106,10 @@ values that were calculated from data in a particular state but aren’t tied to
 that state at all. We have three unrelated variables floating around that need
 to be kept in sync.
 
-Luckily, Rust has a solution to this problem: string slices.
+Instead of outputting a 'usize', which is not a reference to the value,
+we should use a string slice which is a reference to the value. This prevents
+issues around changing states as references will still point to a value
+even if it is changed, whilst 'usize' can only hold on to its own value.
 
 ### String Slices
 
@@ -193,9 +196,9 @@ looking for the first occurrence of a space. When we find a space, we return a
 string slice using the start of the string and the index of the space as the
 starting and ending indices.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+Now when we call `first_word`, by using '&str' instead of 'usize' we get
+back a single value that is tied to the underlying data as it is a reference
+to the starting point of the slice and the number of elements in the slice.
 
 Returning a slice would also work for a `second_word` function:
 
