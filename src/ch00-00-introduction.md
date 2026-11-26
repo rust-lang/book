@@ -190,9 +190,6 @@ meant to work:
 | <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | This code panics!                                |
 | <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | This code does not produce the desired behavior. |
 
-In most situations, we’ll lead you to the correct version of any code that
-doesn’t compile.
-
 ## Source Code
 
 The source files from which this book is generated can be found on
