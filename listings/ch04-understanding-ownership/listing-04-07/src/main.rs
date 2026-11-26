@@ -1,14 +1,13 @@
 // ANCHOR: here
 fn first_word(s: &String) -> usize {
-    // ANCHOR: as_bytes
-    let bytes = s.as_bytes();
-    // ANCHOR_END: as_bytes
-
+    // ANCHOR: char_indices
+    let char_indices = s.char_indices();
+    // ANCHOR_END: char_indices
     // ANCHOR: iter
-    for (i, &item) in bytes.iter().enumerate() {
+    for (i, ch) in char_indices {
         // ANCHOR_END: iter
         // ANCHOR: inside_for
-        if item == b' ' {
+        if ch.is_whitespace() {
             return i;
         }
     }

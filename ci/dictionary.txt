@@ -631,6 +631,7 @@ WeatherForecast
 webpage
 WebSocket
 whitespace
+whitespaces
 wildcard
 wildcards
 Wirth
