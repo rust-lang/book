@@ -280,8 +280,8 @@ flexibility takes advantage of deref coercions, a feature we will cover in
 the [“Using Deref Coercions in Functions and Methods”][deref-coercions]<!--
 ignore --> section of Chapter 15.
 
-Defining a function to take a string slice instead of a reference to a `String`
-makes our API more general and useful without losing any functionality:
+Defining the parameter as a string slice rather than as `&String` makes our API
+more general and useful without losing any functionality:
 
 <Listing file-name="src/main.rs">
 
