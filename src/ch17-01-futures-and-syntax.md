@@ -95,7 +95,7 @@ to wait for the server to send back the first part of its response, which will
 include HTTP headers, cookies, and so on and can be delivered separately from
 the response body. Especially if the body is very large, it can take some time
 for it all to arrive. Because we have to wait for the _entirety_ of the
-response to arrive, the `text` method is also async.
+response to arrive to access the body, the `text` method is also async.
 
 We have to explicitly await both of these futures, because futures in Rust are
 _lazy_: they don’t do anything until you ask them to with the `await` keyword.
