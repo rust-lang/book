@@ -193,6 +193,9 @@ interested in this topic, see [the Rust API Guidelines][api-guidelines].
 > This helps you design a good API; not only are you the author, but you’re
 > also a client!
 >
+> **Do not** let multiple module trees overlap (like `mod foo;` in both
+> _src/lib.rs_ and _src/main.rs_), as this can cause serious inconsistencies
+>
 > In [Chapter 12][ch12]<!-- ignore -->, we’ll demonstrate this organizational
 > practice with a command line program that will contain both a binary crate
 > and a library crate.
