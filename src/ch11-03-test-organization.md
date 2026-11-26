@@ -245,7 +245,8 @@ straightforward _src/main.rs_ file that calls logic that lives in the
 _src/lib.rs_ file. Using that structure, integration tests _can_ test the
 library crate with `use` to make the important functionality available. If the
 important functionality works, the small amount of code in the _src/main.rs_
-file will work as well, and that small amount of code doesn’t need to be tested.
+file may not need to be tested, or can be tested by executing the binary from
+the integration test.
 
 ## Summary
 
