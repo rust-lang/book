@@ -360,10 +360,9 @@ copying can be assumed to be inexpensive in terms of runtime performance.
 
 #### Scope and Assignment
 
-The inverse of this is true for the relationship between scoping, ownership, and
-memory being freed via the `drop` function as well. When you assign a completely
-new value to an existing variable, Rust will call `drop` and free the original
-value’s memory immediately. Consider this code, for example:
+Just like when you assign a new variable to an existing value causing the old variable to be dropped,
+when you assign a new value to an existing variable the old value will be dropped, freeing its memory.
+Consider this code, for example:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
