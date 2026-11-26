@@ -359,6 +359,11 @@ When we run _this_ version of the code, it shuts down gracefully after the last
 message is sent and received. Next, let’s see what would need to change to send
 data from more than one future.
 
+Note that within the book interface, the messages are all shown after the execution
+finishes due to how the "Run this code" functionality is implemented. To verify that
+the messages in Listing 17-12 show up at 500-millisecond intervals, run the full code in
+[the playground][playground] or locally.
+
 #### Joining a Number of Futures with the `join!` Macro
 
 This async channel is also a multiple-producer channel, so we can call `clone`
@@ -419,3 +424,4 @@ to tell the runtime it can switch to another task.
 [if-let]: ch06-03-if-let.html
 [capture-or-move]: ch13-01-closures.html#capturing-references-or-moving-ownership
 [move-threads]: ch16-01-threads.html#using-move-closures-with-threads
+[playground]: https://play.rust-lang.org
