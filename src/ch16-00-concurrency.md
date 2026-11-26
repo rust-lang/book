@@ -28,7 +28,7 @@ subtle bugs and is easy to refactor without introducing new bugs.
 > parallel_ whenever we use _concurrent_. In the next chapter, where the
 > distinction matters more, we’ll be more specific.
 
-Many languages are dogmatic about the solutions they offer for handling
+Many languages are opinionated about the solutions they offer for handling
 concurrent problems. For example, Erlang has elegant functionality for
 message-passing concurrency but has only obscure ways to share state between
 threads. Supporting only a subset of possible solutions is a reasonable
