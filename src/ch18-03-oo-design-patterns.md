@@ -119,9 +119,9 @@ want a post to start in.
 When we create a new `Post`, we set its `state` field to a `Some` value that
 holds a `Box`. This `Box` points to a new instance of the `Draft` struct. This
 ensures that whenever we create a new instance of `Post`, it will start out as
-a draft. Because the `state` field of `Post` is private, there is no way to
-create a `Post` in any other state! In the `Post::new` function, we set the
-`content` field to a new, empty `String`.
+a draft. Because the `state` field of `Post` is private, there is no way for
+code using our library to create a `Post` in any other state! In the `Post::new`
+function, we set the `content` field to a new, empty `String`.
 
 #### Storing the Text of the Post Content
 
