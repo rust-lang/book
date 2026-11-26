@@ -26,10 +26,10 @@ lifetime syntax so that you can get comfortable with the concept.
 
 ### Dangling References
 
-The main aim of lifetimes is to prevent dangling references, which, if they
-were allowed to exist, would cause a program to reference data other than the
-data it’s intended to reference. Consider the program in Listing 10-16, which
-has an outer scope and an inner scope.
+The main aim of lifetimes is to prevent dangling references, which, if allowed,
+would cause a program to reference data other than the data it’s intended to
+reference. Consider the program in Listing 10-16, which has an outer scope and
+an inner scope.
 
 <Listing number="10-16" caption="An attempt to use a reference whose value has gone out of scope">
 
