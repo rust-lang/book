@@ -106,6 +106,20 @@ In Linux and macOS, use:
 $ echo $PATH
 ```
 
+Ensure that the directory containing `.cargo` is present in your `PATH` variables. If you installed Rust using `rustup` with the default settings, these variables are:
+
+Windows:
+
+```text
+%USERPROFILE%\.cargo\bin
+```
+
+Linux and macOS:
+
+```text
+$HOME/.cargo/bin
+```
+
 If that’s all correct and Rust still isn’t working, there are a number of
 places you can get help. Find out how to get in touch with other Rustaceans (a
 silly nickname we call ourselves) on [the community page][community].
