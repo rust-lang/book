@@ -154,8 +154,8 @@ concurrency model they enable.
 principles you might be familiar with. **Chapter 19** is a reference on
 patterns and pattern matching, which are powerful ways of expressing ideas
 throughout Rust programs. **Chapter 20** contains a smorgasbord of advanced
-topics of interest, including unsafe Rust, macros, and more about lifetimes,
-traits, types, functions, and closures.
+topics of interest, including unsafe Rust, macros, traits, types, functions,
+and closures.
 
 In **Chapter 21**, we’ll complete a project in which we’ll implement a
 low-level multithreaded web server!
