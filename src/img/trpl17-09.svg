@@ -14,15 +14,15 @@
 <g id="clust2" class="cluster">
 <title>cluster_deref</title>
 <polygon fill="none" stroke="black" stroke-dasharray="5,2" points="154,-16 154,-109 349.6,-109 349.6,-16 154,-16"/>
-<text text-anchor="middle" x="251.8" y="-91.7" font-family="Times,serif" font-size="14.00">String</text>
+<text text-anchor="middle" x="251.8" y="-91.7" font-family="serif" font-size="14.00">String</text>
 </g>
 <!-- pinned_box -->
 <g id="node1" class="node">
 <title>pinned_box</title>
 <polyline fill="none" stroke="black" points="59,-152 83,-152"/>
-<text text-anchor="start" x="62" y="-158.2" font-family="Times,serif" font-size="14.00">Pin</text>
+<text text-anchor="start" x="62" y="-158.2" font-family="serif" font-size="14.00">Pin</text>
 <polygon fill="none" stroke="black" points="59,-129.5 59,-152 83,-152 83,-129.5 59,-129.5"/>
-<text text-anchor="start" x="69.12" y="-135.7" font-family="Times,serif" font-size="14.00"> </text>
+<text text-anchor="start" x="69.12" y="-135.7" font-family="serif" font-size="14.00"> </text>
 </g>
 <!-- pin -->
 <g id="node3" class="node">
@@ -39,41 +39,41 @@
 <title>string1</title>
 <polygon fill="lightgray" stroke="none" points="24,-39 24,-83 118,-83 118,-39 24,-39"/>
 <polyline fill="none" stroke="black" points="24,-61 118,-61"/>
-<text text-anchor="start" x="65" y="-66.7" font-family="Times,serif" font-size="14.00">s1</text>
+<text text-anchor="start" x="65" y="-66.7" font-family="serif" font-size="14.00">s1</text>
 <polygon fill="none" stroke="black" points="24,-39 24,-61 64,-61 64,-39 24,-39"/>
-<text text-anchor="start" x="26.75" y="-44.7" font-family="Times,serif" font-size="14.00">5usize</text>
+<text text-anchor="start" x="26.75" y="-44.7" font-family="serif" font-size="14.00">5usize</text>
 <polygon fill="none" stroke="black" points="64,-39 64,-61 76,-61 76,-39 64,-39"/>
-<text text-anchor="start" x="66.62" y="-44.7" font-family="Times,serif" font-size="14.00">h</text>
+<text text-anchor="start" x="66.62" y="-44.7" font-family="serif" font-size="14.00">h</text>
 <polygon fill="none" stroke="black" points="76,-39 76,-61 88,-61 88,-39 76,-39"/>
-<text text-anchor="start" x="79" y="-44.7" font-family="Times,serif" font-size="14.00">e</text>
+<text text-anchor="start" x="79" y="-44.7" font-family="serif" font-size="14.00">e</text>
 <polygon fill="none" stroke="black" points="88,-39 88,-61 97,-61 97,-39 88,-39"/>
-<text text-anchor="start" x="90.62" y="-44.7" font-family="Times,serif" font-size="14.00">l</text>
+<text text-anchor="start" x="90.62" y="-44.7" font-family="serif" font-size="14.00">l</text>
 <polygon fill="none" stroke="black" points="97,-39 97,-61 106,-61 106,-39 97,-39"/>
-<text text-anchor="start" x="99.62" y="-44.7" font-family="Times,serif" font-size="14.00">l</text>
+<text text-anchor="start" x="99.62" y="-44.7" font-family="serif" font-size="14.00">l</text>
 <polygon fill="none" stroke="black" points="106,-39 106,-61 118,-61 118,-39 106,-39"/>
-<text text-anchor="start" x="108.62" y="-44.7" font-family="Times,serif" font-size="14.00">o</text>
+<text text-anchor="start" x="108.62" y="-44.7" font-family="serif" font-size="14.00">o</text>
 </g>
 <!-- string2 -->
 <g id="node4" class="node">
 <title>string2</title>
 <polyline fill="none" stroke="black" points="209.6,-50 333.6,-50"/>
-<text text-anchor="start" x="265.6" y="-55.7" font-family="Times,serif" font-size="14.00">s2</text>
+<text text-anchor="start" x="265.6" y="-55.7" font-family="serif" font-size="14.00">s2</text>
 <polygon fill="none" stroke="black" points="209.6,-28 209.6,-50 249.6,-50 249.6,-28 209.6,-28"/>
-<text text-anchor="start" x="212.35" y="-33.7" font-family="Times,serif" font-size="14.00">7usize</text>
+<text text-anchor="start" x="212.35" y="-33.7" font-family="serif" font-size="14.00">7usize</text>
 <polygon fill="none" stroke="black" points="249.6,-28 249.6,-50 261.6,-50 261.6,-28 249.6,-28"/>
-<text text-anchor="start" x="252.23" y="-33.7" font-family="Times,serif" font-size="14.00">g</text>
+<text text-anchor="start" x="252.23" y="-33.7" font-family="serif" font-size="14.00">g</text>
 <polygon fill="none" stroke="black" points="261.6,-28 261.6,-50 273.6,-50 273.6,-28 261.6,-28"/>
-<text text-anchor="start" x="264.23" y="-33.7" font-family="Times,serif" font-size="14.00">o</text>
+<text text-anchor="start" x="264.23" y="-33.7" font-family="serif" font-size="14.00">o</text>
 <polygon fill="none" stroke="black" points="273.6,-28 273.6,-50 285.6,-50 285.6,-28 273.6,-28"/>
-<text text-anchor="start" x="276.23" y="-33.7" font-family="Times,serif" font-size="14.00">o</text>
+<text text-anchor="start" x="276.23" y="-33.7" font-family="serif" font-size="14.00">o</text>
 <polygon fill="none" stroke="black" points="285.6,-28 285.6,-50 297.6,-50 297.6,-28 285.6,-28"/>
-<text text-anchor="start" x="288.23" y="-33.7" font-family="Times,serif" font-size="14.00">d</text>
+<text text-anchor="start" x="288.23" y="-33.7" font-family="serif" font-size="14.00">d</text>
 <polygon fill="none" stroke="black" points="297.6,-28 297.6,-50 309.6,-50 309.6,-28 297.6,-28"/>
-<text text-anchor="start" x="300.23" y="-33.7" font-family="Times,serif" font-size="14.00">b</text>
+<text text-anchor="start" x="300.23" y="-33.7" font-family="serif" font-size="14.00">b</text>
 <polygon fill="none" stroke="black" points="309.6,-28 309.6,-50 321.6,-50 321.6,-28 309.6,-28"/>
-<text text-anchor="start" x="312.23" y="-33.7" font-family="Times,serif" font-size="14.00">y</text>
+<text text-anchor="start" x="312.23" y="-33.7" font-family="serif" font-size="14.00">y</text>
 <polygon fill="none" stroke="black" points="321.6,-28 321.6,-50 333.6,-50 333.6,-28 321.6,-28"/>
-<text text-anchor="start" x="324.6" y="-33.7" font-family="Times,serif" font-size="14.00">e</text>
+<text text-anchor="start" x="324.6" y="-33.7" font-family="serif" font-size="14.00">e</text>
 </g>
 <!-- pin&#45;&gt;string2 -->
 <g id="edge2" class="edge">

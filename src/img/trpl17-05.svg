@@ -16,25 +16,25 @@
 <title>fut1</title>
 <polygon fill="gray" stroke="none" points="29.12,-20 29.12,-110 56.88,-110 56.88,-20 29.12,-20"/>
 <polyline fill="none" stroke="black" points="29.12,-87.5 56.88,-87.5"/>
-<text text-anchor="start" x="32.12" y="-93.7" font-family="Times,serif" font-size="14.00">fut1</text>
+<text text-anchor="start" x="32.12" y="-93.7" font-family="serif" font-size="14.00">fut1</text>
 <polygon fill="none" stroke="black" points="29.12,-65 29.12,-87.5 56.88,-87.5 56.88,-65 29.12,-65"/>
-<text text-anchor="start" x="40" y="-71.2" font-family="Times,serif" font-size="14.00">?</text>
+<text text-anchor="start" x="40" y="-71.2" font-family="serif" font-size="14.00">?</text>
 <polygon fill="none" stroke="black" points="29.12,-42.5 29.12,-65 56.88,-65 56.88,-42.5 29.12,-42.5"/>
-<text text-anchor="start" x="40" y="-48.7" font-family="Times,serif" font-size="14.00">?</text>
+<text text-anchor="start" x="40" y="-48.7" font-family="serif" font-size="14.00">?</text>
 <polygon fill="none" stroke="black" points="29.12,-20 29.12,-42.5 56.88,-42.5 56.88,-20 29.12,-20"/>
-<text text-anchor="start" x="40" y="-26.2" font-family="Times,serif" font-size="14.00">?</text>
+<text text-anchor="start" x="40" y="-26.2" font-family="serif" font-size="14.00">?</text>
 </g>
 <!-- fut2 -->
 <g id="node2" class="node">
 <title>fut2</title>
 <polyline fill="none" stroke="black" points="119.12,-87.5 146.88,-87.5"/>
-<text text-anchor="start" x="122.12" y="-93.7" font-family="Times,serif" font-size="14.00">fut2</text>
+<text text-anchor="start" x="122.12" y="-93.7" font-family="serif" font-size="14.00">fut2</text>
 <polygon fill="none" stroke="black" points="119.12,-65 119.12,-87.5 146.88,-87.5 146.88,-65 119.12,-65"/>
-<text text-anchor="start" x="129.62" y="-71.2" font-family="Times,serif" font-size="14.00">0</text>
+<text text-anchor="start" x="129.62" y="-71.2" font-family="serif" font-size="14.00">0</text>
 <polygon fill="none" stroke="black" points="119.12,-42.5 119.12,-65 146.88,-65 146.88,-42.5 119.12,-42.5"/>
-<text text-anchor="start" x="129.62" y="-48.7" font-family="Times,serif" font-size="14.00">1</text>
+<text text-anchor="start" x="129.62" y="-48.7" font-family="serif" font-size="14.00">1</text>
 <polygon fill="none" stroke="black" points="119.12,-20 119.12,-42.5 146.88,-42.5 146.88,-20 119.12,-20"/>
-<text text-anchor="start" x="131.12" y="-26.2" font-family="Times,serif" font-size="14.00"> </text>
+<text text-anchor="start" x="131.12" y="-26.2" font-family="serif" font-size="14.00"> </text>
 </g>
 <!-- fut2&#45;&gt;fut1 -->
 <g id="edge1" class="edge">
