@@ -322,7 +322,7 @@ making sure the data ultimately being referenced stays in place. If a pointer
 moves around, _but the data it points to_ is in the same place, as in Figure
 17-7, there’s no potential problem. (As an independent exercise, look at the docs
 for the types as well as the `std::pin` module and try to work out how you’d do
-this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
+this with a `Pin` wrapping a `Box`. The key is that the self-referential type
 itself cannot move, because it is still pinned.
 
 <figure>
