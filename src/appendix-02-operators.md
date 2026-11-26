@@ -101,17 +101,17 @@ hierarchy to an item.
 
 <span class="caption">Table B-3: Path-Related Syntax</span>
 
-| Symbol                                  | Explanation                                                                                                  |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------|
-| `ident::ident`                          | Namespace path                                                                                               |
-| `::path`                                | Path relative to the crate root (that is, an explicitly absolute path)                                       |
-| `self::path`                            | Path relative to the current module (that is, an explicitly relative path)                                   |
-| `super::path`                           | Path relative to the parent of the current module                                                            |
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                   |
-| `<type>::...`                           | Associated item for a type that cannot be directly named (for example, `<&T>::...`, `<[T]>::...`, and so on) |
-| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                             |
-| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                       |
-| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                    |
+| Symbol                                  | Explanation                                                                                                                        |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `ident::ident`                          | Namespace path                                                                                                                     |
+| `::path`                                | Path relative to the extern prelude, where all other crates are rooted (that is, an explicitly absolute path including crate name) |
+| `self::path`                            | Path relative to the current module (that is, an explicitly relative path)                                                         |
+| `super::path`                           | Path relative to the parent of the current module                                                                                  |
+| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                                         |
+| `<type>::...`                           | Associated item for a type that cannot be directly named (for example, `<&T>::...`, `<[T]>::...`, and so on)                       |
+| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                                                   |
+| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                                             |
+| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                                          |
 
 Table B-4 shows symbols that appear in the context of using generic type
 parameters.
