@@ -10,7 +10,7 @@ impl UsState {
         match self {
             UsState::Alabama => year >= 1819,
             UsState::Alaska => year >= 1959,
-            // -- snip --
+            // --snip--
         }
     }
 }

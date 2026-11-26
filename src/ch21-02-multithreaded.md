@@ -52,7 +52,7 @@ you enter _/sleep_ and then load _/_, you’ll see that _/_ waits until `sleep`
 has slept for its full five seconds before loading.
 
 There are multiple techniques we could use to avoid requests backing up behind
-a slow request, including using async as we did Chapter 17; the one we’ll
+a slow request, including using async as we did in Chapter 17; the one we’ll
 implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool

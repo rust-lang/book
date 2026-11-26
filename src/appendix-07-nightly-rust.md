@@ -1,4 +1,4 @@
-## Appendix G - How Rust is Made and “Nightly Rust”
+## Appendix G: How Rust is Made and “Nightly Rust”
 
 This appendix is about how Rust is made and how that affects you as a Rust
 developer.
@@ -114,7 +114,7 @@ work as expected, you can report it to the team and get it fixed before the
 next stable release happens! Breakage in a beta release is relatively rare, but
 `rustc` is still a piece of software, and bugs do exist.
 
-### Maintenance time
+### Maintenance Time
 
 The Rust project supports the most recent stable version. When a new stable
 version is released, the old version reaches its end of life (EOL). This means

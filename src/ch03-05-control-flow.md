@@ -280,7 +280,7 @@ doesn’t specify a label will exit the inner loop only. The `break
 <!-- Old headings. Do not remove or links may break. -->
 <a id="conditional-loops-with-while"></a>
 
-#### Streamlining Conditional Loops with while
+#### Streamlining Conditional Loops with `while`
 
 A program will often need to evaluate a condition within a loop. While the
 condition is `true`, the loop runs. When the condition ceases to be `true`, the
