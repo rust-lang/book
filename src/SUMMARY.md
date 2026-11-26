@@ -125,7 +125,7 @@
   - [From Single-Threaded to Multithreaded Server](ch21-02-multithreaded.md)
   - [Graceful Shutdown and Cleanup](ch21-03-graceful-shutdown-and-cleanup.md)
 
-- [Appendix](appendix-00.md)
+- [Appendices](appendix-00.md)
   - [A - Keywords](appendix-01-keywords.md)
   - [B - Operators and Symbols](appendix-02-operators.md)
   - [C - Derivable Traits](appendix-03-derivable-traits.md)

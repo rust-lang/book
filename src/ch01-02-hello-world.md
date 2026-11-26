@@ -25,7 +25,7 @@ your projects there.
 Open a terminal and enter the following commands to make a _projects_ directory
 and a directory for the “Hello, world!” project within the _projects_ directory.
 
-For Linux, macOS, and PowerShell on Windows, enter this:
+For GNU/Linux, macOS, and PowerShell on Windows, enter this:
 
 ```console
 $ mkdir ~/projects
@@ -66,7 +66,7 @@ fn main() {
 </Listing>
 
 Save the file and go back to your terminal window in the
-_~/projects/hello_world_ directory. On Linux or macOS, enter the following
+_~/projects/hello_world_ directory. On GNU/Linux or macOS, enter the following
 commands to compile and run the file:
 
 ```console
@@ -75,11 +75,11 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main` instead of `./main`:
+On Windows, enter the command `.\main.exe` instead of `./main`:
 
 ```powershell
 > rustc main.rs
-> .\main
+> .\main.exe
 Hello, world!
 ```
 
@@ -164,7 +164,7 @@ $ rustc main.rs
 If you have a C or C++ background, you’ll notice that this is similar to `gcc`
 or `clang`. After compiling successfully, Rust outputs a binary executable.
 
-On Linux, macOS, and PowerShell on Windows, you can see the executable by
+On GNU/Linux, macOS, and PowerShell on Windows, you can see the executable by
 entering the `ls` command in your shell:
 
 ```console
@@ -172,7 +172,7 @@ $ ls
 main  main.rs
 ```
 
-On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
+On GNU/Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
 see the same three files that you would see using CMD. With CMD on Windows, you
 would enter the following:
 
@@ -189,7 +189,7 @@ Windows, a file containing debugging information with the _.pdb_ extension.
 From here, you run the _main_ or _main.exe_ file, like this:
 
 ```console
-$ ./main # or .\main on Windows
+$ ./main # or .\main.exe on Windows
 ```
 
 If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,

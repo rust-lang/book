@@ -46,7 +46,8 @@ You can see how primitive our server is: Real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
 Start the server using `cargo run`. Then, open two browser windows: one for
-_http://127.0.0.1:7878_ and the other for _http://127.0.0.1:7878/sleep_. If you
+[_http://127.0.0.1:7878_](http://127.0.0.1:7878) and the other for
+[_http://127.0.0.1:7878/sleep_](http://127.0.0.1:7878/sleep). If you
 enter the _/_ URI a few times, as before, you’ll see it respond quickly. But if
 you enter _/sleep_ and then load _/_, you’ll see that _/_ waits until `sleep`
 has slept for its full five seconds before loading.
