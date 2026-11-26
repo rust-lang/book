@@ -178,7 +178,9 @@ let slice = &s[..];
 > multibyte character, your program will exit with an error.
 
 With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+slice. Note for the below code that `*` usually dereferences a reference in expressions,
+while `&` in a pattern matches a reference and automatically unwraps its value.
+The type that signifies “string slice” is written as `&str`:
 
 <Listing file-name="src/main.rs">
 
