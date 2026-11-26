@@ -200,7 +200,7 @@ have null, thus making the billion-dollar mistake discussed earlier impossible.
 
 ### Catch-All Patterns and the `_` Placeholder
 
-Using enums, we can also take special actions for a few particular values, but
+Using `match`, we can also take special actions for a few particular values, but
 for all other values take one default action. Imagine we’re implementing a game
 where, if you roll a 3 on a dice roll, your player doesn’t move but instead
 gets a fancy new hat. If you roll a 7, your player loses a fancy hat. For all
