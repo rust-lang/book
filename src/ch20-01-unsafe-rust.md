@@ -567,6 +567,5 @@ Rust’s official guide for `unsafe`, [The Rustonomicon][nomicon].
 [the-slice-type]: ch04-03-slices.html#the-slice-type
 [unions]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
-[editions]: appendix-05-editions.html
 [nightly]: appendix-07-nightly-rust.html
 [nomicon]: https://doc.rust-lang.org/nomicon/
