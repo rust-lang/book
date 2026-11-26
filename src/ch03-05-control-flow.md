@@ -348,17 +348,6 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
 </Listing>
 
-When we run this code, we’ll see the same output as in Listing 3-4. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items. Machine code generated from `for`
-loops can be more efficient as well because the index doesn’t need to be
-compared to the length of the array at every iteration.
-
-Using the `for` loop, you wouldn’t need to remember to change any other code if
-you changed the number of values in the array, as you would with the method
-used in Listing 3-4.
-
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
 certain number of times, as in the countdown example that used a `while` loop
